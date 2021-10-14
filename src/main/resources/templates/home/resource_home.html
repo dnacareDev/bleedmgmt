@@ -1,81 +1,129 @@
 <!doctype html>
 <html lang="en" dir="ltr"
-	xmlns:th="http://www.thymeleaf.org">
-	
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
 
-<!-- 공통 헤더 -->
-<th:block th:include="@{/fragments/header.html}"></th:block>
+    <!-- 공통 헤더 -->
+    <th:block th:include="@{/fragments/header.html}"></th:block>
 
 </head>
 
 <body class="layout-light top-menu overlayScroll">
-	<div class="mobile-search"></div>
-	
-	<div class="mobile-author-actions"></div>
-	
-	<!-- 공통 topbar -->
-	<th:block th:include="@{/fragments/topbar.html}"></th:block>
-	
-	<main class="main-content" style="background-color: #fafef5;">
-	
-		<div class="contents" style="background-color: #fafef5;">
+<div class="mobile-search"></div>
+
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="@{/fragments/topbar.html}"></th:block>
+
+<main class="main-content" style="background-color: #fafef5;">
+
+    <div class="contents" style="background-color: #fafef5;">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <p class="color-primary fa-lg mb-3 mt-5 ml-3">관리 대장 상황</p>
+                        <div class="action-btn d-flex justify-content-end">
+                            <div class="atbd-button-list d-flex flex-wrap">
+                                <div class="d-flex align-items-center add-contact__form my-sm-0 my-2">
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" id="start_month" name="page-number">
+                                        <option value="none">시작월</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                    <span class="ml-1 mt-20">~</span>
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" id="end_month" name="page-number">
+                                        <option value="none">종료월</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" id="search_type" style="width: 250px;">
+                                        <option value="none">작물 선택</option>
+                                        <option value="r.reagent_code">시약•농약•비료 ID</option>
+                                        <option value="r.reagent_type">종류</option>
+                                        <option value="r.reagent_name">품명</option>
+                                        <option value="r.reagent_standard">규격</option>
+                                        <option value="r.reagent_nick_e">영문별칭</option>
+                                        <option value="r.reagent_nick_k">국문별칭</option>
+                                        <option value="r.reagent_manufacturer">제조사</option>
+                                        <option value="r.reagent_quantity">수량</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <canvas id="bar1" height="100px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <p class="color-primary fa-lg mb-3 mt-5 ml-3">작목별 관리 현황</p>
+                            <div class="card-body">
+                                <div>
+                                    <canvas id="hbar1" height="100px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
-                            <p class="color-primary fa-lg mb-3 mt-5 ml-3">작물별 품종 수</p>
+                            <p class="color-primary fa-lg mb-3 mt-5 ml-3">등록 자료 현황</p>
                             <div class="card-body">
                                 <div>
-                                    <canvas id="bar1" height="100px"></canvas>
+                                    <canvas id="pie1" height="100px"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <p class="color-primary fa-lg mb-3 mt-5 ml-3">작물별 품종 수</p>
-                                <div class="card-body">
-                                    <div>
-                                        <canvas id="hbar1" height="100px"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    </div>
 
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <p class="color-primary fa-lg mb-3 mt-5 ml-3">작물별 품종 수</p>
-                                <div class="card-body">
-                                    <div>
-                                        <canvas id="pie1" height="100px"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+</main>
 
-		</div>
-	
-	</main>
-	
-	<!-- 공통 하단 -->
-    <th:block th:include="@{/fragments/footer.html}"></th:block>
-    <!-- 공통 js -->
-    <th:block th:include="@{/fragments/commonjs.html}"></th:block>
+<!-- 공통 하단 -->
+<th:block th:include="@{/fragments/footer.html}"></th:block>
+<!-- 공통 js -->
+<th:block th:include="@{/fragments/commonjs.html}"></th:block>
 
 <script type="text/javascript">
 
@@ -83,35 +131,41 @@
     var bar1 = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
+            labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+            datasets: [
+                {
+                    data: [60, 30, 10, 80, 80, 50, 25, 50, 35, 75, 80, 75],
+                    backgroundColor:
+                        "rgb(54, 162, 235)", // blue
+                },
+                {
+                    data: [90, 50, 70, 20, 55, 35, 60, 90, 60, 75, 20, 65],
+                    backgroundColor:
+                        "rgb(75, 192, 192)", // green
+                },
+                {
+                    data: [30, 100, 100, 35, 45, 45, 65, 40, 50, 40, 50, 40],
+                    backgroundColor:
+                        "rgb(255, 159, 64)", // orange
+                }
+            ]
         },
         options: {
+            responsive: true,
             scales: {
-                yAxes: [{
+                xAxes: [{
                     ticks: {
                         beginAtZero: true
-                    }
+                    },
+                    stacked: true,
+                    barPercentage: 0.7
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 50,
+                    },
+                    stacked: true
                 }]
             }
         }
@@ -121,36 +175,39 @@
     var hbar1 = new Chart(ctx, {
         type: 'horizontalBar',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
+            labels: ["품종관리", "원종관리", "도입자원관리"],
+            datasets: [
+                {
+                    data: [51, 26, 32],
+                    backgroundColor:
+                        "rgb(54, 162, 235)", // blue
+                },
+                {
+                    data: [47, 15, 24],
+                    backgroundColor:
+                        "rgb(75, 192, 192)", // green
+                },
+                {
+                    data: [27, 54, 36],
+                    backgroundColor:
+                        "rgb(255, 159, 64)", // orange
+                }
+            ]
         },
         options: {
             indexAxis: 'y',
             scales: {
+                xAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 5,
+                    }
+                }],
                 yAxes: [{
                     ticks: {
                         beginAtZero: true
-                    }
+                    },
+                    barPercentage: 0.6
                 }]
             }
         }
@@ -160,38 +217,15 @@
     var pie1 = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            labels: ["사진", "문서"],
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                data: [78.07, 21.93],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    "rgb(255, 159, 64)", // orange
+                    "rgb(54, 162, 235)", // blue
                 ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
             }]
         },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
     });
 </script>
 
