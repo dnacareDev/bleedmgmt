@@ -57,10 +57,11 @@
                                         <a href="javascript:void(0)" class="btn btn-lg btn-outline-lighten btn-upload"
                                            onclick="$('#upload-1').click()">
                                             <span data-feather="upload"></span> 템플릿 엑셀 첨부</a>
-                                        <input type="file" name="upload-1" class="upload-one" id="upload-1">
+                                        <input type="file" name="upload-1" class="upload-one" id="upload-1" onchange="excelExport(event)"/>
                                     </div>
                                 </div>
                             </div>
+                            <div id="displayExcelHtml"></div>
                             <div>
                                 특성항목 파일
                                 <div class="atbd-upload">
@@ -160,7 +161,63 @@
 <th:block th:include="@{/fragments/commonjs.html}"></th:block>
 
 <script type="text/javascript">
+    function excelExport(event) {
+        excelExportCommon(event, handleExcelDataAll);
+    }
 
+    function excelExportCommon(event, callback) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function () {
+            var fileData = reader.result;
+            var wb = XLSX.read(fileData, {type: 'binary'});
+            var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
+            var firstSheetName = sheetNameList[0]; // 첫번째 시트명
+            var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
+            callback(firstSheet);
+        };
+        reader.readAsBinaryString(input.files[0]);
+    }
+
+    function handleExcelDataAll(sheet) {
+        handleExcelDataHeader(sheet); // header 정보
+        handleExcelDataJson(sheet); // json 형태
+        handleExcelDataCsv(sheet); // csv 형태
+        handleExcelDataHtml(sheet); // html 형태
+    }
+
+    function handleExcelDataHeader(sheet) {
+        var headers = get_header_row(sheet);
+        $("#displayHeaders").html(JSON.stringify(headers));
+    }
+
+    function handleExcelDataJson(sheet) {
+        $("#displayExcelJson").html(JSON.stringify(XLSX.utils.sheet_to_json(sheet)));
+    }
+
+    function handleExcelDataCsv(sheet) {
+        $("#displayExcelCsv").html(XLSX.utils.sheet_to_csv(sheet));
+    }
+
+    function handleExcelDataHtml(sheet) {
+        $("#displayExcelHtml").html(XLSX.utils.sheet_to_html(sheet));
+    }
+
+    function get_header_row(sheet) {
+        var headers = [];
+        var range = XLSX.utils.decode_range(sheet['!ref']);
+        var C, R = range.s.r;
+
+        for (C = range.s.c; C <= range.e.c; ++C) {
+            var cell = sheet[XLSX.utils.encode_cell({c: C, r: R})]
+
+            var hdr = "UNKNOWN " + C;
+            if (cell && cell.t) hdr = XLSX.utils.format_cell(cell);
+
+            headers.push(hdr);
+        }
+        return headers;
+    }
 </script>
 
 </body>

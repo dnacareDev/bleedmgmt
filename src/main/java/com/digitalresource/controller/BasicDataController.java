@@ -25,4 +25,20 @@ public class BasicDataController {
     return mv;
   }
 
+  @GetMapping("seed_spec")
+  public ModelAndView getSeedSpecList(ModelAndView mv) {
+
+    mv.setViewName("/basic_data/seed_spec");
+
+    return mv;
+  }
+
+  @GetMapping("seed_spec/insert")
+  public ModelAndView getSeedSpecInsert(ModelAndView mv) {
+
+    mv.setViewName("/basic_data/new_seed_spec");
+
+    return mv;
+  }
+
 }
