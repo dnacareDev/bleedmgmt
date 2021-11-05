@@ -1944,20 +1944,20 @@ a.btn.disabled,
 fieldset:disabled a.btn {
 	pointer-events: none;
 }
-
 .btn-primary {
 	color: #fff;
-	background-color: #5f63f2;
+	background-color: #217566; /* 2021-10-18 AlpaDesign 수정 */
 	border-color: #5f63f2;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
-.btn-primary:hover {
+/*.btn-primary:hover {
 	color: #fff;
 	background-color: #3c41ef;
 	border-color: #3035ee;
-}
+}*/ 
+/* 2021-10-18 AlpaDesign 제거 */
 
 .btn-primary:focus,
 .btn-primary.focus {
@@ -4504,7 +4504,6 @@ input[type="button"].btn-block {
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 }
-
 .card > hr {
 	margin-right: 0;
 	margin-left: 0;
@@ -4566,7 +4565,90 @@ input[type="button"].btn-block {
 	background-color: #fff;
 	border-bottom: 1px solid #f1f2f6;
 }
+.top-menu .strikingDash-top-menu ul li a svg,
+.top-menu .strikingDash-top-menu ul li span.menu-text,
+.top-menu .strikingDash-top-menu ul li > ul li a{
+	color:#222222;
+}
+.top-menu .navbar-right__menu .search-toggle i.la-search,
+.top-menu .navbar-right__menu .nav-item-toggle svg{
+	color: #9299B8;
+}
+.top-menu .strikingDash-top-menu ul li:hover a svg,
+.top-menu .strikingDash-top-menu ul li:hover span.menu-text,
+.top-menu .strikingDash-top-menu ul li > ul li:hover a,
+.top-menu .strikingDash-top-menu ul li > ul li a.active,
+.top-menu .atbd-menu.menu-vertical .atbd-menu__item .atbd-menu__link:hover .atbd-menu__text{
+	color:#3B7366;
+}
+.top-menu .strikingDash-top-menu ul li.has-subMenu > a{
+	font-size: 16px;
+}
 
+.main-content .signUp-admin-right .edit-profile { /* 2021-10-18 AlpaDesign 추가 */
+	margin: 0;
+	background-color:#ffffff;
+	box-shadow: 0 3px 10px(0,0,0, 0.5);
+}
+.main-content .signUp-admin-right .card .card-header h6{ /* 2021-10-18 AlpaDesign 추가 */
+	font-size: 30px;
+}
+.main-content .signUp-admin-right .card .card-header h6 span{ /* 2021-10-18 AlpaDesign 추가 */
+	color: #217566;
+	font-size: 30px;
+}
+.main-content .custom-checkbox input[type="checkbox"]:checked + label:after{ /* 2021-10-18 AlpaDesign 추가 */
+	background-color:#217566;
+	border: 1px solid #217566;
+}
+.main-content .edit-profile__body .form-group label{ /* 2021-10-18 AlpaDesign 추가 */
+	font-size: 18px;
+	font-weight: 700;
+}
+.main-content .fa-eye-slash:before{ /* 2021-10-18 AlpaDesign 추가 */
+	cursor: pointer;
+}
+.main-content .fa-eye:before{
+	cursor: pointer;
+	color:#222222;
+}
+.main-content .col-xl-7.col-lg-8.col-md-12{ /* 2021-10-18 AlpaDesign 추가 */
+	box-shadow:0px 0px 3px 2px rgb(0 0 0 / 5%);
+	border-radius: 20px;
+}
+.main-content .signUP-admin-left{ /* 2021-10-18 AlpaDesign 추가 */
+	background: url(/img/login_images/resource_login.png) no-repeat center center;
+	background-size: cover;
+	border-radius:0;
+}
+.main-content .container-fluid{
+	padding:0;
+	margin:0;
+}
+.main-content .contents{
+	padding:0;
+}
+.top-menu .main-content .fa-eye-slash:before{
+	color:#D9D9D9;
+}
+.main-content .edit-profile__body .form-group .form-control:focus{
+	border:1px solid #222222;
+}
+@media only screen and (min-width: 1200px){
+	.main-content .col-xl-4{
+		flex: 0 0 40%;
+		max-width: 40%;
+	}
+	.main-content .col-xl-8{
+		flex: 0 0 60%;
+		max-width: 60%;
+	}
+}
+@media only screen and (max-width: 991px){
+	.top-menu .main-content .contents{
+		padding:0;
+	}
+}
 .card-header:first-child {
 	-webkit-border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
 	border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;

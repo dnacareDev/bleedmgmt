@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <style>
+    	.card {
+    		box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%);
+    	}
+    
+        table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+		.data_cover1 {
+			clear: both;
+			width: 100%;
+			padding-bottom: 20px;
+		}
+		.data_type{
+			float: left;
+			width: calc((100% - 20px)/3);
+			margin-left:10px;
+		}
+		.data_type1, .data_type4{
+			margin-left:0;
+		}
+		.data_type span.sub_title{
+			display:block;
+			width: 100%;
+			padding-bottom: 10px;
+		}
+		select{
+			width: 100%;
+			height: 50px;
+			border: 1px solid #E4E4E4;
+			padding:0 20px;
+			border-radius: 5px;
+			color: #B2B2B2;
+		}
+		input[type="text"]{
+			width: calc((70% - 5px)/1);
+			border: 1px solid #E4E4E4;
+			padding:12px;
+			border-radius: 5px;
+			margin-right:5px;
+		}
+		button[type="button"]{
+			border: none;
+			border-radius: 5px;
+		}
+		button[type="button"].greenop_btn{
+			width: calc((30% - 5px)/1);
+    		background-color: #EDF6F1;
+   		 	padding: 13px 20px;
+    		color: #217566;
+		}
+		button[type="button"].gray_btn{
+			background-color:#E2E3E5;
+			color: #222;
+			float:left;
+		}
+		button[type="button"].green_btn{
+			background-color:#217566;
+			color: #fff;
+			float:right;
+		}
+		.data_files{
+			width:100%;
+			border: 1px solid #E4E4E4;
+			padding:12px;
+			border-radius: 5px;
+			margin-right:5px;
+			cursor: pointer;
+			margin-bottom: 10px;
+		}
+		.data_files img{
+			vertical-align: middle;
+			margin-bottom: 5px;
+		}
+		.data_files span{
+			margin-left:5px;
+			color: #B2B2B2;
+		}
+		
+		.data_cover3{
+			padding:50px 0;
+		}
+		input[type="checkbox"]{
+			display:none;
+		}
+		span.check_span{
+			display:inline-block;
+			vertical-align:middle;
+			margin-left: 5px;
+			cursor:pointer;
+			color: #939393;
+		}
+		input[type="text"].style_ver{
+			width: 20%;
+    		margin-left: 5px;
+		}
+		
+		.data_list_type > ul > li{
+			clear:both;
+			width: 100%;
+			padding: 20px 0;
+		}
+		.data_list_type ul ul{
+			display: none;
+		}
+		.data_list_type ul ul li{
+			padding-top: 20px;
+			float:left;
+			width: calc((100% - 20px)/3);
+			margin-left: 10px;
+		}
+		.data_list_type ul ul li:nth-child(3n + 1){
+			margin-left:0;
+		}
+		.data_list_type ul ul li input[type="text"]{
+			width: 100%;
+		}
+		.btn_cover{
+			max-width: 1280px;
+			margin: 0 auto;
+			padding-bottom: 50px; 
+		}
+		.data_cover2{
+			width:100%;
+			overflow:auto;
+			position: relative;
+			min-height: 400px; 
+		}
+		table{
+			width: max-content;
+    		min-width: 1230px;
+		}
+		table thead tr th{
+			background-color:#F7F7F8;
+		}
+		table thead tr{
+			border-top: 1px solid #E8EEF2;
+			border-bottom: 2px solid #E2E3E5;
+		}
+		
+		span.check_box_design{
+			display:inline-block;
+			width: 18px;
+			height:18px;
+			background-color: transparent;
+			border-radius: 5px;
+			position: relative;
+			border: 1px solid #939393; 
+			vertical-align: middle;
+		}
+		span.check_box_design.active{
+			display:inline-block;
+			width: 18px;
+			height:18px;
+			background-color: #217566;
+			border-radius: 5px;
+			position: relative;
+			border: none;
+		}
+		span.check_box_design.active::before{
+			content: "";
+			display:block;
+			position: absolute;
+			left: 5px;
+			bottom:3.7px;
+			width: 2px;
+			height: 7px;
+			background-color: #fff;
+			border-radius:5px;
+			transform: rotate(-45deg);
+		}
+		span.check_box_design.active::after{
+			content: "";
+			display:block;
+			position: absolute;
+			right: 5px;
+			bottom:3px;
+			width: 2px;
+			height: 11px;
+			background-color: #fff;
+			border-radius:5px;
+			transform: rotate(45deg);
+		}
+		
+		
+		.listNone{
+			display:none;
+		}
+		.listNone.active{
+			position: absolute; left:0; top:0; width: 100%; height: 100%;text-align:center; display:table;
+			border-bottom: 1px solid #E2E3E5;
+			
+		}
+		.listNone .lineNone_inner{
+			display: table-cell;
+			vertical-align: middle;
+		}
+		.listNone span {
+			display:inline-block;
+			color: #B2B2B2;
+		}
+		.this_check{
+			display: inline-block;
+		}
+		
+		
+		
+		
+       /* 푸터 배경색 */
+		.footer-wrapper {background-color: #FCFCFC;}
+        
+    </style>
+</head>
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+<main class="main-content" style="background-color: #FCFCFC;">
+	<div class="contents" style="background-color: #FFFFFF;">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12 mb-30">
+					<div class="card">
+						<div class="card-extra mt-20 mr-20">
+							<div class="breadcrumb-main" style="float: left;">
+								<h4 class="text-capitalize breadcrumb-title">작목선택</h4>
+							</div>
+							<div class="data_cover1 clearfix">
+								<div class="data_type data_type1">
+									<span class="sub_title">작목 선택</span>
+									<select>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+									</select>
+								</div>
+								<div class="data_type data_type2">
+									<span class="sub_title">관리자원 명</span>
+									<input type="text"><button type="button" class="greenop_btn">중복확인</button>
+								</div>
+								<div class="data_type data_type3">
+									<span class="sub_title">관리자원 명</span>
+									<div class="data_files" onclick="return filed('#data_file1')"><img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>템플릿 엑셀 첨부</span></div>
+									<input type="file" id="data_file1" style="display: none;"> <!-- file  -->
+								</div>
+							</div>
+							<div class="data_cover2 clearfix">
+								<table style="height: 100%;"> <!-- table에 slideDown 또는 show 해주세요 -->
+									<thead>
+										<tr>
+											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
+											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
+											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
+											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
+											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+										</tr>
+									</tbody>
+								</table>
+								<div class="listNone">
+									<div class="lineNone_inner">
+										<span>리스트가 존재하지 않습니다.</span>
+									</div>
+									
+								</div>
+							</div>
+							<div class="data_cover3 clearfix">
+								<div class="data_type data_type4">
+									<span class="sub_title">특성항목 파일</span>
+									<div class="data_files" onclick="return filed('#data_file2')"><img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>템플릿 엑셀 첨부</span></div>
+									<input type="file" id="data_file2" style="display: none;"> <!-- file  -->
+									
+									<div class="this_check"><input type="checkbox" style="display:none;"><span class="check_box_design"></span><span class="check_span">종자원 특성 조사 기준 사용</span></div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12 mb-30">
+					<div class="card">
+						<div class="card-extra mt-20 mr-20">
+							<div class="data_cover1 clearfix">
+								<span class="sub_title">추가연동</span>
+								<div class="data_list_type" style="padding:0 0 50px 0">
+									<ul>
+										<li>
+											<div class="this_check">
+												<input type="checkbox">
+												<span class="check_box_design"></span>
+												<span class="check_span">사진등록</span>
+											</div>
+											<input type="text" class="style_ver">
+											<button type="button" class="greenop_btn" style="width: 10%;" onclick="showType(this)">적용</button>
+											<ul><!-- 등록 text 나오는곳 -->
+											</ul>
+											
+										</li>
+										<li>
+											<div class="this_check">
+												<input type="checkbox">
+												<span class="check_box_design"></span><span class="check_span">문서등록</span>
+											</div>
+											<input type="text" class="style_ver">
+											<button type="button" class="greenop_btn" style="width: 10%;" onclick="showType(this)">적용</button>
+											<ul><!-- 등록 text 나오는곳 -->
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_cover clearfix">
+        	<button type="button" class="gray_btn" style="width:130px;height:45px;padding:0;">목록</button>
+        	<button type="button" class="green_btn" style="width:130px;height:45px;padding:0;">저장</button>
+        </div>
+    </div>
+</main>
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+<script type="text/javascript">
+	
+	let file_this_id; // 클릭한 파일첨부 div 박스 element
+	let file_this_file; // 클릭한 파일과 연동된 input type["file"]
+	function filed(id){ //파일 첨부 클릭할경우
+		$(id).trigger("click");
+		$(id).on("change", file_handler);
+		file_this_id = $(id).prev();
+		file_this_file = $(id);
+	}
+	
+	function file_handler(e){ //파일 클릭시 파일명 업로드
+		
+		var file_name= $(file_this_file).val(); //파일 이름;
+		file_this_id.text(file_name); // 클릭한 파일첨부 div 박스 element에 파일이름과 경로 생성
+	}
+	
+	/*check-box를 보다 쉽게 클릭하기 위해 글씨를 눌렀을때 체크박스도 같이 클릭되는 이벤트입니다*/
+	let flag=true;
+	$(".this_check").click(function(){
+		if(flag == false){
+			$(this).children().eq(0).prop("checked", true);
+			return;
+		}
+		$(this).toggleClass('active');
+		$(this).children().eq(1).toggleClass('active');
+		
+		if($(this).hasClass("active") == true){
+			$(this).children().eq(0).prop("checked", true);
+		} else {
+			$(this).children().eq(0).prop("checked", false);
+		}
+	});
+	$("table tbody tr").each(function(idx, elem){ // table 에 td 가 존재하지않을경우 "리스트가 존재하지않습니다"를 호출합니다.
+		($(elem).find("td").length === 0) ? $(".listNone").addClass("active") : $(".listNone").removeClass("active");
+	});
+	
+	function showType(element){ // 추가연동에 적용 누를떄 나오는 input text;
+		let input_val= Number($(element).prev().val());
+		let inner_html = "";
+		if($(element).prev().prev().children().eq(0).is(":checked", true)){
+			if(!input_val){
+				$(element).prev().val("");
+				return Alert("숫자를 입력 해주세요!");
+			}else{
+				flag = false;
+				for(let i=0; i<input_val; i++){
+					inner_html += "<li><input type='text' value=''></li>"; 
+				}
+				$(element).next().html(inner_html);
+				
+			}
+			$(element).next().slideDown(300);
+		} else {
+			return Alert('체크박스를 클릭해주세요');
+		}
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <style>
+    	.card {
+    		box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%);
+    	}
+    
+        table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+		.data_cover1 {
+			clear: both;
+			width: 100%;
+			padding-bottom: 20px;
+		}
+		.data_type{
+			float: left;
+			width: calc((100% - 20px)/3);
+			margin-left:10px;
+		}
+		.data_type1, .data_type4{
+			margin-left:0;
+		}
+		.data_type span.sub_title{
+			display:block;
+			width: 100%;
+			padding-bottom: 10px;
+		}
+		select{
+			width: 100%;
+			height: 50px;
+			border: 1px solid #E4E4E4;
+			padding:0 20px;
+			border-radius: 5px;
+			color: #B2B2B2;
+		}
+		input[type="text"]{
+			width: calc((70% - 5px)/1);
+			border: 1px solid #E4E4E4;
+			padding:12px;
+			border-radius: 5px;
+			margin-right:5px;
+		}
+		button[type="button"]{
+			border: none;
+			border-radius: 5px;
+		}
+		button[type="button"].greenop_btn{
+			width: calc((30% - 5px)/1);
+    		background-color: #EDF6F1;
+   		 	padding: 13px 20px;
+    		color: #217566;
+		}
+		button[type="button"].gray_btn{
+			background-color:#E2E3E5;
+			color: #222;
+			float:left;
+		}
+		button[type="button"].green_btn{
+			background-color:#217566;
+			color: #fff;
+			float:right;
+		}
+		.data_files{
+			width:100%;
+			border: 1px solid #E4E4E4;
+			padding:12px;
+			border-radius: 5px;
+			margin-right:5px;
+			cursor: pointer;
+			margin-bottom: 10px;
+		}
+		.data_files img{
+			vertical-align: middle;
+			margin-bottom: 5px;
+		}
+		.data_files span{
+			margin-left:5px;
+			color: #B2B2B2;
+		}
+		
+		.data_cover2{
+			padding:50px 0;
+		}
+		input[type="checkbox"]{
+			display:none;
+			vertical-align:inherit;
+		}
+		span.check_span{
+			display:inline-block;
+			vertical-align:middle;
+			margin-left: 5px;
+			color: #939393;
+		}
+		input[type="text"].style_ver{
+			width: 20%;
+    		margin-left: 5px;
+		}
+		
+		.data_list_type > ul > li{
+			clear:both;
+			width: 100%;
+			padding: 20px 0;
+		}
+		.data_list_type ul ul li{
+			padding-top: 20px;
+			float:left;
+			width: calc((100% - 20px)/3);
+			margin-left: 10px;
+		}
+		.data_list_type ul ul li:nth-child(3n + 1){
+			margin-left:0;
+		}
+		.data_list_type ul ul li input[type="text"]{
+			width: 100%;
+		}
+		.btn_cover{
+			max-width: 1280px;
+			margin: 0 auto;
+			padding-bottom: 50px; 
+		}
+		.data_cover3{
+			width:100%;
+			overflow:auto;
+			position: relative;
+			min-height: 400px; 
+		}
+		table{
+			width: max-content;
+    		min-width: 1230px;
+		}
+		table thead tr th{
+			background-color:#F7F7F8;
+		}
+		table thead tr{
+			border-top: 1px solid #E8EEF2;
+			border-bottom: 2px solid #E2E3E5;
+		}
+		
+		span.check_box_design{
+			display:inline-block;
+			width: 18px;
+			height:18px;
+			background-color: transparent;
+			border-radius: 5px;
+			position: relative;
+			border: 1px solid #939393; 
+			vertical-align: middle;
+		}
+		span.check_box_design.active{
+			display:inline-block;
+			width: 18px;
+			height:18px;
+			background-color: #217566;
+			border-radius: 5px;
+			position: relative;
+			border: none;
+		}
+		span.check_box_design.active::before{
+			content: "";
+			display:block;
+			position: absolute;
+			left: 5px;
+			bottom:3.7px;
+			width: 2px;
+			height: 7px;
+			background-color: #fff;
+			border-radius:5px;
+			transform: rotate(-45deg);
+		}
+		span.check_box_design.active::after{
+			content: "";
+			display:block;
+			position: absolute;
+			right: 5px;
+			bottom:3px;
+			width: 2px;
+			height: 11px;
+			background-color: #fff;
+			border-radius:5px;
+			transform: rotate(45deg);
+		}
+		
+		
+		.listNone{
+			display:none;
+		}
+		.listNone.active{
+			position: absolute; left:0; top:0; width: 100%; height: 100%;text-align:center; display:table;
+			border-bottom: 1px solid #E2E3E5;
+			
+		}
+		.listNone .lineNone_inner{
+			display: table-cell;
+			vertical-align: middle;
+		}
+		.listNone span {
+			display:inline-block;
+			color: #B2B2B2;
+		}
+		
+		
+		
+		
+		
+       /* 푸터 배경색 */
+		.footer-wrapper {background-color: #FCFCFC;}
+        
+    </style>
+</head>
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+<main class="main-content" style="background-color: #FCFCFC;">
+	<div class="contents" style="background-color: #FFFFFF;">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12 mb-30">
+					<div class="card">
+						<div class="card-extra mt-20 mr-20">
+							<div class="breadcrumb-main" style="float: left;">
+								<h4 class="text-capitalize breadcrumb-title">종자원 특성 조사 관리</h4>
+								
+							</div>
+							<span class="sub_title" style="display: block; clear:both; padding: 10px 0;">작목 선택</span>
+							<div class="data_cover1 clearfix">
+								<div class="data_type data_type1">
+									<select>
+										<option>작물구분1</option>
+										<option>작물구분2</option>
+										<option>작물구분3</option>
+										<option>작물구분4</option>
+										<option>작물구분5</option>
+									</select>
+								</div>
+								<div class="data_type data_type2">
+									<select>
+										<option>작물구분1</option>
+										<option>작물구분2</option>
+										<option>작물구분3</option>
+										<option>작물구분4</option>
+										<option>작물구분5</option>
+									</select>
+								</div>
+							</div>
+							<div class="data_cover2 clearfix">
+								<div class="data_type data_type4">
+									<span class="sub_title">특성항목 파일</span>
+									<div class="data_files" onclick="return filed('#data_file2')"><img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>템플릿 엑셀 첨부</span></div>
+									<input type="file" id="data_file2" style="display: none;"> <!-- file  -->
+								</div>
+							</div>
+							<div class="data_cover3 clearfix">
+								<table style="height: 100%;">
+									<thead>
+										<tr>
+											<th><span class="check_span">번호</span></th>
+											<th><span class="check_span">특성</span></th>
+											<th><span class="check_span">표현형태</span></th>
+											<th><span class="check_span">계급</span></th>
+											<th><span class="check_span">표준품종</span></th>
+											<th><span class="check_span">조사시기 및 방법</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1(*)QN</td>
+											<td>식물체 : 높이</td>
+											<td>작다,중간,크다</td>
+											<td>3,5,7</td>
+											<td>-</td>
+											<td>(a)MS/VG</td>
+										</tr>
+										<tr>
+											<td>1(*)QN</td>
+											<td>식물체 : 높이</td>
+											<td>작다,중간,크다</td>
+											<td>3,5,7</td>
+											<td>-</td>
+											<td>(a)MS/VG</td>
+										</tr>
+										<tr>
+											<td>1(*)QN</td>
+											<td>식물체 : 높이</td>
+											<td>작다,중간,크다</td>
+											<td>3,5,7</td>
+											<td>-</td>
+											<td>(a)MS/VG</td>
+										</tr>
+										<tr>
+											<td>1(*)QN</td>
+											<td>식물체 : 높이</td>
+											<td>작다,중간,크다</td>
+											<td>3,5,7</td>
+											<td>-</td>
+											<td>(a)MS/VG</td>
+										</tr>
+										<tr>
+											<td>1(*)QN</td>
+											<td>식물체 : 높이</td>
+											<td>작다,중간,크다</td>
+											<td>3,5,7</td>
+											<td>-</td>
+											<td>(a)MS/VG</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="row">
+                                <div class="col-4">
+                                    <button class="btn btn-icon btn-light btn-circle" onclick="">
+                                        <span data-feather="plus"></span>
+                                    </button>
+                                    <button class="btn btn-icon btn-light btn-circle" onclick="">
+                                        <span data-feather="trash-2"></span>
+                                    </button>
+                                    <input type="hidden" id="offset">
+                                </div>
+                            </div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_cover clearfix">
+        	<button type="button" class="gray_btn" style="width:130px;height:45px;padding:0;">목록</button>
+        	<button type="button" class="green_btn" style="width:130px;height:45px;padding:0;">저장</button>
+        </div>
+    </div>
+</main>
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+<script type="text/javascript">
+	let file_this_id; // 클릭한 파일첨부 div 박스
+	let file_this_file; // 클릭한 파일과 연동된 input type["file"]
+	function filed(id){ //파일 첨부 클릭할경우
+		$(id).trigger("click");
+		$(id).on("change", file_handler);
+		file_this_id = $(id).prev();
+		file_this_file = $(id);
+	}
+	
+	function file_handler(e){ //파일 클릭시 파일명 업로드
+		
+		var file_name= $(file_this_file).val(); //파일 이름;
+		file_this_id.text(file_name);
+	}
+</script>
+</body>
+</html>

@@ -194,7 +194,7 @@
     typeof optionValue === "undefined" ? defaultValue : optionValue;
 
   /* Slick Slider */
-  $(".slick-slider").each(function () {
+ /* $(".slick-slider").each(function () {
     $(this).slick({
       slidesToShow: getData($(this).data("slide-slick"), 1),
       slidesToScroll: getData($(this).data("slideScroll-slick"), 1),
@@ -217,7 +217,7 @@
       fade: getData($(this).data("fade-slick"), false),
       responsive: getData($(this).data("responsive-slick"), {}),
     });
-  });
+  }); */
 
   /* Refresh Slick Under Tab */
   $('a[data-toggle="tab"]').on("shown.bs.tab", function () {

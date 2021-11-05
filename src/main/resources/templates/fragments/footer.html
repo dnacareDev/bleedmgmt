@@ -1,10 +1,165 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
-
+<style>
+	* {
+		box-sizing: border-box;
+	}
+	body, h1, h2, h3, h4, h5, h6, p, ul, ol {
+		margin: 0;
+		padding: 0;
+	}
+	ul, ol {
+		list-style: none;
+	}
+	a {
+		text-decoration: none;
+		color: #000;
+	}
+	img {
+		vertical-align: top;
+		border: 0;
+	}
+	.clearfix::before{
+		content: "";
+		display: block;
+	}
+	.clearfix::after{
+		content: "";
+		display: block;
+		clear: both;
+	}
+	.footer-wrapper{
+		position: static;
+	}
+	.footer-wrapper .container-fluid{
+		max-width: 1280px;
+    	margin: 0 auto;
+    	padding-top:24px;
+	}
+	.footer-top{
+		border-bottom:1px solid rgba(0, 0, 0, 0.1);
+	}
+	.footer_utills{
+		padding: 0 15px 24px 15px;
+		max-width:1280px;
+		margin:0 auto;
+	}
+	.footer_utills ul li{
+		display: inline-block;
+		padding: 0 15px;
+		position: relative;
+	}
+	.footer_utills ul li:first-child{
+		padding-left:0;
+	}
+	.footer_utills ul li::before{
+		content:"";
+		display: block;
+		position: absolute;
+		left:0;
+		top:6px;
+		width:1px;
+		height:50%;
+		background-color: #4f4f4f;
+	}
+	.footer_utills ul li:first-child::before{
+		display:none;
+	}
+	.footer_utills ul li a{
+		color:#4f4f4f;
+		font-size:14px;
+	}
+	.footer_contact ul li{
+		color:#4f4f4f;
+		font-weight:300;
+		font-size:14px;
+		display:inline-block;
+		padding:0 10px;
+		position:relative;
+	}
+	.footer_contact ul li:nth-child(3n+1){
+		padding-left:0;
+	}
+	.footer_contact ul li::before{
+		content:"";
+		display: block;
+		position: absolute;
+		left:0;
+		top:6px;
+		width:1px;
+		height:50%;
+		background-color: #4f4f4f;
+	}
+	.footer_contact ul li:nth-child(3n+1)::before{
+		display:none;
+	}
+	.footer-wrapper .footer-copyright{
+		padding-left:0;
+		line-height:3;
+	}
+	.footer-wrapper .footer-copyright p{
+		font-size:13px;
+		color:#B1B1B1;
+	}
+	.footer_logo{
+		width:180px;
+		line-height: 3;
+	}
+	.footer_logo img {
+		width: 100%;
+	}
+	.dropdown .btn-group{
+		width:100%;
+	}
+	.dropdown .btn-group .footer_btn1{
+		border-radius:none;
+		border:1px solid #CCCCCC;
+		border-right:none;
+	}
+	.dropdown .btn-group .footer_btn2{
+		border-radius:none;
+		border:1px solid #CCCCCC;
+		border-left:none;
+	}
+	.footer-wrapper .col-md-6:nth-child(1){
+		max-width: 70%;
+    	flex: 0 0 70%;
+	}
+	.footer-wrapper .col-md-6:nth-child(2){
+		max-width: 30%;
+    	flex: 0 0 30%;
+	}
+	.footer-wrapper .dropdown{
+		width:165px;
+	}
+</style>
 <footer class="footer-wrapper">
+	<div class="footer-top">
+		<div class="footer_utills">
+   			<ul>
+   				<li><a href="">개인정보처리방침</a></li>
+   				<li><a href="">이메일무단수집거부</a></li>
+   				<li><a href="">이용약관</a></li>
+   			</ul>
+   		</div>
+	</div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
+            	<div class="footer_logo">
+               		<a href="">
+               			<img src="../assets/vendor_assets/img/logo.png" alt="logo">
+               		</a>
+               	</div>
+            	<div class="footer_contact">
+            		<ul>
+            			<li>경기도 안성시 삼죽면 밤고개 1길 10 (우편번호 : 17513)</li>
+            			<li>대표전화:031-8053-9700</li>
+            			<li>팩스 : 031-8053-9797</li>
+            			<li>고객상담센터 : 평일 8:30 - 5:50PM (토,공휴일 휴무)</li>
+            			<li>이메일 : thekiban@thekiban.com</li>
+            		</ul>
+            	</div>
                 <div class="footer-copyright">
                     <p>COPYRIGHT @ 2015 THE KIBAN CO., Ltd. All Rights Reserved.
                     </p>
@@ -14,12 +169,12 @@
                 <div class="footer-menu text-right">
                     <div class="dropdown dropdown-click">
                         <div class="btn-group dropleft">
-                            <button class="btn btn-outline-lighten btn-sm">Button</button>
+                            <button class="btn btn-outline-lighten dropdown-toggle-split btn-sm footer_btn1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >패밀리 사이트</button>
+                            
 
-                            <button type="button" class="btn btn-outline-lighten btn-sm dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-outline-lighten btn-sm dropdown-toggle-split footer_btn2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span data-feather=chevron-down></span>
                             </button>
-
                             <div class="dropdown-default dropdown-menu">
                                 <a class="dropdown-item" href="#">Item One</a>
                                 <a class="dropdown-item" href="#">Item Two</a>

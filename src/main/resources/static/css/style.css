@@ -3371,7 +3371,7 @@ ul {
 }
 
 .main-content {
-  min-height: 100vh;
+  /*min-height: 100vh;*/
   position: relative;
 }
 
@@ -25201,5 +25201,240 @@ table.table-rounded tbody tr td:last-child {
     padding: 19px 0;
   }
 }
+table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
 
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+        #table2 {
+            display: none;
+        }
+        .main-content{
+        	padding: 77px 0 50px 0;
+        }
+        .main-content .contents .container-fluid{
+        	max-width: 1280px;
+		    margin: 0 auto;
+		    padding-top: 50px;
+        }
+		.main-content .btn.btn-icon{
+			float:left;
+			margin-left: 10px;
+		}
+		.main-content .btn.btn-icon:hover{
+			color: #3B7366;
+		}
+		.main-content .btn.btn-icon:first-child{
+			margin-left:0;
+		}
+		.main-content .card-extra .justify-content-end{
+			clear:both;
+		}
+		.main-content .card-extra .justify-content-end .atbd-button-list{
+			width: 100%;
+			margin:0;
+		}
+		.main-content .card-extra .atbd-button-group{
+			flex-grow: 3;
+		}
+		.main-content .card-extra .btn-group > .btn{
+			flex: 0 0 auto;
+			width: 120px;
+			height: 45px;
+			margin: 0;
+			font-size: 14px;
+			background-color:#FBFBFB;
+		}
+		.main-content .card-extra .btn-group > .btn:first-child{
+			border-radius: 5px 0 0 5px;
+			border: 1.5px solid #D9D9D9;
+		}
+		.main-content .card-extra .btn-group > .btn:nth-child(2){
+			border-radius: 0 5px 5px 0;
+			border: 1.5px solid #D9D9D9;
+		}
+		.main-content .card-extra .btn-group > .btn.btn-active,
+		.main-content .card-extra .btn-group > .btn:hover{
+			border-color: #C3E3CC;
+   			background-color:#EDF6F1;
+   			color: #217566;
+		}
+		.action-btn .atbd-button-group .btn.btn-outline-light:hover{
+			background-color:#EDF6F1;
+		}
+		.main-content .form-control{
+			height:45px;
+		}
+		.main-content .atbd-button-list > .btn{
+			margin-top:10px;
+			margin-bottom: 0;
+			border: none;
+		}
+		.main-content .atbd-button-list > .data_btn3{
+			width:45px;
+			height:45px;
+			background-color: #E9E9FD;
+		}
+		.main-content .atbd-button-list > .data_btn2{
+			width:45px;
+			height:45px;
+			background-color: #E8F3FF;
+		}
+		.main-content .atbd-button-list > .data_btn1{
+			width:45px;
+			height:45px;
+			background-color: #EDF6F1;
+		}
+		.main-content .table thead th span.title{
+			position:relative;
+		}
+		.main-content .table thead th span.title::before,
+		.main-content .table thead th span.title::after{
+			content:'';
+			display:block;
+			position:absolute;
+			top:5px;
+			right: -20px;
+			width:6px;
+			height:2px;
+			background-color:#222;
+			transform: rotate(45deg);
+		}
+		.main-content .table thead th span.title::after{
+			right: -17px;
+			transform: rotate(-45deg);
+		}
+		.main-content .table thead th i{
+			position:relative;
+		}
+		.main-content .table thead th i::before,
+		.main-content .table thead th i::after{
+			content:'';
+			display:block;
+			position:absolute;
+			bottom:5px;
+			right: -20px;
+			width:6px;
+			height:2px;
+			background-color:#222;
+			transform: rotate(-45deg);
+		}
+		.main-content .table thead th i::after{
+			right: -17px;
+			transform: rotate(45deg);
+		}
+		.main-content .card-extra {
+			margin:0;
+			padding-left:1.56rem;
+		}
+		.atbd-pagination__link.active{
+			background-color:#217566;
+		}
+		.atbd-pagination__link:hover{
+			background-color:#217566;
+		}
+		.col-4 .bottom_btn{
+			float:right;
+			background-color:#EDF6F1;
+			color:#217566;
+			border:none;
+		}
+		.main-content .table{
+			white-space: nowrap;
+    		border-collapse: collapse;
+		}
+		.main-content .table thead th img{
+			margin:6px 0 0 30px;
+		}
+		#table1{
+        	display:none;
+        	width:100%;
+        }
+        #table1.table_active{
+        	display:table;
+        }
+        #table2 {
+            display: none;
+        }
+        #table2.table_active{
+        	display:table;
+        }
+        .main-content .modal-header h6{
+        	font-size:20px;
+        }
+        
+        .main-content .modal-footer .btn-secondary{
+        	background-color:#EDF6F1;
+        	border: 1px solid #EDF6F1;
+        	color: #217566;
+        }
+        .main-content .fade .top_box{
+        	position:relative;
+        }
+        .main-content .fade .atbd-tab{
+        	overflow:hidden;
+        	position: relative;
+        }
+       	.main-content .fade .top_box span.next,
+       	.main-content .fade .top_box span.prev{
+       		position: absolute;
+		    right: 0;
+		    top: 0;
+		    display: block;
+		    width: 40px;
+		    height: 40px;
+		    cursor:pointer;
+		    background-color: rgba(255,255,255, .8);
+       	}
+       	.main-content .fade .top_box span.prev{
+       		width:20px;
+       		left:0;
+       	}
+       	.main-content .atbd-tab .nav-item:not(:last-child){
+       		margin-right:0;
+       		margin-left:20px;
+       	}
+        .main-content .fade .top_box span.next::before,
+        .main-content .fade .top_box span.next::after,
+        .main-content .fade .top_box span.prev::before,
+        .main-content .fade .top_box span.prev::after{
+        	content:"";
+        	display:block;
+        	position: absolute;
+        	top:15px;
+        	right:0;
+        	width: 15px;
+        	height: 2px;
+        	transform: rotate(45deg);
+        	background-color:#217566;
+        }
+        .main-content .fade .top_box span.prev::before,
+        .main-content .fade .top_box span.prev::after{
+        	left:0;
+        	transform: rotate(-45deg);
+        }
+        .main-content .fade .top_box span.prev::after{
+        	top:25px;
+        	transform: rotate(45deg);
+        }
+        .main-content .fade .top_box span.next::after{
+        	right:0;
+        	top:25px;
+        	transform: rotate(-45deg);
+        }
+        .main-content .fade .atbd-tab .nav-tabs{
+        	flex-flow: nowrap;
+        	width: max-content;
+        	transition: margin-left 0.3s;
+        }
 /*# sourceMappingURL=maps/style.css.map */

@@ -1,0 +1,2164 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <script src="../assets/vendor_assets/js/script.js"></script> <!-- 왼쪽상단에 버튼 클릭시 class 추가 스크립트 -->
+    <style>
+        .card {
+            box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%); /* 2021-11-02 수정 */
+        }
+
+        table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+
+        .main-content .card-extra .justify-content-end .atbd-button-list {
+            width: 100%;
+            margin: 0;
+        }
+
+        .main-content .nav-tabs .nav-link.active, .main-content .nav-tabs .nav-item.show .nav-link, .modal-basic .atbd-tab .nav-link {
+            color: #D9D9D9;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .main-content .atbd-tab .nav-link:after {
+            background-color: #f4f5f7;
+        }
+
+        .modal-basic .atbd-tab .nav-tabs .nav-item.active a {
+            border-radius: 21px;
+            background-color: #EDF6F1;
+            color: #217566;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .modal-basic .atbd-tab .nav-tabs .nav-item a::after,
+        .modal-basic .atbd-tab .nav-tabs:after {
+            display: none;
+        }
+
+        .content_title {
+            width: 100%;
+            background-color: #F7F7F8;
+            padding: 10px 0;
+        }
+
+        /*.content_title li { alpaDesign 수정
+            float: left;
+            width: 50%;
+            text-align: center;
+        }*/
+
+        .content_1 {
+            padding: 20px;
+            max-height: 500px;
+            overflow: auto;
+            line-height: 2;
+        }
+
+        .content_1 .title {
+            float: left;
+        }
+
+        .content_1 .input_text {
+            float: right;
+            width: 50%;
+        }
+
+        .content_1 .input_text input[type="text"] {
+            width: 100%;
+        }
+
+        .content_1 li {
+            display: inline-block;
+            width: 100%;
+            color: #222222;
+            font-size: 16px;
+        }
+
+        .pop1 .modal-dialog textarea {
+            width: 100%;
+            height: 300px;
+            border-radius: 5px;
+            border: 1px solid #D9D9D9;
+        }
+
+        .pop1 .modal-dialog .btn-upload {
+            width: 100%;
+        }
+
+        .pop1 .atbd-upload__file {
+            display: none;
+        }
+
+        .pop2 .modal-header {
+            display: -webkit-box;
+        }
+
+        .main-content .pop1 .form-group input[type=text] {
+            flex: 0 0 85%;
+        }
+
+        .main-content .pop1 .form-group span {
+            flex: 0 0 10%;
+        }
+
+        .main-content .pop1 a.btn-outline-lighten {
+            display: block;
+            text-align: left;
+            color: #B2B2B2;
+        }
+
+        #gen-messege {
+            display: table;
+        }
+
+        #gen-messege .modal-dialog {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        #gen-messege .modal-dialog .modal-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        #gen-messege .modal-dialog .modal-content .messege {
+            padding-bottom: 30px;
+        }
+
+        .main-content .modal-body {
+            width: 100%;
+        }
+
+        .main-content .modal-body .content_title ul li {
+            display: inline-block;
+            width: calc((100% - 50px) / 2);
+            margin-left: 40px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .main-content .modal-body ul li:first-child {
+            margin-left: 0;
+        }
+
+        .main-content .modal-body ul li img {
+            width: 100%;
+        }
+
+        #google_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            height: 500px;
+        }
+
+        #google_container li {
+            flex: 1;
+            height: 100%;
+        }
+
+        @media (min-width: 576px) {
+            .modal-dialog {
+                max-width: 1014px;
+                margin: 1.75rem auto;
+            }
+
+            #recent .modal-dialog {
+                max-width: 1300px;
+                margin: 1.75rem auto;
+            }
+
+            /* 2021 - 11 - 02 수정 */
+            .pop1 .modal-dialog {
+                max-width: 750px;
+            }
+
+            .pop4 .modal-dialog {
+                max-width: 750px;
+                margin: 0 auto;
+            }
+        }
+
+        .btn.btn-light.btn-transparent-light {
+            display: block;
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .main-content .contents .container-fluid {
+            max-width: 100%;
+            padding: 50px;
+        }
+
+        .bg-white > .row {
+            padding-top: 50px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        td .btn i.bi-file-earmark-arrow-down {
+            color: #000;
+        }
+
+
+        /* 2021 - 11 - 01 수정 */
+        .table td {
+            padding: 0px 12px;
+            vertical-align: middle;
+            font-size: 14px;
+            border-bottom: 2px solid #d9d9d9;
+        }
+
+        /* 2021 - 11 - 02 수정 */
+        .table th {
+            font-size: 16px;
+            border-top: 1px solid #d9d9d9;
+        }
+
+        /* 2021 - 11 - 02 수정 */
+        .table thead th {
+            border-bottom: 2px solid #adadad;
+        }
+
+        /* 2021 - 11 - 02 수정 */
+
+        #table2 td {
+            padding: 12px 12px;
+            font-size: 14px
+        }
+
+        #table2 th {
+            font-size: 16px
+        }
+
+        .main-content .table thead th span.title:before,
+        .main-content .table thead th span.title:after,
+        .main-content .table thead th i {
+            display: none;
+        }
+
+        .main-content .table thead th > img {
+            margin: 6px 0 0 12px;
+        }
+
+        #data_upload .form-group input[type=text]::placeholder {
+            text-align: left;
+            text-indent: 20px
+        }
+
+        .popup_wrap {
+            display: none
+        }
+
+        .popup_wrap.on {
+            display: block;
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .popup_wrap.on .popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 150px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            padding-top: 40px
+        }
+
+        .popup_wrap.on .close {
+            opacity: 1;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20px;
+            font-size: 14px;
+            background-color: #1e695c;
+            display: block;
+            height: 35px;
+            width: 90px;
+            color: #fff;
+            font-weight: 400;
+            border-radius: 6px
+        }
+
+
+        #data_upload .modal-body .form-group {
+            justify-content: flex-start;
+        }
+
+        #data_upload .form-group button, #data_upload2 .form-group button, #data_upload3 .form-group button, #data_upload12 .form-group button {
+            height: 45px;
+            padding: 0 20px;
+            background-color: #217566;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        #data_upload2 .form-group button, #data_upload3 .form-group button, #data_upload12 .form-group button {
+            margin-left: 0;
+        }
+
+        #data_upload .form-group input[type=text], #data_upload2 .form-group input[type=text], #data_upload3 .form-group input[type=text], #data_upload12 .form-group input[type=text] {
+            flex: 0 0 30%;
+            cursor: pointer;
+        }
+
+        #data_upload .form-group input[type=text]::-webkit-input-placeholder {
+            background: url("../assets/vendor_assets/img/upload.png") no-repeat 0 3px;
+            background-size: 15px;
+            color: #B2B2B2;
+        }
+
+        #data_upload .atbd-upload, #data_upload2 .atbd-upload, #data_upload3 .atbd-upload, #data_upload12 .atbd-upload {
+            width: 100%;
+            height: 300px;
+            overflow: auto;
+        }
+
+        #data_upload .atbd-upload table {
+            min-width: max-content;
+            border: none;
+        }
+
+        #data_upload2 .atbd-upload table, #data_upload3 .atbd-upload table, #data_upload12 .atbd-upload table {
+            width: 100%;
+        }
+
+        #data_upload table thead tr, #data_upload2 table thead tr, #data_upload3 table thead tr, #data_upload12 table thead tr {
+            border-top: none;
+            border-bottom: 2px solid #E8EEF2;
+        }
+
+        #data_upload table tbody tr, #data_upload2 table tbody tr, #data_upload3 table tbody tr, #data_upload12 table tbody tr {
+            border-bottom: 1px solid #E8EEF2;
+        }
+
+        #data_upload .atbd-upload table thead th, #data_upload2 .atbd-upload table thead th, #data_upload3 .atbd-upload table thead th, #data_upload12 .atbd-upload table thead th {
+            background-color: #F7F7F8;
+            color: #222222;
+            font-size: 16px;
+        }
+
+        #data_upload .atbd-upload table tbody td, #data_upload2 .atbd-upload table tbody td, #data_upload3 .atbd-upload table tbody td, #data_upload12 .atbd-upload table tbody td {
+            background-color: #fff;
+            color: #666666;
+            font-size: 16px;
+            font-weight: 200;
+        }
+
+        /* 2021 - 11 - 02 수정 */
+        #data_upload .form-group button {
+            line-height: 2rem;
+            font-size: 13px;
+            height: 34px;
+            margin-left: 5px;
+        }
+
+        #data_upload .form-group input[type=text] {
+            height: 34px;
+        }
+
+        #data_upload .form-group input[type=text]::placeholder {
+            text-align: left;
+            text-indent: 20px;
+            font-size: 14px;
+        }
+
+        .contents .container-fluid {
+            background-color: #FCFCFC;
+        }
+
+        #excel_data {
+            width: 100%;
+        }
+
+        .modal-content .modal-footer {
+            padding-bottom: 28px;
+            padding-right: 24px;
+        }
+
+        .btn-primary {
+            border: none;
+        }
+
+        .main-content .card-extra .justify-content-end .atbd-button-list .data_btn1,
+        .main-content .card-extra .justify-content-end .atbd-button-list .data_btn2,
+        .main-content .card-extra .justify-content-end .atbd-button-list .form-control {
+            height: 36px;
+        }
+
+        .main-content .card-extra .justify-content-end .atbd-button-list .data_btn1,
+        .main-content .card-extra .justify-content-end .atbd-button-list .data_btn2 {
+            width: 31px;
+            margin-top: 12px;
+            padding: 0px 19px;
+        }
+
+
+        .atbd-button-list button {
+            margin: 5px 3px;
+        }
+
+        #data_upload2 .form-group button, #data_upload3 .form-group button, #data_upload12 .form-group button {
+            height: 34px;
+            line-height: 2rem;
+            font-size: 13px;
+        }
+
+        #excel_data {
+            width: 100%;
+        }
+
+        .col-4 .bottom_btn > span {
+            height: 34px;
+            line-height: 2rem;
+            font-size: 13px;
+        }
+
+        /* 푸터 배경색 */
+        .footer-wrapper {
+            background-color: #FCFCFC;
+        }
+
+        /* contextmenu */
+        .contextmenu {
+            position: absolute;
+            display: none;
+        }
+
+        .contextmenu li {
+            border-left: 3px solid transparent;
+            transition: ease .2s;
+        }
+
+        .contextmenu li a {
+            display: block;
+            padding: 10px;
+            color: #B0BEC5;
+            background: #FFFFFF;
+            text-decoration: none;
+            transition: ease .2s;
+        }
+
+        .contextmenu li:hover {
+            border-left: 3px solid #9C27B0;
+        }
+
+        .contextmenu li:hover a {
+            color: #FFFFFF;
+        }
+
+        /* input 크기 */
+        .rowInput {
+            width: 115px;
+        }
+    </style>
+</head>
+
+<body class="layout-light top-menu overlayScroll" oncontextmenu='return false'>
+<div class="mobile-search"></div>
+
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+
+<main class="main-content" style="background-color: #FCFCFC;">
+
+    <div class="contents" style="background-color: #FFFFFF;">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mb-30">
+                    <div class="card">
+                        <div class="card-extra mt-20 mr-20">
+                            <div class="breadcrumb-main" style="float: left;">
+                                <h4 class="text-capitalize breadcrumb-title">시교 자원 관리</h4>
+                            </div>
+                            <!-- 버튼 등록하는 곳 -->
+                            <div class="action-btn d-flex justify-content-end">
+                                <div class="atbd-button-list d-flex flex-wrap">
+                                    <div class="btn-group atbd-button-group btn-group-normal my-2" role="group">
+                                        <button type="button" class="btn btn-xs btn-outline-light" id="sampleTable1">시교관리</button>
+                                        <!-- 2021-10-19 AlpaDesign btn-active클래스를 추가했습니다 -->
+                                        <button type="button" class="btn btn-xs btn-outline-light" id="sampleTable2">시교수출관리</button>
+                                    </div>
+
+                                    <form action="" name="searchForm" class="d-flex align-items-center add-contact__form my-sm-0 my-2">
+                                        <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" id="CropSelect">
+                                            <option value="고추">고추</option>
+                                            <option value="대파">대파</option>
+                                            <option value="멜론">멜론</option>
+                                            <option value="무">무</option>
+                                            <option value="배추">배추</option>
+                                            <option value="수박">수박</option>
+                                            <option value="양배추">양배추</option>
+                                            <option value="양파">양파</option>
+                                            <option value="참외">참외</option>
+                                            <option value="토마토">토마토</option>
+                                        </select>
+                                    </form>
+                                    <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
+                                        <img src="../assets/vendor_assets/img/icon1.png" alt=""></button>
+                                    <button type="button" class="btn btn-lg btn-primary data_btn1" title="엑셀 export" id="excelFileExport">
+                                        <img src="../assets/vendor_assets/img/icon2.png" title="데이터 등록" alt=""></button>
+                                    <button class="btn btn-lg btn-primary data_btn2" title="표시항목 선택" onclick="DisplayBtn();">
+                                        <img src="../assets/vendor_assets/img/icon3.png" alt=""></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="bg-white">
+                                <div class="table-responsive">
+                                    <table class="table" id="table1">
+                                        <thead class="text-center">
+                                        <tr>
+                                            <th></th>
+                                            <th><span class="title">첨부파일</span></th>
+                                            <th style="cursor: pointer;"><span class="title">작물</span></th>
+                                            <th style="cursor: pointer;"><span class="title">시교명(ID)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="시교명"></th>
+                                            <th style="cursor: pointer;"><span class="title">목표 지역</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="목표 지역"></th>
+                                            <th style="cursor: pointer;"><span class="title">구분</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="구분"></th>
+                                            <th style="cursor: pointer;"><span class="title">교배번호</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="교배번호"></th>
+                                            <th style="cursor: pointer;"><span class="title">종자번호(ID)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="종자번호"></th>
+                                            <th style="cursor: pointer;"><span class="title">현 종자량(g)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="현 종자량"></th>
+                                            <th style="cursor: pointer;"><span class="title">기내 발아율(%)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="기내 발아율"></th>
+                                            <th style="cursor: pointer;"><span class="title">기내 순도율(%)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="기내 순도율"></th>
+                                            <th style="cursor: pointer;"><span class=" title">비고</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="비고"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="text-center sample-list" id="sample_list">
+                                        <!--<tr>
+                                            <td><input type="checkbox"></td>
+                                            <td><span>19PC4155</span></td>
+                                            <td><span>P20C0080</span></td>
+                                            <td><span>0</span></td>
+                                            <td><span>40</span></td>
+                                            <td><span>0</span></td>
+                                            <td><span>40</span></td>
+                                            <td><span>백향구</span></td>
+                                            <td><span>이호석</span></td>
+                                            <td><span>2019-11-11</span></td>
+                                        </tr>-->
+                                        </tbody>
+                                    </table>
+                                    <table class="table" id="table2">
+                                        <thead class="text-center">
+                                        <tr>
+                                            <th></th>
+                                            <th><span class="title">시교명</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="시교명"></th>
+                                            <th><span class="title">종자번호(ID)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="종자번호(ID)"></th>
+                                            <th><span class="title">종자 보유량</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="종자 보유량"></th>
+                                            <th><span class="title">입고량</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="입고량"></th>
+                                            <th><span class="title">출고량</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="출고량"></th>
+                                            <th><span class="title">재고량</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="재고량"></th>
+                                            <th><span class="title">담당자</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="담당자"></th>
+                                            <th><span class="title">인수자</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="인수자"></th>
+                                            <th><span class="title">날짜</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="날짜"></th>
+                                            <th><span class="title">시교종료일자</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="시교종료일자"></th>
+                                            <th><span class="title">지역구분</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="지역구분"></th>
+                                            <th><span class="title">대상 지역</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="지역구분"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="text-center sampleOutcome-list" id="sampleOutcome-list">
+                                        <!--<tr>-->
+                                        <!--    <td><input type="checkbox" name="chkBox"></td>-->
+                                        <!--    <td><span>19PC0233</span></td>-->
+                                        <!--    <td><span>P20C0080</span></td>-->
+                                        <!--    <td><span>0</span></td>-->
+                                        <!--    <td><span>40</span></td>-->
+                                        <!--    <td><span>0</span></td>-->
+                                        <!--    <td><span>40</span></td>-->
+                                        <!--    <td><span>백향구</span></td>-->
+                                        <!--    <td><span>이호석</span></td>-->
+                                        <!--    <td><span>2019-01-01</span></td>-->
+                                        <!--    <td><span>-</span></td>-->
+                                        <!--    <td><span>해외</span></td>-->
+                                        <!--</tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button class="btn btn-icon btn-light btn-circle" id="addRow" onclick="addRow()">
+                                            <span data-feather="plus"></span>
+                                        </button>
+                                        <button class="btn btn-icon btn-light btn-circle" onclick="DeleteSample()">
+                                            <span data-feather="trash-2"></span>
+                                        </button>
+                                        <button class="btn btn-icon btn-light btn-circle" id="data_check_submit" style="width:44.03px; height:42px;">
+                                            <img src="../assets/vendor_assets/img/check_tab.png" alt="check" style="width: 17px;margin-left: 4px;">
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row" style="justify-content: center;">
+                                            <div id="pageNum" style="text-align:center; margin: 2% 0 0 0;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-lg btn-primary bottom_btn" data-toggle="modal" data-target="#recent">
+                                            <span>시교 진행 현황</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- modal code -->
+    <!-- 첨부파일 리스트  2021-11-04 -->
+    <div class="modal-basic modal fade show pop7" id="data_upload3" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 첨부파일 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <button onclick="dataToggle('#data_upload3', '#gen-attach');">데이터 등록</button>
+                    </div>
+                    <div>
+                        <div class="atbd-upload">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>순번</th>
+                                    <th>제목</th>
+                                    <th>등록일</th>
+                                </tr>
+                                </thead>
+                                <tbody id="file_list">
+                                <tr>
+                                    <td>1</td>
+                                    <td>테스트</td>
+                                    <td>2021-11-04</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <div class="col-4">
+                        <div class="row" style="justify-content: center;">
+                            <div id="pageNum2" style="text-align:center; margin: 2% 0 0 0;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 첨부파일 등록 -->
+    <div class="modal-basic modal fade show pop1" id="gen-attach" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 첨부파일</h6>
+                </div>
+                <form action="" method="post">
+                    <input type="hidden" id="input_file" name="input_file">
+                    <div class="modal-body">
+                        <div class="form-group mb-0">
+                            <span>제목</span>
+                            <input type="text" class="form-control form-control-lg" name="title">
+                        </div>
+                        <div class="form-group mb-0">
+                            <textarea style="resize:none;" name="content"></textarea>
+                        </div>
+                        <div>
+                            <div class="atbd-upload">
+                                <div class="atbd-upload__button">
+                                    <a href="javascript:void(0)" class="btn btn-lg btn-outline-lighten btn-upload"
+                                       onclick="$('#upload').click()"> <span data-feather="upload"></span>Click to Upload</a>
+                                    <input type="file" name="upload-3" class="upload-one" id="upload">
+                                </div>
+                                <div class="atbd-upload__file">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="file-name"><i class="las la-paperclip"></i> <span
+                                                class="name-text">xxx.png<span></span></span></a>
+                                            <a href="#" class="btn-delete"><i class="la la-trash"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#gen-attach', '#data_upload3');">취소</button>
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 등록된 첨부파일 -->
+    <div class="modal-basic modal fade show pop1" id="inAttach" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 첨부파일</h6>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <div class="form-group mb-0">
+                            <span>제목</span>
+                            <input type="text" class="form-control form-control-lg" name="title">
+                        </div>
+                        <div class="form-group mb-0">
+                            <textarea style="resize:none;" name="content"></textarea>
+                        </div>
+                        <div>
+                            <div class="atbd-upload">
+                                <div class="atbd-upload__button">
+                                    <a href="javascript:void(0)" class="btn btn-lg btn-outline-lighten btn-upload"
+                                       onclick="$('#upload').click()"> <span data-feather="upload"></span>Click to Upload</a>
+                                    <input type="file" name="upload-3" class="upload-one" id="upload">
+                                </div>
+                                <div class="atbd-upload__file">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="file-name"><i class="las la-paperclip"></i> <span
+                                                class="name-text">xxx.png<span></span></span></a>
+                                            <a href="#" class="btn-delete"><i class="la la-trash"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#gen-attach', '#data_upload3');">취소</button>
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 일반 데이터 수정 -->
+    <div class="modal-basic modal fade show pop2" tabindex="-1" role="dialog" aria-hidden="true" id="update-grid">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 기본 정보</h6>
+                    시교명 ID : <span></span>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-pane fade show active" id="control2" role="tabpanel" aria-labelledby="control2-tab">
+                        <div class="tab-slide-content">
+                            <div class="atbd-tab tab-horizontal">
+                                <div class="top_box">
+                                    <ul class="nav nav-tabs vertical-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="tab-horizontal-1-tab" data-toggle="tab"
+                                               href="#tab-horizontal-1" role="tab" aria-controls="tab-horizontal-1"
+                                               aria-selected="true">기본 정보</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <form action="updateSample" id="updateForm" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" id="update_list" name="update_list">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="tab-horizontal-1" role="tabpanel"
+                                             aria-labelledby="tab-horizontal-1-tab">
+                                            <div class="content_title clearfix">
+                                                <ul>
+                                                    <li>형질</li>
+                                                    <li>조사값</li>
+                                                </ul>
+                                            </div>
+                                            <div class="content_1 clearfix">
+                                                <ul>
+                                                    <li>
+                                                        <div class="title">작물</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_name" readonly></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">시교명(ID)</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_code"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">목표 지역</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_country"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">구분</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_type"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">교배번호</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_mate"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">종자번호(ID)</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_seed"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">현 종자량(g)</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_amount"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">기내 발아율(%)</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_sprout"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">기내 순도율(%)</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_purity"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">비고</div>
+                                                        <div class="input_text"><input type="text" class="test" name="sample_comment"></div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="updateBtn" onclick="UpdateBtn()" data-dismiss="modal">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 시교자원 데이터 등록 모달창 -->
+    <div class="modal-basic modal fade show pop5" id="data_upload" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 데이터 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <input type="text" class="form-control form-control-lg" placeholder="Click to Upload">
+                        <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none">
+                        <button onclick="filesFunction()">불러오기</button>
+                        <input type="file" name="" id="file_data_upload" style="display: none;">
+                    </div>
+                    <div>
+                        <form action="excelSample" id="excelForm" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" id="excel_list" name="excel_list">
+                            <div class="atbd-upload">
+                                <table id="excel_data">
+                                    <thead>
+                                    <th><span class="title">작물</span></th>
+                                    <th><span class="title">시교명(ID)</span></th>
+                                    <th><span class="title">목표 지역</span></th>
+                                    <th><span class="title">구분</span></th>
+                                    <th><span class="title">교배번호</span></th>
+                                    <th><span class="title">종자번호(ID)</span></th>
+                                    <th><span class="title">현 종자량(g)</span></th>
+                                    <th><span class="title">기내 발아율(%)</span></th>
+                                    <th><span class="title">기내 순도율(%)</span></th>
+                                    <th><span class="title">비고</span></th>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload', '#data_upload2');">취소</button>
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="InsertExcel()">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 수출자원 데이터 등록 모달창 -->
+    <div class="modal-basic modal fade show pop5" id="data_upload1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 데이터 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <input type="text" class="form-control form-control-lg" placeholder="Click to Upload">
+                        <input type="file" id="excelFile1" onchange="excelExport(event)" style="display: none">
+                        <button onclick="filesFunction()">불러오기</button>
+                        <input type="file" name="" id="file_data_upload1" style="display: none;">
+                    </div>
+                    <div>
+                        <form action="excelOutcome" id="excelForm1" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" id="excel_list1" name="excel_list1">
+                            <div class="atbd-upload">
+                                <table id="excel_data1">
+                                    <thead>
+                                    <th><span class="title">시교명</span></th>
+                                    <th><span class="title">종자번호(ID)</span></th>
+                                    <th><span class="title">종자 보유량</span></th>
+                                    <th><span class="title">입고량</span></th>
+                                    <th><span class="title">출고량</span></th>
+                                    <th><span class="title">재고량</span></th>
+                                    <th><span class="title">담당자</span></th>
+                                    <th><span class="title">인수자</span></th>
+                                    <th><span class="title">날짜</span></th>
+                                    <th><span class="title">시교종료일자</span></th>
+                                    <th><span class="title">지역구분</span></th>
+                                    <th><span class="title">대상지역</span></th>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload1', '#data_upload12');">취소</button>
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="InsertExcel()">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 데이터 목록 창 -->
+    <div class="modal-basic modal fade show pop7" id="data_upload2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 데이터 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <button onclick="dataToggle('#data_upload2', '#data_upload');">데이터 등록</button>
+                        <button>등록서식 다운로드</button>
+                    </div>
+                    <div>
+                        <div class="atbd-upload">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>순번</th>
+                                    <th>등록일</th>
+                                    <th>데이터수</th>
+                                </tr>
+                                </thead>
+                                <tbody id="uploadDate">
+                                <tr>
+                                    <td></td>
+                                    <td>2021-08-15</td>
+                                    <td>185</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2021-08-15</td>
+                                    <td>185</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <div class="col-4">
+                        <div class="row" style="justify-content: center;">
+                            <div id="pageNum1" style="text-align:center; margin: 2% 0 0 0;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 데이터 목록 창 -->
+    <div class="modal-basic modal fade show pop7" id="data_upload12" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교수출관리 > 데이터 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <button onclick="dataToggle('#data_upload12', '#data_upload1');">데이터 등록</button>
+                        <button>등록서식 다운로드</button>
+                    </div>
+                    <div>
+                        <div class="atbd-upload">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>순번</th>
+                                    <th>등록일</th>
+                                    <th>데이터수</th>
+                                </tr>
+                                </thead>
+                                <tbody id="uploadDate">
+                                <tr>
+                                    <td></td>
+                                    <td>2021-08-15</td>
+                                    <td>185</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2021-08-15</td>
+                                    <td>185</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <div class="col-4">
+                        <div class="row" style="justify-content: center;">
+                            <div id="pageNum1" style="text-align:center; margin: 2% 0 0 0;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 지도 -->
+    <div class="modal-basic modal fade show" id="recent" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title" id="test_click">시교 진행 현황</h6>
+                </div>
+                <div class="modal-body">
+                    <ul id="google_container">
+                        <li id="google_map1"><img src="../assets/vendor_assets/img/map1.png" alt="map1"></li>
+                        <li id="google_map2"><img src="../assets/vendor_assets/img/map2.png" alt="map2"></li>
+                    </ul>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+
+    <!-- context menu -->
+    <ul class="contextmenu">
+        <li><a href="#" onclick="addRow()">Insert Row</a></li>
+        <li><a href="#">Delete Row</a></li>
+        <li><a href="#">Export to Excel</a></li>
+        <li><a href="#">통합 분석</a></li>
+    </ul>
+</main>
+
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+
+<script type="text/javascript">
+    function dataToggle(one, two) {
+        $(one).modal("hide");
+
+        setTimeout(function () {
+            $(two).modal("show");
+        }, 5);
+    }
+
+    let topBox = document.getElementsByClassName("top_box")[0];
+    let [nav, prev, next] = topBox.children;
+    let navLi = nav.children; // pop top list
+    let navN = 0; //선택된 변수
+    let navMove = 0;
+    let content = document.getElementsByClassName("tab-content")[0];
+    let contentLi = content.children;
+
+    navLi[navN].classList.add("active");
+
+    for (let i = 0; i < navLi.length; i++) {
+        navLi[i].idx = i;
+
+        navLi[i].addEventListener("click", function (e) {
+            navN = e.currentTarget.idx;
+
+            moveFunction(navN);
+        });
+
+    }
+
+    /*let list = navLi.length;
+    next.addEventListener("click", function (e) {
+        (navN < list - 1) ? navN += 1 : navN = list - 1;
+        moveFunction(navN);
+    });
+
+    prev.addEventListener("click", function (e) {
+        (navN > 0) ? navN -= 1 : navN = 0;
+        moveFunction(navN);
+    });*/
+
+    function moveFunction(f) {
+
+        for (let k = 0; k < navLi.length; k++) {
+            navLi[k].classList.remove("active");
+            contentLi[k].classList.remove("active");
+        }
+        let navW = navLi[f].offsetWidth;
+        navMove = navW * f;
+
+
+        let a = topBox.offsetWidth;
+        let b = nav.offsetWidth;
+        let c = b - a;
+        let d = c + 40 + "px";
+
+        if (navMove > c) {
+            nav.style.marginLeft = "-" + d;
+        } else {
+            nav.style.marginLeft = "-" + navMove + "px";
+        }
+
+        navLi[f].classList.add("active");
+        contentLi[f].classList.add("active");
+        contentLi[f].classList.add("show");
+    }
+
+    /* 엑셀 업로드 버튼 */
+    function filesFunction() {
+        if(tablechk === 0) {
+            let filesBtn = document.getElementById("excelFile");
+            var eventList = document.createEvent("MouseEvent");
+
+            eventList.initEvent("click");
+            filesBtn.dispatchEvent(eventList);
+        } else {
+            let filesBtn = document.getElementById("excelFile1");
+            var eventList1 = document.createEvent("MouseEvent");
+
+            eventList1.initEvent("click");
+            filesBtn.dispatchEvent(eventList1);
+        }
+
+    }
+
+    /* 엑셀 코드 */
+    function handleExcelDataAll(sheet) {
+        handleExcelDataHtml(sheet); // html 형태
+    }
+
+    /* Html 형태로 출력 */
+    function handleExcelDataHtml(sheet) {
+        $("#displayExcelHtml").html(XLSX.utils.sheet_to_html(sheet));
+    }
+
+    function excelExport(event) {
+        excelExportCommon(event, handleExcelDataAll);
+    }
+
+    function excelExportCommon(event, callback) {
+        if(tablechk == 0) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var fileData = reader.result;
+                var wb = XLSX.read(fileData, {type: 'binary'});
+                var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
+                var fourthSheetName = sheetNameList[3]; // 네번째 시트명
+                var fourthSheet = wb.Sheets[fourthSheetName]; // 네번째 시트
+                callback(fourthSheet);
+
+                delete fourthSheet.A1;
+                delete fourthSheet.A2;
+                var rowdata = XLSX.utils.sheet_to_json(fourthSheet);
+
+                var keys = Object.values(rowdata[0]);
+
+                var html = "";
+
+                for (var i = 1; i < rowdata.length; i++) {
+                    if (i === 0) {
+                        html += "<thead class='text-center'>";
+                        html += "<tr>";
+
+                        $.each(rowdata[0], function (idx, value) {
+                            html += "<th><span class='excel-title'>" + value + "</span></th>";
+                        })
+
+                        html += "</tr>";
+                        html += "</thead>";
+                    } else if (i !== 0) {
+                        html += "<tbody class='text-center'>";
+                        html += "<tr>";
+
+                        var tmp = Object.keys(rowdata[0]);
+                        var j = 0;
+
+                        $.each(rowdata[i], function (idx, value) {
+                            // 공백처리
+                            if (idx == tmp[j]) {
+
+                                html += "<td class='excel'><span>" + value + "</span></td>";
+                                j++;
+
+                            } else {
+                                var idx_str = idx.replace(/[^0-9]/g, '');
+                                var tmp_str = tmp[j].replace(/[^0-9]/g, '');
+
+                                var gap = idx_str - tmp_str;
+
+                                while (gap > 0) {
+                                    gap--;
+                                    html += "<td><span> </span></td>";
+                                }
+
+                                html += "<td class='excel'><span>" + value + "</span></td>";
+                                j++;
+
+                                j = idx_str;
+                                j++;
+                            }
+                        });
+
+                        html += "</tr>";
+                        html += "</tbody>";
+                    }
+                }
+
+                var excel = [];
+
+                for (var k = 1; k < rowdata.length; k++) {
+                    var chk = Object.values(rowdata[k]);
+
+                    for (var n = 0; n < keys.length; n++) {
+                        if (chk[n] == undefined) {
+                            excel[n] = {key: keys[n], value: " "};
+                        } else if (keys[n] === "도입연월일") {
+                            excel[n] = {key: keys[n], value: excelDateToJSDate(chk[n])};
+                        } else {
+                            excel[n] = {key: keys[n], value: "" + chk[n]};
+                        }
+                    }
+                    const obj = {...excel};
+
+                    // console.log(obj);
+                    rowdata[k] = obj;
+                }
+                // $("#excel_data").empty();
+                $("#excel_data").append(html);
+
+                var jsonObj = tableToJson(document.getElementById("excel_data"));
+
+                $("#excel_list").val(JSON.stringify(jsonObj));
+            };
+
+            reader.readAsBinaryString(input.files[0]);
+        } else {
+            var input1 = event.target;
+            var reader1 = new FileReader();
+
+            reader1.onload = function () {
+                var fileData = reader1.result;
+                var wb = XLSX.read(fileData, {type: 'binary'});
+                var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
+                var fourthSheetName = sheetNameList[3]; // 네번째 시트명
+                var fourthSheet = wb.Sheets[fourthSheetName]; // 네번째 시트
+                callback(fourthSheet);
+
+                delete fourthSheet.A1;
+                delete fourthSheet.A2;
+                var rowdata = XLSX.utils.sheet_to_json(fourthSheet);
+
+                var keys = Object.values(rowdata[0]);
+
+                var html = "";
+
+                for (var i = 1; i < rowdata.length; i++) {
+                    if (i === 0) {
+                        html += "<thead class='text-center'>";
+                        html += "<tr>";
+
+                        $.each(rowdata[0], function (idx, value) {
+                            html += "<th><span class='excel-title'>" + value + "</span></th>";
+                        })
+
+                        html += "</tr>";
+                        html += "</thead>";
+                    } else if (i !== 0) {
+                        html += "<tbody class='text-center'>";
+                        html += "<tr>";
+
+                        var tmp = Object.keys(rowdata[0]);
+                        var j = 0;
+
+                        $.each(rowdata[i], function (idx, value) {
+                            // 공백처리
+                            if (idx == tmp[j]) {
+
+                                html += "<td class='excel'><span>" + value + "</span></td>";
+                                j++;
+
+                            } else {
+                                var idx_str = idx.replace(/[^0-9]/g, '');
+                                var tmp_str = tmp[j].replace(/[^0-9]/g, '');
+
+                                var gap = idx_str - tmp_str;
+
+                                while (gap > 0) {
+                                    gap--;
+                                    html += "<td><span> </span></td>";
+                                }
+
+                                html += "<td class='excel'><span>" + value + "</span></td>";
+                                j++;
+
+                                j = idx_str;
+                                j++;
+                            }
+                        });
+
+                        html += "</tr>";
+                        html += "</tbody>";
+                    }
+                }
+
+                var excel = [];
+
+                for (var k = 1; k < rowdata.length; k++) {
+                    var chk = Object.values(rowdata[k]);
+
+                    for (var n = 0; n < keys.length; n++) {
+                        if (chk[n] == undefined) {
+                            excel[n] = {key: keys[n], value: " "};
+                        } else if (keys[n] === "도입연월일") {
+                            excel[n] = {key: keys[n], value: excelDateToJSDate(chk[n])};
+                        } else {
+                            excel[n] = {key: keys[n], value: "" + chk[n]};
+                        }
+                    }
+                    const obj = {...excel};
+
+                    // console.log(obj);
+                    rowdata[k] = obj;
+                }
+                // $("#excel_data1").empty();
+                $("#excel_data1").append(html);
+
+                var jsonObj = tableToJson(document.getElementById("excel_data1"));
+
+                $("#excel_list").val(JSON.stringify(jsonObj));
+            };
+
+            reader1.readAsBinaryString(input1.files[0]);
+        }
+    }
+
+    function openExcel() {
+        if(tablechk === 0) {
+            $("#data_upload2").modal();
+        } else {
+            $("#data_upload12").modal();
+        }
+    }
+
+    /* 엑셀 입력 */
+    function InsertExcel() {
+        if(tablechk === 1) {
+            var data = [];
+
+            $("#excel_data").each(function (index, item) {
+                const key = $(this).attr('id');
+                var value = $(this).val();
+
+                var arr = {key: key, value: value};
+
+                data.push(arr);
+            });
+
+            $("#excelForm").submit();
+        } else {
+            var data1 = [];
+
+            $("#excel_data1").each(function (index, item) {
+                const key = $(this).attr('id');
+                var value = $(this).val();
+
+                var arr = {key: key, value: value};
+
+                data1.push(arr);
+            });
+
+            $("#excelForm1").submit();
+        }
+
+
+/*        var uploadHtml = "";
+
+        uploadHtml += '<tr>';
+        uploadHtml += '<td>chk</td>';
+        uploadHtml += '<td>chk</td>';
+        uploadHtml += '<td>chk</td>';
+        uploadHtml += '</tr>';
+
+        $('#uploadDate').prepend(uploadHtml);*/
+    }
+
+    // table to json
+    function tableToJson(table) {
+        var data = [];
+
+        var headers = [];
+        for (var i = 0; i < table.rows[0].cells.length; i++) {
+            headers[i] = table.rows[0].cells[i].innerText;
+
+            // console.log('headers : ', headers[i]);
+        }
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var tableRow = table.rows[i];
+
+            var rowData = {};
+
+            for (var j = 0; j < tableRow.cells.length; j++) {
+                rowData[headers[j]] = tableRow.cells[j].innerText;
+            }
+
+            data.push(rowData);
+        }
+
+        // console.log('data : ', data);
+
+        return data;
+    }
+
+    /* form data to json */
+    jQuery.fn.serializeObject = function () {
+        var obj = null;
+        try {
+            if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+                var arr = this.serializeArray();
+                if (arr) {
+                    obj = {};
+                    jQuery.each(arr, function () {
+                        obj[this.name] = this.value;
+                    });
+                }
+            }
+        } catch (e) {
+            alert(e.message);
+        } finally {
+        }
+
+        return obj;
+    };
+
+    const thisBtn = document.querySelector('#modal_open');
+
+    // 시교 자원 추가
+    function insertBtn() {
+        var data = [];
+
+        $("input[name=detail]").each(function (index, item) {
+            const key = $(this).attr('id');
+            var value = $(this).val();
+
+            var arr = {key: key, value: value};
+
+            data.push(arr);
+        });
+
+        $("#origin_list").val(JSON.stringify(data));
+
+        $("#insertForm").submit();
+
+    }
+
+    var tablechk = 0;
+
+    $("#sampleTable1").click(function () {
+        tablechk = 0;
+    })
+
+    $("#sampleTable2").click(function () {
+        tablechk = 1;
+    })
+
+    // DB에 저장된 데이터 출력
+    $(document).ready(function () {
+        SearchSample(1);
+    });
+
+    $("#CropSelect").change(function () {
+        SearchSample(1);
+    })
+
+    var emptyEls;
+    var resultData = [];
+
+    var btnindex = 0;
+
+    function SearchSample(e) {
+
+        var sample_name = $("#CropSelect").val();
+        var data = {"sample_name": sample_name, "page_num": e};
+
+        $.ajax(
+            {
+                url: 'searchSample',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    var sample_list = $(".sample-list");
+                    sample_list.eq(btnindex);
+                    var add_list = "";
+
+                    resultData = result.sample;
+
+                    var pageNum = $("#pageNum");
+                    var page_add = "";
+
+                    for (var i = 0; i < result.sample.length; i++) {
+                        add_list += '<tr>';
+                        add_list += '<td><input type="checkbox" name="RowCheck" value="' + result.sample[i].sample_id + '"></td>';
+                        add_list += '<td><button class="btn btn-light btn-default btn-squared btn-transparent-light" id="attachFileList" onclick="SearchFileList(' + result.sample[i].sample_id + ');"><i class="bi bi-file-earmark-arrow-down"></i></button></td>';
+                        add_list += '<td>' + result.sample[i].sample_name + '</td>';
+                        add_list += '<td ondblclick="myFunction()">' + result.sample[i].sample_code + '</td>';
+                        add_list += '<td>' + result.sample[i].sample_country + '</td>';
+                        add_list += '<td>' + result.sample[i].sample_type + '</td>';
+                        add_list += '<td>' + result.sample[i].sample_mate + '</td>';
+                        add_list += '<td>' + result.sample[i].sample_seed + '</td>';
+                        add_list += '<td>' + result.sample[i].sample_amount + '</td>';
+                        add_list += '<td>' + result.sample[i].sample_sprout + '</td>';
+                        add_list += '<td>' + result.sample[i].sample_purity + '</td>';
+                        add_list += '<td>' + result.sample[i].sample_comment + '</td>';
+                        add_list += '</tr>';
+                    }
+
+                    if (result.page_num == 1) {
+                        page_add += '<button class="atbd-pagination__link pagination-control"><span class="la la-angle-left"></span></button>';
+                    } else {
+                        page_add += '<button class="atbd-pagination__link pagination-control" onclick="SearchSample(' + (result.page_num - 1) + ')"><span class="la la-angle-left"></span></button>';
+                    }
+
+                    for (var i = 0; i < result.end_page; i++) {
+                        if (result.page_num == (i + 1)) {
+                            page_add += '<button class="atbd-pagination__link active" onclick="SearchSample(' + (i + 1) + ')">' + (i + 1) + '</button>';
+                        } else {
+                            page_add += '<button class="atbd-pagination__link" onclick="SearchSample(' + (i + 1) + ')">' + (i + 1) + '</button>';
+                        }
+                    }
+
+                    if (result.page_num == result.end_page) {
+                        page_add += '<button class="atbd-pagination__link pagination-control"><span class="la la-angle-right"></span></button>';
+                    } else {
+                        page_add += '<button class="atbd-pagination__link pagination-control" onclick="SearchSample(' + (result.page_num + 1) + ')"><span class="la la-angle-right"></span></button>';
+                    }
+
+                    sample_list.empty();
+                    sample_list.append(add_list);
+
+                    pageNum.empty();
+                    pageNum.append(page_add);
+
+                    emptyEls = document.querySelectorAll('#sample_list tr .status');
+                    emptyEls = Array.prototype.slice.call(emptyEls);
+
+                }
+            });
+    }
+
+
+    function SearchFileList(e) {
+
+        $("#data_upload3").modal();
+
+        var data = {"sample_id": e};
+
+        $.ajax(
+            {
+                url: 'searchFileList',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    var file_list = $("#file_list");
+                    var add_list = "";
+
+                    for (var i = 0; i < result.sampleFile.length; i++) {
+                        add_list += '<tr>';
+                        add_list += '<td>' + result.sampleFile[i].sample_file_id + '</td>';
+                        add_list += '<td>' + result.sampleFile[i].sample_file_title + '</td>';
+                        add_list += '<td>' + result.sampleFile[i].create_date + '</td>';
+                        add_list += '</tr>';
+                    }
+
+                    file_list.empty();
+                    file_list.append(add_list);
+                }
+            });
+    }
+
+    // 시교자원 삭제
+    function DeleteSample() {
+        var total_id = [];
+
+        $("input:checkbox[name=RowCheck]:checked").each(function () {
+            var sample_id = $(this).val();
+
+            total_id.push(sample_id);
+        });
+
+        var data = {'sample_id': total_id};
+
+        if (confirm("삭제하시겠습니까?") == true) {
+            $.ajax(
+                {
+                    url: 'deleteSample',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        if (result == 0) {
+                        } else {
+                            location.reload()
+                        }
+                    }
+                });
+        } else {
+
+        }
+    }
+
+    // 정렬
+    $(document).ready(function () {
+        $('#table1 th').each(function (column) {
+            $(this).click(function () {
+                if ($(this).is('.asc')) {
+                    $(this).removeClass('asc');
+                    $(this).addClass('desc');
+                    sortdir = -1;
+                } else {
+                    $(this).addClass('asc');
+                    $(this).removeClass('desc');
+                    sortdir = 1;
+                }
+                $(this).siblings().removeClass('asc');
+                $(this).siblings().removeClass('desc');
+
+                var rec = $('#table1').find('tbody>tr').get();
+
+                rec.sort(function (a, b) {
+                    var val1 = +($(a).children('td').eq(column).text());
+                    var val2 = +($(b).children('td').eq(column).text());
+
+                    if (isNaN(val1) && isNaN(val2)) {
+                        val1 = $(a).children('td').eq(column).text();
+                        val2 = $(b).children('td').eq(column).text();
+
+                        return (val1 < val2) ? -sortdir : (val1 > val2) ? sortdir : 0;
+                    } else {
+                        return (val1 < val2) ? -sortdir : (val1 > val2) ? sortdir : 0;
+                    }
+                });
+
+                $.each(rec, function (index, row) {
+                    $('#table1 tbody').append(row);
+                });
+            });
+        });
+    });
+
+    var emptyElsIndex = 0;
+
+    function emptyFunction(id, e) { // table 내용 모달로 가져오기 2021-10-29 alpadesign 수정
+        let target = e;
+
+        let index = emptyEls.indexOf(target);
+
+        emptyElsIndex = index;
+
+        let values = $(e).parent().children();
+
+        $("#update-grid").modal("show");
+
+        var input_N = 0;
+
+        for (let i = 3; i < values.length; i++) {
+            var inner_text = values.eq(i).text();
+
+            $("#update-grid input[type='text']").eq(i - 3).val(inner_text);
+        }
+
+        $("#update-grid input[type='text']").each(function (f, e) {
+            input_N += $(e).length;
+        });
+
+        $("#updateBtn").removeAttr("onclick");
+        $("#updateBtn").attr("onclick", "UpdateBtn('id');");
+    }
+
+    // 일반 데이터 수정
+    function UpdateBtn() {
+        const data = [];
+
+        const sample_id = {key: 'sample_id', value: "" + resultData[emptyElsIndex].sample_id};
+
+        data.push(sample_id);
+
+        $("input[class=test]").each(function (index, item) {
+            const key = $(this).attr('name');
+            var value = $(this).val();
+
+            var arr = {key: key, value: value};
+
+            data.push(arr);
+        });
+
+        $("#update_list").val(JSON.stringify(data));
+
+        $("#updateForm").submit();
+    }
+
+    // 구글 맵 관련
+    const mapContainer = document.querySelector('#google_map1');
+    const mapContainer2 = document.querySelector('#google_map2');
+    const koreaOptions = {
+        zoom: 6,
+        center: {lat: 36.613766432253634, lng: 127.84942123102657},
+        panControl: false,
+        zoomControl: false,
+        scaleControl: false,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false
+        // mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+
+    const globalOptions = {
+        ...koreaOptions,
+        zoom: 2,
+        center: {lat: 37.5642135, lng: 127.0016985}
+    }
+
+    let map = new google.maps.Map(mapContainer, koreaOptions);
+    let map2 = new google.maps.Map(mapContainer2, globalOptions);
+    //국내는 부산, 청주, 익산, 남해, 밀양, 전주, 제주, 강릉, 함양, 부여, 성주
+    // 해외는 인도, 중국, 영국, 미국, 파키스탄, 일본, 네덜란드
+    const globalCityDatas = [
+        {lat: 22.22267143294292, lng: 79.13524723236651},
+        {lat: 33.25173879082619, lng: 103.92501603483987},
+        {lat: 38.8498311865453, lng: -102.37095928101904},
+        {lat: 29.48237176159851, lng: 69.69045458640039},
+        {lat: 36.332952986760326, lng: 138.65686172199221},
+        {lat: 52.529665164041596, lng: 4.8670640984935165},
+    ];
+
+    const koreaCityDatas = [
+        {lat: 35.206238513124546, lng: 129.08038118015855},
+        {lat: 36.6424341, lng: 127.4890319},
+        {lat: 35.9482858, lng: 126.9575991},
+        {lat: 36.6424341, lng: 127.4890319},
+        {lat: 35.832732140930425, lng: 127.12353144605112},
+        {lat: 35.492278267228684, lng: 128.74756762815156},
+        {lat: 37.7626809049733, lng: 128.89751079481087},
+        {lat: 33.46962794437109, lng: 126.53995587901136},
+        {lat: 35.62315997859795, lng: 127.64287731141832},
+        {lat: 36.28673472687304, lng: 126.75708382107744},
+        {lat: 35.932930167597355, lng: 128.26808927858545},
+        // {lat: 35.906974893937814, lng: 137.73401019446183 },
+    ]
+
+    const image = {
+        url: "http://maps.google.com/mapfiles/ms/micons/msmarker.shadow.png",
+        // This marker is 20 pixels wide by 32 pixels high.
+        size: new google.maps.Size(10, 20),
+        // The origin for this image is (0, 0).
+        origin: new google.maps.Point(0, 0),
+        // The anchor for this image is the base of the flagpole at (0, 32).
+        anchor: new google.maps.Point(0, 32),
+    };
+
+    const markers = [];
+    koreaCityDatas.forEach((value, i) => {
+        const marker = new google.maps.Marker({
+            position: value,
+            map: map,
+            // icon: image,
+            label: ""
+        })
+        markers.push(marker)
+    })
+
+    markers.forEach((el, i) => {
+        el.addListener('click', () => {
+            map = el.getMap();
+            map.panTo({lat: el.getPosition().lat(), lng: el.getPosition().lng()})
+            smoothZoom(map, 12, map.getZoom())
+            console.log(1)
+        })
+    })
+
+    const gMarkers = [];
+    globalCityDatas.forEach((value, i) => {
+        const marker = new google.maps.Marker({
+            position: value,
+            map: map2,
+            // icon: image,
+            label: ""
+        })
+        gMarkers.push(marker)
+    })
+
+    gMarkers.forEach((el, i) => {
+        el.addListener('click', () => {
+            map = el.getMap();
+            map.panTo({lat: el.getPosition().lat(), lng: el.getPosition().lng()})
+            smoothZoom(map2, 12, map2.getZoom())
+            console.log(1)
+        })
+    })
+
+    function smoothZoom(map, max, cnt) {
+        if (cnt >= max) {
+            return;
+        } else {
+            z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+                google.maps.event.removeListener(z);
+                smoothZoom(map, max, cnt + 1);
+            });
+            setTimeout(function () {
+                map.setZoom(cnt)
+            }, 40);
+        }
+    }
+
+    document.addEventListener('mousedown', function () {
+        if ((event.button == 2) || (event.which == 3)) {
+
+        }
+    });
+
+    var tableAllEls = document.querySelectorAll('.card-body .table-responsive .table');
+
+    tableAllEls = Array.prototype.slice.call(tableAllEls);
+
+    // row 추가
+    function addRow() {
+        if (tablechk === 0) {
+            var row_list = "";
+            row_list += '<tr id="row_data">';
+
+            row_list += '<form action="insertSample" id="rowForm" method="POST" enctype="multipart/form-data">';
+            row_list += '<input type="hidden" id="rowSample" name="rowSample">'
+            row_list += '<td><input type="checkbox" name="RowCheck"></td>';
+            row_list += '<td><button class="btn btn-light btn-default btn-squared btn-transparent-light" data-toggle="modal" data-target="#gen-attach"><i class="bi bi-file-earmark-arrow-down"></i></button></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_name" value="' + $("#CropSelect option:selected").text() + '"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_code"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_country"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_type"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_mate"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_seed"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_amount"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_sprout"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_purity"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_comment"></td>';
+            row_list += '</form>';
+            row_list += '</tr>';
+
+            $("#sample_list").append(row_list);
+
+            var input_data = [];
+
+            var input_value = $("#CropSelect option:selected").text();
+
+            var input_name = {key: "sample_name", value: input_value};
+
+            input_data.push(input_name);
+
+            $.ajax(
+                {
+                    url: 'insertSample',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "input_data": JSON.stringify(input_data)
+                    },
+                    success: function (result) {
+                        if (result != null) {
+                            $(".rowInput").focusout(function () {
+                                var data = [];
+
+                                var data_in = {key: "sample_id", value: result.sample_id}
+
+                                data.push(data_in);
+
+                                $("input[class=rowInput]").each(function (index, item) {
+                                    const key = $(this).attr('name');
+                                    var value = $(this).val();
+
+                                    var arr = {key: key, value: value};
+
+                                    data.push(arr);
+                                });
+
+                                $.ajax(
+                                    {
+                                        url: 'updateSample',
+                                        method: 'POST',
+                                        dataType: 'json',
+                                        data: {
+                                            "data": JSON.stringify(data)
+                                        },
+                                        success: function (result) {
+
+                                        }
+                                    });
+                            })
+                        }
+                    }
+                });
+        } else {
+            /*var row_list = "";
+            row_list += '<tr id="row_data">';
+
+            row_list += '<form action="insertSample" id="rowForm" method="POST" enctype="multipart/form-data">';
+            row_list += '<input type="hidden" id="rowSample" name="rowSample">'
+            row_list += '<td><input type="checkbox" name="RowCheck"></td>';
+            row_list += '<td><button class="btn btn-light btn-default btn-squared btn-transparent-light" data-toggle="modal" data-target="#gen-attach"><i class="bi bi-file-earmark-arrow-down"></i></button></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_name" value="' + $("#CropSelect option:selected").text() + '"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_code"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_country"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_type"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_mate"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_seed"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_amount"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_sprout"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_purity"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_comment"></td>';
+            row_list += '</form>';
+            row_list += '</tr>';
+
+            $("#sample_list").append(row_list);
+
+            var input_data = [];
+
+            var input_value = $("#CropSelect option:selected").text();
+
+            var input_name = {key: "sample_name", value: input_value};
+
+            input_data.push(input_name);
+
+            $.ajax(
+                {
+                    url: 'insertSample',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "input_data": JSON.stringify(input_data)
+                    },
+                    success: function (result) {
+                        if (result != null) {
+                            $(".rowInput").focusout(function () {
+                                var data = [];
+
+                                var data_in = {key: "sample_id", value: result.sample_id}
+
+                                data.push(data_in);
+
+                                $("input[class=rowInput]").each(function (index, item) {
+                                    const key = $(this).attr('name');
+                                    var value = $(this).val();
+
+                                    var arr = {key: key, value: value};
+
+                                    data.push(arr);
+                                });
+
+                                $.ajax(
+                                    {
+                                        url: 'updateSample',
+                                        method: 'POST',
+                                        dataType: 'json',
+                                        data: {
+                                            "data": JSON.stringify(data)
+                                        },
+                                        success: function (result) {
+
+                                        }
+                                    });
+                            })
+                        }
+                    }
+                });*/
+        }
+    }
+
+    /* 엑셀 다운로드 */
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+        var view = new Uint8Array(buf);  //create uint8array as viewer
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+        return buf;
+    }
+
+    function exportExcel() {
+        if (tablechk === 0) {
+            // step 1. workbook 생성
+            var wb = XLSX.utils.book_new();
+
+            // step 2. 시트 만들기
+            var newWorksheet = excelHandler.getWorksheet();
+
+            // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.
+            XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+
+            // step 4. 엑셀 파일 만들기
+            var wbOut = XLSX.write(wb, {bookType: 'xlsx', type: 'binary'});
+
+            // step 5. 엑셀 파일 내보내기
+            saveAs(new Blob([s2ab(wbOut)], {type: "application/octet-stream"}), excelHandler.getExcelFileName());
+        } else {
+            // step 1. workbook 생성
+            var wb1 = XLSX.utils.book_new();
+
+            // step 2. 시트 만들기
+            var newWorksheet1 = excelHandler1.getWorksheet();
+
+            // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.
+            XLSX.utils.book_append_sheet(wb1, newWorksheet1, excelHandler1.getSheetName());
+
+            // step 4. 엑셀 파일 만들기
+            var wbOut1 = XLSX.write(wb1, {bookType: 'xlsx', type: 'binary'});
+
+            // step 5. 엑셀 파일 내보내기
+            saveAs(new Blob([s2ab(wbOut1)], {type: "application/octet-stream"}), excelHandler1.getExcelFileName());
+        }
+
+    }
+
+    $("#excelFileExport").click(function () {
+        exportExcel();
+    });
+
+    var excelHandler = {
+        getExcelFileName: function () {
+            return '시교자원관리.xlsx';
+        },
+        getSheetName: function () {
+            return '시교자원관리';
+        },
+        getExcelData: function () {
+            return document.getElementById('table1');
+        },
+        getWorksheet: function () {
+            return XLSX.utils.table_to_sheet(this.getExcelData());
+        }
+    }
+
+    var excelHandler1 = {
+        getExcelFileName: function () {
+            return '시교수출관리.xlsx';
+        },
+        getSheetName: function () {
+            return '시교수출관리';
+        },
+        getExcelData: function () {
+            return document.getElementById('table2');
+        },
+        getWorksheet: function () {
+            return XLSX.utils.table_to_sheet(this.getExcelData());
+        }
+    }
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn0n_LEGxgJuCfTU8aKvuwrcmw0iZjfmY&callback=initMap&region=kr"></script>
+</body>
+
+</html>
