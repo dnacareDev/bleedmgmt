@@ -213,7 +213,31 @@
 			display:inline-block;
 			color: #B2B2B2;
 		}
-		
+		input[type="text"]:focus{
+			border:1px solid #222;
+		}
+		.main-content .form-group{
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			padding-bottom:10px;
+			align-items: center;
+	  	}
+	  	.main-content .form-group span {
+	  		flex: 0 0 30%;
+	  		color: #222222;
+	  	}
+	  	.main-content .form-group input[type=text]{
+	  		flex: 0 0 70%;
+	  	}
+	  	#passwordCh1,#passwordCh2{
+	  		border: 1px solid #e3e6ef;
+	  	}
+	  	
+	  	#checking_password.active #passwordCh1,
+	  	#checking_password.active #passwordCh2{
+	  		border: 1px solid red;
+	  	}
 		
 		
 		
@@ -324,9 +348,9 @@
 									</tbody>
 								</table>
 							</div>
-							<div class="row">
+							<div class="row" style="padding-bottom: 20px;">
                                 <div class="col-4">
-                                    <button class="btn btn-icon btn-light btn-circle" onclick="">
+                                    <button class="btn btn-icon btn-light btn-circle"  data-toggle="modal" title="데이터 등록" data-target="#settings">
                                         <span data-feather="plus"></span>
                                     </button>
                                     <button class="btn btn-icon btn-light btn-circle" onclick="">
@@ -343,6 +367,45 @@
         <div class="btn_cover clearfix">
         	<button type="button" class="gray_btn" style="width:130px;height:45px;padding:0;">목록</button>
         	<button type="button" class="green_btn" style="width:130px;height:45px;padding:0;">저장</button>
+        </div>
+    </div>
+    
+    <div class="modal-basic modal fade show pop1" id="settings" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <form method="" action="">
+	                <div class="modal-body clearfix" id="checking_password">
+	                    <div class="form-group mb-0 clearfix" style="padding: 10px 0;">
+	                       <span style="vertical-align: middle;">번호</span>
+	                       <input id="passwordCh1" type="password" name="" style="width: 80%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
+	                    </div>
+	                   	<div class="form-group mb-0 clearfix" style="clear: both;">
+	                        <span style="vertical-align: middle;">특성</span>
+	                        <input id="passwordCh2" type="password" name="" style="width: 80%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
+	                    </div>
+	                    <div class="form-group mb-0 clearfix" style="clear: both;">
+	                        <span style="vertical-align: middle;">표현형태</span>
+	                        <input id="passwordCh2" type="password" name="" style="width: 80%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
+	                    </div>
+	                    <div class="form-group mb-0 clearfix" style="clear: both;">
+	                        <span style="vertical-align: middle;">계급</span>
+	                        <input id="passwordCh2" type="password" name="" style="width: 80%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
+	                    </div>
+	                    <div class="form-group mb-0 clearfix" style="clear: both;">
+	                        <span style="vertical-align: middle;">표준품종</span>
+	                        <input id="passwordCh2" type="password" name="" style="width: 80%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
+	                    </div>
+	                    <div class="form-group mb-0 clearfix" style="clear: both;">
+	                        <span style="vertical-align: middle;">조사시기 및 방법</span>
+	                        <input id="passwordCh2" type="password" name="" style="width: 80%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
+	                    </div>
+	                </div>
+	                <div class="modal-footer clearfix" style="border: none; clear:both;">
+	                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+	                    <input type="submit" class="btn btn-primary btn-sm" value="저장">
+	                </div>
+                </form>
+            </div>
         </div>
     </div>
 </main>
