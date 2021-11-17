@@ -1,0 +1,16 @@
+@charset "utf-8";
+.card {padding: 30px 50px;}
+
+
+.container-fluid .row .card {border-radius: 10px; overflow: hidden;}
+.container-fluid .row .card.breadcrumb-main {float: none;}
+.container-fluid .row .card .atbd-button-list {display: flex; align-items: center; margin-bottom: 20px; justify-content: flex-end;}
+.container-fluid .row .card .atbd-button-list .btn-lg {margin: 0 3px;}
+.bg-white .row {padding-top: 10px;}
+
+.file_input {}
+.file_input > input[type="file"] {display: none;}
+.file_input > label {display: inline-block; width: 17px; height: 21px; background: url('./add_file.png') no-repeat center center;}
+
+
+main.main-content .contents .tui-is-selected {background-color: #217566; border: 1px solid #217566;}
