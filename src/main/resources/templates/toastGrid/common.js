@@ -734,7 +734,8 @@ window.onload = function() {
     pageLeng.addEventListener('change', (e) => {
         let target = e.target;
         let select = parseInt(target.options[target.selectedIndex].value);
-        let _tab = tabIdx === 0 ? grid.setPerPage(select) : grid2.setPerPage(select);
+        grid.setPerPage(select);
+        grid2.setPerPage(select);
     });
     
     // Export 기능과 설정
