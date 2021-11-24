@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalresource.Mapper.LoginMapper">
+	<select id="LoginUserInfo" parameterType="String" resultType="User">
+		SELECT * FROM user
+		WHERE user_username = #{user_username}
+	</select>
+
+	<!-- 비밀번호 변경 -->
+	<update id="UpdatePassword" parameterType="User">
+		UPDATE user
+		SET user_password = #{user_password}
+		WHERE user_id = #{user_id}
+	</update>
+</mapper>
