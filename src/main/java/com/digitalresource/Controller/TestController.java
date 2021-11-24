@@ -31,4 +31,10 @@ public class TestController
 		
 		return mv;
 	}
+
+	@RequestMapping("/test")
+	public ModelAndView test(ModelAndView mv){
+		mv.setViewName("lab/data_manage");
+		return mv;
+	}
 }
