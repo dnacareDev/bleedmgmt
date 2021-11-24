@@ -1859,7 +1859,7 @@
 
         $.ajax(
             {
-                url: 'searchSample',
+                url: 'search-character',
                 method: 'POST',
                 dataType: 'json',
                 data: data,
@@ -1872,19 +1872,19 @@
                         rowHeaders: ['checkbox'],
                         columns: [
                             {
-                                header: '첨부파일',
+                                header: '분류',
                                 name: 'file',
                                 width: 100
                             },
                             {
-                                header: '작물',
+                                header: '작목서설',
                                 name: 'sample_name',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
-                                header: '시교명(ID)',
+                                header: '설명',
                                 name: 'sample_code',
                                 editor: 'text',
                                 sortable: true,
@@ -1892,60 +1892,22 @@
                                 filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                             },
                             {
-                                header: '목표 지역',
+                                header: '지정년도',
                                 name: 'sample_country',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
-                                header: '구분',
+                                header: '조사기준화일',
                                 name: 'sample_type',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
-                                header: '교배번호',
+                                header: '생성날짜',
                                 name: 'sample_mate',
-                                editor: 'text',
-                                sortable: true,
-                                sortingType: 'asc'
-                            },
-                            {
-                                header: '종자번호(ID)',
-                                name: 'sample_seed',
-                                editor: 'text',
-                                sortable: true,
-                                sortingType: 'asc'
-                            },
-                            {
-                                header: '현 종자량(g)',
-                                name: 'sample_amount',
-                                editor: 'text',
-                                filter: 'number',
-                                sortable: true,
-                                sortingType: 'asc'
-                            },
-                            {
-                                header: '기내 발아율(%)',
-                                name: 'sample_sprout',
-                                editor: 'text',
-                                filter: 'number',
-                                sortable: true,
-                                sortingType: 'asc'
-                            },
-                            {
-                                header: '기내 순도율(%)',
-                                name: 'sample_purity',
-                                editor: 'text',
-                                filter: 'number',
-                                sortable: true,
-                                sortingType: 'asc'
-                            },
-                            {
-                                header: '비고',
-                                name: 'sample_comment',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
