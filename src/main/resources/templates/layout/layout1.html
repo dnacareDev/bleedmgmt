@@ -278,6 +278,7 @@
 									</thead>
 									<tbody>
 										<tr>
+										
 										</tr>
 									</tbody>
 								</table>
@@ -370,24 +371,24 @@
 	}
 	
 	/*check-box를 보다 쉽게 클릭하기 위해 글씨를 눌렀을때 체크박스도 같이 클릭되는 이벤트입니다*/
-	let flag=true;
+	
 	$(".this_check").click(function(){
-		if(flag == false){
-			$(this).children().eq(0).prop("checked", true);
-			return;
-		}
-		$(this).toggleClass('active');
-		$(this).children().eq(1).toggleClass('active');
-		
-		if($(this).hasClass("active") == true){
-			$(this).children().eq(0).prop("checked", true);
-		} else {
-			$(this).children().eq(0).prop("checked", false);
-		}
+			$(this).toggleClass('active');
+			$(this).children().eq(1).toggleClass('active');
+			
+			if($(this).hasClass("active") == true){
+				$(this).children().eq(0).prop("checked", true);
+			} else {
+				$(this).children().eq(0).prop("checked", false);
+			}
 	});
-	$("table tbody tr").each(function(idx, elem){ // table 에 td 가 존재하지않을경우 "리스트가 존재하지않습니다"를 호출합니다.
-		($(elem).find("td").length === 0) ? $(".listNone").addClass("active") : $(".listNone").removeClass("active");
-	});
+	
+	tableText();
+	function tableText(){
+		$("table tbody tr").each(function(idx, elem){ // table 에 td 가 존재하지않을경우 "리스트가 존재하지않습니다"를 호출합니다.
+			($(elem).find("td").length === 0) ? $(".listNone").addClass("active") : $(".listNone").removeClass("active");
+		});
+	}
 	
 	function showType(element){ // 추가연동에 적용 누를떄 나오는 input text;
 		let input_val= Number($(element).prev().val());
@@ -397,12 +398,17 @@
 				$(element).prev().val("");
 				return Alert("숫자를 입력 해주세요!");
 			}else{
-				flag = false;
 				for(let i=0; i<input_val; i++){
 					inner_html += "<li><input type='text' value=''></li>"; 
 				}
-				$(element).next().html(inner_html);
 				
+				if($(element).next().children().length > 0){
+					$(element).next().append(inner_html);
+					
+				} else {
+					$(element).next().html(inner_html);
+					$(element).text("추가");
+				}
 			}
 			$(element).next().slideDown(300);
 		} else {
