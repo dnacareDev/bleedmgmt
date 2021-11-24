@@ -7,32 +7,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class TestController
 {
-	@RequestMapping("/login")
-	public ModelAndView login(ModelAndView mv)
-	{
-		mv.setViewName("login/login");
-		
-		return mv;
-	}
-	@RequestMapping("/home")
-	public ModelAndView gethome(ModelAndView mv)
-	{
-		mv.setViewName("home/resource_home");
-		
-		return mv;
-	}
-	@RequestMapping("/breed")
-	public ModelAndView breed(ModelAndView mv) {
-		mv.setViewName("genome/breed");
-		
-		return mv;
-	}
-	@RequestMapping("/basic")
-	public ModelAndView basic(ModelAndView mv) {
-		mv.setViewName("genome/basic");
-		
-		return mv;
-	}
 	@RequestMapping("/layout1")
 	public ModelAndView layout1(ModelAndView mv) {
 		mv.setViewName("layout/layout1");
