@@ -355,6 +355,8 @@
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 <script type="text/javascript">
 	
+	
+	
 	let file_this_id; // 클릭한 파일첨부 div 박스 element
 	let file_this_file; // 클릭한 파일과 연동된 input type["file"]
 	function filed(id){ //파일 첨부 클릭할경우
@@ -393,26 +395,25 @@
 	function showType(element){ // 추가연동에 적용 누를떄 나오는 input text;
 		let input_val= Number($(element).prev().val());
 		let inner_html = "";
-		if($(element).prev().prev().children().eq(0).is(":checked", true)){
-			if(!input_val){
+		if($(element).prev().prev().children().eq(0).is(":checked", true)){ //체크박스가 클릭이 true 라면
+			if(!input_val){ //입력한 text가 number 타입이 아니라면
 				$(element).prev().val("");
-				return Alert("숫자를 입력 해주세요!");
-			}else{
+				return Alert("숫자를 입력 해주세요!");  /* 팝업에 날아오는 효과를 원하지 않으시다면 commonjs.html 에서 $("#alert").show(300); 을 $("#alert").show(0); 으로 바꿔주세요*/
+			}else{ // number타입이라면
 				for(let i=0; i<input_val; i++){
 					inner_html += "<li><input type='text' value=''></li>"; 
 				}
 				
-				if($(element).next().children().length > 0){
+				if($(element).next().children().length > 0){ //추가된 input text가 1이상이라면
 					$(element).next().append(inner_html);
-					
-				} else {
+				} else { 
 					$(element).next().html(inner_html);
 					$(element).text("추가");
 				}
 			}
 			$(element).next().slideDown(300);
 		} else {
-			return Alert('체크박스를 클릭해주세요');
+			return Alert('체크박스를 클릭해주세요'); 
 		}
 	}
 </script>
