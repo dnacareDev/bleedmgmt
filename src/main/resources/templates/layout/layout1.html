@@ -406,14 +406,14 @@
 				
 				if($(element).next().children().length > 0){ //추가된 input text가 1이상이라면
 					$(element).next().append(inner_html);
-				} else { 
+				} else {
 					$(element).next().html(inner_html);
 					$(element).text("추가");
 				}
 			}
 			$(element).next().slideDown(300);
 		} else {
-			return Alert('체크박스를 클릭해주세요'); 
+			return Alert('체크박스를 클릭해주세요');
 		}
 	}
 </script>

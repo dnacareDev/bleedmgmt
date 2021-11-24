@@ -19,17 +19,12 @@
 			box-shadow: 0 3px 15px 3px rgb(0 0 0 / 7%); /* 2021-11-02 수정 */
 			/* box-shadow: 0 0 3px 3px rgb(0 0 0/ 3%); */
 		}
-		
+		.slick-slider__single.d-flex{
+			display:block !important;
+			width: 100% !important;
+		}
 		.main-content .contents .row .card .slick-slider__single{ /* 2021-10-19 AlpaDesign 추가 */
 			align-items: start;
-		}
-		.main-content .contents .row .card .slick-slider__single > div{
-			display:table;
-			height:100%;
-		}
-		.main-content .contents .row .card .doughnut_cover{
-			display:table-cell;
-			vertical-align:middle;	
 		}
 		.main-content .contents .row .card .data_percent{
 		    font-size: 11px;
@@ -133,6 +128,39 @@
 			}
 			
 		}
+		
+		.labels{
+			width: 100%;
+			text-align: right;
+		}
+		.labels.right_content_la{
+			text-align:left;
+			padding: 0 33px;
+		}
+		.labels li{
+			display: inline-block;
+			margin-left: 10px;
+			cursor:pointer;
+		}
+		.labels li:first-child{
+			margin-left:0;
+		}
+		.labels li span[class*="dought_"]{
+			width: 13px;
+			height: 13px;
+			border-radius: 50%;
+			display: inline-block;
+			margin: 0 5px;
+		}
+		.labels li span[class*="blue"]{
+			background-color: #6AB7FF;
+		}
+		.labels li span[class*="green"]{
+			background-color: #63D9B6;
+		}
+		.labels li span[class*="orange"]{
+			background-color: #FBAD55;
+		}
     </style>
 </head>
 
@@ -152,103 +180,22 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body" style="height: 280px;">
+                        <div class="card-body" style="height: auto;">
                             <div id="doughnut" class="slick-slider slick-dots-bottom" data-dots-slick='true'>
                                 <div class="slick-slider__single d-flex">
-                                    <p class="color-primary fa-lg mb-3 mt-5 ml-3" style="color: black">총 품종 수</p>
+                                    <p class="color-primary" style="color: black;  width: 100%; padding-bottom: 10px;">관리대장 상황</p>
                                     <div class="data_relative">
-                                    	<div class="doughnut_cover"> <!-- 2021-10-19 AlpaDesign 자동으로 가운데로 오기위해 추가했습니다 (vertical-align=middle) -->
-                                        	<canvas id="doughnut1" style="height:210px; width:200px"></canvas>
+                                    	<div class="doughnut_cover">
+                                    		<div class="labels right_content_la">
+				                        		<ul>
+				                        			<li onclick="checked('check1')"><input type="checkbox" id="check1"><span class="dought_blue"></span>품종관리</li>
+				                        			<li onclick="checked('check2')"><input type="checkbox" id="check2"><span class="dought_green"></span>원종관리</li>
+				                        			<li onclick="checked('check3')"><input type="checkbox" id="check3"><span class="dought_orange"></span>도입자원관리</li>
+				                        		</ul>
+				                        	</div>
+                                        	<canvas id="bar1" style="height:210px; width:100%"></canvas>
                                         </div>
-                                        <div class="data_number">
-                                    		<span class="data">174건</span>
-                                    	</div>
                                     </div>
-                                    <div class="data_percent" id="doughnut1_data">
-                                    	<ul>
-                                    		<li>20.81%</li>
-                                    		<li>8.09%</li>
-                                    		<li>4.62%</li>
-                                    		<li>8.09%</li>
-                                    		<li>8.09%</li>
-                                    		<li>2%</li>
-                                    		<li>5.02%</li>
-                                    		<li>8.61%</li>
-                                    		<li>20.81%</li>
-                                    		<li>14.45%</li>
-                                    	</ul>
-                                   	</div>
-                                    <p class="color-primary fa-lg mb-3 mt-5 ml-3" style="color: black">생산 판매 신고</p>
-                                    <div class="data_relative">
-                                   		<div class="doughnut_cover"> <!-- 2021-10-19 AlpaDesign 자동으로 가운데로 오기위해 추가했습니다 (vertical-align=middle) -->
-                                        	<canvas id="doughnut2" style="height:210px; width:200px"></canvas>
-                                        </div>
-                                        <div class="data_number">
-                                    		<span class="data">174건</span>
-                                    	</div>
-                                    </div>
-                                    <div class="data_percent" id="doughnut2_data">
-                                    	<ul>
-                                    		<li>20.81%</li>
-                                    		<li>8.09%</li>
-                                    		<li>4.62%</li>
-                                    		<li>8.09%</li>
-                                    		<li>8.09%</li>
-                                    		<li>2%</li>
-                                    		<li>5.02%</li>
-                                    		<li>8.61%</li>
-                                    		<li>20.81%</li>
-                                    		<li>14.45%</li>
-                                    	</ul>
-                                    </div>
-                                </div>
-                                <div class="slick-slider__single d-flex">
-                                    <p class="color-primary fa-lg mb-3 mt-5 ml-3" style="color: black">품종 보호 출원</p>
-                                    <div class="data_relative">
-                                    	<div class="doughnut_cover"> <!-- 2021-10-19 AlpaDesign 자동으로 가운데로 오기위해 추가했습니다 (vertical-align=middle) -->
-                                        	<canvas id="doughnut3" style="height:210px; width:200px"></canvas>
-                                        </div>
-                                        <div class="data_number">
-                                    		<span class="data">174건</span>
-                                    	</div>
-                                    </div>
-                                    <div class="data_percent" id="doughnut2_data">
-                                    	<ul>
-                                    		<li>20.81%</li>
-                                    		<li>8.09%</li>
-                                    		<li>4.62%</li>
-                                    		<li>8.09%</li>
-                                    		<li>8.09%</li>
-                                    		<li>2%</li>
-                                    		<li>5.02%</li>
-                                    		<li>8.61%</li>
-                                    		<li>20.81%</li>
-                                    		<li>14.45%</li>
-                                    	</ul>
-                                   	</div>
-                                    <p class="color-primary fa-lg mb-3 mt-5 ml-3" style="color: black">품종 보호 등록</p>
-                                    <div class="data_relative">
-                                    	<div class="doughnut_cover"> <!-- 2021-10-19 AlpaDesign 자동으로 가운데로 오기위해 추가했습니다 (vertical-align=middle) -->
-                                        	<canvas id="doughnut4" style="height:210px; width:200px"></canvas>
-                                        </div>
-                                        <div class="data_number">
-                                    		<span class="data">174건</span>
-                                    	</div>
-                                    </div>
-                                        <div class="data_percent" id="doughnut2_data">
-	                                    	<ul>
-	                                    		<li>20.81%</li>
-	                                    		<li>8.09%</li>
-	                                    		<li>4.62%</li>
-	                                    		<li>8.09%</li>
-	                                    		<li>8.09%</li>
-	                                    		<li>2%</li>
-	                                    		<li>5.02%</li>
-	                                    		<li>8.61%</li>
-	                                    		<li>20.81%</li>
-	                                    		<li>14.45%</li>
-	                                    	</ul>
-                                    	</div>
                                 </div>
                             </div>
                         </div>
@@ -263,8 +210,15 @@
                     <div class="card">
                         <p class="color-primary fa-lg mb-3 mt-5 ml-3">작목별 관리 현황</p>
                         <div class="card-body">
+                        	<div class="labels">
+                        		<ul>
+                        			<li onclick="checked('check4')"><input type="checkbox" id="check4"><span class="dought_blue"></span>고추</li>
+                        			<li onclick="checked('check5')"><input type="checkbox" id="check5"><span class="dought_green"></span>무</li>
+                        			<li onclick="checked('check6')"><input type="checkbox" id="check6"><span class="dought_orange"></span>배추</li>
+                        		</ul>
+                        	</div>
                             <div>
-                                <canvas id="bar1" style="height:210px; width:100%"></canvas>
+                                <canvas id="bar2" style="height: 344px; width:100%"></canvas>
                             </div>
                         </div>
                     </div>
@@ -274,7 +228,7 @@
                         <p class="color-primary fa-lg mb-3 mt-5 ml-3">등록 자료 현황</p>
                         <div class="card-body">
                             <div>
-                                <canvas id="bar2" style="height:210px; width:100%"></canvas>
+                                <canvas id="bar3" style="height: 368px; width:100%"></canvas>
                             </div>
                         </div>
                     </div>
@@ -306,370 +260,149 @@
 <!-- 공통 js -->
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn0n_LEGxgJuCfTU8aKvuwrcmw0iZjfmY&callback=initMap&region=kr"></script>
 <script type="text/javascript">	
-    /* 구글 맵 관련 
-    const mapContainer = document.querySelector('#google_map1');
-    const mapContainer2 = document.querySelector('#google_map2');
-    const koreaOptions = {
-        zoom: 6,
-        center: { lat: 36.613766432253634 ,lng: 127.84942123102657 },        
-        panControl: false,
-        zoomControl: false,
-        scaleControl: false,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false
-        // mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-
-    const globalOptions = {
-        ...koreaOptions,
-        zoom: 1, //2021 - 11 - 01 수정 
-        center: { lat: 37.5642135 ,lng: 127.0016985 }
-    }
-
-    const map = new google.maps.Map(mapContainer,koreaOptions); 
-    const map2 = new google.maps.Map(mapContainer2,globalOptions);
-    //국내는 부산, 청주, 익산, 남해, 밀양, 전주, 제주, 강릉, 함양, 부여, 성주
-// 해외는 인도, 중국, 영국, 미국, 파키스탄, 일본, 네덜란드
-    const globalCityDatas = [        
-        { lat: 22.22267143294292, lng: 79.13524723236651},
-        { lat: 33.25173879082619, lng: 103.92501603483987},
-        { lat: 38.8498311865453, lng: -102.37095928101904},
-        { lat: 29.48237176159851, lng: 69.69045458640039},
-        { lat: 36.332952986760326, lng: 138.65686172199221},
-        { lat: 52.529665164041596, lng: 4.8670640984935165},
-    ];
-
-    const koreaCityDatas = [
-        { lat: 35.206238513124546, lng: 129.08038118015855 },
-        { lat: 36.6424341, lng: 127.4890319 },
-        { lat: 35.9482858, lng: 126.9575991 },
-        { lat: 36.6424341, lng: 127.4890319 },
-        {lat: 35.832732140930425, lng: 127.12353144605112 },
-        {lat: 35.492278267228684, lng: 128.74756762815156 },
-        {lat: 37.7626809049733, lng: 128.89751079481087 },
-        {lat: 33.46962794437109, lng: 126.53995587901136 },
-        {lat: 35.62315997859795, lng: 127.64287731141832 },
-        {lat: 36.28673472687304, lng: 126.75708382107744 },
-        {lat: 35.932930167597355, lng: 128.26808927858545 },
-        // {lat: 35.906974893937814, lng: 137.73401019446183 }, 
-    ]
+var ctx = document.getElementById("bar1");
+var bar1 = new Chart(ctx, {
+    type: 'bar',
     
-    const image = {
-        url: "http://maps.google.com/mapfiles/ms/micons/msmarker.shadow.png",
-        // This marker is 20 pixels wide by 32 pixels high.
-        size: new google.maps.Size(10, 20),
-        // The origin for this image is (0, 0).
-        origin: new google.maps.Point(0, 0),
-        // The anchor for this image is the base of the flagpole at (0, 32).
-        anchor: new google.maps.Point(0, 32),
-    };
-    koreaCityDatas.forEach((value, i) => {
-        console.log(value)
-        new google.maps.Marker({
-            position: value,
-            map: map,
-            // icon: image,
-            label: ""
-        })        
-    })
-    globalCityDatas.forEach((value, i) => {
-        console.log(value)
-        new google.maps.Marker({
-            position: value,
-            map: map2,
-            // icon: image,
-            label: ""
-        })        
-    })
-
-    // 지도 관련 액션
-    const test = document.querySelector('#test_click');
-    const testCoord = { lat: 36.613766432253634 ,lng: 127.84942123102657 };
-
-    test.addEventListener('click', () => {
-        map.panTo(testCoord);
-        map.setZoom(10);
-    })
-
-    google.maps.event.addListener(test, 'dblclick', function(event){
-        map = marker.getMap();    
-        // map.setCenter(overlay.getPosition()); // set map center to marker position
-        smoothZoom(map, 12, map.getZoom()); // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
-    });
-
-
-    // the smooth zoom function
-    function smoothZoom (map, max, cnt) {
-        if (cnt >= max) {
-            return;
-        }
-        else {
-            z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-                google.maps.event.removeListener(z);
-                smoothZoom(map, max, cnt + 1);
-            });
-            setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
-        }
-    }  */
-
-    var ctx = document.getElementById("doughnut1");
-    var doughnut1 = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["고추", "대파", "멜론", "무", "배추", "수박", "양배추", "양파", "참외", "토마토"],
-            datasets: [{
-            	label: "#",
-                data: [20.81, 8.09, 4.62, 8.09, 8.09, 2, 5.02, 8.61, 20.81, 14.45],
-                backgroundColor: [
-                    'rgb(255, 155, 147)',
-                    'rgb(255, 207, 141)',
-                    'rgb(247, 235, 137)',
-                    'rgb(188, 227, 220)',
-                    'rgb(184, 229, 252)',
-                    'rgb(120, 210, 236)',
-                    'rgb(178, 162, 207)',
-                    'rgb(248, 184, 198)',
-                    'rgb(243, 216, 197)',
-                    'rgb(206, 187, 173)'
-                ],
-            }]
-        },
-        options: {
-        	responsive: false,
-            legend: {
-                position: "right",
-                labels: {
-                    fontColor: "black",
-                    usePointStyle: true,
-                    fontSize: 10,
-                    font: {
-                        lineHeight: 5,
-                    },
-                }
+    data: {
+        labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월" , "11월", "12월"],
+        datasets: [
+            {
+                label: '품종관리',
+                data: [210, 10, 10,20],
+                backgroundColor:
+                    'rgb(106, 183, 255)',
+                stack: 'Stack 0'
             },
-        	cutoutPercentage: 80,
-        }
-    });
-    
-    var ctx = document.getElementById("doughnut2");
-    var doughnut2 = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["고추", "대파", "멜론", "무", "배추", "수박", "양배추", "양파", "참외", "토마토"],
-            datasets: [{
-                label: '#',
-                data: [20.81, 8.09, 4.62, 8.09, 8.09, 2, 5.02, 8.61, 20.81, 14.45],
-                backgroundColor: [
-                    'rgb(255, 155, 147)',
-                    'rgb(255, 207, 141)',
-                    'rgb(247, 235, 137)',
-                    'rgb(188, 227, 220)',
-                    'rgb(184, 229, 252)',
-                    'rgb(120, 210, 236)',
-                    'rgb(178, 162, 207)',
-                    'rgb(248, 184, 198)',
-                    'rgb(243, 216, 197)',
-                    'rgb(206, 187, 173)'
-                ]
-            }]
-        },
-        options: {
-        	responsive: false,
-            legend: {
-                position: 'right',
-                labels: {
-                    fontColor: "black",
-                    usePointStyle: true,
-                    fontSize: 10,
-                    font: {
-                        lineHeight: 1,
-                    },
-                }
+            {
+                label: '원종관리',
+                data: [210, 10, 10,20],
+                backgroundColor:
+                    'rgb(99,217,182)',
+                stack: 'Stack 0',
+                stackSeries : true,
             },
-            cutoutPercentage: 80,
-        }
-    });
-
-    var ctx = document.getElementById("doughnut3");
-    var doughnut3 = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["고추", "대파", "멜론", "무", "배추", "수박", "양배추", "양파", "참외", "토마토"],
-            datasets: [{
-                label: "#",
-                data: [20.81, 8.09, 4.62, 8.09, 8.09, 2, 5.02, 8.61, 20.81, 14.45],
-                backgroundColor: [
-                    'rgb(255, 155, 147)',
-                    'rgb(255, 207, 141)',
-                    'rgb(247, 235, 137)',
-                    'rgb(188, 227, 220)',
-                    'rgb(184, 229, 252)',
-                    'rgb(120, 210, 236)',
-                    'rgb(178, 162, 207)',
-                    'rgb(248, 184, 198)',
-                    'rgb(243, 216, 197)',
-                    'rgb(206, 187, 173)'
-                ]
-            }]
-        },
-        options: {
-        	responsive: false,
-            legend: {
-                position: 'right',
-                labels: {
-                    fontColor: "black",
-                    usePointStyle: true,
-                    fontSize: 10,
-                    font: {
-                        lineHeight: 1,
-                    },
-                }
-            },
-            cutoutPercentage: 80,
-        }
-    });
-
-    var ctx = document.getElementById("doughnut4");
-    var doughnut4 = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["고추", "대파", "멜론", "무", "배추", "수박", "양배추", "양파", "참외", "토마토"],
-            datasets: [{
-                label: '#',
-                data: [20.81, 8.09, 4.62, 8.09, 8.09, 2, 5.02, 8.61, 20.81, 14.45],
-                backgroundColor: [
-                    'rgb(255, 155, 147)',
-                    'rgb(255, 207, 141)',
-                    'rgb(247, 235, 137)',
-                    'rgb(188, 227, 220)',
-                    'rgb(184, 229, 252)',
-                    'rgb(120, 210, 236)',
-                    'rgb(178, 162, 207)',
-                    'rgb(248, 184, 198)',
-                    'rgb(243, 216, 197)',
-                    'rgb(206, 187, 173)'
-                ]
-            }]
-        },
-        options: {
-        	responsive: false,
-            legend: {
-                position: 'right',
-                labels: {
-                    fontColor: "black",
-                    usePointStyle: true,
-                    fontSize: 10,
-                    font: {
-                    lineHeight: 1,
-                    },
-                }
-            },
-            cutoutPercentage: 80,
-        }
-    });
-   
-    
-
-    var ctx = document.getElementById("bar1");
-    var bar1 = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["2017", "2018", "2019", "2020", "2021"],
-            datasets: [
-                {
-                    label: '고추',
-                    data: [210, 315, 390, 70, 300],
-                    backgroundColor:
-                        'rgb(255, 155, 147)'
-                },
-                {
-                    label: '대파',
-                    data: [200, 400, 115, 500, 270],
-                    backgroundColor:
-                        'rgb(255, 207, 141)'
-
-                },
-                {
-                    label: '멜론',
-                    data: [35, 35, 60, 260, 300],
-                    backgroundColor:
-                        'rgb(247, 235, 137)'
-
-                },
-                {
-                    label: '무',
-                    data: [450, 430, 80, 210, 50],
-                    backgroundColor:
-                        'rgb(188, 227, 220)'
-
-                },
-                {
-                    label: '배추',
-                    data: [440, 60, 180, 290, 300],
-                    backgroundColor:
-                        'rgb(184, 229, 252)'
-
-                },
-                {
-                    label: '수박',
-                    data: [50, 80, 160, 470, 70],
-                    backgroundColor:
-                        'rgb(120, 210, 236)'
-
-                },
-                {
-                    label: '양배추',
-                    data: [480, 180, 230, 360, 20],
-                    backgroundColor:
-                        'rgb(178, 162, 207)'
-                },
-                {
-                    label: '양파',
-                    data: [460, 90, 400, 350, 330],
-                    backgroundColor:
-                        'rgb(248, 184, 198)'
-                },
-                {
-                    label: '참외',
-                    data: [450, 260, 330, 180, 410],
-                    backgroundColor:
-                        'rgb(243, 216, 197)'
-                },
-                {
-                    label: '토마토',
-                    data: [490, 280, 230, 400, 370],
-                    backgroundColor:
-                        'rgb(206, 187, 173)'
-                }
-            ]
-        },
-        options: {
-        	responsive: false,
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 500,
-                    }
-                }]
-            },
-            legend: {
-                position: 'top',
-                labels: {
-                    usePointStyle: true,
-                }
+            {
+                label: '도입자원관리',
+                data: [161, 221, 199],
+                backgroundColor:
+                    'rgb(255,173,85)',
+                stack: 'Stack 0',
+                stackSeries : true,
             }
-        }
-    });
+            
+        ],
+        stackSeries : true,
+    },
+    options: {
+    	
+    	responsive: false,
+        scales: {
+            xAxes: [{
+                barPercentage: 0.5
+            }],
+            yAxes: [{
+                ticks: {
+                    stepSize: 300,
+                }
+            }],
+        },
+        legend: {
+        	display: false,
+            position: "top",
+            labels: {
+                usePointStyle: true,
+            },
+        },
+        
+    },
     
+});
+
+var ctx = document.getElementById("bar2");
+var bar1 = new Chart(ctx, {
+    type: 'horizontalBar',
+    
+    data: {
+        labels: ["품종관리", "원종관리", "도입자원관리"],
+        datasets: [
+            {
+                label: '고추',
+                data: [210, 10, 10,20],
+                backgroundColor:
+                    'rgb(106, 183, 255)'
+            },
+            {
+                label: '무',
+                data: [210, 10, 10,20],
+                backgroundColor:
+                    'rgb(99,217,182)'
+            },
+            {
+                label: '배추',
+                data: [161, 221, 199],
+                backgroundColor:
+                    'rgb(255,173,85)'
+            }
+            
+        ],
+    },
+    options: {
+    	indexAxis: 'y',
+    	responsive: true,
+        
+        legend: {
+        	display: false,
+            position: "top",
+            labels: {
+                usePointStyle: true,
+            },
+        },
+        
+    },
+    
+});
+
+var ctx = document.getElementById("bar3");
+var bar1 = new Chart(ctx, {
+    type: 'pie',
+    
+    data: {
+        labels: ["사진", "문서"],
+        datasets: [
+        	{
+        		data: [
+        			"70",
+        			"30"
+        		],
+        		backgroundColor: [
+        			'rgb(251, 173, 85)',
+        			'rgb(106,183,255)'
+        		],
+        		borderWidth: 0, label: "Dataset 1"
+
+        	}
+        ],
+    },
+    options: {
+        legend: {
+            position: "bottom",
+            labels: {
+                usePointStyle: true,
+            },
+        },
+        
+    },
+    
+});
+
+function checked(e){ // 체크박스 텍스트 눌렀을때 체크박스 클릭
+	const element = document.getElementById(e);
+	
+	(element.checked == true) ? element.checked=false : element.checked= true ;
+	
+}
 </script>
 
 </body>
