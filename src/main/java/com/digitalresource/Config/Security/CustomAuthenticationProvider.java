@@ -29,7 +29,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider
     public Authentication authenticate(Authentication authentication) throws AuthenticationException
     {
         User user = service.loadUserByUsername(authentication.getName());
-        System.out.println(user);
         if(user == null)
         {
             throw new UsernameNotFoundException("해당 아이디가 없습니다.");

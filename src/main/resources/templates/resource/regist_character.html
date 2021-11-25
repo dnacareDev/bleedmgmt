@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user = ${#authentication.principal}">
 <head>
     <!-- 공통 헤더 -->
     <th:block th:include="/../fragments/header.html"></th:block>
@@ -94,17 +95,17 @@
 			color: #B2B2B2;
 		}
 		
-		.data_cover3{
+		.data_cover2{
 			padding:50px 0;
 		}
 		input[type="checkbox"]{
 			display:none;
+			vertical-align:inherit;
 		}
 		span.check_span{
 			display:inline-block;
 			vertical-align:middle;
 			margin-left: 5px;
-			cursor:pointer;
 			color: #939393;
 		}
 		input[type="text"].style_ver{
@@ -116,9 +117,6 @@
 			clear:both;
 			width: 100%;
 			padding: 20px 0;
-		}
-		.data_list_type ul ul{
-			display: none;
 		}
 		.data_list_type ul ul li{
 			padding-top: 20px;
@@ -137,7 +135,7 @@
 			margin: 0 auto;
 			padding-bottom: 50px; 
 		}
-		.data_cover2{
+		.data_cover3{
 			width:100%;
 			overflow:auto;
 			position: relative;
@@ -216,9 +214,31 @@
 			display:inline-block;
 			color: #B2B2B2;
 		}
-		.this_check{
-			display: inline-block;
+		input[type="text"]:focus{
+			border:1px solid #222;
 		}
+		.main-content .form-group{
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			padding-bottom:10px;
+			align-items: center;
+	  	}
+	  	.main-content .form-group span {
+	  		flex: 0 0 30%;
+	  		color: #222222;
+	  	}
+	  	.main-content .form-group input[type=text]{
+	  		flex: 0 0 70%;
+	  	}
+	  	#passwordCh1,#passwordCh2{
+	  		border: 1px solid #e3e6ef;
+	  	}
+	  	
+	  	#checking_password.active #passwordCh1,
+	  	#checking_password.active #passwordCh2{
+	  		border: 1px solid red;
+	  	}
 		
 		
 		
@@ -242,99 +262,49 @@
 					<div class="card">
 						<div class="card-extra mt-20 mr-20">
 							<div class="breadcrumb-main" style="float: left;">
-								<h4 class="text-capitalize breadcrumb-title">작목선택</h4>
+								<h4 class="text-capitalize breadcrumb-title">종자원 특성 조사 관리</h4>
+								
 							</div>
+							<span class="sub_title" style="display: block; clear:both; padding: 10px 0;">작목 선택</span>
 							<div class="data_cover1 clearfix">
 								<div class="data_type data_type1">
-									<span class="sub_title">작목 선택</span>
 									<select>
-										<option value="-22" selected disabled hidden>작목 선택</option>
-										<option value="-1">신규 등록 </option>
+										<option>작물구분1</option>
+										<option>작물구분2</option>
+										<option>작물구분3</option>
+										<option>작물구분4</option>
+										<option>작물구분5</option>
 									</select>
 								</div>
 								<div class="data_type data_type2">
-									<span class="sub_title">관리자원 명</span>
-									<input type="text"><button type="button" class="greenop_btn">중복확인</button>
-								</div>
-								<div class="data_type data_type3">
-									<span class="sub_title">관리자원 명</span>
-									<div class="data_files" onclick="return filed('#data_file1')"><img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>템플릿 엑셀 첨부</span></div>
-									<input type="file" id="data_file1" style="display: none;"> <!-- file  -->
+									<select>
+										<option>작물구분1</option>
+										<option>작물구분2</option>
+										<option>작물구분3</option>
+										<option>작물구분4</option>
+										<option>작물구분5</option>
+									</select>
 								</div>
 							</div>
 							<div class="data_cover2 clearfix">
-								<table style="height: 100%;"> <!-- table에 slideDown 또는 show 해주세요 -->
-									<thead>
-										<tr>
-											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
-											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
-											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
-											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
-											<th><div class="this_check"><input type="checkbox"><span class="check_box_design"></span><span class="check_span">원소재 계통 번호</span></div></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-										
-										</tr>
-									</tbody>
-								</table>
-								<div class="listNone">
-									<div class="lineNone_inner">
-										<span>리스트가 존재하지 않습니다.</span>
-									</div>
-									
-								</div>
-							</div>
-							<div class="data_cover3 clearfix">
 								<div class="data_type data_type4">
 									<span class="sub_title">특성항목 파일</span>
 									<div class="data_files" onclick="return filed('#data_file2')"><img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>템플릿 엑셀 첨부</span></div>
 									<input type="file" id="data_file2" style="display: none;"> <!-- file  -->
-									
-									<div class="this_check"><input type="checkbox" style="display:none;"><span class="check_box_design"></span><span class="check_span">종자원 특성 조사 기준 사용</span></div>
 								</div>
 							</div>
-						</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="container-fluid">
-			<div class="row">
-				<div class="col-lg-12 mb-30">
-					<div class="card">
-						<div class="card-extra mt-20 mr-20">
-							<div class="data_cover1 clearfix">
-								<span class="sub_title">추가연동</span>
-								<div class="data_list_type" style="padding:0 0 50px 0">
-									<ul>
-										<li>
-											<div class="this_check">
-												<input type="checkbox">
-												<span class="check_box_design"></span>
-												<span class="check_span">사진등록</span>
-											</div>
-											<input type="text" class="style_ver">
-											<button type="button" class="greenop_btn" style="width: 10%;" onclick="showType(this)">적용</button>
-											<ul><!-- 등록 text 나오는곳 -->
-											</ul>
-											
-										</li>
-										<li>
-											<div class="this_check">
-												<input type="checkbox">
-												<span class="check_box_design"></span><span class="check_span">문서등록</span>
-											</div>
-											<input type="text" class="style_ver">
-											<button type="button" class="greenop_btn" style="width: 10%;" onclick="showType(this)">적용</button>
-											<ul><!-- 등록 text 나오는곳 -->
-											</ul>
-										</li>
-									</ul>
-								</div>
-							</div>
+							<div id="characterGrid"></div>
+							<div class="row" style="padding-bottom: 20px;">
+                                <div class="col-4">
+                                    <button class="btn btn-icon btn-light btn-circle" onclick="insertRow();">
+                                        <span data-feather="plus"></span>
+                                    </button>
+                                    <button class="btn btn-icon btn-light btn-circle" onclick="">
+                                        <span data-feather="trash-2"></span>
+                                    </button>
+                                    <input type="hidden" id="offset">
+                                </div>
+                            </div>
 						</div>
                     </div>
                 </div>
@@ -350,11 +320,8 @@
 <th:block th:include="/../fragments/footer.html"></th:block>
 <!-- 공통 js -->
 <th:block th:include="/../fragments/commonjs.html"></th:block>
-<script type="text/javascript">
-	
-	
-	
-	let file_this_id; // 클릭한 파일첨부 div 박스 element
+<script type="text/javascript" th:inline="javascript">
+	let file_this_id; // 클릭한 파일첨부 div 박스
 	let file_this_file; // 클릭한 파일과 연동된 input type["file"]
 	function filed(id){ //파일 첨부 클릭할경우
 		$(id).trigger("click");
@@ -362,57 +329,100 @@
 		file_this_id = $(id).prev();
 		file_this_file = $(id);
 	}
-	
+
+	let breedgrid = null;
+
+	function insertRow()
+	{
+		// const user_type = [[${user.user_type}]];
+		const user_type = "0";
+		if(user_type != 0 && user_type != 2)
+		{
+			return Alert("등록 권한이 없습니다.");
+		}
+		else
+		{
+			var cnt = characterGrid.getRowCount();
+
+			const newRow = {
+				feature:"data",
+				expression:"data",
+				level:"data",
+				breed:"data",
+				investigate_date:"data"
+			};
+
+			characterGrid.appendRow(newRow);
+			//characterGrid.check(cnt);
+
+			//var data = {"breed_name" : $("#CropSelect").val(), "offset" : $("#offset").val()};
+
+		}
+	}
+	var characterGrid = null;
 	function file_handler(e){ //파일 클릭시 파일명 업로드
 		
 		var file_name= $(file_this_file).val(); //파일 이름;
-		file_this_id.text(file_name); // 클릭한 파일첨부 div 박스 element에 파일이름과 경로 생성
+		file_this_id.text(file_name);
 	}
-	
-	/*check-box를 보다 쉽게 클릭하기 위해 글씨를 눌렀을때 체크박스도 같이 클릭되는 이벤트입니다*/
-	
-	$(".this_check").click(function(){
-			$(this).toggleClass('active');
-			$(this).children().eq(1).toggleClass('active');
-			
-			if($(this).hasClass("active") == true){
-				$(this).children().eq(0).prop("checked", true);
-			} else {
-				$(this).children().eq(0).prop("checked", false);
+
+	$(document).ready(function(){
+		const result = "";
+		characterGrid = new tui.Grid({
+			el: document.getElementById("characterGrid"),
+			scrollX: false,
+			scrollY: false,
+			data: result.sample,
+			rowHeaders: ['checkbox'],
+			columns: [
+				{
+					header: '순번',
+					name: 'file',
+					width: 100
+				},
+				{
+					header: '특성',
+					name: 'feature',
+					editor: 'text',
+					sortable: true,
+					sortingType: 'asc'
+				},
+				{
+					header: '표현형태',
+					name: 'expression',
+					editor: 'text',
+					sortable: true,
+					sortingType: 'asc',
+					filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+				},
+				{
+					header: '계급',
+					name: 'level',
+					editor: 'text',
+					sortable: true,
+					sortingType: 'asc'
+				},
+				{
+					header: '표준품종',
+					name: 'breed',
+					editor: 'text',
+					sortable: true,
+					sortingType: 'asc'
+				},
+				{
+					header: '조사시기 및 방법',
+					name: 'investigation',
+					editor: 'text',
+					sortable: true,
+					sortingType: 'asc'
+				}
+			],
+			pageOptions: {
+				perPage: 10,
 			}
-	});
-	
-	tableText();
-	function tableText(){
-		$("table tbody tr").each(function(idx, elem){ // table 에 td 가 존재하지않을경우 "리스트가 존재하지않습니다"를 호출합니다.
-			($(elem).find("td").length === 0) ? $(".listNone").addClass("active") : $(".listNone").removeClass("active");
 		});
-	}
-	
-	function showType(element){ // 추가연동에 적용 누를떄 나오는 input text;
-		let input_val= Number($(element).prev().val());
-		let inner_html = "";
-		if($(element).prev().prev().children().eq(0).is(":checked", true)){ //체크박스가 클릭이 true 라면
-			if(!input_val){ //입력한 text가 number 타입이 아니라면
-				$(element).prev().val("");
-				return Alert("숫자를 입력 해주세요!");  /* 팝업에 날아오는 효과를 원하지 않으시다면 commonjs.html 에서 $("#alert").show(300); 을 $("#alert").show(0); 으로 바꿔주세요*/
-			}else{ // number타입이라면
-				for(let i=0; i<input_val; i++){
-					inner_html += "<li><input type='text' value=''></li>"; 
-				}
-				
-				if($(element).next().children().length > 0){ //추가된 input text가 1이상이라면
-					$(element).next().append(inner_html);
-				} else { 
-					$(element).next().html(inner_html);
-					$(element).text("추가");
-				}
-			}
-			$(element).next().slideDown(300);
-		} else {
-			return Alert('체크박스를 클릭해주세요'); 
-		}
-	}
+	})
+
 </script>
 </body>
 </html>

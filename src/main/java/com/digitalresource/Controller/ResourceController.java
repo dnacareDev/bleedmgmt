@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class DataController {
+public class ResourceController {
 
     @RequestMapping("management-resource")
     public ModelAndView manageResource(ModelAndView mv) {

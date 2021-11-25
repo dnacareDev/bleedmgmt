@@ -25,4 +25,10 @@ public class CharacterController {
         Map<String,Object> map = new HashMap<>();
         return map;
     }
+
+    @RequestMapping("regist-character")
+    public ModelAndView registCharacter(ModelAndView mv){
+        mv.setViewName("resource/regist_character");
+        return mv;
+    }
 }
