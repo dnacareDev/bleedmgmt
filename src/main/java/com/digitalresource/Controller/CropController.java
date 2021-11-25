@@ -27,5 +27,4 @@ public class CropController {
         List<Crop> cropList = cropService.selectCropList();
         return cropList;
     }
-
 }
