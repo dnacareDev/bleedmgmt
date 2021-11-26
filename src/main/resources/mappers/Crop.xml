@@ -21,4 +21,16 @@
     <select id="selectCropListByResource" parameterType="int" resultType="Crop">
         SELECT * FROM crop;
     </select>
+
+    <delete id="deleteCropById" parameterType="int">
+        DELETE FROM crop WHERE crop_id = #{crop_id}
+    </delete>
+
+    <delete id="deleteCropByCategory" parameterType="int">
+        DELETE FROM crop WHERE category_id = #{category_id}
+    </delete>
+
+    <select id="selectCropByCategory" parameterType="int" resultType="Crop">
+        SELECT * FROM crop WHERE category_id = #{category_id}
+    </select>
 </mapper>

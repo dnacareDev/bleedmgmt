@@ -11,4 +11,10 @@ public interface Cropservice {
     public List<Crop> selectCropList();
 
     public List<Crop> selectCropListByResource(int resource_id);
+
+    public int deleteCrop(int crop_id);
+
+    public int deleteCropByCategory(int category_id);
+
+    public List<Crop> selectCropByCategory(int category_id);
 }

@@ -23,11 +23,40 @@ public class CropServiceImpl implements Cropservice {
 
     @Override
     public List<Crop> selectCropList() {
-        return null;
+        List<Crop> cropList = mapper.selectCropList();
+        return cropList;
     }
 
     @Override
     public List<Crop> selectCropListByResource(int resource_id) {
         return null;
+    }
+
+    @Override
+    public int deleteCrop(int crop_id) {
+        int result = -1;
+
+        result = mapper.deleteCropById(crop_id);
+        if(result > 0){
+
+        }
+
+        return result;
+    }
+
+    @Override
+    public int deleteCropByCategory(int category_id) {
+        int result = -1;
+        result = mapper.deleteCropByCategory(category_id);
+        if(result > 0){
+
+        }
+        return result;
+    }
+
+    @Override
+    public List<Crop> selectCropByCategory(int category_id) {
+        List<Crop> list = mapper.selectCropByCategory(category_id);
+        return list;
     }
 }

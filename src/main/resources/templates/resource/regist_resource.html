@@ -250,6 +250,9 @@
 									<select>
 										<option value="-22" selected disabled hidden>작목 선택</option>
 										<option value="-1">신규 등록 </option>
+										<th:block th:each="crop : ${cropList}">
+											<option th:value="${crop.crop_id}" th:text="${crop.crop_name}"></option>
+										</th:block>
 									</select>
 								</div>
 								<div class="data_type data_type2">

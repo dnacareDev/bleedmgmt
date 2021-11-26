@@ -1,5 +1,8 @@
 package com.digitalresource.Controller;
 
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Service.Cropservice;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,10 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 public class ResourceController {
+    @Autowired
+    private Cropservice cropService;
 
     @RequestMapping("management-resource")
     public ModelAndView manageResource(ModelAndView mv) {
@@ -21,6 +27,10 @@ public class ResourceController {
 
     @RequestMapping("regist-resource")
     public ModelAndView registResourcePage(ModelAndView mv) {
+        List<Crop> cropList = cropService.selectCropList();
+
+        mv.addObject("cropList",cropList);
+
         mv.setViewName("resource/regist_resource");
         return mv;
     }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalresource.Mapper.ResourceMapper">
+
+<!--    사용되는 자원 관리 이름 갯수-->
+    <select id="getCountResourceName" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM resource WHERE resoucre_name_id = #{resource_name_id}
+    </select>
+
+    <select id="selectResourceById" parameterType="int" resultType="Resource">
+        SELECT * FROM resource WHERE resource_id = #{resource_id}
+    </select>
+
+    <delete id="deleteResourceByCropCategory" parameterType="int">
+        DELETE FROM resource WHERE crop_id IN
+        (SELECT crop_id FROM crop WHERE category_id = #{category_id})
+    </delete>
+
+    <delete id="deleteResourceByCrop" parameterType="int">
+        DELETE FROM resource WHERE crop_id = #{crop_id}
+    </delete>
+</mapper>
