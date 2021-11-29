@@ -27,14 +27,19 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public int registResource(Resource resource) {
         int result = -1;
+
+        //upload Resource Template File
+        result = fileService.registFile(resource.getResource_template());
+        if(result < 0){
+            return result;
+        }
+        resource.setResource_template_id(resource.getResource_template_id());
+
         int resource_name_id = nameService.registResourceName(resource.getResource_name(), resource.getCrop_id());
         if(resource_name_id < 0)
             return result;
 
         resource.setResource_name_id(resource_name_id);
-
-        //upload Resource File
-        fileService.registFile(resource.getResource_template());
 
         //parse Character to Detail
 
@@ -52,17 +57,22 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public int deleteResource(int resource_id) {
         int result = -1;
-        Resource deleteParam = resourceMapper.selectResourceById(resource_id);
-        int count = resourceMapper.getCountResourceName(deleteParam.getResource_id());
+        Resource resource = resourceMapper.selectResourceById(resource_id);
+        int count = resourceMapper.getCountResourceName(resource.getResource_id());
         if(count == 0)
-            nameService.deleteResourceName(deleteParam.getResource_name_id());
+            nameService.deleteResourceName(resource.getResource_name_id());
+        result = fileService.deleteFile(resource.getResource_template_id());
+        if(result < 0){
+            //Err
+            return result;
+        }
 
         /*
         * Delete Resource_detail
-        * Delete character 삭제
-        * Delete Resource_row 삭제
-        * Delete Resource_standard 삭제
+        * Delete Resource_breed
+        * Delete Resource_standard
         * */
+
 
         return result;
     }

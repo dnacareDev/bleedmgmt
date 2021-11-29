@@ -11,12 +11,22 @@ public class ResourceNameServiceImpl implements ResourceNameService {
     @Autowired
     private ResourceNameMapper mapper;
 
+    public int checkDuplicateResourceName(String resource_name, int crop_id){
+        int result = -1;
+        result = mapper.getCountResourceNameByCrop(crop_id, resource_name);
+        if(result > 0){
+            //Err_cd
+            return result;
+        }
+        return result;
+    }
+
     public int registResourceName(String resource_name,int crop_id){
         int result = -1;
 
-        int count = mapper.getCountResourceNameByCrop(crop_id, resource_name);
-        if(count > 0){
-            return -23;
+        result = checkDuplicateResourceName(resource_name, crop_id);
+        if(result < 0){
+            return result;
         }
 
         ResourceName name = selectResourceName(resource_name);

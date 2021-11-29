@@ -22,4 +22,5 @@ public class Resource {
     private List<Detail> detailList;
 
     private File resource_template;
+    private int resource_template_id;
 }
