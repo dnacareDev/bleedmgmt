@@ -14,18 +14,5 @@ public interface ResourceNameMapper {
 
     public int registResourceName(ResourceName registParam);
 
-    public int registResourceCropName(@Param("crop_id") int crop_id,
-                                      @Param("resource_name_id") int resource_name_id);
-
-    public int deleteResourceCropName(@Param("crop_id") int crop_id,
-                                      @Param("resource_name_id") int resource_name_id);
-
     public int deleteResourceName(int resource_name_id);
-
-    public int deleteReourceCropByResourceName(int resource_name_id);
-
-    public int modifyResourceCropbyResource(@Param("new_name_id") int new_name_id,
-                                            @Param("crop_id") int crop_id,
-                                            @Param("resource_name_id") int resource_name_id);
-
 }

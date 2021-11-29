@@ -3,6 +3,7 @@ package com.digitalresource.ServiceImple;
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Mapper.CropMapper;
 import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ import java.util.List;
 public class CropServiceImpl implements Cropservice {
     @Autowired
     private CropMapper mapper;
+
+    @Autowired
+    private ResourceService resourceService;
 
     @Override
     public int registCrop(Crop crop) {
@@ -24,6 +28,7 @@ public class CropServiceImpl implements Cropservice {
         result = mapper.registCrop(crop);
         if(result > 0)
             return result;
+
         return -1001;
     }
 
@@ -35,7 +40,9 @@ public class CropServiceImpl implements Cropservice {
 
     @Override
     public List<Crop> selectCropListByResource(int resource_id) {
-        return null;
+        List<Crop> cropList = null;
+        cropList = mapper.selectCropListByResourceName(resource_id);
+        return cropList;
     }
 
     @Override
@@ -44,7 +51,7 @@ public class CropServiceImpl implements Cropservice {
 
         result = mapper.deleteCropById(crop_id);
         if(result > 0){
-
+            resourceService.deleteReourceByCrop(crop_id);
         }
 
         return result;

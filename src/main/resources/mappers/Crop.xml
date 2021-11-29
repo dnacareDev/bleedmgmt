@@ -19,7 +19,7 @@
     </select>
 
     <select id="selectCropListByResourceName" parameterType="int" resultType="Crop">
-        SELECT * FROM crop c JOIN resource_crop r ON c.crop_id = r.crop_id
+        SELECT * FROM crop c JOIN resource r on c.crop_id = r.crop_id
         WHERE r.resource_name_id = #{resource_name_id}
     </select>
 

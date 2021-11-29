@@ -38,26 +38,9 @@ public class ResourceNameServiceImpl implements ResourceNameService {
         int result = -1;
 
         int count = mapper.deleteResourceName(resource_name_id);
-        if(count > 0)
-            result = deleteResourceCropByResoruceName(resource_name_id);
+        if(count > 0){
 
-        return result;
-    }
-
-    @Override
-    public int registResourceCrop(int crop_id, int resource_name_id) {
-        int result = -1;
-
-        result = mapper.registResourceCropName(crop_id,resource_name_id);
-
-        return result;
-    }
-
-    @Override
-    public int deleteResourceCropByResoruceName(int resource_name_id) {
-        int result = -1;
-        result = mapper.deleteReourceCropByResourceName(resource_name_id);
-
+        }
         return result;
     }
 

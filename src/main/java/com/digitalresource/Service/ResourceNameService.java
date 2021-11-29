@@ -7,9 +7,6 @@ public interface ResourceNameService {
 
     public int deleteResourceName(int resource_name_id);
 
-    public int registResourceCrop(int crop_id, int resource_name_id);
-
-    public int deleteResourceCropByResoruceName(int resource_name_id);
 
     public ResourceName selectResourceName(String resource_name);
 }

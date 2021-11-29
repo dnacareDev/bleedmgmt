@@ -3,9 +3,10 @@
 <mapper namespace="com.digitalresource.Mapper.ResourceNameMapper">
     <select id="getCountResourceNameByCrop" resultType="int" parameterType="map">
         SELECT COUNT(*)
-        FROM resource_name r JOIN ON resource_crop_name c
+        FROM resource_name name JOIN resource r ON name.resource_name_id = r.resource_name_id
+        JOIN crop c on r.crop_id = c.crop_id
         WHERE c.crop_id = #{crop_id}
-        AND r.resource_name = #{resource_name}
+        AND name.resource_name = #{resource_name}
     </select>
 
 <!--    이름으로 자원 관리 이름 찾기-->
@@ -23,38 +24,9 @@
         )
     </insert>
 
-<!--    자원 관리 이름과 작물의 관계 생성-->
-    <insert id="registResourceCropName" parameterType="Map">
-        INSERT INTO resource_crop_name(
-            crop_id,
-            resource_name_id
-        )
-        VALUE(
-            #{crop_id},
-            #{resource_name_id}
-        )
-    </insert>
-
-<!--    자원 관리 삭제시 연관된 데이터 삭제-->
-    <delete id="deleteResourceCropName" parameterType="Map">
-        DELETE FROM resource_crop_name
-        WHERE crop_id = #{crop_id} AND resource_name_id = #{resource_name_id}
-    </delete>
-
 <!--    자원 관리 삭제시 사용되는 자원관리 이름이 더 이상 없는 경우 삭제-->
     <delete id="deleteResourceName" parameterType="int">
         DELETE FROM resource_name
         WHERE resource_name_id = #{resource_name_id}
     </delete>
-
-    <delete id="deleteResourceCropByResourceName" parameterType="int">
-        DELETE FROM resource_crop_name
-        WHERE resource_name_id = #{resource_name_id}
-    </delete>
-
-    <update id="modifyResourceCropByResource" parameterType="Map">
-        UPDATE resource_crop_name SET
-        resource_name_id = #{new_name_id}
-        WHERE crop_id = #{crop_id} AND resource_name_id = #{resource_name_id}
-    </update>
 </mapper>
