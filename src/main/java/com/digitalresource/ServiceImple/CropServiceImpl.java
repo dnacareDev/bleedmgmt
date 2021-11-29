@@ -14,11 +14,17 @@ public class CropServiceImpl implements Cropservice {
     private CropMapper mapper;
 
     @Override
-    public boolean registCrop(Crop crop) {
-        int result = mapper.registCrop(crop);
+    public int registCrop(Crop crop) {
+        int result = -1;
+
+        result = checkDuplicateCropName(crop.getCrop_name());
+        if(result < 0)
+            return result;
+
+        result = mapper.registCrop(crop);
         if(result > 0)
-            return true;
-        return false;
+            return result;
+        return -1001;
     }
 
     @Override
@@ -58,5 +64,15 @@ public class CropServiceImpl implements Cropservice {
     public List<Crop> selectCropByCategory(int category_id) {
         List<Crop> list = mapper.selectCropByCategory(category_id);
         return list;
+    }
+
+    @Override
+    public int checkDuplicateCropName(String crop_name){
+        int result = -1;
+        result = mapper.checkDuplicateCropName(crop_name);
+        if(result > 0){
+            return -1000;
+        }
+        return result;
     }
 }

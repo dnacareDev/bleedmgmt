@@ -18,8 +18,9 @@
         SELECT * FROM crop;
     </select>
 
-    <select id="selectCropListByResource" parameterType="int" resultType="Crop">
-        SELECT * FROM crop;
+    <select id="selectCropListByResourceName" parameterType="int" resultType="Crop">
+        SELECT * FROM crop c JOIN resource_crop r ON c.crop_id = r.crop_id
+        WHERE r.resource_name_id = #{resource_name_id}
     </select>
 
     <delete id="deleteCropById" parameterType="int">
@@ -32,5 +33,9 @@
 
     <select id="selectCropByCategory" parameterType="int" resultType="Crop">
         SELECT * FROM crop WHERE category_id = #{category_id}
+    </select>
+
+    <select id="checkDuplicateCropName" parameterType="String" resultType="int">
+        SELECT COUNT(*) from crop WHERE crop_name = #{crop_name}
     </select>
 </mapper>

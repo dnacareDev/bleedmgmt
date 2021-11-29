@@ -7,11 +7,13 @@ import java.util.List;
 
 @Mapper
 public interface CropMapper {
+    public int checkDuplicateCropName(String crop_name);
+
     public int registCrop(Crop crop);
 
     public List<Crop> selectCropList();
 
-    public List<Crop> selectCropListByResource(int resource_id);
+    public List<Crop> selectCropListByResourceName(int resource_name_id);
 
     public int deleteCropById(int crop_id);
 

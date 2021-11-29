@@ -16,7 +16,7 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public int registResource(Resource resource) {
         int result = -1;
-        int resource_name_id = nameService.registResourceName(resource.getResource_name());
+        int resource_name_id = nameService.registResourceName(resource.getResource_name(), resource.getCrop_id());
         if(resource_name_id < 0)
             return result;
 
@@ -30,8 +30,15 @@ public class ResourceServiceImpl implements ResourceService {
         int result = -1;
         Resource deleteParam = resourceMapper.selectResourceById(resource_id);
         int count = resourceMapper.getCountResourceName(deleteParam.getResource_id());
+        if(count == 0)
+            nameService.deleteResourceName(deleteParam.getResource_name_id());
 
-        nameService.deleteResourceName(deleteParam.getResource_name_id());
+        /*
+        * Delete Resource_detail
+        * Delete character 삭제
+        * Delete Resource_row 삭제
+        * Delete Resource_standard 삭제
+        * */
 
         return result;
     }
