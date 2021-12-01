@@ -46,4 +46,9 @@ public class ResourceNameServiceImple implements ResourceNameService {
 
         return result;
     }
+
+  @Override
+  public int getCountResourceNameByCrop(String resource_name) {
+    return mapper.getCountResourceNameByCrop(resource_name);
+  }
 }
