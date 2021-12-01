@@ -35,7 +35,7 @@ public class ResourceServiceImpl implements ResourceService {
         }
         resource.setResource_template_id(resource.getResource_template_id());
 
-        int resource_name_id = nameService.registResourceName(resource.getResource_name(), resource.getCrop_id());
+        int resource_name_id = nameService.registResourceName(resource.getResource_name());
         if(resource_name_id < 0)
             return result;
 

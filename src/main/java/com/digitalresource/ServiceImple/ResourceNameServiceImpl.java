@@ -21,13 +21,8 @@ public class ResourceNameServiceImpl implements ResourceNameService {
         return result;
     }
 
-    public int registResourceName(String resource_name,int crop_id){
+    public int registResourceName(String resource_name){
         int result = -1;
-
-        result = checkDuplicateResourceName(resource_name, crop_id);
-        if(result < 0){
-            return result;
-        }
 
         ResourceName name = selectResourceName(resource_name);
         if(name != null){
@@ -48,10 +43,13 @@ public class ResourceNameServiceImpl implements ResourceNameService {
         int result = -1;
 
         int count = mapper.deleteResourceName(resource_name_id);
-        if(count > 0){
 
-        }
         return result;
+    }
+
+    @Override
+    public int registResourceCrop(int crop_id, int resource_name_id) {
+        return 0;
     }
 
     @Override
@@ -62,8 +60,13 @@ public class ResourceNameServiceImpl implements ResourceNameService {
         return name;
     }
 
-  @Override
-  public int getCountResourceNameByCrop(String resource_name) {
-    return mapper.getCountResourceNameByCrop(resource_name);
-  }
+    @Override
+    public int getCountResourceNameByCrop(String resource_name) {
+        return 0;
+    }
+
+    @Override
+    public int CountResourceNameByCrop(String resource_name) {
+        return mapper.CountResourceNameByCrop(resource_name);
+    }
 }

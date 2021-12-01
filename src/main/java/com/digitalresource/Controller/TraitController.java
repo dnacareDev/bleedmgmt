@@ -52,7 +52,7 @@ public class TraitController {
         return map;
     }
 
-    @RequestMapping("registTrait")
+    @RequestMapping("regist-character")
     public ModelAndView registTrait(ModelAndView mv){
         List<CropCategory> categoryList = cropCategoryService.SelectCropCategoryList();
 
