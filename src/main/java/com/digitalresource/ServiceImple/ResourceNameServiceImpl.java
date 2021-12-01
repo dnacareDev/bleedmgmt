@@ -7,13 +7,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ResourceNameServiceImple implements ResourceNameService {
+public class ResourceNameServiceImpl implements ResourceNameService {
     @Autowired
     private ResourceNameMapper mapper;
 
-    public int registResourceName(String resource_name){
+    public int checkDuplicateResourceName(String resource_name, int crop_id){
         int result = -1;
-        ResourceName name = mapper.selectResourceName(resource_name);
+        result = mapper.getCountResourceNameByCrop(crop_id, resource_name);
+        if(result > 0){
+            //Err_cd
+            return result;
+        }
+        return result;
+    }
+
+    public int registResourceName(String resource_name,int crop_id){
+        int result = -1;
+
+        result = checkDuplicateResourceName(resource_name, crop_id);
+        if(result < 0){
+            return result;
+        }
+
+        ResourceName name = selectResourceName(resource_name);
         if(name != null){
             return name.getResource_name_id();
         }
@@ -32,19 +48,18 @@ public class ResourceNameServiceImple implements ResourceNameService {
         int result = -1;
 
         int count = mapper.deleteResourceName(resource_name_id);
-        if(count > 0)
-            result = mapper.deleteReourceCropByResourceName(resource_name_id);
+        if(count > 0){
 
+        }
         return result;
     }
 
     @Override
-    public int registResourceCrop(int crop_id, int resource_name_id) {
-        int result = -1;
+    public ResourceName selectResourceName(String resource_name) {
+        ResourceName name = null;
+        name = mapper.selectResourceName(resource_name);
 
-        result = mapper.registResourceCropName(crop_id,resource_name_id);
-
-        return result;
+        return name;
     }
 
   @Override

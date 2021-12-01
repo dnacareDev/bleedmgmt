@@ -6,7 +6,7 @@ import com.digitalresource.Entity.Crop;
 import java.util.List;
 
 public interface Cropservice {
-    public boolean registCrop(Crop crop);
+    public int registCrop(Crop crop);
 
     public List<Crop> selectCropList();
 
@@ -17,4 +17,6 @@ public interface Cropservice {
     public int deleteCropByCategory(int category_id);
 
     public List<Crop> selectCropByCategory(int category_id);
+
+    public int checkDuplicateCropName(String crop_name);
 }

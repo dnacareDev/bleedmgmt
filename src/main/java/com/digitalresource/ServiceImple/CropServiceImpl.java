@@ -3,6 +3,7 @@ package com.digitalresource.ServiceImple;
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Mapper.CropMapper;
 import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,22 @@ public class CropServiceImpl implements Cropservice {
     @Autowired
     private CropMapper mapper;
 
+    @Autowired
+    private ResourceService resourceService;
+
     @Override
-    public boolean registCrop(Crop crop) {
-        int result = mapper.registCrop(crop);
+    public int registCrop(Crop crop) {
+        int result = -1;
+
+        result = checkDuplicateCropName(crop.getCrop_name());
+        if(result < 0)
+            return result;
+
+        result = mapper.registCrop(crop);
         if(result > 0)
-            return true;
-        return false;
+            return result;
+
+        return -1001;
     }
 
     @Override
@@ -29,7 +40,9 @@ public class CropServiceImpl implements Cropservice {
 
     @Override
     public List<Crop> selectCropListByResource(int resource_id) {
-        return null;
+        List<Crop> cropList = null;
+        cropList = mapper.selectCropListByResourceName(resource_id);
+        return cropList;
     }
 
     @Override
@@ -38,7 +51,7 @@ public class CropServiceImpl implements Cropservice {
 
         result = mapper.deleteCropById(crop_id);
         if(result > 0){
-
+            resourceService.deleteReourceByCrop(crop_id);
         }
 
         return result;
@@ -58,5 +71,15 @@ public class CropServiceImpl implements Cropservice {
     public List<Crop> selectCropByCategory(int category_id) {
         List<Crop> list = mapper.selectCropByCategory(category_id);
         return list;
+    }
+
+    @Override
+    public int checkDuplicateCropName(String crop_name){
+        int result = -1;
+        result = mapper.checkDuplicateCropName(crop_name);
+        if(result > 0){
+            return -1000;
+        }
+        return result;
     }
 }

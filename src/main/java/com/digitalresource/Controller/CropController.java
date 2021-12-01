@@ -16,9 +16,9 @@ public class CropController {
 
     @PostMapping("/regist-crop")
     @ResponseBody
-    public boolean registCrop(@ModelAttribute Crop crop){
-        boolean result = cropService.registCrop(crop);
-        return false;
+    public int registCrop(@ModelAttribute Crop crop){
+        int result = cropService.registCrop(crop);
+        return result;
     }
 
     @GetMapping("/crop-list")
