@@ -325,15 +325,20 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="data_cover2 clearfix">
-                                <div class="data_type data_type4" style="display: flex">
-                                    <span class="sub_title">특성항목 파일</span>
-                                    <div class="data_files" onclick="return filed('#data_file2')"><img src="../assets/vendor_assets/img/upload.png"
-                                                                                                       alt="file업로드"><span>템플릿 엑셀 첨부</span></div>
-                                    <input type="file" id="data_file2" style="display: none;"> <!-- file  -->
+                            <form action="updateSampleFile" id="insertFile" method="POST" enctype="multipart/form-data">
+                                <div class="data_cover2 clearfix">
+                                    <div class="data_type data_type4" style="display: flex">
+                                        <span class="sub_title">특성항목 파일</span>
+                                        <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none">
+                                        <div class="data_files" onclick="filesFunction()">
+                                            <img src="../assets/vendor_assets/img/upload.png" alt="file업로드">
+                                            <span>템플릿 엑셀 첨부</span>
+                                        </div>
+                                        <input type="file" id="upload_file" name="file" style="display: none;"> <!-- file  -->
+                                    </div>
                                 </div>
-                            </div>
-                            <div id="characterGrid"></div>
+                            </form>
+                            <div id="featureGrid"></div>
                             <div class="row" style="padding-bottom: 20px;">
                                 <div class="col-4">
                                     <button class="btn btn-icon btn-light btn-circle" onclick="insertRow();">
@@ -351,13 +356,11 @@
             </div>
         </div>
         <div class="btn_cover clearfix">
-            <button type="button" class="gray_btn" style="width:130px;height:45px;padding:0;">목록</button>
-            <button type="button" class="green_btn" style="width:130px;height:45px;padding:0;">저장</button>
+            <button type="button" class="gray_btn" style="width:130px;height:45px;padding:0;" onclick="location.href='/character'">목록</button>
+            <button type="button" class="green_btn" style="width:130px;height:45px;padding:0;" onclick="saveTrait()">저장</button>
         </div>
     </div>
 </main>
-<!-- 공통 하단 -->
-<th:block th:include="/../fragments/footer.html"></th:block>
 <!-- 공통 js -->
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 <script type="text/javascript" th:inline="javascript">
@@ -396,51 +399,50 @@
     }
 
     $(document).ready(function () {
-        const result = "";
-        characterGrid = new tui.Grid({
-            el: document.getElementById("characterGrid"),
-            scrollX: false,
+        featureGrid = new tui.Grid({
+            el: document.getElementById("featureGrid"),
+            scrollX: true,
             scrollY: false,
-            data: result.sample,
-            rowHeaders: ['rowNum'],
+            data: [],
             columns: [
                 {
-                    header: '순번',
-                    name: 'file',
-                    width: 100
+                    header: '번호',
+                    name: 'feature_num',
+                    editor: 'text',
+                    width: 120
                 },
                 {
-                    header: '특성',
-                    name: 'feature',
+                    header: '형질/특성',
+                    name: 'feature_name',
                     editor: 'text'
                 },
                 {
                     header: '표현형태',
-                    name: 'expression',
-                    editor: 'text'
+                    name: 'feature_expression',
+                    editor: 'text',
+                    width: 200
                 },
                 {
                     header: '계급',
-                    name: 'level',
-                    editor: 'text'
+                    name: 'feature_level',
+                    editor: 'text',
+                    width: 120
                 },
                 {
-                    header: '표준품종',
-                    name: 'breed',
-                    editor: 'text'
-                },
-                {
-                    header: '조사시기 및 방법',
-                    name: 'investigation',
-                    editor: 'text'
+                    header: '조사시기',
+                    name: 'feature_investigation',
+                    editor: 'text',
+                    width: 150
                 }
             ],
             pageOptions: {
-                perPage: 10,
+                useClient: true,
+                perPage: 10
             }
         });
     })
 
+    // 작물구분에 따른 작물 리스트 출력
     function getCrop(e) {
         var data = {'category_id': e.value};
 
@@ -451,7 +453,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                    for(let i = 0; i < result.length; i++) {
+                    for (let i = 0; i < result.length; i++) {
                         var list = result[i];
 
                         $("select[name=selectCrop]").append('<option value="' + list.crop_id + '">' + list.crop_name + '</option>')
@@ -459,6 +461,137 @@
                 }
             }
         )
+    }
+
+    function filesFunction() {
+        let filesBtn = document.getElementById("excelFile");
+        var eventList = document.createEvent("MouseEvent");
+
+        eventList.initEvent("click");
+        filesBtn.dispatchEvent(eventList);
+    }
+
+    /* 엑셀 코드 */
+    function handleExcelDataAll(sheet) {
+        handleExcelDataHtml(sheet); // html 형태
+    }
+
+    /* Html 형태로 출력 */
+    function handleExcelDataHtml(sheet) {
+        $("#displayExcelHtml").html(XLSX.utils.sheet_to_html(sheet));
+    }
+
+    function excelExport(event) {
+        featureGrid.destroy();
+
+        excelExportCommon(event, handleExcelDataAll);
+    }
+
+    var featureGrid = null;
+
+    function excelExportCommon(event, callback) {
+        var input = event.target;
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            var fileData = reader.result;
+            var wb = XLSX.read(fileData, {type: 'binary'});
+            var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
+            var firstSheetName = sheetNameList[0]; // 첫번째 시트명
+            var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
+            callback(firstSheet);
+
+            var rowdata = XLSX.utils.sheet_to_json(firstSheet);
+
+            featureGrid = new tui.Grid({
+                el: document.getElementById("featureGrid"),
+                scrollX: true,
+                scrollY: false,
+                data: [],
+                columns: [
+                    {
+                        header: '번호',
+                        name: 'feature_num',
+                        editor: 'text',
+                        width: 120
+                    },
+                    {
+                        header: '형질/특성',
+                        name: 'feature_name',
+                        editor: 'text'
+                    },
+                    {
+                        header: '표현형태',
+                        name: 'feature_expression',
+                        editor: 'text',
+                        width: 200
+                    },
+                    {
+                        header: '계급',
+                        name: 'feature_level',
+                        editor: 'text',
+                        width: 120
+                    },
+                    {
+                        header: '조사시기',
+                        name: 'feature_investigation',
+                        editor: 'text',
+                        width: 150
+                    }
+                ],
+                pageOptions: {
+                    useClient: true,
+                    perPage: 10
+                }
+            });
+
+            const dataArr = [];
+
+            for (let i = 0; i < rowdata.length; i++) {
+                let listArr = {}
+
+                listArr.feature_num = rowdata[i]["번호"];
+                listArr.feature_name = rowdata[i]["형질/특성"];
+                listArr.feature_expression = rowdata[i]["표현형태"];
+                listArr.feature_level = rowdata[i]["계급"];
+                listArr.feature_investigation = rowdata[i]["조사시기"];
+
+                dataArr.push(listArr);
+            }
+
+            featureGrid.resetData(dataArr);
+
+        };
+
+        reader.readAsBinaryString(input.files[0]);
+    }
+
+    function saveTrait() {
+        insertFile();
+
+        console.log(featureGrid.getData());
+        console.log($("select[name=selectCrop]").val());
+
+
+        var data = featureGrid.getData();
+
+        $.ajax(
+            {
+                url: '',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+
+                }
+            }
+        )
+    }
+
+    function insertFile() {
+        var file = $("#upload_file");
+
+        $("#insertFile").submit();
     }
 </script>
 </body>

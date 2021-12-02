@@ -646,9 +646,7 @@
         }
 
 
-
-
-        #data_upload12 .form-group button, #data_upload2 .form-group button, #basic_file .form-group button, #data_upload11 .form-group button, #data_upload21 .form-group button{
+        #data_upload12 .form-group button, #data_upload2 .form-group button, #basic_file .form-group button, #data_upload11 .form-group button, #data_upload21 .form-group button {
             height: 45px;
             padding: 0 20px;
             background-color: #217566;
@@ -658,11 +656,11 @@
             margin-left: 10px;
         }
 
-        #data_upload2 .form-group button, #basic_file .form-group button,  #data_upload21 .form-group button {
+        #data_upload2 .form-group button, #basic_file .form-group button, #data_upload21 .form-group button {
             margin-left: 0;
         }
 
-        #data_upload12 .form-group input[type=text], #data_upload2 .form-group input[type=text], #basic_file .form-group input[type=text],  #data_upload21 .form-group input[type=text], #data_upload11 .form-group input[type=text] {
+        #data_upload12 .form-group input[type=text], #data_upload2 .form-group input[type=text], #basic_file .form-group input[type=text], #data_upload21 .form-group input[type=text], #data_upload11 .form-group input[type=text] {
             flex: 0 0 30%;
             cursor: pointer;
         }
@@ -672,19 +670,20 @@
             background-size: 15px;
             color: #B2B2B2;
         }
+
         #data_upload12 .atbd-upload, #data_upload2 .atbd-upload, #data_upload21 .atbd-upload, #data_upload11 .atbd-upload {
             width: 100%;
             height: 300px;
             overflow: auto;
         }
 
-        #data_upload12 .atbd-upload table,  #data_upload11 .atbd-upload table {
+        #data_upload12 .atbd-upload table, #data_upload11 .atbd-upload table {
             width: max-content;
             border: none;
-            min-width:100%;
+            min-width: 100%;
         }
 
-        #data_upload2 .atbd-upload table, #data_upload21 .atbd-upload table{
+        #data_upload2 .atbd-upload table, #data_upload21 .atbd-upload table {
             width: 100%;
         }
 
@@ -697,7 +696,7 @@
             border-bottom: 1px solid #E8EEF2;
         }
 
-        #data_upload12 .atbd-upload table thead th, #data_upload2 .atbd-upload table thead th,  #data_upload21 .atbd-upload table thead th, #data_upload11 .atbd-upload table thead th {
+        #data_upload12 .atbd-upload table thead th, #data_upload2 .atbd-upload table thead th, #data_upload21 .atbd-upload table thead th, #data_upload11 .atbd-upload table thead th {
             background-color: #F7F7F8;
             color: #222222;
             font-size: 16px;
@@ -930,8 +929,6 @@
 
 </main>
 
-<!-- 공통 하단 -->
-<th:block th:include="/../fragments/footer.html"></th:block>
 <!-- 공통 js -->
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 
@@ -946,19 +943,11 @@
 
     /* 엑셀 업로드 목록창 */
     function filesFunction() {
-        if (tablechk === 0) {
-            let filesBtn = document.getElementById("excelFile");
-            var eventList = document.createEvent("MouseEvent");
+        let filesBtn = document.getElementById("excelFile");
+        var eventList = document.createEvent("MouseEvent");
 
-            eventList.initEvent("click");
-            filesBtn.dispatchEvent(eventList);
-        } else {
-            let filesBtn = document.getElementById("excelFile1");
-            var eventList1 = document.createEvent("MouseEvent");
-
-            eventList1.initEvent("click");
-            filesBtn.dispatchEvent(eventList1);
-        }
+        eventList.initEvent("click");
+        filesBtn.dispatchEvent(eventList);
     }
 
     /* 엑셀 업로드 목록창 */
@@ -1179,61 +1168,32 @@
 
     /* 엑셀 등록 창 */
     function openExcel() {
-        if (tablechk === 0) {
-            $("#data_upload2").modal();
+        $("#data_upload2").modal();
 
-            let data = {"datalist_type": 'sample'};
+        let data = {"datalist_type": 'sample'};
 
-            $.ajax(
-                {
-                    url: 'selectSampleDateGroup',
-                    method: 'POST',
-                    dataType: 'json',
-                    data: data,
-                    success: function (result) {
-                        var data_list = $("#uploadDate");
-                        var data_add = "";
+        $.ajax(
+            {
+                url: 'selectSampleDateGroup',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    var data_list = $("#uploadDate");
+                    var data_add = "";
 
-                        for (var i = result.dataGroup.length - 1; i > -1; i--) {
-                            data_add += '<tr>';
-                            data_add += '<td>' + (i + 1) + '</td>';
-                            data_add += '<td>' + result.dataGroup[i].datalist_date + '</td>';
-                            data_add += '<td>' + result.dataGroup[i].cnt + '</td>';
-                            data_add += '</tr>';
-                        }
-
-                        data_list.empty();
-                        data_list.append(data_add);
+                    for (var i = result.dataGroup.length - 1; i > -1; i--) {
+                        data_add += '<tr>';
+                        data_add += '<td>' + (i + 1) + '</td>';
+                        data_add += '<td>' + result.dataGroup[i].datalist_date + '</td>';
+                        data_add += '<td>' + result.dataGroup[i].cnt + '</td>';
+                        data_add += '</tr>';
                     }
-                });
-        } else {
-            $("#data_upload12").modal();
 
-            let data = {"datalist_type": 'sample_outcome'};
-
-            $.ajax(
-                {
-                    url: 'selectDateGroup',
-                    method: 'POST',
-                    dataType: 'json',
-                    data: data,
-                    success: function (result) {
-                        var data_list = $("#uploadDate1");
-                        var data_add = "";
-
-                        for (var i = result.dataGroup.length - 1; i > -1; i--) {
-                            data_add += '<tr>';
-                            data_add += '<td>' + (i + 1) + '</td>';
-                            data_add += '<td>' + result.dataGroup[i].datalist_date + '</td>';
-                            data_add += '<td>' + result.dataGroup[i].cnt + '</td>';
-                            data_add += '</tr>';
-                        }
-
-                        data_list.empty();
-                        data_list.append(data_add);
-                    }
-                });
-        }
+                    data_list.empty();
+                    data_list.append(data_add);
+                }
+            });
     }
 
     /* 엑셀 등록 창 */
@@ -1366,6 +1326,7 @@
 
         return data;
     }
+
     // table to json
 
     // date to string
@@ -1399,28 +1360,13 @@
 
     const thisBtn = document.querySelector('#modal_open');
 
-    /* 시교자원 수출관리 테이블 구분 */
-    var tablechk = 0;
-
-    $("#sampleTable1").click(function () {
-        tablechk = 0;
-        $("#sampleGrid").css("display", "block");
-        $("#outcomeGrid").css("display", "none");
-    })
-
-    $("#sampleTable2").click(function () {
-        tablechk = 1;
-        $("#sampleGrid").css("display", "none");
-        $("#outcomeGrid").css({"display": "block", "visibility": "", "height": "auto"});
-    })
-    /* 시교자원 수출관리 테이블 구분 */
 
     // DB에 저장된 데이터 읽어와서 테이블에 보여줌
     $(document).ready(function () {
         SearchTrait(1)
     });
 
-    // 갯수 선택
+    // 한 페이지 출력 갯수 선택
     $("#limit").change(function () {
         characterGrid.destroy();
 
@@ -1599,8 +1545,6 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                    console.log(result);
-
                     traitGrid = new tui.Grid({
                         el: document.getElementById('traitGrid'),
                         scrollX: false,
@@ -1610,43 +1554,32 @@
                         columns: [
                             {
                                 header: '분류',
-                                name: 'type'
+                                name: 'category_name'
                             },
                             {
                                 header: '작목서설',
-                                name: 'sample_name',
+                                name: 'crop_name',
                                 editor: 'text',
-                                sortable: true,
-                                sortingType: 'asc'
                             },
                             {
                                 header: '설명',
-                                name: 'sample_code',
+                                name: 'trait_description',
                                 editor: 'text',
-                                sortable: true,
-                                sortingType: 'asc',
-                                filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                             },
                             {
                                 header: '지정년도',
-                                name: 'sample_country',
+                                name: 'trait_year',
                                 editor: 'text',
-                                sortable: true,
-                                sortingType: 'asc'
                             },
                             {
                                 header: '조사기준화일',
-                                name: 'sample_type',
+                                name: 'trait_file',
                                 editor: 'text',
-                                sortable: true,
-                                sortingType: 'asc'
                             },
                             {
                                 header: '생성날짜',
-                                name: 'sample_mate',
+                                name: 'create_date',
                                 editor: 'text',
-                                sortable: true,
-                                sortingType: 'asc'
                             }
                         ],
                         pageOptions: {

@@ -71,4 +71,6 @@ public class TraitController {
         return cropList;
     }
 
+//    @RequestMapping("insertTrait")
+//    public
 }
