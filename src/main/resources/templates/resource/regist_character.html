@@ -339,17 +339,6 @@
                                 </div>
                             </form>
                             <div id="featureGrid"></div>
-                            <div class="row" style="padding-bottom: 20px;">
-                                <div class="col-4">
-                                    <button class="btn btn-icon btn-light btn-circle" onclick="insertRow();">
-                                        <span data-feather="plus"></span>
-                                    </button>
-                                    <button class="btn btn-icon btn-light btn-circle" onclick="">
-                                        <span data-feather="trash-2"></span>
-                                    </button>
-                                    <input type="hidden" id="offset">
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -361,6 +350,8 @@
         </div>
     </div>
 </main>
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
 <!-- 공통 js -->
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 <script type="text/javascript" th:inline="javascript">
