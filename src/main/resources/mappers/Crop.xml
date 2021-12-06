@@ -7,7 +7,7 @@
             crop_name,
             create_date,
         )
-        VALUE (
+        VALUES (
             #{category_id},
             #{crop_name},
             SYSDATE()

@@ -310,19 +310,22 @@
                             <span class="sub_title" style="display: block; clear:both; padding: 10px 0;">작목 선택</span>
                             <div class="data_cover1 clearfix">
                                 <div class="data_type data_type1">
-                                    <select name="selectCategory" onchange="getCrop(this)">
+                                    <select name="selectCategory" onchange="getCrop(this)" id="cropCategory">
                                         <option value="-1" selected disabled hidden>작물구분</option>
 
-                                        <th:block th:each="cat : ${cropCategoryList}">
+                                        <th:block th:each="cat : ${cropCategoryList}" >
                                             <option th:value="${cat.category_id}" th:text="${cat.category_name}"></option>
                                         </th:block>
                                     </select>
                                 </div>
                                 <div class="data_type data_type2">
-                                    <select name="selectCrop">
+                                    <select name="selectCrop"  onChange = "selectOptionEvent(value)">
                                         <option value="-2" selected disabled hidden>작물선택</option>
                                         <option value="-1">신규등록</option>
                                     </select>
+                                </div>
+                                <div class="data_type data_type3" id="newCropInput" style="display: none">
+                                	<input type ="text" id="newCrop">
                                 </div>
                             </div>
                             <form action="updateSampleFile" id="insertFile" method="POST" enctype="multipart/form-data">
@@ -559,19 +562,36 @@
 
     function saveTrait() {
         insertFile();
-
-        console.log(featureGrid.getData());
-        console.log($("select[name=selectCrop]").val());
-
-
-        var data = featureGrid.getData();
-
+        var cropCategory = document.getElementById("cropCategory");
+		var formData = new FormData();
+		formData.append("file", $("#excelFile")[0].files[0]);
+        var cropName = document.getElementById("newCrop").value;
+        var test = JSON.stringify(featureGrid.getData());
+        
+        var obj = featureGrid.getData();
+        
+        console.log(obj[0]);
+        
+        for(let i = 0; i < obj.length; i++) {
+        	if(obj[i]["feature_investigation"] == null){        		
+        		obj[i]["feature_investigation"] = "NULL";
+        	}
+	        console.log(obj[i])
+        }
+        obj = JSON.stringify(obj)
+        console.log("obj!",cropCategory);
+        var data = {"attribute_item":obj,"crop_name":cropName, "file": formData};
+		formData.append("attribute_item",obj);
+		formData.append("crop_name",cropName);
+		formData.append("cropCategory",cropCategory.value);
         $.ajax(
-            {
-                url: '',
+            { 	
+			    processData: false,
+			    contentType: false,
+                url: 'seed-resources',
                 method: 'POST',
                 dataType: 'json',
-                data: data,
+                data: formData,
                 success: function (result) {
 
                 }
@@ -584,6 +604,20 @@
 
         $("#insertFile").submit();
     }
+    
+    /* 셀렉트 박스 선택시 이벤트 발생 */
+    function selectOptionEvent(value){
+   		var selectOption = document.getElementById("newCropInput");
+   		var newCropIntput = document.getElementById("newCrop")
+    	if(value == -1){
+        	selectOption.style.display="block";	
+    	}else{
+        	selectOption.style.display="none";	
+        	newCropIntput.value=null;
+    	}
+    	
+    }
+    
 </script>
 </body>
 </html>

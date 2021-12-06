@@ -8,4 +8,7 @@ import java.util.List;
 @Mapper
 public interface FeatureMapper {
 
+	int seedResourcesInsert(Feature feature);
+
+	int selectFeatureGroup();
 }

@@ -10,4 +10,7 @@ public class Feature {
     private String feature_expression;
     private String feature_level;
     private String feature_investigate;
+    private String feature_file;
+    private String feature_origin_file;
+    private int feature_group;
 }

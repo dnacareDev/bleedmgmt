@@ -1,19 +1,23 @@
 package com.digitalresource.Controller;
 
-import com.digitalresource.Entity.Crop;
-import com.digitalresource.Service.Cropservice;
-import com.digitalresource.Service.ResourceNameService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.ResourceNameService;
 
 @Controller
 public class ResourceController {
@@ -56,4 +60,6 @@ public class ResourceController {
 
         return result;
     }
+    
+   
 }

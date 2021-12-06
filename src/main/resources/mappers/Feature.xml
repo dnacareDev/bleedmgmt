@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalresource.Mapper.FeatureMapper">
-
+	<insert id="seedResourcesInsert" >
+		insert into feature( feature_num, feature_name, feature_expression, feature_level, feature_investigate, feature_file, feature_origin_file, feature_group)
+		values(#{feature_num},#{feature_name}, #{feature_expression},#{feature_level},#{feature_investigate},#{feature_file},#{feature_origin_file},#{feature_group});
+	</insert>
+	
+	<select id="selectFeatureGroup" resultType="int">
+		select ifnull(max(feature_group)+1,1)from feature;
+	</select>
+	
 </mapper>
