@@ -567,13 +567,13 @@
 		formData.append("file", $("#excelFile")[0].files[0]);
         var cropName = document.getElementById("newCrop").value;
         var test = JSON.stringify(featureGrid.getData());
-        
+
         var obj = featureGrid.getData();
-        
+
         console.log(obj[0]);
-        
+
         for(let i = 0; i < obj.length; i++) {
-        	if(obj[i]["feature_investigation"] == null){        		
+        	if(obj[i]["feature_investigation"] == null){
         		obj[i]["feature_investigation"] = "NULL";
         	}
 	        console.log(obj[i])
@@ -585,7 +585,7 @@
 		formData.append("crop_name",cropName);
 		formData.append("cropCategory",cropCategory.value);
         $.ajax(
-            { 	
+            {
 			    processData: false,
 			    contentType: false,
                 url: 'seed-resources',
@@ -604,20 +604,20 @@
 
         $("#insertFile").submit();
     }
-    
+
     /* 셀렉트 박스 선택시 이벤트 발생 */
     function selectOptionEvent(value){
    		var selectOption = document.getElementById("newCropInput");
    		var newCropIntput = document.getElementById("newCrop")
     	if(value == -1){
-        	selectOption.style.display="block";	
+        	selectOption.style.display="block";
     	}else{
-        	selectOption.style.display="none";	
+        	selectOption.style.display="none";
         	newCropIntput.value=null;
     	}
-    	
+
     }
-    
+
 </script>
 </body>
 </html>
