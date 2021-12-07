@@ -20,4 +20,10 @@
 		</if>
 		#{feature_group}, #{trait_file}, now(),#{feature_count}
 	</insert>
+	
+	<update id="changeTrait">
+		update trait
+		set trait_description = #{trait_description}
+		where trait_id= (select trait_id from (select trait_id from trait limit #{limit},1) as trait_id)
+	</update>
 </mapper>

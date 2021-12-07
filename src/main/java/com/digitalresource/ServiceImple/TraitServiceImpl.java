@@ -29,4 +29,9 @@ public class TraitServiceImpl implements TraitService {
 	public int insertTrait(Map<String, Object> param) {
 		return mapper.insertTrait(param);
 	}
+
+	@Override
+	public int changeTrait(Map<String, Object> param) {
+		return mapper.changeTrait(param);
+	}
 }

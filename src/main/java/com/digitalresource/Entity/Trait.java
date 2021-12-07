@@ -17,5 +17,6 @@ public class Trait {
   private int feature_count;
   private String crop_category;
   private String category_name;
+  private String crop_name;
 
 }

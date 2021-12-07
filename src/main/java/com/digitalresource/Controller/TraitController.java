@@ -70,6 +70,16 @@ public class TraitController {
 
         return cropList;
     }
+    
+    @ResponseBody
+    @RequestMapping("change-trait")
+    public int changeTrait(@RequestParam("trait_description")String trait_description, @RequestParam("limit") int limit) {
+    	Map<String,Object> param = new HashMap<String, Object>();
+    	param.put("trait_description", trait_description);
+    	param.put("limit", limit);
+    	int result = traitService.changeTrait(param);
+    	return result;
+    }
 
 //    @RequestMapping("insertTrait")
 //    public

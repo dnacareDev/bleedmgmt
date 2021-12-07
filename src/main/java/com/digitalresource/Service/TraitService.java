@@ -13,4 +13,6 @@ public interface TraitService {
   
   int insertTrait(Map<String,Object> param);
 
+int changeTrait(Map<String, Object> param);
+
 }
