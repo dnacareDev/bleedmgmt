@@ -2,10 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalresource.Mapper.TraitMapper">
     <select id="SelectTraitList" resultType="Trait">
-        SELECT * FROM trait;
+        select*,(select category_name from crop_category where category_id = (select category_id from crop where crop_id = t.crop_id))as category_name, (select crop_name from crop where crop_id= t.crop_id)as crop_name  from trait t;
     </select>
 
     <select id="SelectTraitCount" resultType="int">
         SELECT COUNT(*) FROM trait;
     </select>
+    
+    <insert id="insertTrait">
+		insert into trait (crop_id, feature_group,trait_file,create_date,feature_count)
+		select
+		<if test="crop_name != ''">
+			(select crop_id from crop where crop_name = #{crop_name}),
+		</if> 
+		<if test="crop_name == ''">
+			#{cropSubCategory},
+		</if>
+		#{feature_group}, #{trait_file}, now(),#{feature_count}
+	</insert>
 </mapper>

@@ -319,7 +319,7 @@
                                     </select>
                                 </div>
                                 <div class="data_type data_type2">
-                                    <select name="selectCrop"  onChange = "selectOptionEvent(value)">
+                                    <select name="selectCrop"  onChange = "selectOptionEvent(value)" id="cropSubCategory">
                                         <option value="-2" selected disabled hidden>작물선택</option>
                                         <option value="-1">신규등록</option>
                                     </select>
@@ -360,6 +360,7 @@
 <script type="text/javascript" th:inline="javascript">
     let file_this_id; // 클릭한 파일첨부 div 박스
     let file_this_file; // 클릭한 파일과 연동된 input type["file"]
+    var subCrop;
     function filed(id) { //파일 첨부 클릭할경우
         $(id).trigger("click");
         $(id).on("change", file_handler);
@@ -563,39 +564,42 @@
     function saveTrait() {
         insertFile();
         var cropCategory = document.getElementById("cropCategory");
+        var cropSubCategory = document.getElementById("cropSubCategory");
+   		console.log(cropSubCategory.value);
 		var formData = new FormData();
 		formData.append("file", $("#excelFile")[0].files[0]);
         var cropName = document.getElementById("newCrop").value;
         var test = JSON.stringify(featureGrid.getData());
-
+        
         var obj = featureGrid.getData();
-
-        console.log(obj[0]);
-
+		var feature_count = obj.length;
+        
         for(let i = 0; i < obj.length; i++) {
-        	if(obj[i]["feature_investigation"] == null){
+        	if(obj[i]["feature_investigation"] == null){        		
         		obj[i]["feature_investigation"] = "NULL";
         	}
 	        console.log(obj[i])
         }
         obj = JSON.stringify(obj)
         console.log("obj!",cropCategory);
-        var data = {"attribute_item":obj,"crop_name":cropName, "file": formData};
+
 		formData.append("attribute_item",obj);
 		formData.append("crop_name",cropName);
+		formData.append("cropSubCategory", cropSubCategory.value);
 		formData.append("cropCategory",cropCategory.value);
+		formData.append("feature_count", feature_count);
         $.ajax(
-            {
+            { 	
 			    processData: false,
 			    contentType: false,
-                url: 'seed-resources',
+                url: '/seed-resources',
                 method: 'POST',
                 dataType: 'json',
                 data: formData,
                 success: function (result) {
-
+                	location.href="regist-resource";
                 }
-            }
+            } 
         )
     }
 
@@ -604,20 +608,24 @@
 
         $("#insertFile").submit();
     }
-
+    
     /* 셀렉트 박스 선택시 이벤트 발생 */
     function selectOptionEvent(value){
    		var selectOption = document.getElementById("newCropInput");
    		var newCropIntput = document.getElementById("newCrop")
+		var cropSubCategory = document.getElementById("cropSubCategory");
+   		console.log(cropSubCategory.value);
     	if(value == -1){
-        	selectOption.style.display="block";
+        	selectOption.style.display="block";	
+        	subCrop = cropSubCategory.value;
     	}else{
-        	selectOption.style.display="none";
+        	selectOption.style.display="none";	
         	newCropIntput.value=null;
+        	cropSubCategory = null;
     	}
-
+    	
     }
-
+    
 </script>
 </body>
 </html>

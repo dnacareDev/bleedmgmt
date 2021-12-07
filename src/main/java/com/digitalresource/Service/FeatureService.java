@@ -14,5 +14,5 @@ public interface FeatureService {
 
     public int deleteFeatureByCharacter(int character_id);
 
-	public int seedResourcesInsert(String attribute_item, String crop_name, String cropCategory, String file_name,String origin_file_name );
+	public int seedResourcesInsert(String attribute_item, String crop_name, String cropCategory, String file_name,String origin_file_name, String feature_count, int cropSubCategory );
 }
