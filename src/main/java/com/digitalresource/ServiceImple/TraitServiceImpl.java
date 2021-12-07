@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TraitServiceImpl implements TraitService {
@@ -23,4 +24,9 @@ public class TraitServiceImpl implements TraitService {
   public int SelectTraitCount() {
     return mapper.SelectTraitCount();
   }
+
+	@Override
+	public int insertTrait(Map<String, Object> param) {
+		return mapper.insertTrait(param);
+	}
 }

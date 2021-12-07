@@ -11,9 +11,11 @@ public class Trait {
   private int crop_id;
   private String trait_description;
   private String trait_year;
-  private int trait_file;
+  private String trait_file;
   private LocalDate create_date;
   private LocalDate modify_date;
   private int feature_count;
+  private String crop_category;
+  private String category_name;
 
 }
