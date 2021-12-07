@@ -5,7 +5,7 @@
         INSERT INTO crop(
             category_id,
             crop_name,
-            create_date,
+            create_date
         )
         VALUES (
             #{category_id},

@@ -28,7 +28,6 @@ public class FeatureController {
 	 @ResponseBody
 	 @RequestMapping("seed-resources")
 	 public void seedResourcesInsert(@RequestParam(value ="attribute_item") String attribute_item, @RequestParam(value="crop_name", required = false)String crop_name,@RequestParam("cropCategory") String cropCategory,MultipartFile file) throws IOException {
-		 System.out.println(cropCategory);
 		String[] extension = file.getOriginalFilename().split("\\.");
 
 		String file_name = fileController.ChangeFileName(extension[1]);
@@ -42,8 +41,7 @@ public class FeatureController {
 		Path targetLocation = fileLocation.resolve(file_name);
 		
 		Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-		System.out.println("attribute_item");
-		System.out.println(attribute_item);
+
 	  	int result = featureService.seedResourcesInsert(attribute_item,crop_name,cropCategory,file_name,origin_file_name);
 	 }
 }
