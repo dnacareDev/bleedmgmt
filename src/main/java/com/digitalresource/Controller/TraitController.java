@@ -81,6 +81,10 @@ public class TraitController {
     	return result;
     }
 
-//    @RequestMapping("insertTrait")
-//    public
+    @ResponseBody
+    @RequestMapping("traitDescriptionList")
+    public List<Trait> traitDescriptionList(){
+    	List<Trait> traitList = traitService.traitDescriptionList();
+    	return traitList;
+    }
 }

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.Feature;
 import com.digitalresource.Service.Cropservice;
 import com.digitalresource.Service.ResourceNameService;
 
@@ -59,6 +58,38 @@ public class ResourceController {
         int result = RNService.getCountResourceNameByCrop(resource_name);
 
         return result;
+    }
+    
+    @ResponseBody
+    @RequestMapping("confirmResourceName")
+    public int confirmResourceName(@RequestParam("crop_id") int crop_id, @RequestParam("resource_name")String resource_name) {
+    	Map<String,Object> param = new HashMap<String, Object>();
+    	int result = RNService.confirmResourceName(param);
+    	return result;
+    }
+    
+    @ResponseBody
+    @RequestMapping("featureHeadList")
+    public List<Feature> featureHeadList(@RequestParam("feature_group")int feature_group){
+    	List<Feature> result = RNService.featureHeadList(feature_group);
+    	return result;
+    }
+    
+    @ResponseBody
+    @RequestMapping("registerResource")
+    public int registerResource (MultipartFile inputFile, MultipartFile charFile,
+    								@RequestParam(value="crop_id", required=false) int crop_id, @RequestParam("resource_name") String resource_name) {
+    	System.out.println(inputFile);
+    	System.out.println(charFile);
+    	System.out.println(crop_id);
+    	System.out.println(resource_name);
+    	// insert resource_name
+    	int resource_id = RNService.insertResource_name(resource_name); 
+    	System.out.println(resource_id);
+    	// 파일 업로드 및 파일 이름 저장
+    	// insert resource
+    	int result = 1;
+    	return result;
     }
     
    

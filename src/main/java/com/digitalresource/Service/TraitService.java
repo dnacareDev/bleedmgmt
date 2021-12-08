@@ -7,12 +7,14 @@ import com.digitalresource.Entity.Trait;
 
 public interface TraitService {
 
-  List<Trait> SelectTraitList();
+	List<Trait> SelectTraitList();
 
-  int SelectTraitCount();
-  
-  int insertTrait(Map<String,Object> param);
+	int SelectTraitCount();
 
-int changeTrait(Map<String, Object> param);
+	int insertTrait(Map<String, Object> param);
+
+	int changeTrait(Map<String, Object> param);
+
+	List<Trait> traitDescriptionList();
 
 }

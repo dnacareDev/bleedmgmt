@@ -34,4 +34,9 @@ public class TraitServiceImpl implements TraitService {
 	public int changeTrait(Map<String, Object> param) {
 		return mapper.changeTrait(param);
 	}
+
+	@Override
+	public List<Trait> traitDescriptionList() {
+		return mapper.traitDescriptionList();
+	}
 }

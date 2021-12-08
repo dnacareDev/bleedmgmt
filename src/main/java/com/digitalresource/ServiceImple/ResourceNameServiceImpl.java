@@ -1,5 +1,8 @@
 package com.digitalresource.ServiceImple;
 
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +79,20 @@ public class ResourceNameServiceImpl implements ResourceNameService {
     public int CountResourceNameByCrop(String resource_name) {
         return mapper.CountResourceNameByCrop(resource_name);
     }
+
+	@Override
+	public int confirmResourceName(Map<String, Object> param) {
+		return mapper.confirmResourceName(param);
+	}
+
+	@Override
+	public List<Feature> featureHeadList(int feature_group) {
+		return mapper.featureHeadList(feature_group);
+	}
+
+	@Override
+	public int insertResource_name(String resource_name) {
+		return mapper.insertResource_name(resource_name);
+	}
 
 }

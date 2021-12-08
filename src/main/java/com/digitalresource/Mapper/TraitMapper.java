@@ -15,5 +15,7 @@ public interface TraitMapper {
 
   int insertTrait(Map<String, Object> param);
 
-int changeTrait(Map<String, Object> param);
+  int changeTrait(Map<String, Object> param);
+
+  List<Trait> traitDescriptionList();
 }

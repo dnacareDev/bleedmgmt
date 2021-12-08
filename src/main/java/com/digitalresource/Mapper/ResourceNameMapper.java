@@ -1,6 +1,11 @@
 package com.digitalresource.Mapper;
 
+import com.digitalresource.Entity.Feature;
 import com.digitalresource.Entity.ResourceName;
+
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +22,10 @@ public interface ResourceNameMapper {
     public int registResourceName(ResourceName registParam);
 
     public int deleteResourceName(int resource_name_id);
+
+	public int confirmResourceName(Map<String, Object> param);
+
+	public List<Feature> featureHeadList(int feature_group);
+
+	public int insertResource_name(String resource_name);
 }
