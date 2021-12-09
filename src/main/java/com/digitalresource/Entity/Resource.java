@@ -19,8 +19,13 @@ public class Resource {
 
     private int character_id;
 
-    private List<Detail> detailList;
+//    private List<Detail> detailList;
+    private String detailList;
+    
+    private String trait_id;
 
-    private File resource_template;
+    private String resource_template;
     private int resource_template_id;
+    private String resource_character_template_file;
+    private int detail_count;
 }
