@@ -4,25 +4,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.Entity.Crop;
-import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.ResourceNameService;
 
 @Controller
 public class ResourceController {
     @Autowired
-    private Cropservice cropService;
+    private CropService cropService;
 
     @Autowired
     private ResourceNameService RNService;

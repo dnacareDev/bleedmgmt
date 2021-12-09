@@ -1,7 +1,7 @@
 package com.digitalresource.Controller;
 
 import com.digitalresource.Entity.Crop;
-import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.CropService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Controller
 public class CropController {
-    private Cropservice cropService;
+    private CropService cropService;
 
     @PostMapping("/regist-crop")
     @ResponseBody

@@ -541,6 +541,8 @@
             var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
             callback(firstSheet);
 
+            console.log(firstSheet);
+
             headerGrid = new tui.Grid({
                 el: document.getElementById('headerGrid'),
                 scrollX: true,

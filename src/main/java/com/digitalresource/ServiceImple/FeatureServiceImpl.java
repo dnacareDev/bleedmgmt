@@ -8,14 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.digitalresource.Controller.TraitController;
 import com.digitalresource.Entity.Character;
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Feature;
 import com.digitalresource.Mapper.FeatureMapper;
-import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.FeatureService;
 import com.digitalresource.Service.TraitService;
 
@@ -26,7 +24,7 @@ public class FeatureServiceImpl implements FeatureService {
 	private FeatureMapper featureMapper;
 	
 	@Autowired
-	private Cropservice cropService;
+	private CropService cropService;
 	
 	@Autowired
 	private TraitService traitService;

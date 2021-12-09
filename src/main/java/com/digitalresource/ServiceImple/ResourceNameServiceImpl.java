@@ -1,16 +1,10 @@
 package com.digitalresource.ServiceImple;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.digitalresource.Entity.Feature;
 import com.digitalresource.Entity.ResourceName;
 import com.digitalresource.Mapper.ResourceNameMapper;
-import com.digitalresource.Service.Cropservice;
-import com.digitalresource.Service.FeatureService;
 import com.digitalresource.Service.ResourceNameService;
 
 @Service
