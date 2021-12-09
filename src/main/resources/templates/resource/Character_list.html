@@ -1562,6 +1562,7 @@
                                 header: '작목서설',
                                 name: 'crop_name',
                                 editor: 'text',
+                                onchange:'test()'
                             },
                             {
                                 header: '설명',
@@ -1611,7 +1612,25 @@
                     // }
                     //
                     // characterGrid.resetData(dataArr);
+                    traitGrid.on('afterChange', (ev)=>{
+                    	var after = ev.changes[0].value;
+                    	var before = ev.changes[0].prevValue;
+                    	var rowKey = ev.changes[0].rowKey;
+                    	console.log(ev);
+                    	var data = {"limit": rowKey, "trait_description":after}
+                    	if(after != before){
+                    		$.ajax(
+                    			{
+                    				url:'change-trait',
+                    				method:'POST',
+                    				dataType: 'json',
+                                    data: data,
+                    			}		
+                    		)
+                    	}
+                    });
                 }
+            
             });
     }
 

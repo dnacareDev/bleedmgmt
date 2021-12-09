@@ -63,4 +63,20 @@
         resource_name_id = #{new_name_id}
         WHERE crop_id = #{crop_id} AND resource_name_id = #{resource_name_id}
     </update>
+    
+    <select id="confirmResourceName" resultType="int">
+    	select count(*) from resource_name rn inner join resource r on r.resource_name_id = rn.resource_name_id inner join crop c on c.crop_id= r.crop_id
+		where c.crop_id = #{crop_id} and rn.resource_name = #{resource_name}
+    </select>
+    
+    <select id="featureHeadList" resultType="feature">
+    	select feature_num , feature_name from feature where feature_group =#{featur_group} group by feature_num, feature_name;
+    </select>
+    
+    <insert id="insertResource_name">
+    	insert into resource_name(resource_name) values(#{resource_name});
+    	<selectKey resultType="int" keyProperty="resource_name_id" order="AFTER">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>
+    </insert>
 </mapper>
