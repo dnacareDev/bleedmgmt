@@ -25,5 +25,7 @@ public interface ResourceNameService {
 
 	List<Feature> featureHeadList(int feature_group);
 
-	int insertResource_name(String resource_name);
+	int insertResource_name(ResourceName resourceName);
+
+	int registerResource(Map<String, Object> param);
 }

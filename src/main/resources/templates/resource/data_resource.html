@@ -976,7 +976,7 @@
 
     // 종자번호 팝업
     function SearchSeed(e) {
-        var data1 = {"": };
+        var data1 = {"": ""};
 
         $.ajax(
             {
@@ -1384,24 +1384,24 @@
                         el: document.getElementById('sampleGrid'),
                         scrollX: false,
                         scrollY: false,
-                        data: result.sample,
+                        data: result.resourceList,
                         rowHeaders: ['checkbox'],
                         columns: [
                             {
                                 header: '순번',
-                                name: 'file',
+                                name: 'resource_id',
                                 width: 100
                             },
                             {
                                 header: '작목',
-                                name: 'sample_name',
+                                name: 'crop_name',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
                                 header: '자원관리종류',
-                                name: 'sample_code',
+                                name: 'trait_description',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc',
@@ -1409,28 +1409,28 @@
                             },
                             {
                                 header: '관리자원양식',
-                                name: 'sample_country',
+                                name: 'resource_template',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
                                 header: '자체특성양식',
-                                name: 'sample_type',
+                                name: 'resource_character_template_file',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
                                 header: '사용여부',
-                                name: 'sample_mate',
+                                name: 'use_name',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
                                 header: '생성날짜',
-                                name: 'sample_seed',
+                                name: 'create_date',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'

@@ -1,5 +1,6 @@
 package com.digitalresource.ServiceImple;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import com.digitalresource.Mapper.ResourceNameMapper;
 import com.digitalresource.Service.Cropservice;
 import com.digitalresource.Service.FeatureService;
 import com.digitalresource.Service.ResourceNameService;
+import com.google.gson.JsonArray;
 
 @Service
 public class ResourceNameServiceImpl implements ResourceNameService {
@@ -91,8 +93,14 @@ public class ResourceNameServiceImpl implements ResourceNameService {
 	}
 
 	@Override
-	public int insertResource_name(String resource_name) {
-		return mapper.insertResource_name(resource_name);
+	public int registerResource(Map<String, Object> param) {
+		return mapper.registerResource(param);
 	}
+
+	@Override
+	public int insertResource_name(ResourceName resourceName) {
+		return mapper.insertResource_name(resourceName);
+	}
+
 
 }

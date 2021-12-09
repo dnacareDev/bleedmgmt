@@ -1,14 +1,21 @@
 package com.digitalresource.ServiceImple;
 
-import com.digitalresource.Entity.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.digitalresource.Entity.Resource;
+import com.digitalresource.Entity.ResourceList;
 import com.digitalresource.Mapper.ResourceMapper;
 import com.digitalresource.Service.DetailService;
 import com.digitalresource.Service.FileService;
 import com.digitalresource.Service.ResourceNameService;
 import com.digitalresource.Service.ResourceService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -29,7 +36,7 @@ public class ResourceServiceImpl implements ResourceService {
         int result = -1;
 
         //upload Resource Template File
-        result = fileService.registFile(resource.getResource_template());
+        //result = fileService.registFile(resource.getResource_template());
         if(result < 0){
             return result;
         }
@@ -95,4 +102,39 @@ public class ResourceServiceImpl implements ResourceService {
 
         return result;
     }
+    
+
+	@Override
+	public int insertResource(Resource resource) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// inert resource
+		int resultResource = resourceMapper.insertResource(resource);
+		// insert detail
+		String jsonArr = resource.getDetailList();
+		JSONArray arr = new JSONArray(jsonArr);
+		map.put("resource_id", resultResource);
+		int result = 0;
+		for(int i = 0; i<arr.length();  i++) {
+			JSONObject jsonObject = arr.getJSONObject(i);
+			map.put("detail_name", jsonObject.get("name"));
+			map.put("detail_type", jsonObject.get("type"));
+			map.put("detail_info", jsonObject.get("info"));
+			map.put("detail_index", i+1);
+			result = resourceMapper.registerDetail(map);
+			if( result == 0) {
+				return 0;
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public int selectResourceCount() {
+		return resourceMapper.selectResourceCount();
+	}
+
+	@Override
+	public List<ResourceList> searchResource() {
+		return resourceMapper.searchResource();
+	}
 }

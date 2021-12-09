@@ -17,7 +17,7 @@ public class DetailServiceImpl implements DetailService {
     @Override
     public int registDetails(Resource resource) {
         int result = -1;
-        result = mapper.registDetails(resource.getResource_id(), resource.getDetailList());
+        //result = mapper.registDetails(resource.getResource_id(), resource.getDetailList());
 
         if(result != resource.getDetailCount()){
             //Error

@@ -73,10 +73,9 @@
     	select feature_num , feature_name from feature where feature_group =#{featur_group} group by feature_num, feature_name;
     </select>
     
-    <insert id="insertResource_name">
+    <insert id="insertResource_name" useGeneratedKeys="true" keyProperty="resource_name_id">
     	insert into resource_name(resource_name) values(#{resource_name});
-    	<selectKey resultType="int" keyProperty="resource_name_id" order="AFTER">
-        	SELECT LAST_INSERT_ID()
-    	</selectKey>
     </insert>
+    
+    
 </mapper>

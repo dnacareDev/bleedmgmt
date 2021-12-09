@@ -19,4 +19,48 @@
     <delete id="deleteResourceByCrop" parameterType="int">
         DELETE FROM resource WHERE crop_id = #{crop_id}
     </delete>
+    
+    
+    <insert id="insertResource" useGeneratedKeys="true" keyProperty="resource_id" >
+    	insert into resource(resource_name_id, crop_id, 
+    	<if test="trait_id != ''">
+	    	trait_id, 
+    	</if>
+    	<if test="resource_template != ''">
+    		resource_template,
+    	</if>
+    	<if test="resource_character_template_file != ''">    	
+    	 	resource_character_template_file, 
+    	</if>
+	    	 resource_use, create_date,detail_count)
+	    	values(#{resource_name_id}, #{crop_id},
+    	<if test="trait_id != ''">
+	    	#{trait_id},
+    	</if>
+    	<if test="resource_template != ''">
+	    	#{resource_template},
+    	</if>
+    	<if test="resource_character_template_file != ''">
+    	   	 #{resource_character_template_file},
+    	</if>
+    	  1, 
+    	  now(), #{detail_count});
+    </insert>
+    
+    <insert id="registerDetail">
+    	insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info)
+    	values(#{resource_id},#{detail_type},#{detail_name},#{detail_index},#{detail_info});
+    </insert>
+    
+    <select id="searchResource" resultType="ResourceList">
+    	select r.*, t.trait_description, c.crop_name ,(if(resource_use = 1, '사용','비사용'))as use_name from resource r
+		inner join trait t on r.trait_id = t.trait_id
+		inner join crop c on c.crop_id= r.crop_id;
+    </select>
+    
+    <select id="selectResourceCount" resultType="int">
+    	select count(*) from resource r
+		inner join trait t on r.trait_id = t.trait_id
+		inner join crop c on c.crop_id= r.crop_id;
+    </select>
 </mapper>

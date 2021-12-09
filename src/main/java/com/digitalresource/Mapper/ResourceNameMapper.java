@@ -27,5 +27,9 @@ public interface ResourceNameMapper {
 
 	public List<Feature> featureHeadList(int feature_group);
 
-	public int insertResource_name(String resource_name);
+	public int registerResource(Map<String, Object> param);
+
+	public int insertResource_name(ResourceName resourceName);
+
+	public int insertResource(Map<String, Object> param);
 }
