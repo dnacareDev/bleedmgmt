@@ -5,7 +5,7 @@ import com.digitalresource.Entity.Crop;
 
 import java.util.List;
 
-public interface Cropservice {
+public interface CropService {
     public int registCrop(Crop crop);
 
     public List<Crop> selectCropList();

@@ -2,7 +2,7 @@ package com.digitalresource.ServiceImple;
 
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Mapper.CropMapper;
-import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CropServiceImpl implements Cropservice {
+public class CropServiceImpl implements CropService {
     @Autowired
     private CropMapper mapper;
 

@@ -1,5 +1,8 @@
 package com.digitalresource.Controller;
 
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Service.CropService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,13 +11,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 public class BreedController {
+
+	@Autowired
+	private CropService cropService;
 	
 	@RequestMapping("/breed")
 	public ModelAndView breed(ModelAndView mv) {
+		List<Crop> cropList = cropService.selectCropList();
+
+		mv.addObject("cropList", cropList);
+
 		mv.setViewName("genome/breed");
 		
 		return mv;
@@ -27,4 +38,5 @@ public class BreedController {
 
 		return result;
 	}
+
 }

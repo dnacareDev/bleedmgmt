@@ -843,17 +843,12 @@
                                         <option value="20">20개</option>
                                         <option value="30">30개</option>
                                     </select>
-                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" id="CropSelect">
-                                        <option value="고추">고추</option>
-                                        <option value="대파">대파</option>
-                                        <option value="멜론">멜론</option>
-                                        <option value="무">무</option>
-                                        <option value="배추">배추</option>
-                                        <option value="수박">수박</option>
-                                        <option value="양배추">양배추</option>
-                                        <option value="양파">양파</option>
-                                        <option value="참외">참외</option>
-                                        <option value="토마토">토마토</option>
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;"  name="selectCrop" id="cropCrop" onchange="getCrop(this)">
+                                        <option value="-1" selected disable hidden>작물선택</option>
+
+                                        <th:block th:each="list : ${cropList}" >
+                                            <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
+                                        </th:block>
                                     </select>
                                     <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
                                         <img src="../assets/vendor_assets/img/icon1.png" alt="">

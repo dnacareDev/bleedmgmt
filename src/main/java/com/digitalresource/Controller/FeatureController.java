@@ -2,14 +2,10 @@ package com.digitalresource.Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.digitalresource.Entity.Crop;
-import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.FeatureService;
 
 @Controller
@@ -34,7 +29,7 @@ public class FeatureController {
 	private FileController fileController;
 
 	@Autowired
-	private Cropservice cropService;
+	private CropService cropService;
 
 	@ResponseBody
 	@RequestMapping("/seed-resources")
