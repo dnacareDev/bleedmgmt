@@ -1454,6 +1454,21 @@
                             var id = samplegrid.getRow(ev.rowKey).sample_id;
 
                             FileBtn(id);
+                        }else if(ev.targetType === 'cell' && ev.columnName === 'resource_template' ){
+                        	var data = {"file_name" : ev.nativeEvent.srcElement.innerText};
+                        	$.ajax(
+                                    {
+                                        url: 'resourceDownloadFile',
+                                        method: 'POST',
+                                        dataType: 'json',
+                                        data: data,
+                                        success: function (result) {
+                                            if (result == 0) {
+                                                return Alert("수정에 실패하였습니다.")
+                                            }
+                                        }
+                                    });
+                        	console.log(ev.nativeEvent.srcElement.innerText);
                         }
                     });
 

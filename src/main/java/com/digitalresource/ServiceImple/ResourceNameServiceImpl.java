@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.digitalresource.Entity.Feature;
 import com.digitalresource.Entity.ResourceName;
 import com.digitalresource.Mapper.ResourceNameMapper;
-import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.FeatureService;
 import com.digitalresource.Service.ResourceNameService;
 import com.google.gson.JsonArray;

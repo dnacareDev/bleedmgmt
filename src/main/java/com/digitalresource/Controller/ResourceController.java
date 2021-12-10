@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +29,14 @@ import com.digitalresource.Entity.Feature;
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Entity.ResourceList;
 import com.digitalresource.Entity.ResourceName;
-import com.digitalresource.Service.Cropservice;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.ResourceNameService;
 import com.digitalresource.Service.ResourceService;
 
 @Controller
 public class ResourceController {
     @Autowired
-    private Cropservice cropService;
+    private CropService cropService;
 
     @Autowired
     private ResourceNameService RNService;
@@ -88,7 +93,10 @@ public class ResourceController {
     @RequestMapping("confirmResourceName")
     public int confirmResourceName(@RequestParam("crop_id") int crop_id, @RequestParam("resource_name")String resource_name) {
     	Map<String,Object> param = new HashMap<String, Object>();
+    	param.put("crop_id", crop_id);
+    	param.put("resource_name", resource_name);
     	int result = RNService.confirmResourceName(param);
+    	System.out.println(result);
     	return result;
     }
     
@@ -166,8 +174,34 @@ public class ResourceController {
     	int result = RService.insertResource(resource);
 
     	
-    	return 0;
+    	return result;
     }
     
-   
+    
+    @ResponseBody
+    @RequestMapping("resourceDownloadFile")
+    public ResponseEntity<Object> resourceDownloadFile(@RequestParam(value="file_name") String file_name) {
+    	String path = "upload/" + file_name;
+    	System.out.println(file_name);
+    	
+    	try
+ 		{
+ 			Path filePath = Paths.get(path);
+ 			InputStreamResource resource = new InputStreamResource(Files.newInputStream(filePath)); // 파일 resource 얻기
+ 			
+ 			File file = new File(path);
+ 			
+ 			HttpHeaders headers = new HttpHeaders();
+ 			headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());  // 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
+ 			
+ 			return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
+ 		}
+ 		catch(Exception e)
+ 		{
+ 			return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
+ 		}
+    }
+    
+    
+
 }
