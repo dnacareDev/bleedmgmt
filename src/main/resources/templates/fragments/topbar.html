@@ -49,7 +49,7 @@
                                 	<span data-feather="sun" class="nav-icon"></span>
 		                            <span class="menu-text">자원관리</span>
                                 </a>
-                                <ul class="subMenu">
+                                <ul class="subMenu" id="subMenuList">
                                     <li>
                                         <a href="/breed">OO 관리</a>
                                     </li>
@@ -155,4 +155,29 @@
             </div>
         </nav>
     </header>
+    
+    <script type="text/javascript">
+    	
+    	window.onload=function () {
+    		$.ajax({
+    			url:"resource-list",
+    			method:"POST",
+    			dataType:"json",
+    			success:function (result){
+    				console.log(result);
+    				var data_list = $("#subMenuList");
+    				var data_add= "";
+    					
+    					for(var i=0; i<result.resourceList.length; i++){
+    						data_add +='<li>';
+    						data_add +=' <a href="/breed" id="'+result.resourceList[i].resource_name_id+'">'+result.resourceList[i].resource_name+'</a>'
+    						data_add +='</li>';
+    					}
+    				data_list.empty();
+    				data_list.append(data_add);
+    			}
+    		})
+    	}
+    
+    </script>
 </html>

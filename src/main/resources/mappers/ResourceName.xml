@@ -74,7 +74,10 @@
     </select>
     
     <insert id="insertResource_name" useGeneratedKeys="true" keyProperty="resource_name_id">
-    	insert into resource_name(resource_name) values(#{resource_name});
+    	insert into resource_name(resource_name, resource_group) 
+    	values(#{resource_name},
+    	(select * from (select ifnull ((select distinct resource_group from resource_name right join (select '') a on resource_name = #{resource_name} ) , (select max(resource_group)+1 from resource_name ))from dual) a)
+    	);
     </insert>
     
     

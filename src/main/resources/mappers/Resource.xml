@@ -69,4 +69,8 @@
 		set resource_use = ${use_name}
 		where resource_id = (select resource_id from (select resource_id from resource limit ${limit}, 1) as resurce_id);
     </update>
+    
+    <select id="resourceList" resultType="resourceName">
+   		select * from resource_name group by resource_group;
+    </select>
 </mapper>

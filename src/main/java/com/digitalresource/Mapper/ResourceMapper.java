@@ -2,6 +2,7 @@ package com.digitalresource.Mapper;
 
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Entity.ResourceList;
+import com.digitalresource.Entity.ResourceName;
 
 import java.util.List;
 import java.util.Map;
@@ -29,4 +30,6 @@ public interface ResourceMapper {
 	public int selectResourceCount();
 
 	public int changeResourceUse(Map<String, Object> map);
+
+	public List<ResourceName> resourceList();
 }

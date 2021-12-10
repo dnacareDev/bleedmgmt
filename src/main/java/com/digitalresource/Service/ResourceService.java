@@ -6,6 +6,7 @@ import java.util.Map;
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Entity.ResourceList;
+import com.digitalresource.Entity.ResourceName;
 
 public interface ResourceService {
     public int registResource(Resource resource);
@@ -23,4 +24,6 @@ public interface ResourceService {
 	public List<ResourceList> searchResource();
 
 	public int changeResourceUse(Map<String, Object> map);
+
+	public List<ResourceName> resourceList();
 }

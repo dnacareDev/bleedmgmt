@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Entity.ResourceList;
+import com.digitalresource.Entity.ResourceName;
 import com.digitalresource.Mapper.ResourceMapper;
 import com.digitalresource.Service.DetailService;
 import com.digitalresource.Service.FileService;
@@ -141,5 +142,10 @@ public class ResourceServiceImpl implements ResourceService {
 	@Override
 	public int changeResourceUse(Map<String, Object> map) {
 		return resourceMapper.changeResourceUse(map);
+	}
+
+	@Override
+	public List<ResourceName> resourceList() {
+		return resourceMapper.resourceList();
 	}
 }

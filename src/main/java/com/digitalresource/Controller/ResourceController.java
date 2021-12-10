@@ -225,4 +225,13 @@ public class ResourceController {
     	}
     	return result;
     }
+    
+    @ResponseBody
+    @RequestMapping("resource-list")
+    public ResponseEntity<?> resourceList(){
+    	Map<String,Object> map = new HashMap<String, Object>();
+    	List<ResourceName>resourceList = RService.resourceList();
+    	map.put("resourceList", resourceList);
+    	return ResponseEntity.ok(map);
+    }
 }
