@@ -32,4 +32,6 @@ public interface ResourceNameMapper {
 	public int insertResource_name(ResourceName resourceName);
 
 	public int insertResource(Map<String, Object> param);
+
+	public int changeResourceUse(Map<String, Object> map);
 }

@@ -1440,6 +1440,30 @@
                             perPage: limit,
                         }
                     });
+                    
+                    samplegrid.on('afterChange', (ev)=>{
+                    	var after = ev.changes[0].value;
+                    	var before = ev.changes[0].prevValue;
+                    	var rowKey = ev.changes[0].rowKey;
+                    	console.log(ev);
+                    	var data = {"limit": rowKey, "use_name":after}
+                    	console.log(data);
+                    	if(after != before){
+                    		$.ajax(
+                    			{
+                    				url:'change-resource-use',
+                    				method:'POST',
+                    				dataType: 'json',
+                                    data: data,
+                                    success:function(result){
+                                    	if(result ==0){
+                                    		Alert('"사용", "비사용"만 입력 가능합니다.')
+                                    	}
+                                    }
+                    			}		
+                    		)
+                    	}
+                    });
 
                     samplegrid.on('click', (ev) => {
                         if (ev.targetType === 'cell' && ev.columnName === 'sample_seed') {

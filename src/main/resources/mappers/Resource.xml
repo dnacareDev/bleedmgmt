@@ -63,4 +63,10 @@
 		inner join trait t on r.trait_id = t.trait_id
 		inner join crop c on c.crop_id= r.crop_id;
     </select>
+    
+    <update id="changeResourceUse">
+    	update resource
+		set resource_use = ${use_name}
+		where resource_id = (select resource_id from (select resource_id from resource limit ${limit}, 1) as resurce_id);
+    </update>
 </mapper>

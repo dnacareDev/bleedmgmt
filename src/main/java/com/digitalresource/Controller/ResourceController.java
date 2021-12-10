@@ -202,6 +202,27 @@ public class ResourceController {
  		}
     }
     
-    
-
+    @ResponseBody
+    @RequestMapping("change-resource-use")
+    public int changeResourceUse(@RequestParam("use_name") String use_name, @RequestParam("limit") int limit) {
+    	int result = 0;
+    	int toggle =0;
+    	Map<String,Object> map = new HashMap<String, Object>();
+    	if(use_name.equals("사용")) {
+    		use_name = "1";
+    		toggle = 1;
+    	}else if(use_name.equals("비사용")) {
+    		use_name="0";
+    		toggle = 1;
+    	}
+    	
+    	if(toggle == 1) {    		
+    		map.put("use_name", use_name);
+    		map.put("limit", limit);
+    		result = RService.changeResourceUse(map);
+    	}else {
+    		result =0;
+    	}
+    	return result;
+    }
 }

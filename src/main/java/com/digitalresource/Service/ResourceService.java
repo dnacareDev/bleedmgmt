@@ -21,4 +21,6 @@ public interface ResourceService {
 	public int selectResourceCount();
 
 	public List<ResourceList> searchResource();
+
+	public int changeResourceUse(Map<String, Object> map);
 }

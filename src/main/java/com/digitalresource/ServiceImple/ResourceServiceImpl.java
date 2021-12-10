@@ -137,4 +137,9 @@ public class ResourceServiceImpl implements ResourceService {
 	public List<ResourceList> searchResource() {
 		return resourceMapper.searchResource();
 	}
+
+	@Override
+	public int changeResourceUse(Map<String, Object> map) {
+		return resourceMapper.changeResourceUse(map);
+	}
 }

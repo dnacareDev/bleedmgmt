@@ -27,4 +27,6 @@ public interface ResourceMapper {
 	public List<ResourceList> searchResource();
 
 	public int selectResourceCount();
+
+	public int changeResourceUse(Map<String, Object> map);
 }
