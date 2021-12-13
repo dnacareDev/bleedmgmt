@@ -166,7 +166,7 @@
     			success:function (result){
     				var data_list = $("#subMenuList");
     				var data_add= "";
-    					
+    					console.log(result);
     					for(var i=0; i<result.resourceList.length; i++){
     						data_add +='<li>';
     						data_add +=' <a href="/breed" id="'+result.resourceList[i].resource_name_id+'">'+result.resourceList[i].resource_name+'</a>'

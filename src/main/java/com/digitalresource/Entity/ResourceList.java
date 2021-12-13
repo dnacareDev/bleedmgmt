@@ -6,6 +6,7 @@ import lombok.Data;
 public class ResourceList {
 	private int resource_id;
 	private int resource_name_id;
+	private String resource_name;
 	private int crop_id;
 	private int trait_id;
 	private String resource_template;
