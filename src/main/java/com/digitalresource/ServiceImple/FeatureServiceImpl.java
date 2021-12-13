@@ -79,15 +79,14 @@ public class FeatureServiceImpl implements FeatureService {
     		featureMapper.seedResourcesInsert(feature);
     	}
     	// 입력이 끝나고 나서 trait insrt
-    	System.out.println(cropSubCategory);
     	param.put("crop_name", crop_name);
     	param.put("feature_group", feature_group);
     	param.put("feature_count", feature_count);
     	param.put("cropSubCategory", cropSubCategory);
     	param.put("trait_file", file_name);
-    	traitService.insertTrait(param);
+    	int result = traitService.insertTrait(param);
     	
-		return 0;
+		return result;
 	}
 
 }
