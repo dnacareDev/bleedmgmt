@@ -833,7 +833,7 @@
                     <div class="card">
                         <div class="card-extra mt-20 mr-20">
                             <div class="breadcrumb-main" style="float: left;">
-                                <h4 class="text-capitalize breadcrumb-title" th:text="${type}"></h4>
+                                <h4 class="text-capitalize breadcrumb-title manage" th:text="${type}"></h4>
                                 <input type="hidden" id="user_type" th:value="${user.user_type}">
                             </div>
                             <div class="action-btn d-flex justify-content-end">
@@ -843,7 +843,7 @@
                                         <option value="20">20개</option>
                                         <option value="30">30개</option>
                                     </select>
-                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;"  name="selectCrop" id="cropCrop">
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect">
                                         <th:block th:each="list : ${cropList}" >
                                             <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                         </th:block>
@@ -1879,14 +1879,6 @@
 
     let c = 0;
 
-    function dataToggle(one, two) {
-        $(one).modal("hide");
-
-        setTimeout(function () {
-            $(two).modal("show");
-        }, 5);
-    }
-
     $(function () {
         $("#grid2 .content_1 li").click(function (e) {
             $(this).toggleClass("checked");
@@ -1914,7 +1906,6 @@
     for (let k = 0; k < topBox.length; k++) {
         let [nav, prev, next] = topBox[k].children;
         let navLi = nav.children;
-
 
         let content = document.getElementsByClassName("tab-content")[k];
         let contentLi = content.children;
@@ -2290,92 +2281,6 @@
             });
     }
 
-    function SearchSample1(e) {
-        $("#pop_data1").modal();
-
-        var sample_name = $("#CropSelect").val();
-
-        var data = {"sample_name": sample_name};
-
-        $.ajax(
-            {
-                url: 'searchSampleList',
-                method: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    $(".sample_title").text("시교명 (ID) : " + e);
-
-                    var sample_list = $(".sample-list");
-
-                    var add_list = "";
-
-                    for (var i = 0; i < result.sample.length; i++) {
-                        if (result.sample[i].sample_code === e) {
-                            add_list += '<tr>';
-                            add_list += '<td>' + result.sample[i].sample_name + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_code + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_country + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_type + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_mate + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_seed + '</a></td>';
-                            add_list += '<td>' + result.sample[i].sample_amount + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_sprout + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_purity + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_comment + '</td>';
-                            add_list += '</tr>';
-                        }
-                    }
-
-                    sample_list.empty();
-                    sample_list.append(add_list);
-                }
-            });
-    }
-
-    function SearchSample2(e) {
-        $("#pop_data1").modal();
-
-        var sample_name = $("#CropSelect").val();
-
-        var data = {"sample_name": sample_name};
-
-        $.ajax(
-            {
-                url: 'searchSampleList',
-                method: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    $(".sample_title").text("시교명 (ID) : " + e);
-
-                    var sample_list = $(".sample-list");
-
-                    var add_list = "";
-
-                    for (var i = 0; i < result.sample.length; i++) {
-                        if (result.sample[i].sample_code === e) {
-                            add_list += '<tr>';
-                            add_list += '<td>' + result.sample[i].sample_name + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_code + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_country + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_type + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_mate + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_seed + '</a></td>';
-                            add_list += '<td>' + result.sample[i].sample_amount + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_sprout + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_purity + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_comment + '</td>';
-                            add_list += '</tr>';
-                        }
-                    }
-
-                    sample_list.empty();
-                    sample_list.append(add_list);
-                }
-            });
-    }
-
     function SearchBasic(e1, e2) {
         $("#pop_data1").modal();
 
@@ -2423,126 +2328,27 @@
             });
     }
 
-    function SearchBasic1(e1, e2) {
-        $("#pop_data1").modal();
-
-        var basic_name = $("#CropSelect").val();
-
-        var data = {"basic_name": basic_name};
-
-        $.ajax(
-            {
-                url: 'searchBasic1',
-                method: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    var basic_list = $("#basic_list");
-                    var basicD_list = $("#basicD_list");
-
-                    var add_list = "";
-                    var add_listD = "";
-
-                    for (var i = 0; i < result.basic.length; i++) {
-                        add_list += '<tr>';
-                        add_listD += '<tr>';
-
-                        for (var j = 0; j < result.basic[i].basic_standard.length; j++) {
-                            if (result.basic[i].basic_standard[1].standard === e1.innerText) {
-                                add_list += '<td>' + result.basic[i].basic_standard[j].standard + '</td>';
-                            }
-
-                            if (result.basic[i].basic_standard[1].standard === e2) {
-                                add_listD += '<td>' + result.basic[i].basic_standard[j].standard + '</td>';
-                            }
-                        }
-
-                        add_list += '</tr>';
-                        add_listD += '</tr>';
-                    }
-
-                    basic_list.empty();
-                    basic_list.append(add_list);
-
-                    basicD_list.empty();
-                    basicD_list.append(add_listD);
-                }
-            });
-    }
-
-    function SearchBasic2(e1, e2) {
-        $("#pop_data1").modal();
-
-        var basic_name = $("#CropSelect").val();
-
-        var data = {"basic_name": basic_name};
-
-        $.ajax(
-            {
-                url: 'searchBasic1',
-                method: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    var basic_list = $("#basic_list");
-                    var basicD_list = $("#basicD_list");
-
-                    var add_list = "";
-                    var add_listD = "";
-
-                    for (var i = 0; i < result.basic.length; i++) {
-                        add_list += '<tr>';
-                        add_listD += '<tr>';
-
-                        for (var j = 0; j < result.basic[i].basic_standard.length; j++) {
-                            if (result.basic[i].basic_standard[1].standard === e1) {
-                                add_list += '<td>' + result.basic[i].basic_standard[j].standard + '</td>';
-                            }
-
-                            if (result.basic[i].basic_standard[1].standard === e2.innerText) {
-                                add_listD += '<td>' + result.basic[i].basic_standard[j].standard + '</td>';
-                            }
-                        }
-
-                        add_list += '</tr>';
-                        add_listD += '</tr>';
-                    }
-
-                    basic_list.empty();
-                    basic_list.append(add_list);
-
-                    basicD_list.empty();
-                    basicD_list.append(add_listD);
-                }
-            });
-    }
-
     var breedgrid = null;
 
     function SearchBreedgrid(e) {
-        var breed_name = $("#CropSelect").val();
+        var crop_id = $("#CropSelect").val();
+        var resource_name = $(".manage")[0].innerText;
         var limit = $("#limit").val();
 
-        var data = {"breed_name": breed_name, "page_num": e, "limit": limit};
-
-        var loading = document.querySelector('.load_wrap');
-
-        loading.classList.add('on')
+        var data = {"crop_id": crop_id, "resource_name": resource_name};
 
         $.ajax(
             {
-                url: 'searchBreed',
+                url: 'searchHeader',
                 method: 'POST',
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                    loading.classList.remove('on');
-
                     breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: result.breed,
+                        data: [],
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2567,17 +2373,21 @@
 
                     var headerName = [];
 
-                    for (let i = 0; i < result.display.length; i++) {
-                        var colHeader = result.display[i].detail_title;
-                        var colName = result.display[i].detail_id;
-                        headerName[i] = result.display[i].detail_id;
+                    for (let i = 1; i < result.detail.length; i++) {
+                        var colHeader = result.detail[i].detail_name;
+                        var colName = result.detail[i].detail_id;
 
-                        var arr = {};
+                        console.log(colHeader);
+                        console.log(colName);
 
-                        var filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
+                        headerName[i] = result.detail[i].detail_id;
 
-                        if (result.display[i].detail_spec == '기본 정보') {
-                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
+                        let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
+
+                        let arr = {}
+
+                        if(result.detail[i].detail_info == 0) {
+                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 150, 'filter': filter}
                         } else {
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
                         }
@@ -2587,105 +2397,105 @@
 
                     breedgrid.setColumns(headerArr);
 
-                    const dataArr = [];
-
-                    for (let i = 0; i < result.breed.length; i++) {
-                        let rowArr = {};
-
-                        rowArr = {'file': '<i class="bi bi-file-earmark-arrow-down"></i>', 'breed_id': result.breed[i].breed_id};
-
-                        if (result.breed[i].standard_count == 0) {
-                            rowArr['status'] = '<span style="color:red">EMPTY</span>';
-
-                        } else {
-                            rowArr['status'] = '<span style="color:blue">PROGRESS</span>';
-                        }
-
-                        for (var j = 0; j < result.breed[i].breed_standard.length; j++) {
-                            var rowData = result.breed[i].breed_standard[j].standard;
-                            rowArr[headerName[j]] = rowData;
-                        }
-
-                        dataArr.push(rowArr);
-                    }
-
-                    breedgrid.resetData(dataArr);
-
-                    breedgrid.on('check', (ev) => {
-                        breedgrid.getRow(ev.rowKey).breed_id;
-                    })
-
-                    breedgrid.on('click', (ev) => {
-                        if (ev.targetType === 'cell' && (ev.columnName === '2' || ev.columnName === '277' || ev.columnName === '388' || ev.columnName === '626' || ev.columnName === '749' || ev.columnName === '912' || ev.columnName === '1076' || ev.columnName === '1254' || ev.columnName === '1412' || ev.columnName === '1599')) {
-                            var value_sample = ev.nativeEvent.srcElement;
-                            var value_mom = breedgrid.getRow(ev.rowKey)[4];
-                            var value_dad = breedgrid.getRow(ev.rowKey)[5];
-
-                            SearchSample(value_sample);
-                            SearchBasic(value_mom, value_dad);
-                        } else if (ev.targetType === 'cell' && ev.columnName === '4') {
-                            var value_sample1 = breedgrid.getRow(ev.rowKey)[2];
-                            var value_mom1 = ev.nativeEvent.srcElement;
-                            var value_dad1 = breedgrid.getRow(ev.rowKey)[5];
-
-                            SearchSample1(value_sample1);
-                            SearchBasic1(value_mom1, value_dad1);
-                        } else if (ev.targetType === 'cell' && ev.columnName === '5') {
-                            var value_sample2 = breedgrid.getRow(ev.rowKey)[2];
-                            var value_mom2 = breedgrid.getRow(ev.rowKey)[4];
-                            var value_dad2 = ev.nativeEvent.srcElement;
-
-                            SearchSample2(value_sample2);
-                            SearchBasic2(value_mom2, value_dad2);
-                        } else if (ev.targetType === 'cell' && ev.columnName === 'file') {
-                            var id = breedgrid.getRow(ev.rowKey).breed_id;
-
-                            FileBtn(id);
-                        } else if (ev.targetType === 'cell' && ev.columnName === 'status') {
-                            var e_id = breedgrid.getRow(ev.rowKey).breed_id;
-
-                            EmptyBtn(e_id);
-                        }
-                    });
-
-                    var before = null;
-                    var after = null;
-
-                    breedgrid.on('afterChange', (ev) => {
-                        var user_type = $("#user_type").val();
-
-                        if (user_type != 0 && user_type != 2) {
-                            return Alert("수정 권한이 없습니다.");
-                        } else {
-                            for (let i = 0; i < ev.changes.length; i++) {
-                                before = ev.changes[i].prevValue;
-                                after = ev.changes[i].value;
-
-                                if (after != before) {
-                                    var breed_id = breedgrid.getRow(ev.changes[i].rowKey).breed_id;
-                                    var detail_id = ev.changes[i].columnName;
-                                    var standard = after;
-
-                                    var data = {"breed_id": breed_id, "detail_id": detail_id, "standard": standard};
-
-                                    if (breed_id != null) {
-                                        $.ajax(
-                                            {
-                                                url: 'updateBreed',
-                                                method: 'POST',
-                                                dataType: 'json',
-                                                data: data,
-                                                success: function (result) {
-                                                    if (result == 0) {
-                                                        return Alert("수정에 실패하였습니다.")
-                                                    }
-                                                }
-                                            });
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    // const dataArr = [];
+                    //
+                    // for (let i = 0; i < result.breed.length; i++) {
+                    //     let rowArr = {};
+                    //
+                    //     rowArr = {'file': '<i class="bi bi-file-earmark-arrow-down"></i>', 'breed_id': result.breed[i].breed_id};
+                    //
+                    //     if (result.breed[i].standard_count == 0) {
+                    //         rowArr['status'] = '<span style="color:red">EMPTY</span>';
+                    //
+                    //     } else {
+                    //         rowArr['status'] = '<span style="color:blue">PROGRESS</span>';
+                    //     }
+                    //
+                    //     for (var j = 0; j < result.breed[i].breed_standard.length; j++) {
+                    //         var rowData = result.breed[i].breed_standard[j].standard;
+                    //         rowArr[headerName[j]] = rowData;
+                    //     }
+                    //
+                    //     dataArr.push(rowArr);
+                    // }
+                    //
+                    // breedgrid.resetData(dataArr);
+                    //
+                    // breedgrid.on('check', (ev) => {
+                    //     breedgrid.getRow(ev.rowKey).breed_id;
+                    // })
+                    //
+                    // breedgrid.on('click', (ev) => {
+                    //     if (ev.targetType === 'cell' && (ev.columnName === '2' || ev.columnName === '277' || ev.columnName === '388' || ev.columnName === '626' || ev.columnName === '749' || ev.columnName === '912' || ev.columnName === '1076' || ev.columnName === '1254' || ev.columnName === '1412' || ev.columnName === '1599')) {
+                    //         var value_sample = ev.nativeEvent.srcElement;
+                    //         var value_mom = breedgrid.getRow(ev.rowKey)[4];
+                    //         var value_dad = breedgrid.getRow(ev.rowKey)[5];
+                    //
+                    //         SearchSample(value_sample);
+                    //         SearchBasic(value_mom, value_dad);
+                    //     } else if (ev.targetType === 'cell' && ev.columnName === '4') {
+                    //         var value_sample1 = breedgrid.getRow(ev.rowKey)[2];
+                    //         var value_mom1 = ev.nativeEvent.srcElement;
+                    //         var value_dad1 = breedgrid.getRow(ev.rowKey)[5];
+                    //
+                    //         SearchSample1(value_sample1);
+                    //         SearchBasic1(value_mom1, value_dad1);
+                    //     } else if (ev.targetType === 'cell' && ev.columnName === '5') {
+                    //         var value_sample2 = breedgrid.getRow(ev.rowKey)[2];
+                    //         var value_mom2 = breedgrid.getRow(ev.rowKey)[4];
+                    //         var value_dad2 = ev.nativeEvent.srcElement;
+                    //
+                    //         SearchSample2(value_sample2);
+                    //         SearchBasic2(value_mom2, value_dad2);
+                    //     } else if (ev.targetType === 'cell' && ev.columnName === 'file') {
+                    //         var id = breedgrid.getRow(ev.rowKey).breed_id;
+                    //
+                    //         FileBtn(id);
+                    //     } else if (ev.targetType === 'cell' && ev.columnName === 'status') {
+                    //         var e_id = breedgrid.getRow(ev.rowKey).breed_id;
+                    //
+                    //         EmptyBtn(e_id);
+                    //     }
+                    // });
+                    //
+                    // var before = null;
+                    // var after = null;
+                    //
+                    // breedgrid.on('afterChange', (ev) => {
+                    //     var user_type = $("#user_type").val();
+                    //
+                    //     if (user_type != 0 && user_type != 2) {
+                    //         return Alert("수정 권한이 없습니다.");
+                    //     } else {
+                    //         for (let i = 0; i < ev.changes.length; i++) {
+                    //             before = ev.changes[i].prevValue;
+                    //             after = ev.changes[i].value;
+                    //
+                    //             if (after != before) {
+                    //                 var breed_id = breedgrid.getRow(ev.changes[i].rowKey).breed_id;
+                    //                 var detail_id = ev.changes[i].columnName;
+                    //                 var standard = after;
+                    //
+                    //                 var data = {"breed_id": breed_id, "detail_id": detail_id, "standard": standard};
+                    //
+                    //                 if (breed_id != null) {
+                    //                     $.ajax(
+                    //                         {
+                    //                             url: 'updateBreed',
+                    //                             method: 'POST',
+                    //                             dataType: 'json',
+                    //                             data: data,
+                    //                             success: function (result) {
+                    //                                 if (result == 0) {
+                    //                                     return Alert("수정에 실패하였습니다.")
+                    //                                 }
+                    //                             }
+                    //                         });
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // });
 
                 }
             });
@@ -2879,7 +2689,6 @@
                 }
                 const obj = {...excel};
 
-                // console.log(obj);
                 rowdata[k] = obj;
             }
             $("#excel_data").empty();

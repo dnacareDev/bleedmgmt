@@ -21,10 +21,9 @@
         </foreach>
     </insert>
 
-    <select id="selectDetailListByResource" parameterType="int" resultType="Detail">
+    <select id="SelectDetailListByResource" parameterType="int" resultType="Detail">
         SELECT * FROM detail WHERE resource_id = #{resource_id}
         ORDER BY detail_index
     </select>
-
 
 </mapper>

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 @Mapper
 public interface ResourceMapper {
@@ -32,4 +34,6 @@ public interface ResourceMapper {
 	public int changeResourceUse(Map<String, Object> map);
 
 	public List<ResourceName> resourceList();
+
+	public Integer SearchResourceId(@Param("crop_id") int crop_id, @Param("resource_name_id") int resource_name_id);
 }

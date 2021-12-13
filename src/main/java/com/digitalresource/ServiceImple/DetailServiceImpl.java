@@ -11,23 +11,23 @@ import java.util.List;
 
 @Service
 public class DetailServiceImpl implements DetailService {
-    @Autowired
-    private DetailMapper mapper;
+  @Autowired
+  private DetailMapper mapper;
 
-    @Override
-    public int registDetails(Resource resource) {
-        int result = -1;
-        //result = mapper.registDetails(resource.getResource_id(), resource.getDetailList());
+  @Override
+  public int registDetails(Resource resource) {
+    int result = -1;
+    //result = mapper.registDetails(resource.getResource_id(), resource.getDetailList());
 
-        if(result != resource.getDetailCount()){
-            //Error
-        }
-
-        return result;
+    if (result != resource.getDetailCount()) {
+      //Error
     }
 
-    @Override
-    public List<Detail> selectDetailListByResource(int resource_id) {
-        return null;
-    }
+    return result;
+  }
+
+  @Override
+  public List<Detail> SelectDetailListByResource(int resource_id) {
+    return mapper.SelectDetailListByResource(resource_id);
+  }
 }

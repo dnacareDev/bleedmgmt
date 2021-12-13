@@ -1,12 +1,15 @@
 package com.digitalresource.Controller;
 
 import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.Detail;
 import com.digitalresource.Entity.User;
 import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.DetailService;
 import com.digitalresource.Service.ResourceNameService;
+import com.digitalresource.Service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +31,9 @@ public class BreedController {
 	private ResourceNameService resourceNameService;
 
 	@Autowired
+	private ResourceService resourceService;
+
+	@Autowired
 	private DetailService detailService;
 	
 	@RequestMapping("/breed")
@@ -41,11 +47,24 @@ public class BreedController {
 	}
 
 	@ResponseBody
-	@RequestMapping("searchBreed")
-	public Map<String, Object> SearchBreed(Authentication auth, @RequestParam(value = "breed_name", required = false) String breed_name, @RequestParam(value = "page_num", required = false) int page_num, @RequestParam(value = "limit", required = false) int limit) {
+	@RequestMapping("searchHeader")
+	public Map<String, Object> SearchBreed(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-//		detailService.selectDetailListByResource();
+		int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name);
+
+		int resourceId = 0;
+
+		for(int i = 0; i < resourceNameId.length; i++) {
+			if(resourceService.SearchResourceId(crop_id, resourceNameId[i]) != null) {
+				resourceId = resourceService.SearchResourceId(crop_id, resourceNameId[i]);
+				break;
+			}
+		}
+
+		List<Detail> details = detailService.SelectDetailListByResource(resourceId);
+
+		result.put("detail", details);
 
 		return result;
 	}

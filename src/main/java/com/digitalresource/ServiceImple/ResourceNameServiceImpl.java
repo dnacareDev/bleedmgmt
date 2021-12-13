@@ -94,7 +94,7 @@ public class ResourceNameServiceImpl implements ResourceNameService {
   }
 
   @Override
-  public int SelectResourceNameId(String resourceName) {
+  public int[] SelectResourceNameId(String resourceName) {
     return mapper.SelectResourceNameId(resourceName);
   }
 }

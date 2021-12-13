@@ -11,5 +11,5 @@ public interface DetailMapper {
     public int registDetails(@Param("resource_id") int resource_id,
                              @Param("list") List<Detail> detailList);
 
-    public List<Detail> selectDetailListByResource(int resource_id);
+    public List<Detail> SelectDetailListByResource(@Param("resource_id") int resource_id);
 }

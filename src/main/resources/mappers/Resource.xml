@@ -19,8 +19,7 @@
     <delete id="deleteResourceByCrop" parameterType="int">
         DELETE FROM resource WHERE crop_id = #{crop_id}
     </delete>
-    
-    
+
     <insert id="insertResource" useGeneratedKeys="true" keyProperty="resource_id" >
     	insert into resource(resource_name_id, crop_id, 
     	<if test="trait_id != ''">
@@ -74,4 +73,8 @@
     <select id="resourceList" resultType="resourceName">
    		select * from resource_name group by resource_name;
     </select>
+
+	<select id="SearchResourceId" resultType="int">
+		SELECT resource_id FROM resource WHERE crop_id = #{crop_id} AND resource_name_id = #{resource_name_id}
+	</select>
 </mapper>

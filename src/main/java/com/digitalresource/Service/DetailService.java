@@ -8,5 +8,5 @@ import java.util.List;
 public interface DetailService {
     public int registDetails(Resource resource);
 
-    public List<Detail> selectDetailListByResource(int resource_id);
+    public List<Detail> SelectDetailListByResource(int resource_id);
 }
