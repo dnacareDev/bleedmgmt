@@ -25,4 +25,6 @@
         SELECT * FROM detail WHERE resource_id = #{resource_id}
         ORDER BY detail_index
     </select>
+
+
 </mapper>

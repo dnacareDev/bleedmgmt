@@ -9,23 +9,26 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 public interface ResourceNameService {
-    int registResourceName(String resource_name);
+  int registResourceName(String resource_name);
 
-    int CountResourceNameByCrop(String resource_name);
+  int CountResourceNameByCrop(String resource_name);
 
-    int deleteResourceName(int resource_name_id);
+  int deleteResourceName(int resource_name_id);
 
-    int registResourceCrop(int crop_id, int resource_name_id);
+  int registResourceCrop(int crop_id, int resource_name_id);
 
-    ResourceName selectResourceName(String resource_name);
+  ResourceName selectResourceName(String resource_name);
 
-    int getCountResourceNameByCrop(String resource_name);
+  int getCountResourceNameByCrop(String resource_name);
 
-	int confirmResourceName(Map<String, Object> param);
+  int confirmResourceName(Map<String, Object> param);
 
-	List<Feature> featureHeadList(int feature_group);
+  List<Feature> featureHeadList(int feature_group);
 
-	int insertResource_name(ResourceName resourceName);
+  int insertResource_name(ResourceName resourceName);
 
-	int registerResource(Map<String, Object> param);
+  int registerResource(Map<String, Object> param);
+
+  int SelectResourceNameId(String resourceName);
+
 }

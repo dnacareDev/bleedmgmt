@@ -79,6 +79,10 @@
     	(select * from (select ifnull ((select distinct resource_group from resource_name right join (select '') a on resource_name = #{resource_name} ) , (select max(resource_group)+1 from resource_name ))from dual) a)
     	);
     </insert>
-    
-    
+
+    <select id="SelectResourceNameId" resultType="int">
+        SELECT resource_name_id FROM resource_name
+        WHERE resource_name = #{resource_name}
+    </select>
+
 </mapper>

@@ -833,7 +833,7 @@
                     <div class="card">
                         <div class="card-extra mt-20 mr-20">
                             <div class="breadcrumb-main" style="float: left;">
-                                <h4 class="text-capitalize breadcrumb-title">품종 관리</h4>
+                                <h4 class="text-capitalize breadcrumb-title"></h4>
                                 <input type="hidden" id="user_type" th:value="${user.user_type}">
                             </div>
                             <div class="action-btn d-flex justify-content-end">
@@ -843,9 +843,7 @@
                                         <option value="20">20개</option>
                                         <option value="30">30개</option>
                                     </select>
-                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;"  name="selectCrop" id="cropCrop" onchange="getCrop(this)">
-                                        <option value="-1" selected disable hidden>작물선택</option>
-
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;"  name="selectCrop" id="cropCrop">
                                         <th:block th:each="list : ${cropList}" >
                                             <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                         </th:block>
@@ -2522,10 +2520,10 @@
     var breedgrid = null;
 
     function SearchBreedgrid(e) {
-        var breed_name = $("#CropSelect").val();
+        var crop_id = $("#CropSelect").val();
         var limit = $("#limit").val();
 
-        var data = {"breed_name": breed_name, "page_num": e, "limit": limit};
+        var data = {"crop_id": crop_id, "resource_name_id": };
 
         var loading = document.querySelector('.load_wrap');
 
@@ -2563,6 +2561,11 @@
                         {
                             'header': '특성상태',
                             'name': 'status',
+                            'width': 150,
+                        },
+                        {
+                            'header': '작물',
+                            'name': 'crop',
                             'width': 150,
                         }
                     ];
