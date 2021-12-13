@@ -666,7 +666,7 @@
     		success:function(result){
     			for (let i = 0; i < result.length; i++) {
     				var list = result[i];
-    				$("select[name=selectTrait]").append('<option value="'+list.trait_id+ '">'+list.trait_description+'</option>');
+    				$("select[name=selectTrait]").append('<option value="'+list.feature_group+ '">'+list.trait_description+'</option>');
     			}
     		}
     	})
@@ -711,6 +711,7 @@
     /* 종자원 특성 조사 선택*/
     function selectFeature(){
     	let feature_group =$("#featrueId").val();
+    	console.log(feature_group);
     	let data  = {"feature_group" : feature_group}
     	desArr= [];
     	dataArr = [{'header': "첨부화일", 'name': "첨부화일", 'width': 120, 'renderer': CustomColumnHeader ,"type":1,"info":4}];
@@ -723,8 +724,7 @@
     		dataTyp:"json",
     		data:data,
     		success:function(result){
-    			
-    			
+
                 headerGrid = new tui.Grid({
                     el: document.getElementById('headerGrid'),
                     scrollX: true,
@@ -732,11 +732,13 @@
                     data: [],
                     columns: []
                 });
-                
+                console.log("result");
+                console.log(result);
                $.each(result,function(idx, value){
             	  let header = value.feature_num+". " + value.feature_name;
                   headerArr = {'header': header, 'name': header, 'width': 120, 'renderer': CustomColumnHeader, "type": 2, "info": 2};
-                  desArr.push(headerArr);          	 
+                  desArr.push(headerArr);     
+                  console.log(desArr)
                });
                dataArr = dataArr.concat(potoArr,docArr,inputArr, charArr, desArr);
                headerGrid.setColumns(dataArr);

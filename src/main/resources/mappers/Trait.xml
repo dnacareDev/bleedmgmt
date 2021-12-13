@@ -28,6 +28,6 @@
 	</update>
 	
 	<select id="traitDescriptionList" resultType="Trait">
-		select trait_id,trait_description from trait;
+		select trait_id,trait_description, feature_group from trait;
 	</select>
 </mapper>
