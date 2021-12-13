@@ -610,7 +610,7 @@
                      
                  }
              }) 
-          	 dataArr = dataArr.concat(inputArr, inputArr, desArr);
+          	 dataArr = dataArr.concat(inputArr, charArr, desArr);
              headerGrid.setColumns(dataArr);
              
             
@@ -668,7 +668,7 @@
                     
                 }
             })
-			dataArr = dataArr.concat(inputArr, inputArr, desArr);
+			dataArr = dataArr.concat(potoArr,docArr,inputArr, charArr, desArr);
              headerGrid.setColumns(dataArr);
 
             
@@ -763,7 +763,7 @@
                   headerArr = {'header': header, 'name': header, 'width': 120, 'renderer': CustomColumnHeader, "type": 2, "info": 2};
                   desArr.push(headerArr);          	 
                });
-               dataArr = dataArr.concat(inputArr, inputArr, desArr);
+               dataArr = dataArr.concat(potoArr,docArr,inputArr, charArr, desArr);
                headerGrid.setColumns(dataArr);
                $("#excel_data").empty();
     		}
@@ -810,7 +810,7 @@
         
           headerArr = {'header': id.value, 'name': id.value, 'width': 120, 'renderer': CustomColumnHeader ,"type":0,"info":3};
           potoArr.push(headerArr);            	 
-          dataArr = dataArr.concat(potoArr,docArr,inputArr, inputArr, desArr);
+          dataArr = dataArr.concat(potoArr,docArr,inputArr, charArr, desArr);
           headerGrid.setColumns(dataArr);
     }
     
@@ -831,7 +831,7 @@
         
           headerArr = {'header': id.value, 'name': id.value, 'width': 120, 'renderer': CustomColumnHeader ,"type":1,"info":3};
           docArr.push(headerArr);            	 
-          dataArr = dataArr.concat(potoArr,docArr,inputArr, inputArr, desArr);
+          dataArr = dataArr.concat(potoArr,docArr,inputArr, charArr, desArr);
           headerGrid.setColumns(dataArr);
     }
 </script>

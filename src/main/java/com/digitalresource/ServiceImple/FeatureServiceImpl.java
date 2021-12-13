@@ -78,7 +78,7 @@ public class FeatureServiceImpl implements FeatureService {
     		feature.setFeature_origin_file(origin_file_name);
     		featureMapper.seedResourcesInsert(feature);
     	}
-    	// 입력이 끝나고 나서 trait insrt
+    	// 입력이 끝나고 나서 trait insrt 
     	param.put("crop_name", crop_name);
     	param.put("feature_group", feature_group);
     	param.put("feature_count", feature_count);
