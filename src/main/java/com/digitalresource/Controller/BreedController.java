@@ -31,11 +31,10 @@ public class BreedController {
 	private DetailService detailService;
 	
 	@RequestMapping("/breed")
-	public ModelAndView breed(ModelAndView mv) {
+	public ModelAndView breed(ModelAndView mv,@RequestParam(value="type")String type) {
 		List<Crop> cropList = cropService.selectCropList();
-
 		mv.addObject("cropList", cropList);
-
+		mv.addObject("type", type);
 		mv.setViewName("genome/breed");
 		
 		return mv;
