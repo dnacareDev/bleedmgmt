@@ -666,7 +666,7 @@
     		success:function(result){
     			for (let i = 0; i < result.length; i++) {
     				var list = result[i];
-    				$("select[name=selectTrait]").append('<option value="'+list.feature_group+ '">'+list.trait_description+'</option>');
+    				$("select[name=selectTrait]").append('<option value="'+list.trait_id+ '">'+list.trait_description+'</option>');
     			}
     		}
     	})
