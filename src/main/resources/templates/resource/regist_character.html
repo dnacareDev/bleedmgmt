@@ -328,7 +328,7 @@
                                 	<input type ="text" id="newCrop">
                                 </div>
                             </div>
-                            <form action="updateSampleFile" id="insertFile" method="POST" enctype="multipart/form-data">
+                            <form action="character" id="insertFile" method="POST" enctype="multipart/form-data">
                                 <div class="data_cover2 clearfix">
                                     <div class="data_type data_type4" style="display: flex">
                                         <span class="sub_title">특성항목 파일</span>
@@ -588,6 +588,7 @@
 		formData.append("cropSubCategory", cropSubCategory.value);
 		formData.append("cropCategory",cropCategory.value);
 		formData.append("feature_count", feature_count);
+
         $.ajax(
             { 	
 			    processData: false,
@@ -597,15 +598,13 @@
                 dataType: 'json',
                 data: formData,
                 success: function (result) {
-                	location.href="regist-resource";
+                	return location.href='character'
                 }
             } 
         )
     }
 
     function insertFile() {
-        var file = $("#upload_file");
-
         $("#insertFile").submit();
     }
     
