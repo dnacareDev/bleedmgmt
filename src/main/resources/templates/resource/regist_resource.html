@@ -714,7 +714,7 @@
     	console.log(feature_group);
     	let data  = {"feature_group" : feature_group}
     	desArr= [];
-    	dataArr = [{'header': "첨부화일", 'name': "첨부화일", 'width': 120, 'renderer': CustomColumnHeader ,"type":1,"info":4}];
+    	dataArr = [{'header': "첨부화일", 'name': "첨부화일", 'width': 120, 'renderer': CustomColumnHeader , "type":1, "info":4}];
     	if(headerGrid != null){        	
 			headerGrid.destroy();
         }
@@ -736,7 +736,7 @@
                 console.log(result);
                $.each(result,function(idx, value){
             	  let header = value.feature_num+". " + value.feature_name;
-                  headerArr = {'header': header, 'name': header, 'width': 120, 'renderer': CustomColumnHeader, "type": 2, "info": 2};
+                  headerArr = {'header': header, 'name': header, 'width': 250, 'renderer': CustomColumnHeader, "type": 2, "info": 2};
                   desArr.push(headerArr);     
                   console.log(desArr)
                });
