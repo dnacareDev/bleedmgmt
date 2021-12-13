@@ -67,8 +67,9 @@ public class FeatureServiceImpl implements FeatureService {
 		feature.setFeature_group(feature_group);
     	for(int i = 0; i < arr.length(); i++) {    		
     		JSONObject jsonObject = arr.getJSONObject(i);
+    		System.out.println(jsonObject);
     		String feature_level = String.valueOf( jsonObject.get("feature_level"));
-    		feature.setFeature_num((int) jsonObject.get("feature_num"));
+    		feature.setFeature_num(Double.valueOf(String.valueOf(jsonObject.get("feature_num"))));
     		feature.setFeature_name(String.valueOf( jsonObject.get("feature_name")));
     		feature.setFeature_level(feature_level);
     		feature.setFeature_expression(String.valueOf( jsonObject.get("feature_expression")));
