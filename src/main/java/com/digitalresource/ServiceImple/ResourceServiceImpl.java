@@ -113,7 +113,7 @@ public class ResourceServiceImpl implements ResourceService {
 		// insert detail
 		String jsonArr = resource.getDetailList();
 		JSONArray arr = new JSONArray(jsonArr);
-		map.put("resource_id", resultResource);
+		map.put("resource_id", resource.getResource_id());
 		int result = 0;
 		for(int i = 0; i<arr.length();  i++) {
 			JSONObject jsonObject = arr.getJSONObject(i);
