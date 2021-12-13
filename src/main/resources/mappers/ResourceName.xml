@@ -70,7 +70,7 @@
     </select>
     
     <select id="featureHeadList" resultType="feature">
-    	select feature_num , feature_name from feature where feature_group =#{featur_group} group by feature_num, feature_name;
+    	select feature_num , feature_name from feature where feature_group =(select feature_group from trait where trait_id = #{featur_group}) group by feature_num, feature_name;
     </select>
     
     <insert id="insertResource_name" useGeneratedKeys="true" keyProperty="resource_name_id">
