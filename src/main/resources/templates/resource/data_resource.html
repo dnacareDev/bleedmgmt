@@ -1291,7 +1291,7 @@
                             'crop_name': result.resourceList[i].crop_name,
                             'resource_name': result.resourceList[i].resource_name,
                             'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">download</div>',
-                            'resource_character_template_file': '<div data-value="' + result.resourceList[i].resource_character_template_file + '">download</div>',
+                            'resource_character_template_file' : result.resourceList[i].resource_character_template_file ? '<div></div>' : '<div data-value="' + result.resourceList[i].resource_character_template_file + '">download</div>',
                             'use_name': result.resourceList[i].use_name,
                             'create_date': result.resourceList[i].create_date
                         }
@@ -1305,14 +1305,13 @@
                         if (ev.targetType === 'cell' && ev.columnName === 'resource_template') {
                             let value = ev.nativeEvent.srcElement;
                             let fileName = value.dataset.value;
-
                             if (fileName == 'null') {
                                 return Alert("파일이 존재하지 않습니다.")
                             } else {
                             	
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
-                                a.href = 'upload/' + value.dataset.value;
+                                a.href = 'http://3.37.64.204/upload/' + value.dataset.value;
                                 // the filename you want
                                 a.download = 'sample.xlsx'
                                 document.body.appendChild(a);
@@ -1329,7 +1328,7 @@
 
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
-                                a.href = 'upload/' + value.dataset.value;
+                                a.href = 'http://3.37.64.204/upload/' + value.dataset.value;
                                 // the filename you want
                                 a.download = 'sample.xlsx'
                                 document.body.appendChild(a);
