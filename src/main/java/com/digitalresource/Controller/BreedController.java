@@ -1,11 +1,9 @@
 package com.digitalresource.Controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.Detail;
+import com.digitalresource.Entity.StandardList;
+import com.digitalresource.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,14 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.digitalresource.Entity.Crop;
-import com.digitalresource.Entity.Detail;
-import com.digitalresource.Entity.StandardList;
-import com.digitalresource.Service.BreedService;
-import com.digitalresource.Service.CropService;
-import com.digitalresource.Service.DetailService;
-import com.digitalresource.Service.ResourceNameService;
-import com.digitalresource.Service.ResourceService;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class BreedController {

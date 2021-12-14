@@ -2400,105 +2400,106 @@
 
                     breedgrid.setColumns(headerArr);
 
-                    // const dataArr = [];
-                    //
-                    // for (let i = 0; i < result.breed.length; i++) {
-                    //     let rowArr = {};
-                    //
-                    //     rowArr = {'file': '<i class="bi bi-file-earmark-arrow-down"></i>', 'breed_id': result.breed[i].breed_id};
-                    //
-                    //     if (result.breed[i].standard_count == 0) {
-                    //         rowArr['status'] = '<span style="color:red">EMPTY</span>';
-                    //
-                    //     } else {
-                    //         rowArr['status'] = '<span style="color:blue">PROGRESS</span>';
-                    //     }
-                    //
-                    //     for (var j = 0; j < result.breed[i].breed_standard.length; j++) {
-                    //         var rowData = result.breed[i].breed_standard[j].standard;
-                    //         rowArr[headerName[j]] = rowData;
-                    //     }
-                    //
-                    //     dataArr.push(rowArr);
-                    // }
-                    //
-                    // breedgrid.resetData(dataArr);
-                    //
-                    // breedgrid.on('check', (ev) => {
-                    //     breedgrid.getRow(ev.rowKey).breed_id;
-                    // })
-                    //
-                    // breedgrid.on('click', (ev) => {
-                    //     if (ev.targetType === 'cell' && (ev.columnName === '2' || ev.columnName === '277' || ev.columnName === '388' || ev.columnName === '626' || ev.columnName === '749' || ev.columnName === '912' || ev.columnName === '1076' || ev.columnName === '1254' || ev.columnName === '1412' || ev.columnName === '1599')) {
-                    //         var value_sample = ev.nativeEvent.srcElement;
-                    //         var value_mom = breedgrid.getRow(ev.rowKey)[4];
-                    //         var value_dad = breedgrid.getRow(ev.rowKey)[5];
-                    //
-                    //         SearchSample(value_sample);
-                    //         SearchBasic(value_mom, value_dad);
-                    //     } else if (ev.targetType === 'cell' && ev.columnName === '4') {
-                    //         var value_sample1 = breedgrid.getRow(ev.rowKey)[2];
-                    //         var value_mom1 = ev.nativeEvent.srcElement;
-                    //         var value_dad1 = breedgrid.getRow(ev.rowKey)[5];
-                    //
-                    //         SearchSample1(value_sample1);
-                    //         SearchBasic1(value_mom1, value_dad1);
-                    //     } else if (ev.targetType === 'cell' && ev.columnName === '5') {
-                    //         var value_sample2 = breedgrid.getRow(ev.rowKey)[2];
-                    //         var value_mom2 = breedgrid.getRow(ev.rowKey)[4];
-                    //         var value_dad2 = ev.nativeEvent.srcElement;
-                    //
-                    //         SearchSample2(value_sample2);
-                    //         SearchBasic2(value_mom2, value_dad2);
-                    //     } else if (ev.targetType === 'cell' && ev.columnName === 'file') {
-                    //         var id = breedgrid.getRow(ev.rowKey).breed_id;
-                    //
-                    //         FileBtn(id);
-                    //     } else if (ev.targetType === 'cell' && ev.columnName === 'status') {
-                    //         var e_id = breedgrid.getRow(ev.rowKey).breed_id;
-                    //
-                    //         EmptyBtn(e_id);
-                    //     }
-                    // });
-                    //
-                    // var before = null;
-                    // var after = null;
-                    //
-                    // breedgrid.on('afterChange', (ev) => {
-                    //     var user_type = $("#user_type").val();
-                    //
-                    //     if (user_type != 0 && user_type != 2) {
-                    //         return Alert("수정 권한이 없습니다.");
-                    //     } else {
-                    //         for (let i = 0; i < ev.changes.length; i++) {
-                    //             before = ev.changes[i].prevValue;
-                    //             after = ev.changes[i].value;
-                    //
-                    //             if (after != before) {
-                    //                 var breed_id = breedgrid.getRow(ev.changes[i].rowKey).breed_id;
-                    //                 var detail_id = ev.changes[i].columnName;
-                    //                 var standard = after;
-                    //
-                    //                 var data = {"breed_id": breed_id, "detail_id": detail_id, "standard": standard};
-                    //
-                    //                 if (breed_id != null) {
-                    //                     $.ajax(
-                    //                         {
-                    //                             url: 'updateBreed',
-                    //                             method: 'POST',
-                    //                             dataType: 'json',
-                    //                             data: data,
-                    //                             success: function (result) {
-                    //                                 if (result == 0) {
-                    //                                     return Alert("수정에 실패하였습니다.")
-                    //                                 }
-                    //                             }
-                    //                         });
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    // });
+                    const dataArr = [];
+
+                    for (let i = 0; i < result.standardList.length; i++) {
+                        let rowArr = {};
+
+                        rowArr = {'file': '<i class="bi bi-file-earmark-arrow-down"></i>', 'breed_id': result.standardList[i].detail_id};
+
+                        if (result.breed[i].standard_count == 0) {
+                            rowArr['status'] = '<span style="color:red">EMPTY</span>';
+
+                        } else {
+                            rowArr['status'] = '<span style="color:blue">PROGRESS</span>';
+                        }
+
+                        for (var j = 0; j < result.breed[i].breed_standard.length; j++) {
+                            var rowData = result.breed[i].breed_standard[j].standard;
+                            rowArr[headerName[j]] = rowData;
+                        }
+
+                        dataArr.push(rowArr);
+                    }
+
+
+                    breedgrid.resetData(dataArr);
+
+                    breedgrid.on('check', (ev) => {
+                        breedgrid.getRow(ev.rowKey).breed_id;
+                    })
+
+                    breedgrid.on('click', (ev) => {
+                        if (ev.targetType === 'cell' && (ev.columnName === '2' || ev.columnName === '277' || ev.columnName === '388' || ev.columnName === '626' || ev.columnName === '749' || ev.columnName === '912' || ev.columnName === '1076' || ev.columnName === '1254' || ev.columnName === '1412' || ev.columnName === '1599')) {
+                            var value_sample = ev.nativeEvent.srcElement;
+                            var value_mom = breedgrid.getRow(ev.rowKey)[4];
+                            var value_dad = breedgrid.getRow(ev.rowKey)[5];
+
+                            SearchSample(value_sample);
+                            SearchBasic(value_mom, value_dad);
+                        } else if (ev.targetType === 'cell' && ev.columnName === '4') {
+                            var value_sample1 = breedgrid.getRow(ev.rowKey)[2];
+                            var value_mom1 = ev.nativeEvent.srcElement;
+                            var value_dad1 = breedgrid.getRow(ev.rowKey)[5];
+
+                            SearchSample1(value_sample1);
+                            SearchBasic1(value_mom1, value_dad1);
+                        } else if (ev.targetType === 'cell' && ev.columnName === '5') {
+                            var value_sample2 = breedgrid.getRow(ev.rowKey)[2];
+                            var value_mom2 = breedgrid.getRow(ev.rowKey)[4];
+                            var value_dad2 = ev.nativeEvent.srcElement;
+
+                            SearchSample2(value_sample2);
+                            SearchBasic2(value_mom2, value_dad2);
+                        } else if (ev.targetType === 'cell' && ev.columnName === 'file') {
+                            var id = breedgrid.getRow(ev.rowKey).breed_id;
+
+                            FileBtn(id);
+                        } else if (ev.targetType === 'cell' && ev.columnName === 'status') {
+                            var e_id = breedgrid.getRow(ev.rowKey).breed_id;
+
+                            EmptyBtn(e_id);
+                        }
+                    });
+
+                    var before = null;
+                    var after = null;
+
+                    breedgrid.on('afterChange', (ev) => {
+                        var user_type = $("#user_type").val();
+
+                        if (user_type != 0 && user_type != 2) {
+                            return Alert("수정 권한이 없습니다.");
+                        } else {
+                            for (let i = 0; i < ev.changes.length; i++) {
+                                before = ev.changes[i].prevValue;
+                                after = ev.changes[i].value;
+
+                                if (after != before) {
+                                    var breed_id = breedgrid.getRow(ev.changes[i].rowKey).breed_id;
+                                    var detail_id = ev.changes[i].columnName;
+                                    var standard = after;
+
+                                    var data = {"breed_id": breed_id, "detail_id": detail_id, "standard": standard};
+
+                                    if (breed_id != null) {
+                                        $.ajax(
+                                            {
+                                                url: 'updateBreed',
+                                                method: 'POST',
+                                                dataType: 'json',
+                                                data: data,
+                                                success: function (result) {
+                                                    if (result == 0) {
+                                                        return Alert("수정에 실패하였습니다.")
+                                                    }
+                                                }
+                                            });
+                                    }
+                                }
+                            }
+                        }
+                    });
 
                 }
             });
