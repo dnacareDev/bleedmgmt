@@ -434,7 +434,7 @@
         if ($(element).prev().prev().children().eq(0).is(":checked", true)) { //체크박스가 클릭이 true 라면
             if (!input_val) { //입력한 text가 number 타입이 아니라면
                 $(element).prev().val("");
-                return Alert("숫자를 입력 해주세요!");  /* 팝업에 날아오는 효과를 원하지 않으시다면 commonjs.html 에서 $("#alert").show(300); 을 $("#alert").show(0); 으로 바꿔주세요*/
+                return Alert1("숫자를 입력 해주세요!");  /* 팝업에 날아오는 효과를 원하지 않으시다면 commonjs.html 에서 $("#alert").show(300); 을 $("#alert").show(0); 으로 바꿔주세요*/
             } else { // number타입이라면
                 for (let i = 0; i < input_val; i++) {
                     inner_html += "<li><input type='text' onchange='intertHeaderTitle(this)' id=" + "input" + i + " value=''></li>";
@@ -449,7 +449,7 @@
             }
             $(element).next().slideDown(300);
         } else {
-            return Alert('체크박스를 클릭해주세요');
+            return Alert1('체크박스를 클릭해주세요');
         }
     }
 
@@ -459,7 +459,7 @@
         if ($(element).prev().prev().children().eq(0).is(":checked", true)) { //체크박스가 클릭이 true 라면
             if (!input_val) { //입력한 text가 number 타입이 아니라면
                 $(element).prev().val("");
-                return Alert("숫자를 입력 해주세요!");  /* 팝업에 날아오는 효과를 원하지 않으시다면 commonjs.html 에서 $("#alert").show(300); 을 $("#alert").show(0); 으로 바꿔주세요*/
+                return Alert1("숫자를 입력 해주세요!");  /* 팝업에 날아오는 효과를 원하지 않으시다면 commonjs.html 에서 $("#alert").show(300); 을 $("#alert").show(0); 으로 바꿔주세요*/
             } else { // number타입이라면
                 for (let i = 0; i < input_val; i++) {
                     inner_html += "<li><input type='text' onchange='intertHeaderTitleDocu(this)' id=" + "input" + i + " value=''></li>";
@@ -474,7 +474,7 @@
             }
             $(element).next().slideDown(300);
         } else {
-            return Alert('체크박스를 클릭해주세요');
+            return Alert1('체크박스를 클릭해주세요');
         }
     }
 
@@ -492,10 +492,10 @@
                 data: data,
                 success: function (result) {
                     if (result == 0) {
-                        Alert("사용 가능한 자원관리명 입니다.");
+                        Alert1("사용 가능한 자원관리명 입니다.");
                         checkName = 1;
                     } else {
-                        Alert("이미 사용중인 자원관리명 입니다.")
+                        Alert1("이미 사용중인 자원관리명 입니다.")
                     }
                 }
             }
@@ -704,7 +704,7 @@
                 }
             })
         } else {
-            Alert("중복확인을 진행해주세요.");
+            Alert1("중복확인을 진행해주세요.");
         }
 
     }
