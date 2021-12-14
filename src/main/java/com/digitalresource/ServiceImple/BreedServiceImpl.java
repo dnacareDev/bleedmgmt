@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digitalresource.Entity.Breed;
+import com.digitalresource.Entity.CountSelect;
 import com.digitalresource.Entity.StandardList;
 import com.digitalresource.Mapper.BreedMapper;
 import com.digitalresource.Service.BreedService;
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.IntArraySerializer;
 
 @Service
 public class BreedServiceImpl implements BreedService {
@@ -24,6 +24,9 @@ public class BreedServiceImpl implements BreedService {
 	
 	@Override
 	public int insertBreed(int resource_id, String data) {
+		System.out.println(data);
+		System.out.println("resource_id");
+		System.out.println(resource_id);
 		Map<String,Object> map = new HashMap<String, Object>();
 		int result = 0;
 		Breed breed = new Breed();
@@ -31,34 +34,39 @@ public class BreedServiceImpl implements BreedService {
 		// insert breed
 		int test = breedMapper.insertBreed(breed);
 		map.put("breed_id", breed.getBreed_id());
-		int countDetail = breedMapper.selectDetailCount(resource_id);
+		CountSelect countDetail = breedMapper.selectDetailCount(resource_id);
+		
 		// insert standard
 		JSONArray arr = new JSONArray(data);
 		int arrLength = arr.length();
 		int arrMin = 0;
 		String changeI = "";
-		for(int i=1; i<=countDetail; i++) {
+		int cnt = 0;
+		for(int i=countDetail.getMin(); i<=countDetail.getMax(); i++) {
 			if(arrMin != arrLength) {				
 				JSONObject jsonObject = arr.getJSONObject(arrMin);
 				changeI = Integer.toString(i);
 				if(changeI.equals(String.valueOf(jsonObject.get("detail_id")))) {
 					map.put("resource_id",resource_id);
-					map.put("limit",(int)jsonObject.get("detail_id") -1);
+					map.put("limit",cnt);
 					map.put("standard_data", jsonObject.get("standard"));
 					arrMin++;
 				}else {
 					map.put("resource_id",resource_id);
-					map.put("limit",i);
+					map.put("limit",cnt);
 					map.put("standard_data", "");
 				}
 				
 			
 			}else {				
 					map.put("resource_id",resource_id);
-					map.put("limit",i);
+					map.put("limit",cnt);
 					map.put("standard_data", "");
 			}
 			result = breedMapper.insertStandard(map);
+			System.out.println("result");
+			System.out.println(result);
+			cnt++;
 		}
 		return result;
 	}
@@ -75,26 +83,30 @@ public class BreedServiceImpl implements BreedService {
 		List<StandardList> list =  breedMapper.selectStandard(resourceId);
 		List<Map<String, Object>> bodyList = new ArrayList<Map<String, Object>>();
 		Map<String , Object> dataMap = new HashMap<String , Object>();
-		//Map<String , Object> breed = new HashMap<String , Object>();
-		int breed_row = list.get(0).getBreed_row();		
+		int idx = 0;
+		int breed_row = 0;
+		// System.out.println(list.get(0).getBreed_row());
+		if(list.size() != 0 ) {			
+			breed_row = list.get(0).getBreed_row();		
+			idx=1;
+		}
 			for(StandardList item : list) {
 				if(item.getBreed_row() == breed_row) {
 					dataMap.put(String.valueOf(item.getDetail_id()) , item.getStandard_data());
 
 				}else {
 					dataMap.put("breed_id", breed_row);
+					dataMap.put("idx", idx++);
 					bodyList.add(dataMap);
-					//bodyList.add(breed);
+
 					breed_row = item.getBreed_row();
 					dataMap = new HashMap<String , Object>();
-					//breed = new HashMap<String , Object>();
 					dataMap.put(String.valueOf(item.getDetail_id()) , item.getStandard_data());
-					//breed.put("breed_id", item.getBreed_row());
 				}
 			}
+			dataMap.put("idx", idx++);
 			dataMap.put("breed_id", breed_row);
 			bodyList.add(dataMap);
-			//bodyList.add(breed);
 		return bodyList;
 	}
 

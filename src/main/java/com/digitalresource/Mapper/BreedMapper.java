@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.digitalresource.Entity.Breed;
+import com.digitalresource.Entity.CountSelect;
 import com.digitalresource.Entity.StandardList;
 
 @Mapper
@@ -18,7 +19,7 @@ public interface BreedMapper {
 
 	List<StandardList> selectStandard(int resourceId);
 
-	int selectDetailCount(int resource_id);
+	CountSelect selectDetailCount(int resource_id);
 
 	int deleteBreed(String breed_id);
 

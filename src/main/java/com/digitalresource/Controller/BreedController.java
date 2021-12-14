@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -57,7 +59,7 @@ public class BreedController {
 
 	@ResponseBody
 	@RequestMapping("searchHeader")
-	public Map<String, Object> SearchBreed(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
+	public Map<String, Object> SearchBreed(ModelAndView mv,Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
 		int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name);
@@ -69,7 +71,7 @@ public class BreedController {
 				break;
 			}
 		}
-
+		mv.setView(null);
 		List<Detail> details = detailService.SelectDetailListByResource(resourceId);	
 		List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
 		result.put("standardList",standardList);
