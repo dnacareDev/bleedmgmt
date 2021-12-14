@@ -21,6 +21,8 @@ public interface BreedMapper {
 
 	CountSelect selectDetailCount(int resource_id);
 
+	public int updateStandardCell(StandardList data);
+	
 	int deleteBreed(String breed_id);
 
 	int deleteStandard(String breed_id);

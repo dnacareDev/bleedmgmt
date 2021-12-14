@@ -9,6 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.digitalresource.Entity.Breed;
 import com.digitalresource.Entity.CountSelect;
@@ -78,6 +81,14 @@ public class BreedServiceImpl implements BreedService {
 	}
 
 	@Override
+	public int updateStandardCell(StandardList data) {
+		int result = 0;
+		result = breedMapper.updateStandardCell(data);
+		return result;
+	}
+	
+	
+	@Override
 	public List<Map<String, Object>> selectStandard(int resourceId) {
 		
 		List<StandardList> list =  breedMapper.selectStandard(resourceId);
@@ -85,6 +96,7 @@ public class BreedServiceImpl implements BreedService {
 		Map<String , Object> dataMap = new HashMap<String , Object>();
 		int idx = 0;
 		int breed_row = 0;
+		int detail_id = 0;
 		// System.out.println(list.get(0).getBreed_row());
 		if(list.size() != 0 ) {			
 			breed_row = list.get(0).getBreed_row();		
@@ -92,20 +104,23 @@ public class BreedServiceImpl implements BreedService {
 		}
 			for(StandardList item : list) {
 				if(item.getBreed_row() == breed_row) {
-					dataMap.put(String.valueOf(item.getDetail_id()) , item.getStandard_data());
+					dataMap.put(String.valueOf(item.getDetail_id()) , item);
 
 				}else {
 					dataMap.put("breed_id", breed_row);
+					dataMap.put("detail_id", item.getDetail_id());
 					dataMap.put("idx", idx++);
 					bodyList.add(dataMap);
 
 					breed_row = item.getBreed_row();
+					detail_id = item.getDetail_id();
 					dataMap = new HashMap<String , Object>();
-					dataMap.put(String.valueOf(item.getDetail_id()) , item.getStandard_data());
+					dataMap.put(String.valueOf(item.getDetail_id()) , item);
 				}
 			}
 			dataMap.put("idx", idx++);
 			dataMap.put("breed_id", breed_row);
+			dataMap.put("detail_id", detail_id);
 			bodyList.add(dataMap);
 		return bodyList;
 	}

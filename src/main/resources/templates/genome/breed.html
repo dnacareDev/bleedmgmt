@@ -2335,7 +2335,8 @@
     }
 
     var breedgrid = null;
-
+	var gridDataArray = null;
+	
     function SearchBreedgrid(e) {
         var crop_id = $("#CropSelect").val();
         var resource_name = $(".manage")[0].innerText;
@@ -2350,11 +2351,28 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                	
+                	gridDataArray = result.standardList;
+                	let dataList = [];
+                	for(var i =0;i<result.standardList.length ;i++){
+                		let data = result.standardList[i];
+                		let tempArray = [];
+                		for(var key in data){
+                			tempArray.push(data[key].standard_data);
+                    	}
+                		
+                		dataList.push(tempArray);
+                		
+                	}
+                	
+                	
+                	console.log(dataList);
+                	
                     breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: result.standardList,
+                        data: dataList,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2364,6 +2382,7 @@
                         }
                     });
 
+                    console.log(result.standardList)
                     const headerArr = [
                     	{
                             'header': 'No',
@@ -2405,7 +2424,33 @@
                     }
 					
                     breedgrid.setColumns(headerArr);
-                    
+                    breedgrid.on('beforeChange', ev => {
+
+                    	
+                    	
+                    	if(ev.origin != "cell")
+                    		return;
+
+
+                    	for(var i =0;i<ev.changes.length;i++){
+                    		let changeItem = ev.changes[i];
+                    		
+                    		let standard = gridDataArray[changeItem.rowKey][changeItem.columnName + 1];
+                    		var data = { "standard_id": standard.standard_id , "standard_data" : changeItem.nextValue};
+                            
+                    		$.ajax({
+                                 url: 'updateStandardCell',
+                                 method: 'POST',
+                                 dataType: 'json',
+                                 data: data,
+                                  success: function (result) {
+                                      if (result == 0) {
+                                         return Alert("수정에 실패하였습니다.")
+                                      }
+                                  }
+                              });
+                    	}
+                    });
                     
                     //breedgrid.setResetData(result.standardList);
                     

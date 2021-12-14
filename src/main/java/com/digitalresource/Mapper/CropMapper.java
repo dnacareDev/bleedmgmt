@@ -23,6 +23,6 @@ public interface CropMapper {
     public List<Crop> selectCropByCategory(int category_id);
 
     public String SelectCropById(@Param("crop_id") int crop_id);
-
+ 
     public List<Crop> SearchCropList(@Param("type") String type);
 }

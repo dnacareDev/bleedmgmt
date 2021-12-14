@@ -17,7 +17,7 @@
                 #{item.detail_name},
                 #{item.detail_index},
                 #{item.detail_info}
-            )
+            ) 
         </foreach>
     </insert>
 

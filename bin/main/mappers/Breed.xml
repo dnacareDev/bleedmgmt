@@ -11,14 +11,20 @@
     	select #{breed_id}, (select d.detail_id from resource r inner join detail d on r.resource_id = d.resource_id where r.resource_id = ${resource_id} limit ${limit},1), #{standard_data}
     </insert>
     
+    <update id="updateStandardCell" >
+        UPDATE standard SET
+        standard_data = #{standard_data} 
+        WHERE standard_id = #{standard_id}
+    </update>
+    
     <select id="selectStandard" resultType="StandardList">
     	select s.standard_id,d.detail_id, s.standard_data, b.resource_id, b.breed_row from breed b 
 		inner join standard s on b.breed_id = s.breed_id
 		inner join detail d on s.detail_id = d.detail_id where b.resource_id = #{resource_id};
     </select>
     
-    <select id="selectDetailCount" resultType="CountSelect">
-    	select min(detail_id) as min, max(detail_id) as max , count(*) as count from detail where resource_id= #{resource_id};
+    <select id="selectDetailCount" resultType="int">
+    	select count(*) from detail where resource_id= #{resource_id};
     </select>
     
     <delete id="deleteStandard">
