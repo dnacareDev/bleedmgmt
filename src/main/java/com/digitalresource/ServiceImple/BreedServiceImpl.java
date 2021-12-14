@@ -1,6 +1,7 @@
 package com.digitalresource.ServiceImple;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digitalresource.Entity.Breed;
+import com.digitalresource.Entity.StandardList;
 import com.digitalresource.Mapper.BreedMapper;
 import com.digitalresource.Service.BreedService;
 
@@ -43,6 +45,11 @@ public class BreedServiceImpl implements BreedService {
 	public int insertStandard() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public List<StandardList> selectStandard(int resourceId) {
+		return breedMapper.selectStandard(resourceId);
 	}
 
 }

@@ -10,4 +10,10 @@
     	insert into standard (breed_id, detail_id, standard_data)
     	values (#{breed_id}, #{detail_id}, #{standard_data})
     </insert>
+    
+    <select id="selectStandard" resultType="StandardList">
+    	select s.standard_id,d.detail_id, s.standard_data, b.resource_id from breed b 
+		inner join standard s on b.breed_id = s.breed_id
+		inner join detail d on s.detail_id = d.detail_id where b.resource_id = #{resource_id};
+    </select>
 </mapper>

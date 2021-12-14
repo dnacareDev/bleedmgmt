@@ -1,5 +1,7 @@
 package com.digitalresource.Controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Detail;
+import com.digitalresource.Entity.StandardList;
 import com.digitalresource.Service.BreedService;
 import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.DetailService;
@@ -68,8 +71,9 @@ public class BreedController {
 			}
 		}
 
-		List<Detail> details = detailService.SelectDetailListByResource(resourceId);
-
+		List<Detail> details = detailService.SelectDetailListByResource(resourceId);	
+		List<StandardList> standardList = breedService.selectStandard(resourceId);
+		result.put("standardList",standardList);
 		result.put("detail", details);
 
 		return result;
