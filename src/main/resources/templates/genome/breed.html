@@ -2007,7 +2007,7 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        SearchBreed(1);
+        // SearchBreed(1);
         SearchBreedgrid(1);
     });
 
@@ -2015,7 +2015,7 @@
     $("#CropSelect").change(function () {
         breedgrid.destroy();
 
-        SearchBreed(1);
+        // SearchBreed(1);
         SearchBreedgrid(1);
     })
 
@@ -2023,7 +2023,7 @@
     $("#limit").change(function () {
         breedgrid.destroy();
 
-        SearchBreed(1);
+        // SearchBreed(1);
         SearchBreedgrid(1);
     })
 
@@ -2377,9 +2377,6 @@
                     for (let i = 1; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
                         var colName = result.detail[i].detail_id;
-
-                        console.log(colHeader);
-                        console.log(colName);
 
                         headerName[i] = result.detail[i].detail_id;
 

@@ -36,4 +36,6 @@ public interface ResourceMapper {
 	public List<ResourceName> resourceList();
 
 	public Integer SearchResourceId(@Param("crop_id") int crop_id, @Param("resource_name_id") int resource_name_id);
+
+	public Integer SelectCropId(@Param("resource_name_id") int resource_name_id);
 }

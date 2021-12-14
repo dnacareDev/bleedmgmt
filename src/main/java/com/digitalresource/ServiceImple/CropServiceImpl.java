@@ -82,4 +82,14 @@ public class CropServiceImpl implements CropService {
         }
         return result;
     }
+
+    @Override
+    public String SelectCropById(int crop_id) {
+        return mapper.SelectCropById(crop_id);
+    }
+
+    @Override
+    public List<Crop> SearchCropList(String type) {
+        return mapper.SearchCropList(type);
+    }
 }

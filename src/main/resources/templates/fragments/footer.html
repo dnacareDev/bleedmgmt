@@ -137,9 +137,9 @@
 	<div class="footer-top">
 		<div class="footer_utills">
    			<ul>
-   				<li><a href="">개인정보처리방침</a></li>
-   				<li><a href="">이메일무단수집거부</a></li>
-   				<li><a href="">이용약관</a></li>
+   				<li><a onclick="footerData();">개인정보처리방침</a></li>
+   				<li><a onclick="footerData();">이메일무단수집거부</a></li>
+   				<li><a onclick="footerData();">이용약관</a></li>
    			</ul>
    		</div>
 	</div>
@@ -147,21 +147,18 @@
         <div class="row">
             <div class="col-md-6">
             	<div class="footer_logo">
-               		<a href="">
-               			<img src="../assets/vendor_assets/img/logo.png" alt="logo">
-               		</a>
                	</div>
             	<div class="footer_contact">
             		<ul>
-            			<li>경기도 안성시 삼죽면 밤고개 1길 10 (우편번호 : 17513)</li>
-            			<li>대표전화:031-8053-9700</li>
-            			<li>팩스 : 031-8053-9797</li>
-            			<li>고객상담센터 : 평일 8:30 - 5:50PM (토,공휴일 휴무)</li>
-            			<li>이메일 : thekiban@thekiban.com</li>
+            			<li>(우편번호 : )</li>
+            			<li>대표전화 : </li>
+            			<li>팩스 : </li>
+            			<li>고객상담센터 : </li>
+            			<li>이메일 : </li>
             		</ul>
             	</div>
                 <div class="footer-copyright">
-                    <p>COPYRIGHT @ 2015 THE KIBAN CO., Ltd. All Rights Reserved.
+                    <p>
                     </p>
                 </div>
             </div>
@@ -169,17 +166,17 @@
                 <div class="footer-menu text-right">
                     <div class="dropdown dropdown-click">
                         <div class="btn-group dropleft">
-                            <button class="btn btn-outline-lighten dropdown-toggle-split btn-sm footer_btn1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >패밀리 사이트</button>
+                            <button class="btn btn-outline-lighten dropdown-toggle-split btn-sm footer_btn1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="footerData();">패밀리 사이트</button>
                             
 
-                            <button type="button" class="btn btn-outline-lighten btn-sm dropdown-toggle-split footer_btn2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-outline-lighten btn-sm dropdown-toggle-split footer_btn2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="footerData();">
                                 <span data-feather=chevron-down></span>
                             </button>
-                            <div class="dropdown-default dropdown-menu">
-                                <a class="dropdown-item" href="#">Item One</a>
-                                <a class="dropdown-item" href="#">Item Two</a>
-                                <a class="dropdown-item" href="#">Item Three</a>
-                            </div>
+                            <!--<div class="dropdown-default dropdown-menu">-->
+                            <!--    <a class="dropdown-item" href="#">Item One</a>-->
+                            <!--    <a class="dropdown-item" href="#">Item Two</a>-->
+                            <!--    <a class="dropdown-item" href="#">Item Three</a>-->
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
@@ -202,4 +199,11 @@
 <div class="overlay-dark-sidebar"></div>
 <div class="customizer-overlay"></div>
 
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+
+<script>
+    function footerData() {
+        return Alert1("준비 중입니다.");
+    }
+</script>
 </html>

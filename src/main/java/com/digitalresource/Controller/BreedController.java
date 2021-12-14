@@ -1,6 +1,5 @@
 package com.digitalresource.Controller;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.digitalresource.Entity.Breed;
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Detail;
 import com.digitalresource.Service.BreedService;
@@ -41,9 +39,12 @@ public class BreedController {
 	private BreedService breedService;
 	
 	@RequestMapping("/breed")
-	public ModelAndView breed(ModelAndView mv,@RequestParam(value="type")String type,@RequestParam(value="id") int resource_id) {
-		List<Crop> cropList = cropService.selectCropList();
-		mv.addObject("cropList", cropList);
+	public ModelAndView breed(ModelAndView mv, @RequestParam(value="type") String type,@RequestParam(value="id") int resource_id) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+		List<Crop> crops = cropService.SearchCropList(type);
+
+		mv.addObject("cropList", crops);
 		mv.addObject("type", type);
 		mv.addObject("resource_id", resource_id);
 		mv.setViewName("genome/breed");
