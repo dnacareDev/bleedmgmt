@@ -817,6 +817,10 @@
                 box-shadow: 0 2.5em 0 0;
             }
         }
+
+        .tui-grid-cell {
+            background-color: white;
+        }
     </style>
 </head>
 <body class="layout-light top-menu overlayScroll">
@@ -3033,30 +3037,6 @@
                         display_list.eq(i).empty();
                         display_list.eq(i).append(display_add);
                     }
-
-                    // paging
-                    if (result.page_num == 1) {
-                        page_add += '<button class="atbd-pagination__link pagination-control"><span class="la la-angle-left"></span></button>';
-                    } else {
-                        page_add += '<button class="atbd-pagination__link pagination-control" onclick="SearchBreed(' + (result.page_num - 1) + ')"><span class="la la-angle-left"></span></button>';
-                    }
-
-                    for (var i = 0; i < result.end_page; i++) {
-                        if (result.page_num == (i + 1)) {
-                            page_add += '<button class="atbd-pagination__link active" onclick="SearchBreed(' + (i + 1) + ')">' + (i + 1) + '</button>';
-                        } else {
-                            page_add += '<button class="atbd-pagination__link" onclick="SearchBreed(' + (i + 1) + ')">' + (i + 1) + '</button>';
-                        }
-                    }
-
-                    if (result.page_num == result.end_page) {
-                        page_add += '<button class="atbd-pagination__link pagination-control"><span class="la la-angle-right"></span></button>';
-                    } else {
-                        page_add += '<button class="atbd-pagination__link pagination-control" onclick="SearchBreed(' + (result.page_num + 1) + ')"><span class="la la-angle-right"></span></button>';
-                    }
-
-                    header_list.empty();
-                    header_list.append(header_add);
 
                     breed_list.empty();
                     breed_list.append(add_list);
