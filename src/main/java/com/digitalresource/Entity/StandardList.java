@@ -8,4 +8,5 @@ public class StandardList {
 	private int detail_id;
 	private String standard_data;
 	private int resource_id;
+	private int breed_row;
 }
