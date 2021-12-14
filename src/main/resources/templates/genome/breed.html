@@ -2431,25 +2431,30 @@
                     	if(ev.origin != "cell")
                     		return;
 
-
-                    	for(var i =0;i<ev.changes.length;i++){
-                    		let changeItem = ev.changes[i];
-                    		
-                    		let standard = gridDataArray[changeItem.rowKey][changeItem.columnName + 1];
-                    		var data = { "standard_id": standard.standard_id , "standard_data" : changeItem.nextValue};
-                            
-                    		$.ajax({
-                                 url: 'updateStandardCell',
-                                 method: 'POST',
-                                 dataType: 'json',
-                                 data: data,
-                                  success: function (result) {
-                                      if (result == 0) {
-                                         return Alert("수정에 실패하였습니다.")
-                                      }
-                                  }
-                              });
-                    	}
+						try{
+							for(var i =0;i<ev.changes.length;i++){
+	                    		let changeItem = ev.changes[i];
+	                    		
+	                    		let standard = gridDataArray[changeItem.rowKey][changeItem.columnName + 1];
+	                    		var data = { "standard_id": standard.standard_id , "standard_data" : changeItem.nextValue};
+	                            
+	                    		$.ajax({
+	                                 url: 'updateStandardCell',
+	                                 method: 'POST',
+	                                 dataType: 'json',
+	                                 data: data,
+	                                  success: function (result) {
+	                                      if (result == 0) {
+	                                         return Alert("수정에 실패하였습니다.")
+	                                      }
+	                                  }
+	                              });
+	                    	}
+						}
+						catch(e){
+							
+						}
+                    	
                     });
                     
                     //breedgrid.setResetData(result.standardList);
