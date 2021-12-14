@@ -287,7 +287,7 @@
                                     <span class="sub_title">작목 선택</span>
                                     <select id="crop_id">
                                         <option value="-22" selected disabled hidden>작물 선택</option>
-                                        <option value="-1">신규 등록</option>
+                                      <!--   <option value="-1">신규 등록</option> -->
                                         <th:block th:each="crop : ${cropList}">
                                             <option th:value="${crop.crop_id}" th:text="${crop.crop_name}"></option>
                                         </th:block>

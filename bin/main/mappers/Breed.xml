@@ -18,7 +18,7 @@
     </select>
     
     <select id="selectDetailCount" resultType="CountSelect">
-    	select min(detail_id) as min, max(detail_id) as max , count(*) as count from detail where resource_id= #{resource_id};
+    	select  max(detail_id) as max, min(detail_id) as min, count(detail_id) as count from detail where resource_id= #{resource_id};
     </select>
     
     <delete id="deleteStandard">
@@ -36,4 +36,8 @@
     	select breed_id from (
     	select breed_id from breed where breed_row in(${breed_id})) a);
     </delete>
+    
+    <select id="selectResourceId" resultType="int">
+    	select resource_id from resource where resource_name_id in (select resource_name_id from resource_name where resource_name = #{resource_name}) and crop_id = #{crop_id}
+    </select>
 </mapper>

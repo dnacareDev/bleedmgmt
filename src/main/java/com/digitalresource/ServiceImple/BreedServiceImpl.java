@@ -23,12 +23,13 @@ public class BreedServiceImpl implements BreedService {
 	private BreedMapper breedMapper;
 	
 	@Override
-	public int insertBreed(int resource_id, String data) {
-		System.out.println(data);
-		System.out.println("resource_id");
-		System.out.println(resource_id);
+	public int insertBreed(int resource_id, String data,int crop_id, String resource_name) {
+		Map<String,Object> param = new HashMap<String, Object>();
 		Map<String,Object> map = new HashMap<String, Object>();
 		int result = 0;
+		param.put("crop_id", crop_id);
+		param.put("resource_name", resource_name);
+		resource_id = breedMapper.selectResourceId(param);
 		Breed breed = new Breed();
 		breed.setResource_id(resource_id);
 		// insert breed

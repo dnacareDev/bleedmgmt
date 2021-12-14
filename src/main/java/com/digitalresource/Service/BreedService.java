@@ -9,7 +9,7 @@ public interface BreedService {
 	
 	public int insertStandard();
 
-	int insertBreed(int resource_id, String data);
+	int insertBreed(int resource_id, String data, int crop_id, String resource_name);
 	
 	List<Map<String, Object>> selectStandard (int resourceId);
 

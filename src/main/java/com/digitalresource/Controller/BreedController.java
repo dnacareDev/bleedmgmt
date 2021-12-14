@@ -44,11 +44,12 @@ public class BreedController {
 	private BreedService breedService;
 	
 	@RequestMapping("/breed")
-	public ModelAndView breed(ModelAndView mv, @RequestParam(value="type") String type,@RequestParam(value="id") int resource_id) {
+	public ModelAndView breed(ModelAndView mv, @RequestParam(value="type") String type,@RequestParam(value="id") int resource_id,@RequestParam(value="crop_id", required = false)int crop_id) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
 		List<Crop> crops = cropService.SearchCropList(type);
-
+	
+		mv.addObject("crop_id",crop_id);
 		mv.addObject("cropList", crops);
 		mv.addObject("type", type);
 		mv.addObject("resource_id", resource_id);
@@ -59,9 +60,9 @@ public class BreedController {
 
 	@ResponseBody
 	@RequestMapping("searchHeader")
-	public Map<String, Object> SearchBreed(ModelAndView mv,Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
+	public Map<String, Object> SearchBreed(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
-
+System.out.println(crop_id);
 		int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name);
 		int resourceId = 0;
 
@@ -71,7 +72,6 @@ public class BreedController {
 				break;
 			}
 		}
-		mv.setView(null);
 		List<Detail> details = detailService.SelectDetailListByResource(resourceId);	
 		List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
 		result.put("standardList",standardList);
@@ -82,10 +82,10 @@ public class BreedController {
 	
 	@ResponseBody
 	@RequestMapping("insertBreed2")
-	public int insertBreed(@RequestParam(value="data")String data, @RequestParam(value="resource_id") int resource_id) {
+	public int insertBreed(@RequestParam(value="data")String data, @RequestParam(value="resource_id") int resource_id, @RequestParam(value="crop_id")int crop_id, @RequestParam(value="resource_name") String resource_name) {
 		int result = 0;
 		
-		result = breedService.insertBreed(resource_id,data);
+		result = breedService.insertBreed(resource_id,data,crop_id,resource_name);
 
 		return result;
 	}

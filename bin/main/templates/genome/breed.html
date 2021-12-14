@@ -845,7 +845,8 @@
                                     </select>
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect">
                                         <th:block th:each="list : ${cropList}" >
-                                            <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
+                                            <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
+                                        	<option th:if="${crop_id == list.crop_id}"   th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
                                         </th:block>
                                     </select>
                                    <!--  <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
@@ -2014,7 +2015,7 @@
     // 작물 선택
     $("#CropSelect").change(function () {
         breedgrid.destroy();
-
+//123
         // SearchBreed(1);
         SearchBreedgrid(1);
     })
@@ -2342,7 +2343,9 @@
         var limit = $("#limit").val();
 
         var data = {"crop_id": crop_id, "resource_name": resource_name};
-
+        console.log(resource_name);
+        console.log(crop_id);
+        console.log(data);
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2554,6 +2557,8 @@
 	const sortBreed = [...breedData].sort((a,b) => a?.detail_id - b?.detail_id)
 	console.table(sortBreed)
 	
+	var crop_id = $("#CropSelect").val();
+    var resource_name = $(".manage")[0].innerText;
 	
 	let resource_id = $('#resource_id').val();
         $.ajax(
@@ -2563,13 +2568,17 @@
                 dataType: 'json',
                 data: {
                     "data": JSON.stringify(sortBreed),
-                    "resource_id":resource_id
+                    "resource_id":resource_id,
+                    "crop_id" : crop_id,
+                    "resource_name" : resource_name
                 },
                 success: function (result) {
                     if (result == 0) {
                         return Alert("저장에 실패하였습니다.");
                     } else {
-                        location.reload();
+                    	
+                    	window.location.href = "/breed?type=[[${type}]]&id=[[${resource_id}]]&crop_id=" + crop_id;
+                       // location.reload();
                     }
                 }
             });

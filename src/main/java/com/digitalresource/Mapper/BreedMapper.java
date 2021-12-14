@@ -24,4 +24,6 @@ public interface BreedMapper {
 	int deleteBreed(String breed_id);
 
 	int deleteStandard(String breed_id);
+
+	int selectResourceId(Map<String, Object> param);
 }
