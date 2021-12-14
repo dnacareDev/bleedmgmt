@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user = ${#authentication.principal}">
+<head>
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <style>
+        .card {
+            box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%);
+        }
+
+        table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+
+        .data_cover1 {
+            clear: both;
+            width: 100%;
+            padding-bottom: 20px;
+        }
+
+        .data_type {
+            float: left;
+            width: calc((100% - 20px) / 3);
+            margin-left: 10px;
+        }
+
+        .data_type1, .data_type4 {
+            margin-left: 0;
+            width: calc((100% - 20px) / 3);
+        }
+
+        .data_type span.sub_title {
+            display: block;
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #E4E4E4;
+            padding: 0 20px;
+            border-radius: 5px;
+            color: #B2B2B2;
+        }
+
+        input[type="text"] {
+            width: calc((70% - 5px) / 1);
+            border: 1px solid #E4E4E4;
+            padding: 12px;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        button[type="button"] {
+            border: none;
+            border-radius: 5px;
+        }
+
+        button[type="button"].greenop_btn {
+            width: calc((30% - 5px) / 1);
+            background-color: #EDF6F1;
+            padding: 13px 20px;
+            color: #217566;
+        }
+
+        button[type="button"].gray_btn {
+            background-color: #E2E3E5;
+            color: #222;
+            float: left;
+        }
+
+        button[type="button"].green_btn {
+            background-color: #217566;
+            color: #fff;
+            float: right;
+        }
+
+        .data_files {
+            width: 100%;
+            border: 1px solid #E4E4E4;
+            padding: 12px;
+            border-radius: 5px;
+            margin-right: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .data_files img {
+            vertical-align: middle;
+            margin-bottom: 5px;
+        }
+
+        .data_files span {
+            margin-left: 5px;
+            color: #B2B2B2;
+        }
+
+        .data_cover2 {
+            padding: 50px 0;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+            vertical-align: inherit;
+        }
+
+        span.check_span {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 5px;
+            color: #939393;
+        }
+
+        input[type="text"].style_ver {
+            width: 20%;
+            margin-left: 5px;
+        }
+
+        .data_list_type > ul > li {
+            clear: both;
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .data_list_type ul ul li {
+            padding-top: 20px;
+            float: left;
+            width: calc((100% - 20px) / 3);
+            margin-left: 10px;
+        }
+
+        .data_list_type ul ul li:nth-child(3n + 1) {
+            margin-left: 0;
+        }
+
+        .data_list_type ul ul li input[type="text"] {
+            width: 100%;
+        }
+
+        .btn_cover {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        .data_cover3 {
+            width: 100%;
+            overflow: auto;
+            position: relative;
+            min-height: 400px;
+        }
+
+        table {
+            width: max-content;
+            min-width: 1230px;
+        }
+
+        table thead tr th {
+            background-color: #F7F7F8;
+        }
+
+        table thead tr {
+            border-top: 1px solid #E8EEF2;
+            border-bottom: 2px solid #E2E3E5;
+        }
+
+        span.check_box_design {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: transparent;
+            border-radius: 5px;
+            position: relative;
+            border: 1px solid #939393;
+            vertical-align: middle;
+        }
+
+        span.check_box_design.active {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: #217566;
+            border-radius: 5px;
+            position: relative;
+            border: none;
+        }
+
+        span.check_box_design.active::before {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 5px;
+            bottom: 3.7px;
+            width: 2px;
+            height: 7px;
+            background-color: #fff;
+            border-radius: 5px;
+            transform: rotate(-45deg);
+        }
+
+        span.check_box_design.active::after {
+            content: "";
+            display: block;
+            position: absolute;
+            right: 5px;
+            bottom: 3px;
+            width: 2px;
+            height: 11px;
+            background-color: #fff;
+            border-radius: 5px;
+            transform: rotate(45deg);
+        }
+
+
+        .listNone {
+            display: none;
+        }
+
+        .listNone.active {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            display: table;
+            border-bottom: 1px solid #E2E3E5;
+
+        }
+
+        .listNone .lineNone_inner {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .listNone span {
+            display: inline-block;
+            color: #B2B2B2;
+        }
+
+        input[type="text"]:focus {
+            border: 1px solid #222;
+        }
+
+        .main-content .form-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            align-items: center;
+        }
+
+        .main-content .form-group span {
+            flex: 0 0 30%;
+            color: #222222;
+        }
+
+        .main-content .form-group input[type=text] {
+            flex: 0 0 70%;
+        }
+
+        #passwordCh1, #passwordCh2 {
+            border: 1px solid #e3e6ef;
+        }
+
+        #checking_password.active #passwordCh1,
+        #checking_password.active #passwordCh2 {
+            border: 1px solid red;
+        }
+
+
+        /* 푸터 배경색 */
+        .footer-wrapper {
+            background-color: #FCFCFC;
+        }
+
+    </style>
+</head>
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+<main class="main-content" style="background-color: #FCFCFC;">
+    <div class="contents" style="background-color: #FFFFFF;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mb-30">
+                    <div class="card">
+                        <div class="card-extra mt-20 mr-20">
+                            <div class="breadcrumb-main" style="float: left;">
+                                <h4 class="text-capitalize breadcrumb-title">종자원 특성 조사 관리</h4>
+
+                            </div>
+                            <span class="sub_title" style="display: block; clear:both; padding: 10px 0;">작목 선택</span>
+                            <div class="data_cover1 clearfix">
+                                <div class="data_type data_type1">
+                                    <select name="selectCategory" onchange="getCrop(this)" id="cropCategory">
+                                        <option value="-1" selected disabled hidden>작물구분</option>
+
+                                        <th:block th:each="cat : ${cropCategoryList}" >
+                                            <option th:value="${cat.category_id}" th:text="${cat.category_name}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <div class="data_type data_type2">
+                                    <select name="selectCrop"  onChange = "selectOptionEvent(value)" id="cropSubCategory">
+                                        <option value="-2" selected disabled hidden>작물선택</option>
+                                        <option value="-1">신규등록</option>
+                                    </select>
+                                </div>
+                                <div class="data_type data_type3" id="newCropInput" style="display: none">
+                                	<input type ="text" id="newCrop">
+                                </div>
+                            </div>
+                            <form action="character" id="insertFile" method="POST" enctype="multipart/form-data">
+                                <div class="data_cover2 clearfix">
+                                    <div class="data_type data_type4" style="display: flex">
+                                        <span class="sub_title">특성항목 파일</span>
+                                        <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none">
+                                        <div class="data_files" onclick="filesFunction()">
+                                            <img src="../assets/vendor_assets/img/upload.png" alt="file업로드">
+                                            <span>템플릿 엑셀 첨부</span>
+                                        </div>
+                                        <input type="file" id="upload_file" name="file" style="display: none;"> <!-- file  -->
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="featureGrid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_cover clearfix">
+            <button type="button" class="gray_btn" style="width:130px;height:45px;padding:0;" onclick="location.href='/character'">목록</button>
+            <button type="button" class="green_btn" style="width:130px;height:45px;padding:0;" onclick="saveTrait()">저장</button>
+        </div>
+    </div>
+</main>
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+<script type="text/javascript" th:inline="javascript">
+    let file_this_id; // 클릭한 파일첨부 div 박스
+    let file_this_file; // 클릭한 파일과 연동된 input type["file"]
+    var subCrop;
+    function filed(id) { //파일 첨부 클릭할경우
+        $(id).trigger("click");
+        $(id).on("change", file_handler);
+        file_this_id = $(id).prev();
+        file_this_file = $(id);
+    }
+
+    let breedgrid = null;
+
+    function insertRow() {
+
+        var cnt = characterGrid.getRowCount();
+
+        const newRow = {
+            feature: "data",
+            expression: "data",
+            level: "data",
+            breed: "data",
+            investigate_date: "data"
+        };
+
+        characterGrid.appendRow(newRow);
+    }
+
+    var characterGrid = null;
+
+    function file_handler(e) { //파일 클릭시 파일명 업로드
+
+        var file_name = $(file_this_file).val(); //파일 이름;
+        file_this_id.text(file_name);
+    }
+
+    $(document).ready(function () {
+        featureGrid = new tui.Grid({
+            el: document.getElementById("featureGrid"),
+            scrollX: true,
+            scrollY: false,
+            data: [],
+            columns: [
+                {
+                    header: '번호',
+                    name: 'feature_num',
+                    editor: 'text',
+                    width: 120
+                },
+                {
+                    header: '형질/특성',
+                    name: 'feature_name',
+                    editor: 'text'
+                },
+                {
+                    header: '표현형태',
+                    name: 'feature_expression',
+                    editor: 'text',
+                    width: 200
+                },
+                {
+                    header: '계급',
+                    name: 'feature_level',
+                    editor: 'text',
+                    width: 120
+                },
+                {
+                    header: '조사시기',
+                    name: 'feature_investigation',
+                    editor: 'text',
+                    width: 150
+                }
+            ],
+            pageOptions: {
+                useClient: true,
+                perPage: 10
+            }
+        });
+    })
+
+    // 작물구분에 따른 작물 리스트 출력
+    function getCrop(e) {
+        var data = {'category_id': e.value};
+
+        $.ajax(
+            {
+                url: 'cropList',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    for (let i = 0; i < result.length; i++) {
+                        var list = result[i];
+
+                        $("select[name=selectCrop]").append('<option value="' + list.crop_id + '">' + list.crop_name + '</option>')
+                    }
+                }
+            }
+        )
+    }
+
+    function filesFunction() {
+        let filesBtn = document.getElementById("excelFile");
+        var eventList = document.createEvent("MouseEvent");
+
+        eventList.initEvent("click");
+        filesBtn.dispatchEvent(eventList);
+    }
+
+    /* 엑셀 코드 */
+    function handleExcelDataAll(sheet) {
+        handleExcelDataHtml(sheet); // html 형태
+    }
+
+    /* Html 형태로 출력 */
+    function handleExcelDataHtml(sheet) {
+        $("#displayExcelHtml").html(XLSX.utils.sheet_to_html(sheet));
+    }
+
+    function excelExport(event) {
+        featureGrid.destroy();
+
+        excelExportCommon(event, handleExcelDataAll);
+    }
+
+    var featureGrid = null;
+
+    function excelExportCommon(event, callback) {
+        var input = event.target;
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            var fileData = reader.result;
+            var wb = XLSX.read(fileData, {type: 'binary'});
+            var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
+            var firstSheetName = sheetNameList[0]; // 첫번째 시트명
+            var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
+            callback(firstSheet);
+
+            var rowdata = XLSX.utils.sheet_to_json(firstSheet);
+
+            featureGrid = new tui.Grid({
+                el: document.getElementById("featureGrid"),
+                scrollX: true,
+                scrollY: false,
+                data: [],
+                columns: [
+                    {
+                        header: '번호',
+                        name: 'feature_num',
+                        editor: 'text',
+                        width: 120
+                    },
+                    {
+                        header: '형질/특성',
+                        name: 'feature_name',
+                        editor: 'text'
+                    },
+                    {
+                        header: '표현형태',
+                        name: 'feature_expression',
+                        editor: 'text',
+                        width: 200
+                    },
+                    {
+                        header: '계급',
+                        name: 'feature_level',
+                        editor: 'text',
+                        width: 120
+                    },
+                    {
+                        header: '조사시기',
+                        name: 'feature_investigation',
+                        editor: 'text',
+                        width: 150
+                    }
+                ],
+                pageOptions: {
+                    useClient: true,
+                    perPage: 10
+                }
+            });
+
+            const dataArr = [];
+
+            for (let i = 0; i < rowdata.length; i++) {
+                let listArr = {}
+
+                listArr.feature_num = rowdata[i]["번호"];
+                listArr.feature_name = rowdata[i]["형질/특성"];
+                listArr.feature_expression = rowdata[i]["표현형태"];
+                listArr.feature_level = rowdata[i]["계급"];
+                listArr.feature_investigation = rowdata[i]["조사시기"];
+
+                dataArr.push(listArr);
+            }
+
+            featureGrid.resetData(dataArr);
+
+        };
+
+        reader.readAsBinaryString(input.files[0]);
+    }
+
+    function saveTrait() {
+        insertFile();
+        var cropCategory = document.getElementById("cropCategory");
+        var cropSubCategory = document.getElementById("cropSubCategory");
+   		console.log(cropSubCategory.value);
+		var formData = new FormData();
+		formData.append("file", $("#excelFile")[0].files[0]);
+        var cropName = document.getElementById("newCrop").value;
+        var test = JSON.stringify(featureGrid.getData());
+        
+        var obj = featureGrid.getData();
+		var feature_count = obj.length;
+        
+        for(let i = 0; i < obj.length; i++) {
+        	if(obj[i]["feature_investigation"] == null){        		
+        		obj[i]["feature_investigation"] = "NULL";
+        	}
+	        console.log(obj[i])
+        }
+        obj = JSON.stringify(obj)
+        console.log("obj!",cropCategory);
+
+		formData.append("attribute_item",obj);
+		formData.append("crop_name",cropName);
+		formData.append("cropSubCategory", cropSubCategory.value);
+		formData.append("cropCategory",cropCategory.value);
+		formData.append("feature_count", feature_count);
+
+        $.ajax(
+            { 	
+			    processData: false,
+			    contentType: false,
+                url: '/seed-resources',
+                method: 'POST',
+                dataType: 'json',
+                data: formData,
+                success: function (result) {
+                	return location.href='character'
+                }
+            } 
+        )
+    }
+
+    function insertFile() {
+        $("#insertFile").submit();
+    }
+    
+    /* 셀렉트 박스 선택시 이벤트 발생 */
+    function selectOptionEvent(value){
+   		var selectOption = document.getElementById("newCropInput");
+   		var newCropIntput = document.getElementById("newCrop")
+		var cropSubCategory = document.getElementById("cropSubCategory");
+   		console.log(cropSubCategory.value);
+    	if(value == -1){
+        	selectOption.style.display="block";	
+        	subCrop = cropSubCategory.value;
+    	}else{
+        	selectOption.style.display="none";	
+        	newCropIntput.value=null;
+        	cropSubCategory = null;
+    	}
+    	
+    }
+    
+</script>
+</body>
+</html>

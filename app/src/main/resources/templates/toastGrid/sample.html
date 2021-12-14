@@ -1,0 +1,2326 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <script src="../assets/vendor_assets/js/script.js"></script>
+    <link rel="stylesheet" href="./tui-pagination.css">
+    <link rel="stylesheet" href="./tui-grid.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+    <script src="./tui-pagination.js"></script>
+    <script src="./tui-grid.min.js"></script>
+    <script src="./common.js"></script>
+</head>
+
+<body class="layout-light top-menu overlayScroll" oncontextmenu='return false'>
+<div class="mobile-search"></div>
+<div class="mobile-author-actions"></div>
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+<main class="main-content" style="background-color: #FCFCFC;" id="main">
+    <div class="contents" style="background-color: #FFFFFF;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mb-30">
+                    <div class="card">
+                        <div class="card-extra mt-20 mr-20">
+                            <div class="breadcrumb-main" style="float: left;">
+                                <h4 class="text-capitalize breadcrumb-title">시교 자원 관리</h4>
+                            </div>
+                            <div class="action-btn d-flex justify-content-end">
+                                <div class="atbd-button-list d-flex flex-wrap">
+                                    <div class="btn-group atbd-button-group btn-group-normal my-2" role="group">
+                                        <button type="button" class="btn btn-xs btn-outline-light on" id="sampleTable1" data-table="sampleGrid">시교관리</button>
+                                        <button type="button" class="btn btn-xs btn-outline-light" id="sampleTable2" data-table="outcomeGrid">시교수출관리</button>
+                                    </div>
+
+                                    <form action="" name="searchForm" class="d-flex align-items-center add-contact__form my-sm-0 my-2">
+                                        <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: left;" id="limit">
+                                            <option value="10">10개</option>
+                                            <option value="20">20개</option>
+                                            <option value="30">30개</option>
+                                        </select>
+                                        <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" id="CropSelect">
+                                            <option value="고추">고추</option>
+                                            <option value="대파">대파</option>
+                                            <option value="멜론">멜론</option>
+                                            <option value="무">무</option>
+                                            <option value="배추">배추</option>
+                                            <option value="수박">수박</option>
+                                            <option value="양배추">양배추</option>
+                                            <option value="양파">양파</option>
+                                            <option value="참외">참외</option>
+                                            <option value="토마토">토마토</option>
+                                        </select>
+                                    </form>
+                                    <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
+                                        <img src="../assets/vendor_assets/img/icon1.png" alt="">
+                                    </button>
+                                    <button type="button" class="btn btn-lg btn-primary data_btn1" title="엑셀 export" id="excelFileExport">
+                                        <img src="../assets/vendor_assets/img/icon2.png" title="데이터 등록" alt="">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="bg-white">
+                                <div class="table-responsive">
+                                    <div id="sampleGrid" style="width: 100%;"></div>
+                                    <!--<table class="table" id="table1">
+                                        <thead class="text-center">
+                                        <tr>
+                                            <th><input type="checkbox" name="RowCheck" value="selectAll" onclick="selectAll(this)"></th>
+                                            <th><span class="title">첨부파일</span></th>
+                                            <th style="cursor: pointer;"><span class="title">작물</span></th>
+                                            <th style="cursor: pointer;"><span class="title">시교명(ID)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="시교명"></th>
+                                            <th style="cursor: pointer;"><span class="title">목표 지역</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="목표 지역"></th>
+                                            <th style="cursor: pointer;"><span class="title">구분</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="구분"></th>
+                                            <th style="cursor: pointer;"><span class="title">교배번호</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="교배번호"></th>
+                                            <th style="cursor: pointer;"><span class="title">종자번호(ID)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="종자번호"></th>
+                                            <th style="cursor: pointer;"><span class="title">현 종자량(g)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="현 종자량"></th>
+                                            <th style="cursor: pointer;"><span class="title">기내 발아율(%)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="기내 발아율"></th>
+                                            <th style="cursor: pointer;"><span class="title">기내 순도율(%)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="기내 순도율"></th>
+                                            <th style="cursor: pointer;"><span class=" title">비고</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="비고"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="text-center sample-list" id="sample_list">
+                                        </tbody>
+                                    </table>-->
+                                    <div id="outcomeGrid"></div>
+                                    <!--<table class="table table2" id="table2">
+                                        <thead class="text-center">
+                                        <tr>
+                                            <th><input type="checkbox" name="RowCheck1" value="selectAll" onclick="selectAll(this)"></th>
+                                            <th style="cursor: pointer;"><span class="title">시교명</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="시교명"></th>
+                                            <th style="cursor: pointer;"><span class="title">종자번호(ID)</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="종자번호(ID)"></th>
+                                            <th style="cursor: pointer;"><span class="title">종자 보유량</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="종자 보유량"></th>
+                                            <th style="cursor: pointer;"><span class="title">입고량</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="입고량"></th>
+                                            <th style="cursor: pointer;"><span class="title">출고량</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="출고량"></th>
+                                            <th style="cursor: pointer;"><span class="title">재고량</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="재고량"></th>
+                                            <th style="cursor: pointer;"><span class="title">담당자</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="담당자"></th>
+                                            <th style="cursor: pointer;"><span class="title">인수자</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="인수자"></th>
+                                            <th style="cursor: pointer;"><span class="title">날짜</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="날짜"></th>
+                                            <th style="cursor: pointer;"><span class="title">시교종료일자</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="시교종료일자"></th>
+                                            <th style="cursor: pointer;"><span class="title">지역구분</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="지역구분"></th>
+                                            <th style="cursor: pointer;"><span class="title">대상 지역</span><img
+                                                src="../assets/vendor_assets/img/title_icon.png"
+                                                alt="지역구분"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="text-center sampleOutcome-list" id="sampleOutcome-list">
+                                        </tbody>
+                                    </table>-->
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button class="btn btn-icon btn-light btn-circle" id="arrRow">
+                                            <span data-feather="plus"></span>
+                                        </button>
+                                        <button class="btn btn-icon btn-light btn-circle" onclick="DeleteSample()">
+                                            <span data-feather="trash-2"></span>
+                                        </button>
+                                        <button class="btn btn-icon btn-light btn-circle" id="data_check_submit" style="width:44.03px; height:42px;">
+                                            <img src="../assets/vendor_assets/img/check_tab.png" alt="check" style="width: 17px;margin-left: 4px;">
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row" style="justify-content: center;">
+                                            <div id="pageNum" style="text-align:center; margin: 2% 0 0 0;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-lg btn-primary bottom_btn" onclick="openMap()">
+                                            <span>시교 진행 현황</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- modal code -->
+    <!-- 첨부파일 리스트  2021-11-04 -->
+    <div class="modal-basic modal fade show pop7" id="sample_file" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 첨부파일</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <button onclick="InsertFileBtn()">데이터 등록</button>
+                    </div>
+                    <div>
+                        <div class="atbd-upload">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>순번</th>
+                                    <th>제목</th>
+                                    <th>등록일</th>
+                                </tr>
+                                </thead>
+                                <tbody id="file_list">
+                                    <tr>
+                                        <td>table1</td>
+                                        <td>table2</td>
+                                        <td>table3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>table1</td>
+                                        <td>table2</td>
+                                        <td>table3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>table1</td>
+                                        <td>table2</td>
+                                        <td>table3</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 첨부파일 등록 -->
+    <div class="modal-basic modal fade show pop1" id="insert_file" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 첨부파일</h6>
+                </div>
+                <form action="insertSampleFile" id="insertFile" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group mb-0">
+                            <span>제목</span>
+                            <input type="text" class="form-control form-control-lg inputText" name="sample_file_title">
+                        </div>
+                        <div class="form-group mb-0">
+                            <textarea name="sample_file_contents" style="resize:none;"></textarea>
+                        </div>
+                        <div>
+                            <div class="atbd-upload">
+                                <div class="atbd-upload__button">
+                                    <!--
+                                    <a href="javascript:void(0)" class="btn btn-lg btn-outline-lighten btn-upload"
+                                       onclick="$('#upload').click()"> <span data-feather="upload"></span>Click to Upload</a>-->
+                                    <input type="file" id="upload_file" name="file">
+                                </div>
+                                <div class="atbd-upload__file">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="file-name"><i class="las la-paperclip"></i> <span
+                                                class="name-text">xxx.png<span></span></span></a>
+                                            <a href="#" class="btn-delete"><i class="la la-trash"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <input type="hidden" id="upload_id" name="sample_id">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="dataToggle('#insert_file', '#sample_file');">취소</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="dataToggle('#insert_file', '#sample_file'); InsertFile();">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 등록된 첨부파일 -->
+    <div class="modal-basic modal fade show pop1" id="modify_file" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 첨부파일</h6>
+                    <span class="sample_title"></span>
+                </div>
+                <form action="updateSampleFile" id="insertFile" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group mb-0">
+                            <span>제목</span>
+                            <input type="text" class="form-control form-control-lg inputText" id="sample_file_title" name="sample_file_title">
+                        </div>
+                        <div class="form-group mb-0">
+                            <textarea id="sample_file_contents" name="sample_file_contents" style="resize:none;"></textarea>
+                        </div>
+                        <div>
+                            <div class="atbd-upload">
+                                <div class="atbd-upload__button">
+                                    <a href="" class="btn btn-lg btn-outline-lighten btn-upload" id="file_download">
+                                        <span data-feather="upload"></span>
+                                        <span id="uploads_origin_file"></span>
+                                    </a>
+                                    <input type="hidden" id="uploads_file" name="uploads_file">
+                                    <input type="file" id="modify_file" name="file">
+                                </div>
+                                <div class="atbd-upload__file">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="file-name"><i class="las la-paperclip"></i> <span
+                                                class="name-text">xxx.png<span></span></span></a>
+                                            <a href="#" class="btn-delete"><i class="la la-trash"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <input type="hidden" id="sample_file_id" name="sample_file_id">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="dataToggle('#modify_file', '#sample_file');">취소</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="dataToggle('#modify_file', '#sample_file');">수정</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 시교자원 데이터 등록 모달창 -->
+    <div class="modal-basic modal fade show pop5" id="data_upload" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 데이터 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <input type="text" class="form-control form-control-lg" placeholder="Click to Upload">
+                        <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none">
+                        <button onclick="filesFunction()">불러오기</button>
+                        <input type="file" name="" id="file_data_upload" style="display: none;">
+                    </div>
+                    <div>
+                        <form action="excelSample" id="excelForm" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" id="excel_list" name="excel_list">
+                            <div class="atbd-upload">
+                                <table id="excel_data">
+                                    <thead>
+                                    <th><span class="title">작물</span></th>
+                                    <th><span class="title">시교명(ID)</span></th>
+                                    <th><span class="title">목표 지역</span></th>
+                                    <th><span class="title">구분</span></th>
+                                    <th><span class="title">교배번호</span></th>
+                                    <th><span class="title">종자번호(ID)</span></th>
+                                    <th><span class="title">현 종자량(g)</span></th>
+                                    <th><span class="title">기내 발아율(%)</span></th>
+                                    <th><span class="title">기내 순도율(%)</span></th>
+                                    <th><span class="title">비고</span></th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span>excel_data1</span></td>
+                                            <td><span>excel_data2</span></td>
+                                            <td><span>excel_data3</span></td>
+                                            <td><span>excel_data4</span></td>
+                                            <td><span>excel_data5</span></td>
+                                            <td><span>excel_data6</span></td>
+                                            <td><span>excel_data7</span></td>
+                                            <td><span>excel_data8</span></td>
+                                            <td><span>excel_data9</span></td>
+                                            <td><span>excel_data10</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>excel_data1</span></td>
+                                            <td><span>excel_data2</span></td>
+                                            <td><span>excel_data3</span></td>
+                                            <td><span>excel_data4</span></td>
+                                            <td><span>excel_data5</span></td>
+                                            <td><span>excel_data6</span></td>
+                                            <td><span>excel_data7</span></td>
+                                            <td><span>excel_data8</span></td>
+                                            <td><span>excel_data9</span></td>
+                                            <td><span>excel_data10</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>excel_data1</span></td>
+                                            <td><span>excel_data2</span></td>
+                                            <td><span>excel_data3</span></td>
+                                            <td><span>excel_data4</span></td>
+                                            <td><span>excel_data5</span></td>
+                                            <td><span>excel_data6</span></td>
+                                            <td><span>excel_data7</span></td>
+                                            <td><span>excel_data8</span></td>
+                                            <td><span>excel_data9</span></td>
+                                            <td><span>excel_data10</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload', '#data_upload2');">취소</button>
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload1', '#data_upload2'); InsertExcel();">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 수출자원 데이터 등록 모달창 -->
+    <div class="modal-basic modal fade show pop5" id="data_upload1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교수출관리 > 데이터 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <input type="text" class="form-control form-control-lg" placeholder="Click to Upload">
+                        <input type="file" id="excelFile1" onchange="excelExport(event)" style="display: none">
+                        <button onclick="filesFunction()">불러오기</button>
+                        <input type="file" name="" id="file_data_upload1" style="display: none;">
+                    </div>
+                    <div>
+                        <form action="excelOutcome" id="excelForm1" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" id="excel_list1" name="excel_list1">
+                            <div class="atbd-upload">
+                                <table id="excel_data1">
+                                    <thead>
+                                    <th><span class="title">시교명</span></th>
+                                    <th><span class="title">종자번호(ID)</span></th>
+                                    <th><span class="title">종자 보유량</span></th>
+                                    <th><span class="title">입고량</span></th>
+                                    <th><span class="title">출고량</span></th>
+                                    <th><span class="title">재고량</span></th>
+                                    <th><span class="title">담당자</span></th>
+                                    <th><span class="title">인수자</span></th>
+                                    <th><span class="title">날짜</span></th>
+                                    <th><span class="title">시교종료일자</span></th>
+                                    <th><span class="title">지역구분</span></th>
+                                    <th><span class="title">대상지역</span></th>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload1', '#data_upload12');">취소</button>
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload1', '#data_upload12'); InsertExcel();">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 시교자원 데이터 목록 창 -->
+    <div class="modal-basic modal fade show pop7" id="data_upload2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 데이터 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <button onclick="dataToggle('#data_upload2', '#data_upload');">데이터 등록</button>
+                        <button>등록서식 다운로드</button>
+                    </div>
+                    <div>
+                        <div class="atbd-upload">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>순번</th>
+                                    <th>등록일</th>
+                                    <th>데이터수</th>
+                                </tr>
+                                </thead>
+                                <tbody id="uploadDate">
+                                <tr>
+                                    <td></td>
+                                    <td>2021-08-15</td>
+                                    <td>185</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2021-08-15</td>
+                                    <td>185</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <div class="col-4">
+                        <div class="row" style="justify-content: center;">
+                            <div id="pageNum1" style="text-align:center; margin: 2% 0 0 0;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 수출관리 데이터 목록 창 -->
+    <div class="modal-basic modal fade show pop7" id="data_upload12" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교수출관리 > 데이터 등록</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <button onclick="dataToggle('#data_upload12', '#data_upload1');">데이터 등록</button>
+                        <button>등록서식 다운로드</button>
+                    </div>
+                    <div>
+                        <div class="atbd-upload">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>순번</th>
+                                    <th>등록일</th>
+                                    <th>데이터수</th>
+                                </tr>
+                                </thead>
+                                <tbody id="uploadDate1">
+                                <tr>
+                                    <td></td>
+                                    <td>2021-08-15</td>
+                                    <td>185</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2021-08-15</td>
+                                    <td>185</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <div class="col-4">
+                        <div class="row" style="justify-content: center;">
+                            <div id="pageNum1" style="text-align:center; margin: 2% 0 0 0;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 지도 -->
+    <div class="modal-basic modal fade show" id="recent" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title" id="test_click">시교 진행 현황</h6>
+                </div>
+
+                <input type="text" id="modal-search"/>
+                <input type="button" id="modal-search-btn" value="검색"/>
+
+                <div class="modal-body">
+                    <ul id="google_container">
+                        <li id="google_map1">
+                            <!-- <img src="../assets/vendor_assets/img/map1.png" alt="지도1"> -->
+                        </li>
+                        <li id="google_map2"><img src="../assets/vendor_assets/img/map2.png" alt="지도2"></li>
+                    </ul>
+                </div>
+
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                        취소
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 시교명 팝업 -->
+    <div class="modal-basic modal fade show pop7" id="pop_breed" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교자원관리 > 품종관리</h6>
+                    <span class="breed_title"></span>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <div class="btn-group atbd-button-group btn-group-normal my-2" role="group">
+                            <ul class="nav nav-tabs vertical-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="pop_nav-link active" id="tab-horizontal-0-tab-0" data-toggle="tab" href="#tab-horizontal-0-0" role="tab"
+                                       aria-controls="tab-horizontal-0-0" aria-selected="true">품종관리</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="atbd-upload popAdd tab-pane fade show active" id="tab-horizontal-0-0" role="tabpanel" aria-labelledby="tab-horizontal-0-tab-0"
+                             style=" overflow: auto; max-height: 500px;">
+                            <div class="table-responsive">
+                                <table class="table" id="display">
+                                    <thead class="text-center" id="header_list">
+                                    </thead>
+                                    <tbody class="text-center" id="breed_list">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 종자번호 팝업 -->
+    <div class="modal-basic modal fade show pop7" id="pop_seed" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">시교수출관리</h6>
+                    <span class="seed_title"></span>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="atbd-upload">
+                            <div class="table-responsive">
+                                <table class="table table2">
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th style="cursor: pointer;"><span class="title">시교명</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="시교명"></th>
+                                        <th style="cursor: pointer;"><span class="title">종자번호(ID)</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="종자번호(ID)"></th>
+                                        <th style="cursor: pointer;"><span class="title">종자 보유량</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="종자 보유량"></th>
+                                        <th style="cursor: pointer;"><span class="title">입고량</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="입고량"></th>
+                                        <th style="cursor: pointer;"><span class="title">출고량</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="출고량"></th>
+                                        <th style="cursor: pointer;"><span class="title">재고량</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="재고량"></th>
+                                        <th style="cursor: pointer;"><span class="title">담당자</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="담당자"></th>
+                                        <th style="cursor: pointer;"><span class="title">인수자</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="인수자"></th>
+                                        <th style="cursor: pointer;"><span class="title">날짜</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="날짜"></th>
+                                        <th style="cursor: pointer;"><span class="title">시교종료일자</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="시교종료일자"></th>
+                                        <th style="cursor: pointer;"><span class="title">지역구분</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="지역구분"></th>
+                                        <th style="cursor: pointer;"><span class="title">대상 지역</span><img
+                                            src="../assets/vendor_assets/img/title_icon.png"
+                                            alt="지역구분"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="text-center outcome_list">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal end -->
+
+</main>
+
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+<!-- 정린님 --> <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn0n_LEGxgJuCfTU8aKvuwrcmw0iZjfmY&callback=initMap&region=kr"></script>  -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAn2DY-pTTMgNQrmoszX9MQ4gbZoZt8c0&callback=initMap&region=kr"></script>
+
+<script type="text/javascript">
+    function openMap() {
+        $("#recent").modal();
+    }
+
+    function dataToggle(one, two) {
+        $(one).modal("hide");
+
+        setTimeout(function () {
+            $(two).modal("show");
+        }, 5);
+    }
+
+    /*let topBox = document.getElementsByClassName("top_box")[0];
+    let [nav, prev, next] = topBox.children;
+    let navLi = nav.children; // pop top list
+    let navN = 0; //선택된 변수
+    let navMove = 0;
+    let content = document.getElementsByClassName("tab-content")[0];
+    let contentLi = content.children;
+
+    navLi[navN].classList.add("active");
+
+    for (let i = 0; i < navLi.length; i++) {
+        navLi[i].idx = i;
+
+        navLi[i].addEventListener("click", function (e) {
+            navN = e.currentTarget.idx;
+
+            moveFunction(navN);
+        });
+
+    }*/
+
+    /*let list = navLi.length;
+    next.addEventListener("click", function (e) {
+        (navN < list - 1) ? navN += 1 : navN = list - 1;
+        moveFunction(navN);
+    });
+
+    prev.addEventListener("click", function (e) {
+        (navN > 0) ? navN -= 1 : navN = 0;
+        moveFunction(navN);
+    });*/
+
+    function moveFunction(f) {
+
+        for (let k = 0; k < navLi.length; k++) {
+            navLi[k].classList.remove("active");
+            contentLi[k].classList.remove("active");
+        }
+        let navW = navLi[f].offsetWidth;
+        navMove = navW * f;
+
+
+        let a = topBox.offsetWidth;
+        let b = nav.offsetWidth;
+        let c = b - a;
+        let d = c + 40 + "px";
+
+        if (navMove > c) {
+            nav.style.marginLeft = "-" + d;
+        } else {
+            nav.style.marginLeft = "-" + navMove + "px";
+        }
+
+        navLi[f].classList.add("active");
+        contentLi[f].classList.add("active");
+        contentLi[f].classList.add("show");
+    }
+
+    /* 엑셀 업로드 목록창 */
+    function filesFunction() {
+        if (tablechk === 0) {
+            let filesBtn = document.getElementById("excelFile");
+            var eventList = document.createEvent("MouseEvent");
+
+            eventList.initEvent("click");
+            filesBtn.dispatchEvent(eventList);
+        } else {
+            let filesBtn = document.getElementById("excelFile1");
+            var eventList1 = document.createEvent("MouseEvent");
+
+            eventList1.initEvent("click");
+            filesBtn.dispatchEvent(eventList1);
+        }
+    }
+
+    /* 엑셀 업로드 목록창 */
+
+    /* 엑셀 코드 */
+    function handleExcelDataAll(sheet) {
+        handleExcelDataHtml(sheet); // html 형태
+    }
+
+    /* Html 형태로 출력 */
+    function handleExcelDataHtml(sheet) {
+        $("#displayExcelHtml").html(XLSX.utils.sheet_to_html(sheet));
+    }
+
+    function excelExport(event) {
+        excelExportCommon(event, handleExcelDataAll);
+    }
+
+    function excelExportCommon(event, callback) {
+        if (tablechk == 0) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var fileData = reader.result;
+                var wb = XLSX.read(fileData, {type: 'binary'});
+                var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
+                var fourthSheetName = sheetNameList[3]; // 네번째 시트명
+                var fourthSheet = wb.Sheets[fourthSheetName]; // 네번째 시트
+                callback(fourthSheet);
+
+                delete fourthSheet.A1;
+                delete fourthSheet.A2;
+                var rowdata = XLSX.utils.sheet_to_json(fourthSheet);
+
+                var keys = Object.values(rowdata[0]);
+
+                var html = "";
+
+                for (var i = 1; i < rowdata.length; i++) {
+                    if (i === 0) {
+                        html += "<thead class='text-center'>";
+                        html += "<tr>";
+
+                        $.each(rowdata[0], function (idx, value) {
+                            html += "<th><span class='excel-title'>" + value + "</span></th>";
+                        })
+
+                        html += "</tr>";
+                        html += "</thead>";
+                    } else if (i !== 0) {
+                        html += "<tbody class='text-center'>";
+                        html += "<tr>";
+
+                        var tmp = Object.keys(rowdata[0]);
+                        var j = 0;
+
+                        $.each(rowdata[i], function (idx, value) {
+                            // 공백처리
+                            if (idx == tmp[j]) {
+
+                                html += "<td class='excel'><span>" + value + "</span></td>";
+                                j++;
+
+                            } else {
+                                var idx_str = idx.replace(/[^0-9]/g, '');
+                                var tmp_str = tmp[j].replace(/[^0-9]/g, '');
+
+                                var gap = idx_str - tmp_str;
+
+                                while (gap > 0) {
+                                    gap--;
+                                    html += "<td><span> </span></td>";
+                                }
+
+                                html += "<td class='excel'><span>" + value + "</span></td>";
+                                j++;
+
+                                j = idx_str;
+                                j++;
+                            }
+                        });
+
+                        html += "</tr>";
+                        html += "</tbody>";
+                    }
+                }
+
+                var excel = [];
+
+                for (var k = 1; k < rowdata.length; k++) {
+                    var chk = Object.values(rowdata[k]);
+
+                    for (var n = 0; n < keys.length; n++) {
+                        if (chk[n] == undefined) {
+                            excel[n] = {key: keys[n], value: " "};
+                        } else if (keys[n] === "도입연월일") {
+                            excel[n] = {key: keys[n], value: excelDateToJSDate(chk[n])};
+                        } else {
+                            excel[n] = {key: keys[n], value: "" + chk[n]};
+                        }
+                    }
+                    const obj = {...excel};
+
+                    // console.log(obj);
+                    rowdata[k] = obj;
+                }
+                // $("#excel_data").empty();
+                $("#excel_data").append(html);
+
+                var jsonObj = tableToJson(document.getElementById("excel_data"));
+
+                $("#excel_list").val(JSON.stringify(jsonObj));
+            };
+
+            reader.readAsBinaryString(input.files[0]);
+        } else {
+            var input1 = event.target;
+            var reader1 = new FileReader();
+
+            reader1.onload = function () {
+                var fileData = reader1.result;
+                var wb = XLSX.read(fileData, {type: 'binary'});
+                var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
+
+                var sheetName_ten = sheetNameList[10]; // 네번째 시트명
+                var sheetName_ele = sheetNameList[11];
+                var tenSheet = wb.Sheets[sheetName_ten]; // 네번째 시트
+                var eleSheet = wb.Sheets[sheetName_ele];
+                callback(tenSheet);
+                callback(eleSheet);
+
+                delete tenSheet.A1;
+                delete eleSheet.A1;
+                var rowdata = XLSX.utils.sheet_to_json(tenSheet);
+                rowdata.push(...XLSX.utils.sheet_to_json(eleSheet));
+
+                var keys = Object.values(rowdata[0]);
+
+                var html = "";
+
+                for (var i = 1; i < rowdata.length; i++) {
+                    if (i === 0) {
+                        html += "<thead class='text-center'>";
+                        html += "<tr>";
+
+                        $.each(rowdata[0], function (idx, value) {
+                            html += "<th><span class='excel-title'>" + value + "</span></th>";
+                        })
+
+                        html += "</tr>";
+                        html += "</thead>";
+                    } else if (i !== 0) {
+                        html += "<tbody class='text-center'>";
+                        html += "<tr>";
+
+                        var tmp = Object.keys(rowdata[0]);
+                        var j = 0;
+
+                        $.each(rowdata[i], function (idx, value) {
+                            // 공백처리
+                            if (idx == tmp[j]) {
+
+                                html += "<td class='excel'><span>" + value + "</span></td>";
+                                j++;
+
+                            } else {
+                                var idx_str = idx.replace(/[^0-9]/g, '');
+                                var tmp_str = tmp[j].replace(/[^0-9]/g, '');
+
+                                var gap = idx_str - tmp_str;
+
+                                while (gap > 0) {
+                                    gap--;
+                                    html += "<td><span> </span></td>";
+                                }
+
+                                html += "<td class='excel'><span>" + value + "</span></td>";
+                                j++;
+
+                                j = idx_str;
+                                j++;
+                            }
+                        });
+
+                        html += "</tr>";
+                        html += "</tbody>";
+                    }
+                }
+
+                var excel = [];
+
+                for (var k = 1; k < rowdata.length; k++) {
+                    var chk = Object.values(rowdata[k]);
+
+                    for (var n = 0; n < keys.length; n++) {
+                        if (chk[n] == undefined) {
+                            excel[n] = {key: keys[n], value: " "};
+                        } else if (keys[n] === "도입연월일") {
+                            excel[n] = {key: keys[n], value: excelDateToJSDate(chk[n])};
+                        } else {
+                            excel[n] = {key: keys[n], value: "" + chk[n]};
+                        }
+                    }
+                    const obj = {...excel};
+
+                    // console.log(obj);
+                    rowdata[k] = obj;
+                }
+                // $("#excel_data1").empty();
+                $("#excel_data1").append(html);
+
+                var jsonObj = tableToJson(document.getElementById("excel_data1"));
+
+                $("#excel_list1").val(JSON.stringify(jsonObj));
+            };
+
+            reader1.readAsBinaryString(input1.files[0]);
+        }
+    }
+
+    /* 엑셀 등록 창 */
+    function openExcel() {
+        if (tablechk === 0) {
+            $("#data_upload2").modal();
+        } else {
+            $("#data_upload12").modal();
+        }
+    }
+
+    /* 엑셀 등록 창 */
+
+    /* 엑셀 입력 */
+    function InsertExcel() {
+        if (tablechk === 0) {
+            var data = [];
+
+            $("#excel_data").each(function (index, item) {
+                const key = $(this).attr('id');
+                var value = $(this).val();
+
+                var arr = {key: key, value: value};
+
+                data.push(arr);
+            });
+
+            $("#excelForm").submit();
+        } else {
+            var data1 = [];
+
+            $("#excel_data1").each(function (index, item) {
+                const key = $(this).attr('id');
+                var value = $(this).val();
+
+                var arr = {key: key, value: value};
+
+                data1.push(arr);
+            });
+
+            $("#excelForm1").submit();
+        }
+    }
+
+    /* 엑셀 코드 */
+
+    // table to json
+    function tableToJson(table) {
+        var data = [];
+
+        var headers = [];
+        for (var i = 0; i < table.rows[0].cells.length; i++) {
+            headers[i] = table.rows[0].cells[i].innerText;
+        }
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var tableRow = table.rows[i];
+
+            var rowData = {};
+
+            for (var j = 0; j < tableRow.cells.length; j++) {
+                rowData[headers[j]] = tableRow.cells[j].innerText;
+            }
+
+            data.push(rowData);
+        }
+
+        return data;
+    }
+
+    // table to json
+
+    /* form data to json */
+    jQuery.fn.serializeObject = function () {
+        var obj = null;
+        try {
+            if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+                var arr = this.serializeArray();
+                if (arr) {
+                    obj = {};
+                    jQuery.each(arr, function () {
+                        obj[this.name] = this.value;
+                    });
+                }
+            }
+        } catch (e) {
+            alert(e.message);
+        } finally {
+        }
+
+        return obj;
+    };
+    /* form data to json */
+
+    const thisBtn = document.querySelector('#modal_open');
+
+    /* 시교자원 수출관리 테이블 구분 */
+    var tablechk = 0;
+
+    $("#sampleTable1").click(function () {
+        tablechk = 0;
+    })
+
+    $("#sampleTable2").click(function () {
+        tablechk = 1;
+    })
+    /* 시교자원 수출관리 테이블 구분 */
+
+    // DB에 저장된 데이터 읽어와서 테이블에 보여줌
+    $(document).ready(function () {
+        SearchSample(1);
+        // SearchSample1(1);
+        SearchOutcome(1);
+    });
+
+    $("#CropSelect").change(function () {
+        SearchSample(1);
+        // SearchSample1(1);
+        SearchOutcome(1);
+    })
+
+    // 갯수 선택
+    $("#limit").change(function () {
+        SearchSample(1);
+        // SearchSample1(1);
+        SearchOutcome(1);
+    })
+
+    function selectAll(selectAll) {
+        if (tablechk === 0) {
+            const checkboxes
+                = document.getElementsByName('RowCheck');
+
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = selectAll.checked;
+            })
+        } else {
+            const checkboxes1
+                = document.getElementsByName('RowCheck1');
+
+            checkboxes1.forEach((checkbox) => {
+                checkbox.checked = selectAll.checked;
+            })
+        }
+    }
+
+    var emptyEls;
+
+    var btnindex = 0;
+
+    /*function SearchSample(e) {
+        var sample_name = $("#CropSelect").val();
+        var limit = $("#limit").val();
+
+        var data = {"sample_name": sample_name, "page_num": e, "limit": limit};
+
+        $.ajax(
+            {
+                url: 'searchSample',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    var sample_list = $(".sample-list");
+                    sample_list.eq(btnindex);
+                    var add_list = "";
+
+                    var pageNum = $("#pageNum");
+                    var page_add = "";
+
+                    for (var i = 0; i < result.sample.length; i++) {
+                        add_list += '<tr>';
+                        add_list += '<td><input type="checkbox" name="RowCheck" value="' + result.sample[i].sample_id + '"></td>';
+                        add_list += '<td><button class="btn btn-light btn-default btn-squared btn-transparent-light" onclick="FileBtn(' + result.sample[i].sample_id + ');"><i class="bi bi-file-earmark-arrow-down"></i></button></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result.sample[i].sample_id + '" name="sample_name" value="' + result.sample[i].sample_name + '"></td>';
+                        add_list += '<td><a href="javascript:;" onclick="SearchBreed(this)">' + result.sample[i].sample_code + '</a></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result.sample[i].sample_id + '" name="sample_country" value="' + result.sample[i].sample_country + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result.sample[i].sample_id + '" name="sample_type" value="' + result.sample[i].sample_type + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result.sample[i].sample_id + '" name="sample_mate" value="' + result.sample[i].sample_mate + '"></td>';
+                        add_list += '<td><a href="javascript:;" onclick="SearchSeed(this)">' + result.sample[i].sample_seed + '</a></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result.sample[i].sample_id + '" name="sample_amount" value="' + result.sample[i].sample_amount + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result.sample[i].sample_id + '" name="sample_sprout" value="' + result.sample[i].sample_sprout + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result.sample[i].sample_id + '" name="sample_purity" value="' + result.sample[i].sample_purity + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result.sample[i].sample_id + '" name="sample_comment" value="' + result.sample[i].sample_comment + '"></td>';
+                        add_list += '</tr>';
+                    }
+
+                    if (result.page_num == 1) {
+                        page_add += '<button class="atbd-pagination__link pagination-control"><span class="la la-angle-left"></span></button>';
+                    } else {
+                        page_add += '<button class="atbd-pagination__link pagination-control" onclick="SearchSample(' + (result.page_num - 1) + ')"><span class="la la-angle-left"></span></button>';
+                    }
+
+                    for (var i = 0; i < result.end_page; i++) {
+                        if (result.page_num == (i + 1)) {
+                            page_add += '<button class="atbd-pagination__link active" onclick="SearchSample(' + (i + 1) + ')">' + (i + 1) + '</button>';
+                        } else {
+                            page_add += '<button class="atbd-pagination__link" onclick="SearchSample(' + (i + 1) + ')">' + (i + 1) + '</button>';
+                        }
+                    }
+
+                    if (result.page_num == result.end_page) {
+                        page_add += '<button class="atbd-pagination__link pagination-control"><span class="la la-angle-right"></span></button>';
+                    } else {
+                        page_add += '<button class="atbd-pagination__link pagination-control" onclick="SearchSample(' + (result.page_num + 1) + ')"><span class="la la-angle-right"></span></button>';
+                    }
+
+                    sample_list.empty();
+                    sample_list.append(add_list);
+
+                    pageNum.empty();
+                    pageNum.append(page_add);
+
+                    emptyEls = document.querySelectorAll('#sample_list tr .status');
+                    emptyEls = Array.prototype.slice.call(emptyEls);
+
+                }
+            });
+    }*/
+
+    /*function SearchOutcome(e) {
+        var sample_name1 = $("#CropSelect").val();
+        var limit1 = $("#limit").val();
+
+        var data1 = {"sample_name": sample_name1, "page_num": e, "limit": limit1};
+
+        $.ajax(
+            {
+                url: 'searchOutcome',
+                method: 'POST',
+                dataType: 'json',
+                data: data1,
+                success: function (result1) {
+                    var sampleOutcome_list = $(".sampleOutcome-list");
+                    sampleOutcome_list.eq(btnindex);
+                    var add_list = "";
+
+                    var pageNum = $("#pageNum");
+                    var page_add = "";
+
+                    for (var i = 0; i < result1.sampleOutcome.length; i++) {
+                        add_list += '<tr>';
+                        add_list += '<td><input type="checkbox" name="RowCheck1" value="' + result1.sampleOutcome[i].sample_outcome_id + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_code" value="' + result1.sampleOutcome[i].sample_outcome_code + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_num" value="' + result1.sampleOutcome[i].sample_outcome_num + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_amount" value="' + result1.sampleOutcome[i].sample_outcome_amount + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_in" value="' + result1.sampleOutcome[i].sample_outcome_in + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_out" value="' + result1.sampleOutcome[i].sample_outcome_out + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_remain" value="' + result1.sampleOutcome[i].sample_outcome_remain + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_person" value="' + result1.sampleOutcome[i].sample_outcome_person + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_reciever" value="' + result1.sampleOutcome[i].sample_outcome_reciever + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_date" value="' + result1.sampleOutcome[i].sample_outcome_date + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_end" value="' + result1.sampleOutcome[i].sample_outcome_end + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_country" value="' + result1.sampleOutcome[i].sample_outcome_country + '"></td>';
+                        add_list += '<td><input type="text" class="updateInput" data="' + result1.sampleOutcome[i].sample_outcome_id + '" name="sample_outcome_place" value="' + result1.sampleOutcome[i].sample_outcome_place + '"></td>';
+                        add_list += '</tr>';
+                    }
+
+                    if (result1.page_num == 1) {
+                        page_add += '<button class="atbd-pagination__link pagination-control"><span class="la la-angle-left"></span></button>';
+                    } else {
+                        page_add += '<button class="atbd-pagination__link pagination-control" onclick="SearchOutcome(' + (result1.page_num - 1) + ')"><span class="la la-angle-left"></span></button>';
+                    }
+
+                    for (var i = 0; i < result1.end_page; i++) {
+                        if (result1.page_num == (i + 1)) {
+                            page_add += '<button class="atbd-pagination__link active" onclick="SearchOutcome(' + (i + 1) + ')">' + (i + 1) + '</button>';
+                        } else {
+                            page_add += '<button class="atbd-pagination__link" onclick="SearchOutcome(' + (i + 1) + ')">' + (i + 1) + '</button>';
+                        }
+                    }
+
+                    if (result1.page_num == result1.end_page) {
+                        page_add += '<button class="atbd-pagination__link pagination-control"><span class="la la-angle-right"></span></button>';
+                    } else {
+                        page_add += '<button class="atbd-pagination__link pagination-control" onclick="SearchOutcome(' + (result1.page_num + 1) + ')"><span class="la la-angle-right"></span></button>';
+                    }
+
+                    sampleOutcome_list.empty();
+                    sampleOutcome_list.append(add_list);
+
+                    pageNum.empty();
+                    pageNum.append(page_add);
+
+                    emptyEls = document.querySelectorAll('#sampleOutcome-list tr .status');
+                    emptyEls = Array.prototype.slice.call(emptyEls);
+                }
+            });
+    }*/
+
+    // 종자번호 팝업
+    function SearchSeed(e) {
+        $("#pop_seed").modal();
+
+        var sample_name1 = $("#CropSelect").val();
+
+        var data1 = {"sample_name": sample_name1};
+
+        $.ajax(
+            {
+                url: 'searchSeed',
+                method: 'POST',
+                dataType: 'json',
+                data: data1,
+                success: function (result1) {
+                    $(".seed_title").text("종자번호(ID) - " + e.innerText);
+
+                    var outcome_list = $(".outcome_list");
+
+                    var seed_list = "";
+
+                    for (var i = 0; i < result1.sampleOutcome.length; i++) {
+                        if (result1.sampleOutcome[i].sample_outcome_num === e.innerText) {
+                            seed_list += '<tr>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_code + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_num + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_amount + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_in + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_out + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_remain + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_person + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_reciever + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_date + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_end + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_country + '</td>';
+                            seed_list += '<td>' + result1.sampleOutcome[i].sample_outcome_place + '</td>';
+                            seed_list += '</tr>';
+                        }
+                    }
+
+                    outcome_list.empty();
+                    outcome_list.append(seed_list);
+                }
+            });
+    }
+
+    // 시교명 팝업
+    function SearchBreed(e) {
+        $("#pop_breed").modal();
+
+        var breed_name = $("#CropSelect").val();
+
+        var data = {"breed_name": breed_name};
+
+        $.ajax(
+            {
+                url: 'searchBreedList',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    $(".breed_title").text("시교명 (ID) : " + e.innerText);
+
+                    var header_list = $("#header_list");
+                    var header_add = "";
+
+                    var breed_list = $("#breed_list");
+                    var add_list = "";
+
+                    var detail_list = $(".detail_list");
+                    var detail_list2 = $(".detail_list2");
+
+                    var display_list = $(".display_list");
+                    var display_add = "";
+
+                    var detail_add = "";
+                    var detail_add2 = "";
+
+                    // header
+                    header_add += '<tr>';
+                    header_add += '<th></th>';
+                    header_add += '<th><span class="title">첨부파일</span><i></i><img src="../assets/vendor_assets/img/title_icon.png" alt="첨부파일"></th>';
+                    header_add += '<th><span class="title">특성상태</span><i></i><img src="../assets/vendor_assets/img/title_icon.png" alt="특성상태"></th>';
+
+                    for (var i = 0; i < result.display.length; i++) {
+                        header_add += '<th style="cursor: pointer;"><span class="title">' + result.display[i].detail_title + '</span><i></i><img src="../assets/vendor_assets/img/title_icon.png" alt="' + result.display[i].detail_title + '"></th>'
+                    }
+
+                    header_add += '</tr>';
+
+                    // body
+                    for (var i = 0; i < result.breed.length; i++) {
+                        add_list += '<tr>';
+                        add_list += '<td><input type="checkbox" name="RowCheck" value="' + result.breed[i].breed_id + '"></td>';
+                        add_list += '<td><button class="btn btn-light btn-default btn-squared btn-transparent-light" onclick="FileBtn(' + result.breed[i].breed_id + ');"><i class="bi bi-file-earmark-arrow-down"></i></button></td>';
+
+                        if (result.breed[i].standard_count == 0) {
+                            add_list += '<td style="color : blue; cursor:pointer;">EMPTY</td>';
+                        } else {
+                            add_list += '<td style="color : green; cursor:pointer;">PROGRESS</td>';
+                        }
+
+                        for (var j = 0; j < result.breed[i].breed_standard.length; j++) {
+                            add_list += '<td>' + result.breed[i].breed_standard[j].standard + '</td>';
+                        }
+
+                        add_list += '</tr>';
+                    }
+
+                    // detail
+                    for (var i = 0; i < detail_list.length; i++) {
+                        detail_add = "";
+                        detail_add2 = "";
+                        display_add = "";
+
+                        for (var j = 0; j < result.detail.length; j++) {
+                            // 표시항목
+                            if (result.detail[j].detail_spec == detail_list.eq(i).attr("name")) {
+                                var check = true;
+
+                                for (var k = 0; k < result.display.length; k++) {
+                                    if (result.display[k].detail_id == result.detail[j].detail_id) {
+                                        check = false;
+
+                                        display_add += '<div data-id="' + result.detail[j].detail_id + '" class="list-group step">';
+                                        display_add += '<li class="list-group-item-sm list-group-item">';
+                                        display_add += '<div class="row">';
+                                        display_add += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+                                        display_add += '<span class="research-title">' + result.detail[j].detail_title + '</span>';
+                                        display_add += '<input type="hidden" name="detail_id" value="' + result.detail[j].detail_id + '">';
+                                        display_add += '</div>';
+                                        display_add += '</li>';
+                                        display_add += '</div>';
+                                    }
+                                }
+
+                                if (check) {
+                                    detail_add += '<li>';
+                                    detail_add += '<input type="checkbox" class="check_box" name="chk_research" value="' + result.detail[j].detail_id + '">';
+                                    detail_add += '<div class="title">' + result.detail[j].detail_title + '</div>';
+                                    detail_add += '</li>';
+                                }
+                            }
+
+                            // 특성상태
+                            if (result.detail[j].detail_spec == detail_list.eq(i).attr("name")) {
+                                detail_add2 += '<li>';
+                                detail_add2 += '<div class="title">' + result.detail[j].detail_title + '</div>';
+                                detail_add2 += '<div class="input_text">';
+                                detail_add2 += '<input type="text" class="empty_list" name="standard">';
+                                detail_add2 += '<input type="hidden" name="detail_id" value="' + result.detail[j].detail_id + '"></div>';
+                                detail_add2 += '</div>';
+                                detail_add2 += '</li>';
+                            }
+                        }
+
+                        detail_list.eq(i).empty();
+                        detail_list.eq(i).append(detail_add);
+
+                        detail_list2.eq(i).empty();
+                        detail_list2.eq(i).append(detail_add2);
+
+                        display_list.eq(i).empty();
+                        display_list.eq(i).append(display_add);
+                    }
+
+                    header_list.empty();
+                    header_list.append(header_add);
+
+                    breed_list.empty();
+                    breed_list.append(add_list);
+
+                    $("#offset").val(result.offset);
+                }
+
+            });
+    }
+
+    // 시교자원 수정
+    $(document).on("focusout", ".updateInput", function () {
+        if (tablechk === 0) {
+            var sample_id = $(this).attr("data");
+            var sample_name = $(this).attr("name");
+            var sample_value = $(this).val();
+
+            var data = {"sample_id": sample_id, "sample_name": sample_name, "sample_value": sample_value};
+
+            $.ajax(
+                {
+                    url: 'updateSample',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        if (result == 0) {
+                            return Alert("수정에 실패하였습니다.")
+                        }
+                    }
+                });
+        } else {
+            var sample_outcome_id = $(this).attr("data");
+            var sample_outcome_name = $(this).attr("name");
+            var sample_outcome_value = $(this).val();
+
+            var data = {"sample_outcome_id": sample_outcome_id, "sample_outcome_name": sample_outcome_name, "sample_outcome_value": sample_outcome_value};
+
+            $.ajax(
+                {
+                    url: 'updateOutcome',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        if (result == 0) {
+                            return Alert("수정에 실패하였습니다.")
+                        }
+                    }
+                });
+        }
+
+    });
+
+    // 시교자원 삭제
+    function DeleteSample() {
+        if (tablechk === 0) {
+            var total_id = [];
+
+            $("input:checkbox[name=RowCheck]:checked").each(function () {
+                var sample_id = $(this).val();
+
+                total_id.push(sample_id);
+            });
+
+            var data = {'sample_id': total_id};
+
+            console.log(data);
+
+            if (confirm("삭제하시겠습니까?") == true) {
+                $.ajax(
+                    {
+                        url: 'deleteSample',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: data,
+                        success: function (result) {
+                            if (result == 0) {
+                            } else {
+                                location.reload()
+                            }
+                        }
+                    });
+            } else {
+
+            }
+        } else {
+            var total_id1 = [];
+
+            $("input:checkbox[name=RowCheck1]:checked").each(function () {
+                var sample_id1 = $(this).val();
+
+                total_id1.push(sample_id1);
+            });
+
+            var data1 = {'sample_outcome_id': total_id1};
+
+            if (confirm("삭제하시겠습니까?") == true) {
+                $.ajax(
+                    {
+                        url: 'deleteOutcome',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: data1,
+                        success: function (result) {
+                            if (result == 0) {
+                            } else {
+                                location.reload()
+                            }
+                        }
+                    });
+            } else {
+
+            }
+        }
+    }
+
+    // 시교자원 삭제
+
+    // 정렬
+    $(document).ready(function () {
+        $('#table1 th').each(function (column) {
+            $(this).click(function () {
+                if ($(this).is('.asc')) {
+                    $(this).removeClass('asc');
+                    $(this).addClass('desc');
+                    sortdir = -1;
+                } else {
+                    $(this).addClass('asc');
+                    $(this).removeClass('desc');
+                    sortdir = 1;
+                }
+                $(this).siblings().removeClass('asc');
+                $(this).siblings().removeClass('desc');
+
+                var rec = $('#table1').find('tbody>tr').get();
+
+                rec.sort(function (a, b) {
+                    var val1 = +($(a).children('input').eq(column).text());
+                    var val2 = +($(b).children('input').eq(column).text());
+
+                    if (isNaN(val1) && isNaN(val2)) {
+                        val1 = $(a).children('input').eq(column).text();
+                        val2 = $(b).children('input').eq(column).text();
+
+                        return (val1 < val2) ? -sortdir : (val1 > val2) ? sortdir : 0;
+                    } else {
+                        return (val1 < val2) ? -sortdir : (val1 > val2) ? sortdir : 0;
+                    }
+                });
+
+                $.each(rec, function (index, row) {
+                    $('#table1 tbody').append(row);
+                });
+            });
+        });
+
+        $('#table2 th').each(function (column) {
+            $(this).click(function () {
+                if ($(this).is('.asc')) {
+                    $(this).removeClass('asc');
+                    $(this).addClass('desc');
+                    sortdir = -1;
+                } else {
+                    $(this).addClass('asc');
+                    $(this).removeClass('desc');
+                    sortdir = 1;
+                }
+                $(this).siblings().removeClass('asc');
+                $(this).siblings().removeClass('desc');
+
+                var rec = $('#table2').find('tbody>tr').get();
+
+                rec.sort(function (a, b) {
+                    var val1 = +($(a).children('td').eq(column).text());
+                    var val2 = +($(b).children('td').eq(column).text());
+
+                    if (isNaN(val1) && isNaN(val2)) {
+                        val1 = $(a).children('td').eq(column).text();
+                        val2 = $(b).children('td').eq(column).text();
+
+                        return (val1 < val2) ? -sortdir : (val1 > val2) ? sortdir : 0;
+                    } else {
+                        return (val1 < val2) ? -sortdir : (val1 > val2) ? sortdir : 0;
+                    }
+                });
+
+                $.each(rec, function (index, row) {
+                    $('#table2 tbody').append(row);
+                });
+            });
+        });
+    });
+    // 정렬
+
+    // 데이터 수정
+
+    // 구글 맵 관련
+    searchArea();
+
+    function smoothZoom(map, max, cnt) {
+        if (cnt >= max) {
+            return;
+        } else {
+            z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+                google.maps.event.removeListener(z);
+                smoothZoom(map, max, cnt + 1);
+            });
+            setTimeout(function () {
+                map.setZoom(cnt)
+            }, 40);
+        }
+    }
+
+
+    document.addEventListener('mousedown', function () {
+        if ((event.button == 2) || (event.which == 3)) {
+
+        }
+    });
+
+    /* row 추가 */
+    function addRow() {
+        if (tablechk === 0) {
+            var row_list = "";
+            row_list += '<tr id="row_data">';
+
+            row_list += '<form action="insertSample" id="rowForm" method="POST" enctype="multipart/form-data">';
+            row_list += '<input type="hidden" id="rowSample" name="rowSample">'
+            row_list += '<td><input type="checkbox" name="RowCheck"></td>';
+            row_list += '<td><button class="btn btn-light btn-default btn-squared btn-transparent-light" data-toggle="modal" data-target="#insert_file"><i class="bi bi-file-earmark-arrow-down"></i></button></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_name" value="' + $("#CropSelect option:selected").text() + '"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_code"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_country"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_type"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_mate"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_seed"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_amount"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_sprout"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_purity"></td>';
+            row_list += '<td><input type="text" class="rowInput" name="sample_comment"></td>';
+            row_list += '</form>';
+            row_list += '</tr>';
+
+            $("#sample_list").prepend(row_list);
+
+            var input_data = [];
+
+            var input_value = $("#CropSelect option:selected").text();
+
+            var input_name = {key: "sample_name", value: input_value};
+
+            input_data.push(input_name);
+
+            $.ajax(
+                {
+                    url: 'insertSample',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "input_data": JSON.stringify(input_data)
+                    },
+                    success: function (result) {
+                        if (result != null) {
+                            $(".rowInput").focusout(function () {
+                                var data = [];
+
+                                var data_in = {key: "sample_id", value: result.sample_id}
+
+                                data.push(data_in);
+
+                                $("input[class=rowInput]").each(function (index, item) {
+                                    const key = $(this).attr('name');
+                                    var value = $(this).val();
+
+                                    var arr = {key: key, value: value};
+
+                                    data.push(arr);
+                                });
+
+                                $.ajax(
+                                    {
+                                        url: 'updateInsertSample',
+                                        method: 'POST',
+                                        dataType: 'json',
+                                        data: {
+                                            "data": JSON.stringify(data)
+                                        },
+                                        success: function (result) {
+
+                                        }
+                                    });
+                            })
+                        }
+                    }
+                });
+        } else {
+            var row_list1 = "";
+            row_list1 += '<tr id="row_data">';
+
+            row_list1 += '<form action="insertSampleOutcome" id="rowForm" method="POST" enctype="multipart/form-data">';
+            row_list1 += '<input type="hidden" id="rowSample1" name="rowSample1">'
+            row_list1 += '<td><input type="checkbox" name="RowCheck1"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_code"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_num"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_amount"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_in"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_out"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_remain"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_person"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_reciever"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_date"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_end"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_country"></td>';
+            row_list1 += '<td><input type="text" class="rowInput" name="sample_outcome_place"></td>';
+            row_list1 += '</form>';
+            row_list1 += '</tr>';
+
+            $("#sampleOutcome-list").prepend(row_list1);
+
+            var input_data1 = [];
+
+            var input_value1 = $("#CropSelect option:selected").text();
+
+            var input_name1 = {key: "sample_name", value: input_value1};
+
+            input_data1.push(input_name1);
+
+            $.ajax(
+                {
+                    url: 'insertSampleOutcome',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "input_data": JSON.stringify(input_data1)
+                    },
+                    success: function (result) {
+                        if (result != null) {
+                            $(".rowInput").focusout(function () {
+                                var data = [];
+
+                                var data_in = {key: "sample_outcome_id", value: result.sample_outcome_id}
+
+                                data.push(data_in);
+
+                                $("input[class=rowInput]").each(function (index, item) {
+                                    const key = $(this).attr('name');
+                                    var value = $(this).val();
+
+                                    var arr = {key: key, value: value};
+
+                                    data.push(arr);
+                                });
+
+                                $.ajax(
+                                    {
+                                        url: 'updateInsertOutcome',
+                                        method: 'POST',
+                                        dataType: 'json',
+                                        data: {
+                                            "data": JSON.stringify(data)
+                                        },
+                                        success: function (result) {
+
+                                        }
+                                    });
+                            })
+                        }
+                    }
+                });
+        }
+    }
+
+    /* row 추가 */
+
+    /* 엑셀 다운로드 */
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+        var view = new Uint8Array(buf);  //create uint8array as viewer
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+        return buf;
+    }
+
+    function exportExcel() {
+        if (tablechk === 0) {
+            // step 1. workbook 생성
+            var wb = XLSX.utils.book_new();
+
+            // step 2. 시트 만들기
+            var newWorksheet = excelHandler.getWorksheet();
+
+            // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.
+            XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+
+            // step 4. 엑셀 파일 만들기
+            var wbout = XLSX.write(wb, {bookType: 'xlsx', type: 'binary'});
+
+            // step 5. 엑셀 파일 내보내기
+            saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), excelHandler.getExcelFileName());
+        } else {
+            // step 1. workbook 생성
+            var wb1 = XLSX.utils.book_new();
+
+            // step 2. 시트 만들기
+            var newWorksheet1 = excelHandler1.getWorksheet();
+
+            // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.
+            XLSX.utils.book_append_sheet(wb1, newWorksheet1, excelHandler1.getSheetName());
+
+            // step 4. 엑셀 파일 만들기
+            var wbOut1 = XLSX.write(wb1, {bookType: 'xlsx', type: 'binary'});
+
+            // step 5. 엑셀 파일 내보내기
+            saveAs(new Blob([s2ab(wbOut1)], {type: "application/octet-stream"}), excelHandler1.getExcelFileName());
+        }
+
+    }
+
+    $("#excelFileExport").click(function () {
+        exportExcel();
+    });
+
+    var excelHandler = {
+        getExcelFileName: function () {
+            return '시교자원관리.xlsx';
+        },
+        getSheetName: function () {
+            return '시교자원관리';
+        },
+        getExcelData: function () {
+            return document.getElementById('table1');
+        },
+        getWorksheet: function () {
+            return XLSX.utils.table_to_sheet(this.getExcelData());
+        }
+    }
+
+    var excelHandler1 = {
+        getExcelFileName: function () {
+            return '시교수출관리.xlsx';
+        },
+        getSheetName: function () {
+            return '시교수출관리';
+        },
+        getExcelData: function () {
+            return document.getElementById('table2');
+        },
+        getWorksheet: function () {
+            return XLSX.utils.table_to_sheet(this.getExcelData());
+        }
+    }
+    /* 엑셀 다운로드 */
+
+    /* 첨부파일 */
+    function FileBtn(e) {
+        $("#sample_file").modal("show");
+
+        var data = {"sample_id": e};
+
+        $.ajax(
+            {
+                url: 'selectSampleFile',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    $("#upload_id").val(e);
+                    // $(".sample_title").text("시교명 : " + result.sample.standard);
+
+                    var file_list = $("#file_list");
+                    var file_add = "";
+
+                    for (var i = 0; i < result.sample_file.length; i++) {
+                        var file = JSON.stringify(result.sample_file[i]);
+                        var file_json = file.replace(/\"/g, "&quot;");
+
+                        file_add += '<tr>';
+                        file_add += '<td>' + (i + 1) + '</td>';
+                        file_add += '<td><button onclick="ModifyBtn(' + result.sample_file[i].sample_file_id + ')" style="border:0px; color:blue; background: white;">' + result.sample_file[i].sample_file_title + '</button></td>';
+                        file_add += '<td>' + result.sample_file[i].create_date + '</td>';
+                        file_add += '<td><input type="hidden" id="file_' + result.sample_file[i].sample_file_id + '" value="' + file.replace(/\"/g, "&quot;") + '"></td>';
+                        file_add += '</tr>';
+                    }
+
+                    file_list.empty();
+                    file_list.append(file_add);
+                }
+            });
+    }
+
+    function InsertFileBtn() {
+        $("#sample_file").modal("hide");
+        $("#insert_file").modal("show");
+    }
+
+    function InsertFile() {
+        var file = $("#upload_file");
+
+        if (file.val() == "") {
+            return Alert("파일을 선택해주세요.");
+        } else {
+            $("#insertFile").submit();
+        }
+    }
+
+    function ModifyBtn(e) {
+        var files = JSON.parse($("#file_" + e).val());
+
+        $("#sample_file_id").val(files.sample_file_id);
+        $("#sample_file_title").val(files.sample_file_title);
+        $("#sample_file_contents").val(files.sample_file_contents);
+        $("#uploads_origin_file").text(files.uploads_origin_file);
+        $("#uploads_file").val(files.uploads_file);
+        $("#file_download").attr("href", "downloadFile?uploads_file=" + files.uploads_file);
+
+        $("#sample_file").modal("hide");
+        $("#modify_file").modal("show");
+    }
+
+    /* 첨부파일 */
+
+
+    /* 지도 검색 */
+    $("#modal-search").on("keyup", function (e) {
+        if (e.keyCode == 13) {
+            searchArea();
+        }
+    });
+
+    $("#modal-search-btn").click(function () {
+        searchArea();
+    });
+
+    function searchArea() {
+        /*
+        const mapOptions = {
+                  tilt: 35,
+                  heading: 20,
+                  zoom: 3,
+                  center: { lat: 0, lng: 0 },
+                  mapId: "15431d2b469f209e"
+        };
+        */
+
+        var koreaOptions = {
+            zoom: 6.4,
+            center: {
+                lat: 36.613766432253634,
+                lng: 127.84942123102657
+            },
+            panControl: false,
+            zoomControl: false,
+            scaleControl: false,
+            mapTypeControl: false,
+            streetViewControl: false,
+            fullscreenControl: false,
+            scrollwheel: true,
+            // mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var globalOptions = {
+            ...koreaOptions,
+            zoom: 2,
+        };
+
+        var geoCoder = new google.maps.Geocoder();
+        var korMap = new google.maps.Map(document.querySelector("#google_map1"), koreaOptions);
+        var globalMap = new google.maps.Map(document.querySelector("#google_map2"), globalOptions);
+
+        var koreaLocations = ["부산", "밀양", "서울", "제주"];
+        var globalLocations = ["싱가폴", "미국", "파키스탄", "일본"];
+
+        /*        var koreaLocations = [];
+                var globalLocations = [];
+
+                if(  === "국내") {
+                    koreaLocations.push();
+                } else {
+                    globalLocations.push();
+                }*/
+
+        // var searchInput = document.querySelector("#modal-search");
+        // 국내
+        for (var i = 0; i < koreaLocations.length; i++) {
+            geoCoder.geocode({"address": koreaLocations[i]}, function (result, status) {
+                if (status == "OK") {
+                    var centerCoordinate = result[0].geometry.location; // 검색한 지역의 중앙 좌표
+
+                    var marker = new google.maps.Marker({ // 마커 생성
+                        map: korMap,
+                        position: centerCoordinate
+                    });
+                }
+            });
+        }
+
+        // 해외
+        for (var i = 0; i < globalLocations.length; i++) {
+            geoCoder.geocode({"address": globalLocations[i]}, function (result, status) {
+                if (status == "OK") {
+                    var centerCoordinate = result[0].geometry.location; // 검색한 지역의 중앙 좌표
+
+                    var marker = new google.maps.Marker({ // 마커 생성
+                        map: globalMap,
+                        position: centerCoordinate
+                    });
+
+                    globalMap.setCenter(centerCoordinate);
+                }
+            });
+        }
+    }
+
+    // grid test
+    function SearchSample(e) {
+        var sample_name = $("#CropSelect").val();
+        var limit = $("#limit").val();
+
+        var data = {"sample_name": sample_name, "page_num": e, "limit": limit};
+
+        $.ajax(
+            {
+                url: 'searchSample',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    const grid = new tui.Grid({
+                        el: document.getElementById('sampleGrid'),
+                        scrollX: false,
+                        scrollY: false,
+                        rowHeaders: ['checkbox'],
+                        columns: [
+                            {
+                                header: '첨부파일',
+                                name: 'file'
+                            },
+                            {
+                                header: '작물',
+                                name: 'sample_name',
+                                editor: 'text',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '시교명(ID)',
+                                name: 'sample_code',
+                                sortable: true,
+                                sortingType: 'asc',
+                                filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                            },
+                            {
+                                header: '목표 지역',
+                                name: 'sample_country',
+                                editor: 'text',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '구분',
+                                name: 'sample_type',
+                                editor: 'text',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '교배번호',
+                                name: 'sample_mate',
+                                editor: 'text',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '종자번호(ID)',
+                                name: 'sample_seed',
+                                editor: 'text',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '현 종자량(g)',
+                                name: 'sample_amount',
+                                editor: 'text',
+                                filter: 'number',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '기내 발아율(%)',
+                                name: 'sample_sprout',
+                                editor: 'text',
+                                filter: 'number',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '기내 순도율(%)',
+                                name: 'sample_purity',
+                                editor: 'text',
+                                filter: 'number',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '비고',
+                                name: 'sample_comment',
+                                editor: 'text',
+                                sortable: true,
+                                sortingType: 'asc'
+                            }
+                        ]
+                    });
+
+                    grid.resetData(result.sample);
+
+                    grid.on('click', (ev) => {
+                        if(ev.targetType === 'cell' && ev.columnName === 'sample_seed') {
+                            var value_seed = ev.nativeEvent.srcElement;
+
+                            SearchSeed(value_seed);
+                        } else if(ev.targetType === 'cell' && ev.columnName === 'sample_code') {
+                            var value_breed = ev.nativeEvent.srcElement;
+
+                            SearchBreed(value_breed);
+                        }
+                    });
+                }
+            });
+
+    }
+    function SearchOutcome(e) {
+        var sample_name1 = $("#CropSelect").val();
+        var limit1 = $("#limit").val();
+
+        var data1 = {"sample_name": sample_name1, "page_num": e, "limit": limit1};
+
+        $.ajax(
+            {
+                url: 'searchOutcome',
+                method: 'POST',
+                dataType: 'json',
+                data: data1,
+                success: function (result1) {
+                    const grid = new tui.Grid({
+                        el: document.getElementById('outcomeGrid'),
+                        scrollX: false,
+                        scrollY: false,
+                        rowHeaders: ['checkbox'],
+                        columns: [
+                            {
+                                header: '시교명',
+                                name: 'sample_outcome_code',
+                                editor: 'text',
+                                sortable: true
+                            },
+                            {
+                                header: '종자번호(ID)',
+                                name: 'sample_outcome_num',
+                                sortable: true,
+                                filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                            },
+                            {
+                                header: '종자 보유량',
+                                name: 'sample_outcome_amount',
+                                editor: 'text',
+                                sortable: true
+                            },
+                            {
+                                header: '입고량',
+                                name: 'sample_outcome_in',
+                                editor: 'text',
+                                sortable: true
+                            },
+                            {
+                                header: '출고량',
+                                name: 'sample_outcome_out',
+                                editor: 'text',
+                                sortable: true
+                            },
+                            {
+                                header: '재고량',
+                                name: 'sample_outcome_remain',
+                                editor: 'text',
+                                sortable: true
+                            },
+                            {
+                                header: '담당자',
+                                name: 'sample_outcome_person',
+                                editor: 'text',
+                                filter: 'number',
+                                sortable: true
+                            },
+                            {
+                                header: '인수자',
+                                name: 'sample_outcome_reciever',
+                                editor: 'text',
+                                filter: 'number',
+                                sortable: true
+                            },
+                            {
+                                header: '일자',
+                                name: 'sample_outcome_date',
+                                editor: 'text',
+                                filter: 'number',
+                                sortable: true
+                            },
+                            {
+                                header: '시교 종료 일자',
+                                name: 'sample_outcome_end',
+                                editor: 'text',
+                                sortable: true
+                            },
+                            {
+                                header: '지역 구분',
+                                name: 'sample_outcome_country',
+                                editor: 'text',
+                                sortable: true
+                            },
+                            {
+                                header: '대상 지역',
+                                name: 'sample_outcome_place',
+                                editor: 'text',
+                                sortable: true
+                            }
+                        ]
+                    });
+
+                    grid.resetData(result1.sampleOutcome);
+
+                    grid.on('click', (ev) => {
+                        if(ev.targetType === 'cell' && ev.columnName === 'sample_outcome_num') {
+                            var value = ev.nativeEvent.srcElement;
+
+                            SearchSeed(value);
+                        }
+                    });
+
+
+                    const dummy = {
+                        sample_outcome_code: ''
+                    };
+
+                    let addBtnEl = document.querySelector('#arrRow');
+
+                    function onClickAddBtnEL(e){
+                        grid.prependRow(dummy);
+                    }
+
+                    addBtnEl.addEventListener('click', onClickAddBtnEL);
+                }
+            });
+    }
+</script>
+</body>
+
+</html>

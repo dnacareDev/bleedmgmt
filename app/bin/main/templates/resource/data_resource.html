@@ -1,0 +1,1381 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user = ${#authentication.principal}">
+<head>
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <script src="../assets/vendor_assets/js/script.js"></script>
+    <style>
+        .card {
+            box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%);
+        }
+
+        table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+
+        .main-content .card-extra .justify-content-end .atbd-button-list {
+            width: 100%;
+            margin: 0;
+        }
+
+        .main-content .nav-tabs .nav-link.active, .main-content .nav-tabs .nav-item.show .nav-link, .modal-basic .atbd-tab .nav-link {
+            color: #D9D9D9;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .main-content .atbd-tab .nav-link:after {
+            background-color: #f4f5f7;
+        }
+
+        .modal-basic .atbd-tab .nav-tabs .nav-item.active a {
+            border-radius: 21px;
+            background-color: #EDF6F1;
+            color: #217566;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .modal-basic .atbd-tab .nav-tabs .nav-item a::after,
+        .modal-basic .atbd-tab .nav-tabs:after {
+            display: none;
+        }
+
+        .content_title {
+            width: 100%;
+            background-color: #F7F7F8;
+            padding: 10px 0;
+        }
+
+        /*.content_title li { alpaDesign 수정
+            float: left;
+            width: 50%;
+            text-align: center;
+        }*/
+
+        .content_1 {
+            padding: 20px;
+            max-height: 500px;
+            overflow: auto;
+            line-height: 2;
+        }
+
+        .content_1 .title {
+            float: left;
+        }
+
+        .content_1 .input_text {
+            float: right;
+            width: 50%;
+        }
+
+        .content_1 .input_text input[type="text"] {
+            width: 100%;
+        }
+
+        .content_1 li {
+            display: inline-block;
+            width: 100%;
+            color: #222222;
+            font-size: 16px;
+        }
+
+        .pop1 .modal-dialog textarea {
+            width: 100%;
+            height: 300px;
+            border-radius: 5px;
+            border: 1px solid #D9D9D9;
+        }
+
+        .pop1 .modal-dialog .btn-upload {
+            width: 100%;
+        }
+
+        .pop1 .atbd-upload__file {
+            display: none;
+        }
+
+        .pop2 .modal-header {
+            display: -webkit-box;
+        }
+
+        .main-content .pop1 .form-group input[type=text] {
+            flex: 0 0 85%;
+        }
+
+        .main-content .pop1 .form-group span {
+            flex: 0 0 10%;
+        }
+
+        .main-content .pop1 a.btn-outline-lighten {
+            display: block;
+            text-align: left;
+            color: #B2B2B2;
+        }
+
+        #gen-messege {
+            display: table;
+        }
+
+        #gen-messege .modal-dialog {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        #gen-messege .modal-dialog .modal-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        #gen-messege .modal-dialog .modal-content .messege {
+            padding-bottom: 30px;
+        }
+
+        .main-content .modal-body {
+            width: 100%;
+        }
+
+        .main-content .modal-body .content_title ul li {
+            display: inline-block;
+            width: calc((100% - 50px) / 2);
+            margin-left: 40px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .main-content .modal-body ul li:first-child {
+            margin-left: 0;
+        }
+
+        .main-content .modal-body ul li img {
+            width: 100%;
+        }
+
+        #google_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            height: 500px;
+        }
+
+        #google_container li {
+            flex: 1;
+            height: 100%;
+        }
+
+        @media (min-width: 576px) {
+            .modal-dialog {
+                max-width: 1014px;
+                margin: 1.75rem auto;
+            }
+
+            #recent .modal-dialog {
+                max-width: 1300px;
+                margin: 1.75rem auto;
+            }
+
+            /* 2021 - 11 - 02 수정 */
+            .pop1 .modal-dialog {
+                max-width: 750px;
+            }
+
+            .pop4 .modal-dialog {
+                max-width: 750px;
+                margin: 0 auto;
+            }
+        }
+
+        .btn.btn-light.btn-transparent-light {
+            display: block;
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .main-content .contents .container-fluid {
+            max-width: 100%;
+            padding: 50px;
+        }
+
+        .bg-white > .row {
+            padding-top: 50px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        td .btn i.bi-file-earmark-arrow-down {
+            color: #000;
+        }
+
+        .table td {
+            padding: 0px 12px;
+            vertical-align: middle;
+            font-size: 14px;
+            border-bottom: 2px solid #d9d9d9;
+        }
+
+        .table th {
+            font-size: 16px;
+            border-top: 1px solid #d9d9d9;
+        }
+
+        .table thead th {
+            border-bottom: 2px solid #adadad;
+        }
+
+        #table2 td {
+            padding: 12px 12px;
+            font-size: 14px
+        }
+
+        #table2 th {
+            font-size: 16px
+        }
+
+        .main-content .table thead th span.title:before,
+        .main-content .table thead th span.title:after,
+        .main-content .table thead th i {
+            display: none;
+        }
+
+        .main-content .table thead th > img {
+            margin: 6px 0 0 12px;
+        }
+
+        #data_upload .form-group input[type=text]::placeholder {
+            text-align: left;
+            text-indent: 20px
+        }
+
+        .popup_wrap {
+            display: none
+        }
+
+        .popup_wrap.on {
+            display: block;
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .popup_wrap.on .popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 150px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            padding-top: 40px
+        }
+
+        .popup_wrap.on .close {
+            opacity: 1;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20px;
+            font-size: 14px;
+            background-color: #1e695c;
+            display: block;
+            height: 35px;
+            width: 90px;
+            color: #fff;
+            font-weight: 400;
+            border-radius: 6px
+        }
+
+
+        #data_upload .modal-body .form-group {
+            justify-content: flex-start;
+        }
+
+        #data_upload .form-group button, #data_upload2 .form-group button, #data_upload3 .form-group button, #sample_file .form-group button {
+            height: 45px;
+            padding: 0 20px;
+            background-color: #217566;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        #data_upload2 .form-group button, #data_upload3 .form-group button, #sample_file .form-group button {
+            margin-left: 0;
+        }
+
+        #data_upload .form-group input[type=text], #data_upload2 .form-group input[type=text], #data_upload3 .form-group input[type=text], #sample_file .form-group input[type=text] {
+            flex: 0 0 30%;
+            cursor: pointer;
+        }
+
+        #data_upload .form-group input[type=text]::-webkit-input-placeholder {
+            background: url("../assets/vendor_assets/img/upload.png") no-repeat 0 3px;
+            background-size: 15px;
+            color: #B2B2B2;
+        }
+
+        #data_upload .atbd-upload, #data_upload2 .atbd-upload, #data_upload3 .atbd-upload, #sample_file .atbd-upload {
+            width: 100%;
+            height: 300px;
+            overflow: auto;
+        }
+
+        #data_upload .atbd-upload table {
+            min-width: max-content;
+            border: none;
+        }
+
+        #data_upload2 .atbd-upload table, #data_upload3 .atbd-upload table, #sample_file .atbd-upload table {
+            width: 100%;
+        }
+
+        #data_upload table thead tr, #data_upload2 table thead tr, #data_upload3 table thead tr, #sample_file table thead tr {
+            border-top: none;
+            border-bottom: 2px solid #E8EEF2;
+        }
+
+        #data_upload table tbody tr, #data_upload2 table tbody tr, #data_upload3 table tbody tr, #sample_file table tbody tr {
+            border-bottom: 1px solid #E8EEF2;
+        }
+
+        #data_upload .atbd-upload table thead th, #data_upload2 .atbd-upload table thead th, #data_upload3 .atbd-upload table thead th, #sample_file .atbd-upload table thead th {
+            background-color: #F7F7F8;
+            color: #222222;
+            font-size: 16px;
+        }
+
+        #data_upload .atbd-upload table tbody td, #data_upload2 .atbd-upload table tbody td, #data_upload3 .atbd-upload table tbody td, #sample_file .atbd-upload table tbody td {
+            background-color: #fff;
+            color: #666666;
+            font-size: 16px;
+            font-weight: 200;
+        }
+
+        /* 2021 - 11 - 02 수정 */
+        #data_upload .form-group button {
+            line-height: 2rem;
+            font-size: 13px;
+            height: 34px;
+            margin-left: 5px;
+        }
+
+        #data_upload .form-group input[type=text] {
+            height: 34px;
+        }
+
+        #data_upload .form-group input[type=text]::placeholder {
+            text-align: left;
+            text-indent: 20px;
+            font-size: 14px;
+        }
+
+        .contents .container-fluid {
+            background-color: #FCFCFC;
+        }
+
+        #excel_data {
+            width: 100%;
+        }
+
+        .modal-content .modal-footer {
+            padding-bottom: 28px;
+            padding-right: 24px;
+        }
+
+        .modal-search {
+            width: 250px;
+        }
+
+        .btn-primary {
+            border: none;
+        }
+
+        .main-content .card-extra .justify-content-end .atbd-button-list .data_btn1,
+        .main-content .card-extra .justify-content-end .atbd-button-list .data_btn2,
+        .main-content .card-extra .justify-content-end .atbd-button-list .form-control {
+            height: 36px;
+        }
+
+        .main-content .card-extra .justify-content-end .atbd-button-list .data_btn1,
+        .main-content .card-extra .justify-content-end .atbd-button-list .data_btn2 {
+            width: 31px;
+            margin-top: 12px;
+            padding: 0px 19px;
+        }
+
+
+        .atbd-button-list button {
+            margin: 5px 3px;
+        }
+
+        #data_upload2 .form-group button, #data_upload3 .form-group button, #sample_file .form-group button {
+            height: 34px;
+            line-height: 2rem;
+            font-size: 13px;
+        }
+
+        #excel_data {
+            width: 100%;
+        }
+
+        .col-4 .bottom_btn > span {
+            height: 34px;
+            line-height: 2rem;
+            font-size: 13px;
+        }
+
+        /* 푸터 배경색 */
+        .footer-wrapper {
+            background-color: #FCFCFC;
+        }
+
+        .contextmenu li {
+            border-left: 3px solid transparent;
+            transition: ease .2s;
+        }
+
+        .contextmenu li a {
+            display: block;
+            padding: 10px;
+            color: #B0BEC5;
+            background: #FFFFFF;
+            text-decoration: none;
+            transition: ease .2s;
+        }
+
+        .contextmenu li:hover {
+            border-left: 3px solid #9C27B0;
+        }
+
+        .contextmenu li:hover a {
+            color: #FFFFFF;
+        }
+
+        /* input 크기 */
+        .rowInput {
+            width: 115px;
+        }
+
+        .box_center .buttonLi button {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #217566;
+            background-color: transparent;
+            border-radius: 50%;
+        }
+
+        .box_center .buttonLi button svg {
+            display: none;
+        }
+
+        .box_center .buttonLi button span {
+            position: relative;
+        }
+
+        .box_center .buttonLi button span::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 2px;
+            height: 10px;
+            background-color: #217566;
+            transform: rotate(45deg);
+        }
+
+        .box_center .buttonLi button span::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: -7px;
+            left: 0;
+            width: 2px;
+            height: 10px;
+            background-color: #217566;
+            transform: rotate(-45deg);
+        }
+
+        .box_center .buttonLi button span.left_btn::before {
+            left: -2px;
+            transform: rotate(-45deg);
+        }
+
+        .box_center .buttonLi button span.left_btn::after {
+            left: -2px;
+            transform: rotate(45deg);
+        }
+
+        #grid2 .tab-content .row .detail_list li {
+            width: 100%;
+            border-bottom: 1px solid #E2E3E5;
+        }
+
+        #grid2 .tab-content .row .list-group {
+            width: 100%;
+            margin: 0 !important;
+        }
+
+        #grid2 .tab-content .row .detail_list li:hover,
+        #grid2 .tab-content .row .display_list li:hover {
+            background-color: #EDF6F1;
+        }
+
+        #grid2 .tab-content .row .detail_list li.active,
+        #grid2 .tab-content .row .display_list li.active {
+            background-color: #217566;
+            color: #fff;
+            border: none;
+        }
+
+        #grid2 .tab-content .row .display_list li .row {
+            margin-left: 0;
+            margin-right: 0;
+            display: block;
+        }
+
+        #grid2 input[type="checkbox"] {
+            display: none !important;
+        }
+
+        #grid2 .tab-content .row li {
+            padding: 0 10px !important;
+        }
+
+        input[type="text"].updateInput {
+            border: none;
+            height: 45px;
+            text-align: center;
+        }
+
+        #saveRow {
+            float: right;
+            color: #fff;
+            background-color: #217566;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        #cancelRow {
+            float: right;
+            color: #217566;
+            background-color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        #pop_breed table thead tr, #pop_seed table thead tr {
+            border-top: 2px solid #aaa;
+            border-bottom: 2px solid #aaa;
+        }
+
+        #pop_breed table thead th, #pop_seed table thead th {
+            border-left: 1px solid #eee;
+            border-right: 1px solid #eee;
+            color: #222;
+            font-size: 13px;
+        }
+
+        #pop_breed table thead th:first-child, #pop_seed table thead th:first-child {
+            border-left: none;
+        }
+
+        #pop_breed table thead th:last-child, #pop_seed table thead th:last-child {
+            border-right: none;
+        }
+
+        #pop_breed table tbody tr, #pop_seed table tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        #pop_breed table tbody td, #pop_seed table tbody td {
+            background-color: #fff;
+            color: #333;
+            font-size: 13px;
+        }
+
+        #pop_seed table tbody td {
+            padding: 12px 12px;
+        }
+
+        .plus_btn_submit1 {
+            display: none;
+        }
+
+        .bg-white .row {
+            padding-top: 0;
+        }
+
+
+        #data_upload12 .form-group button, #data_upload2 .form-group button, #basic_file .form-group button, #data_upload11 .form-group button, #data_upload21 .form-group button {
+            height: 45px;
+            padding: 0 20px;
+            background-color: #217566;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        #data_upload2 .form-group button, #basic_file .form-group button, #data_upload21 .form-group button {
+            margin-left: 0;
+        }
+
+        #data_upload12 .form-group input[type=text], #data_upload2 .form-group input[type=text], #basic_file .form-group input[type=text], #data_upload21 .form-group input[type=text], #data_upload11 .form-group input[type=text] {
+            flex: 0 0 30%;
+            cursor: pointer;
+        }
+
+        #data_upload12 .form-group input[type=text]::-webkit-input-placeholder, #data_upload11 .form-group input[type=text]::-webkit-input-placeholder {
+            background: url("../assets/vendor_assets/img/upload.png") no-repeat 0 3px;
+            background-size: 15px;
+            color: #B2B2B2;
+        }
+
+        #data_upload12 .atbd-upload, #data_upload2 .atbd-upload, #data_upload21 .atbd-upload, #data_upload11 .atbd-upload {
+            width: 100%;
+            height: 300px;
+            overflow: auto;
+        }
+
+        #data_upload12 .atbd-upload table, #data_upload11 .atbd-upload table {
+            width: max-content;
+            border: none;
+            min-width: 100%;
+        }
+
+        #data_upload2 .atbd-upload table, #data_upload21 .atbd-upload table {
+            width: 100%;
+        }
+
+        #data_upload12 table thead tr, #data_upload2 table thead tr, #data_upload21 table thead tr, #data_upload11 table thead tr {
+            border-top: none;
+            border-bottom: 2px solid #E8EEF2;
+        }
+
+        #data_upload12 table tbody tr, #data_upload2 table tbody tr, #data_upload21 table tbody tr, #data_upload11 table tbody tr {
+            border-bottom: 1px solid #E8EEF2;
+        }
+
+        #data_upload12 .atbd-upload table thead th, #data_upload2 .atbd-upload table thead th, #data_upload21 .atbd-upload table thead th, #data_upload11 .atbd-upload table thead th {
+            background-color: #F7F7F8;
+            color: #222222;
+            font-size: 16px;
+        }
+
+        #data_upload12 .atbd-upload table tbody td, #data_upload2 .atbd-upload table tbody td, #data_upload21 .atbd-upload table tbody td, #data_upload11 .atbd-upload table tbody td {
+            background-color: #fff;
+            color: #666666;
+            font-size: 16px;
+            font-weight: 200;
+        }
+
+        /* 2021 - 11 - 01 수정 */
+        #basic_list td {
+            padding: 0px 12px;
+            vertical-align: middle;
+            font-size: 14px
+        }
+
+        #basic_list th {
+            font-size: 16px
+        }
+
+        .main-content .contents .container-fluid {
+            max-width: 100%;
+            padding: 50px;
+        }
+
+        .btn.btn-light.btn-transparent-light {
+            display: block;
+            width: 100%;
+            background-color: rgba(244, 245, 247, 0);
+        }
+
+        .main-content .contents .container-fluid {
+            max-width: 100%;
+            padding: 50px;
+        }
+
+        .bg-white > .row {
+            padding-top: 50px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        td .btn i.bi-file-earmark-arrow-down {
+            color: #000;
+        }
+
+        .table td {
+            padding: 0px 12px;
+            vertical-align: middle;
+            font-size: 14px;
+            border-bottom: 2px solid #d9d9d9;
+        }
+
+        /* 2021 - 11 - 02 수정 */
+        .table th {
+            font-size: 16px;
+            border-top: 1px solid #d9d9d9;
+        }
+
+        /* 2021 - 11 - 02 수정 */
+        .table thead th {
+            border-bottom: 2px solid #adadad;
+        }
+
+        /* 2021 - 11 - 02 수정 */
+
+        #table2 td {
+            padding: 12px 12px;
+            font-size: 14px
+        }
+
+        #table2 th {
+            font-size: 16px
+        }
+
+        .main-content .table thead th span.title:before,
+        .main-content .table thead th span.title:after,
+        .main-content .table thead th i {
+            display: none;
+        }
+
+        .main-content .table thead th > img {
+            margin: 6px 0 0 12px;
+        }
+
+        .popup_wrap {
+            display: none
+        }
+
+        .popup_wrap.on {
+            display: block;
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .popup_wrap.on .popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 150px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            padding-top: 40px
+        }
+
+        .popup_wrap.on .close {
+            opacity: 1;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20px;
+            font-size: 14px;
+            background-color: #1e695c;
+            display: block;
+            height: 35px;
+            width: 90px;
+            color: #fff;
+            font-weight: 400;
+            border-radius: 6px
+        }
+
+        /* 2021 - 11 - 02 수정 */
+        #data_upload2 .form-group button, #data_upload12 .form-group button {
+            line-height: 2rem;
+            font-size: 13px;
+            height: 34px;
+            margin-left: 5px;
+        }
+
+        #data_upload2 .form-group input[type=text], #data_upload11 .form-group input[type=text] {
+            height: 34px;
+        }
+
+        #data_upload2 .form-group input[type=text]::placeholder, #data_upload11 .form-group input[type=text]::placeholder {
+            text-align: left;
+            text-indent: 20px;
+            font-size: 14px;
+        }
+
+        #sampleGrid .tui-grid-body-area td[data-column-name='resource_template'], #sampleGrid .tui-grid-body-area td[data-column-name='resource_character_template_file'] {
+            color: mediumblue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .tui-grid-cell {
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body class="layout-light top-menu overlayScroll" oncontextmenu='return false'>
+<div class="mobile-search"></div>
+<div class="mobile-author-actions"></div>
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+<main class="main-content" style="background-color: #FCFCFC;">
+    <div class="contents" style="background-color: #FFFFFF;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mb-30">
+                    <div class="card" id="cardPlus">
+                        <div class="card-extra mt-20 mr-20">
+                            <div class="breadcrumb-main" style="float: left;">
+                                <h4 class="text-capitalize breadcrumb-title">관리 자원</h4>
+                                <input type="hidden" id="user_type" th:value="${user.user_type}">
+                            </div>
+                            <div class="action-btn d-flex justify-content-end">
+                                <div class="atbd-button-list d-flex flex-wrap">
+                                    <div class="btn-group atbd-button-group btn-group-normal my-2" role="group">
+
+                                    </div>
+
+                                    <form action="" name="searchForm" class="d-flex align-items-center add-contact__form my-sm-0 my-2">
+                                        <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: left;" id="limit">
+                                            <option value="10">10개</option>
+                                            <option value="20">20개</option>
+                                            <option value="30">30개</option>
+                                        </select>
+                                        <!--<select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" id="CropSelect">-->
+                                        <!--    <option value="고추">고추</option>-->
+                                        <!--    <option value="대파">대파</option>-->
+                                        <!--    <option value="멜론">멜론</option>-->
+                                        <!--    <option value="무">무</option>-->
+                                        <!--    <option value="배추">배추</option>-->
+                                        <!--    <option value="수박">수박</option>-->
+                                        <!--    <option value="양배추">양배추</option>-->
+                                        <!--    <option value="양파">양파</option>-->
+                                        <!--    <option value="참외">참외</option>-->
+                                        <!--    <option value="토마토">토마토</option>-->
+                                        <!--</select>-->
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='card-extra mt-10 mb-10 mr-20 plus_btn_submit1'>
+                            <button type='button' id="cancelRow" onclick="cancelRow()">취소</button>
+                            <button type='button' id="saveRow" onclick="saveRow()">저장</button>
+                        </div>
+                        <div class="card-body" style="padding-top: 0;">
+                            <div class="bg-white">
+                                <div id="sampleGrid"></div>
+                                <div class="row">
+                                    <div class="col-4">
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row" style="justify-content: center;">
+                                            <div id="pageNum" style="text-align:center; margin: 2% 0 0 0;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-lg btn-primary bottom_btn" onclick="location.href='regist-resource'">
+                                            <span>신규 등록</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- modal end -->
+
+</main>
+
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+
+<script type="text/javascript">
+    function dataToggle(one, two) {
+        $(one).modal("hide");
+
+        setTimeout(function () {
+            $(two).modal("show");
+        }, 5);
+    }
+
+    // DB에 저장된 데이터 읽어와서 테이블에 보여줌
+    $(document).ready(function () {
+        SearchSample(1);
+    });
+
+    // 갯수 선택
+    $("#limit").change(function () {
+        samplegrid.destroy();
+
+        SearchSample(1);
+    })
+
+    function selectAll(selectAll) {
+        if (tablechk === 0) {
+            const checkboxes
+                = document.getElementsByName('RowCheck');
+
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = selectAll.checked;
+            })
+        } else {
+            const checkboxes1
+                = document.getElementsByName('RowCheck1');
+
+            checkboxes1.forEach((checkbox) => {
+                checkbox.checked = selectAll.checked;
+            })
+        }
+    }
+
+    var emptyEls;
+
+    // 시교자원 삭제
+    function DeleteSample() {
+        var user_type = $("#user_type").val();
+
+        if (user_type != 0) {
+            return Alert("삭제 권한이 없습니다.");
+        } else {
+            if (tablechk === 0) {
+                var total_id = [];
+
+                var l = samplegrid.getCheckedRows().length;
+
+                for (let i = 0; i < l; i++) {
+                    total_id.push(samplegrid.getCheckedRows()[i].sample_id)
+                }
+
+                var data = {'sample_id': total_id};
+
+                if (confirm("삭제하시겠습니까?") == true) {
+                    $.ajax(
+                        {
+                            url: 'deleteSample',
+                            method: 'POST',
+                            dataType: 'json',
+                            data: data,
+                            success: function (result) {
+                                if (result == 0) {
+                                    return Alert("삭제에 실패하였습니다.");
+                                } else {
+                                    location.reload()
+                                }
+                            }
+                        });
+                } else {
+                    return false;
+                }
+            } else {
+                var total_id1 = [];
+
+                var l1 = outcomegrid.getCheckedRows().length;
+
+                for (let i = 0; i < l1; i++) {
+                    total_id1.push(outcomegrid.getCheckedRows()[i].sample_outcome_id)
+                }
+
+                var data1 = {'sample_outcome_id': total_id1};
+
+                if (confirm("삭제하시겠습니까?") == true) {
+                    $.ajax(
+                        {
+                            url: 'deleteOutcome',
+                            method: 'POST',
+                            dataType: 'json',
+                            data: data1,
+                            success: function (result) {
+                                if (result == 0) {
+                                    return Alert("삭제에 실패하였습니다.");
+                                } else {
+                                    location.reload()
+                                }
+                            }
+                        });
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+
+    // 시교자원 삭제
+
+    /* 엑셀 다운로드 */
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+        var view = new Uint8Array(buf);  //create uint8array as viewer
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+        return buf;
+    }
+
+    function exportExcel() {
+        if (tablechk === 0) {
+            // step 1. workbook 생성
+            var wb = XLSX.utils.book_new();
+
+            // step 2. 시트 만들기
+            var newWorksheet = excelHandler.getWorksheet();
+
+            // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.
+            XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+
+            // step 4. 엑셀 파일 만들기
+            var wbout = XLSX.write(wb, {bookType: 'xlsx', type: 'binary'});
+
+            // step 5. 엑셀 파일 내보내기
+            saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), excelHandler.getExcelFileName());
+        } else {
+            // step 1. workbook 생성
+            var wb1 = XLSX.utils.book_new();
+
+            // step 2. 시트 만들기
+            var newWorksheet1 = excelHandler1.getWorksheet();
+
+            // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.
+            XLSX.utils.book_append_sheet(wb1, newWorksheet1, excelHandler1.getSheetName());
+
+            // step 4. 엑셀 파일 만들기
+            var wbOut1 = XLSX.write(wb1, {bookType: 'xlsx', type: 'binary'});
+
+            // step 5. 엑셀 파일 내보내기
+            saveAs(new Blob([s2ab(wbOut1)], {type: "application/octet-stream"}), excelHandler1.getExcelFileName());
+        }
+
+    }
+
+    $("#excelFileExport").click(function () {
+        exportExcel();
+    });
+
+    var excelHandler = {
+        getExcelFileName: function () {
+            return '시교자원관리.xlsx';
+        },
+        getSheetName: function () {
+            return '시교자원관리';
+        },
+        getExcelData: function () {
+            return document.getElementById('table1');
+        },
+        getWorksheet: function () {
+            return XLSX.utils.table_to_sheet(this.getExcelData());
+        }
+    }
+
+    var excelHandler1 = {
+        getExcelFileName: function () {
+            return '시교수출관리.xlsx';
+        },
+        getSheetName: function () {
+            return '시교수출관리';
+        },
+        getExcelData: function () {
+            return document.getElementById('table2');
+        },
+        getWorksheet: function () {
+            return XLSX.utils.table_to_sheet(this.getExcelData());
+        }
+    }
+    /* 엑셀 다운로드 */
+
+    /* 첨부파일 */
+    function FileBtn(e) {
+        $("#sample_file").modal("show");
+
+        var data = {"sample_id": e};
+
+        $.ajax(
+            {
+                url: 'selectSampleFile',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    $("#upload_id").val(e);
+
+                    var file_list = $("#file_list");
+                    var file_add = "";
+
+                    for (var i = 0; i < result.sample_file.length; i++) {
+                        var file = JSON.stringify(result.sample_file[i]);
+                        var file_json = file.replace(/\"/g, "&quot;");
+
+                        file_add += '<tr>';
+                        file_add += '<td>' + (i + 1) + '</td>';
+                        file_add += '<td><button onclick="ModifyBtn(' + result.sample_file[i].sample_file_id + ')" style="border:0px; color:blue; background: white;">' + result.sample_file[i].sample_file_title + '</button></td>';
+                        file_add += '<td>' + result.sample_file[i].create_date + '</td>';
+                        file_add += '<td><input type="hidden" id="file_' + result.sample_file[i].sample_file_id + '" value="' + file.replace(/\"/g, "&quot;") + '"></td>';
+                        file_add += '</tr>';
+                    }
+
+                    file_list.empty();
+                    file_list.append(file_add);
+                }
+            });
+    }
+
+    function InsertFileBtn() {
+        $("#sample_file").modal("hide");
+        $("#insert_file").modal("show");
+    }
+
+    function InsertFile() {
+        var file = $("#upload_file");
+
+        if (file.val() == "") {
+            return Alert("파일을 선택해주세요.");
+        } else {
+            $("#insertFile").submit();
+        }
+    }
+
+    function ModifyBtn(e) {
+        var files = JSON.parse($("#file_" + e).val());
+
+        $("#sample_file_id").val(files.sample_file_id);
+        $("#sample_file_title").val(files.sample_file_title);
+        $("#sample_file_contents").val(files.sample_file_contents);
+        $("#uploads_origin_file").text(files.uploads_origin_file);
+        $("#uploads_file").val(files.uploads_file);
+        $("#file_download").attr("href", "downloadFile?uploads_file=" + files.uploads_file);
+
+        $("#sample_file").modal("hide");
+        $("#modify_file").modal("show");
+    }
+
+    /* 첨부파일 */
+
+    // grid
+    var samplegrid = null;
+
+    function SearchSample(e) {
+        var limit = $("#limit").val();
+
+        var data = {"page_num": e, "limit": limit};
+
+        $.ajax(
+            {
+                url: 'search-resource',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    samplegrid = new tui.Grid({
+                        el: document.getElementById('sampleGrid'),
+                        scrollX: false,
+                        scrollY: false,
+                        data: result.resourceList,
+                        rowHeaders: ['checkbox'],
+                        columns: [
+                            {
+                                header: '순번',
+                                name: 'resource_id',
+                                width: 100
+                            },
+                            {
+                                header: '작목',
+                                name: 'crop_name',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '자원관리종류',
+                                name: 'resource_name',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '관리자원양식',
+                                name: 'resource_template',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '자체특성양식',
+                                name: 'resource_character_template_file',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '사용여부',
+                                name: 'use_name',
+                                editor: 'text',
+                                sortable: true,
+                                sortingType: 'asc'
+                            },
+                            {
+                                header: '생성날짜',
+                                name: 'create_date',
+                                sortable: true,
+                                sortingType: 'asc'
+                            }
+                        ],
+                        pageOptions: {
+                            perPage: limit,
+                        }
+                    });
+
+                    samplegrid.on('afterChange', (ev) => {
+                        var after = ev.changes[0].value;
+                        var before = ev.changes[0].prevValue;
+                        var rowKey = ev.changes[0].rowKey;
+
+                        var data = {"limit": rowKey, "use_name": after}
+
+                        if (after != before) {
+                            $.ajax(
+                                {
+                                    url: 'change-resource-use',
+                                    method: 'POST',
+                                    dataType: 'json',
+                                    data: data,
+                                    success: function (result) {
+                                        if (result == 0) {
+                                            Alert('"사용", "비사용"만 입력 가능합니다.')
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    });
+
+                    const dataArr = [];
+
+                    for (let i = 0; i < result.resourceList.length; i++) {
+                        let rowArr = {
+                            'resource_id': result.resourceList[i].resource_id,
+                            'crop_name': result.resourceList[i].crop_name,
+                            'resource_name': result.resourceList[i].resource_name,
+                            'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">download</div>',
+                            'resource_character_template_file': '<div data-value="' + result.resourceList[i].resource_character_template_file + '">download</div>',
+                            'use_name': result.resourceList[i].use_name,
+                            'create_date': result.resourceList[i].create_date
+                        }
+
+                        dataArr.push(rowArr);
+                    }
+
+                    samplegrid.resetData(dataArr);
+
+                    samplegrid.on('click', (ev) => {
+                        if (ev.targetType === 'cell' && ev.columnName === 'resource_template') {
+                            let value = ev.nativeEvent.srcElement;
+                            let fileName = value.dataset.value;
+
+                            if (fileName == 'null') {
+                                return Alert("파일이 존재하지 않습니다.")
+                            } else {
+                            	
+                                let a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = 'upload/' + value.dataset.value;
+                                // the filename you want
+                                a.download = 'sample.xlsx'
+                                document.body.appendChild(a);
+                                a.click();
+                            	
+                            }
+                        } else if (ev.targetType === 'cell' && ev.columnName === 'resource_character_template_file') {
+                            let value = ev.nativeEvent.srcElement;
+                            let fileName = value.dataset.value;
+
+                            if (fileName == 'null') {
+                                return Alert("파일이 존재하지 않습니다.")
+                            } else {
+
+                                let a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = 'upload/' + value.dataset.value;
+                                // the filename you want
+                                a.download = 'sample.xlsx'
+                                document.body.appendChild(a);
+                                a.click();
+                            }
+                        }
+                    });
+
+                    var before = null;
+                    var after = null;
+
+                    samplegrid.on('afterChange', (ev) => {
+                        for (let i = 0; i < ev.changes.length; i++) {
+                            before = ev.changes[i].prevValue;
+                            after = ev.changes[i].value;
+
+                            if (after != before) {
+                                var sample_id = samplegrid.getRow(ev.changes[i].rowKey).sample_id;
+                                var sample_name = ev.changes[i].columnName;
+                                var sample_value = after;
+
+                                var data = {"sample_id": sample_id, "sample_name": sample_name, "sample_value": sample_value};
+
+                                if (sample_id != null) {
+                                    $.ajax(
+                                        {
+                                            url: 'updateSample',
+                                            method: 'POST',
+                                            dataType: 'json',
+                                            data: data,
+                                            success: function (result) {
+                                                if (result == 0) {
+                                                    return Alert("수정에 실패하였습니다.")
+                                                }
+                                            }
+                                        });
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+
+    }
+</script>
+
+</body>
+
+</html>

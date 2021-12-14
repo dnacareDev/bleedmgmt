@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en" dir="ltr"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+
+    <style>
+    	
+        #doughnut .slick-slider__single {
+            background: #FFFFFF;
+            height: 270px;
+            justify-content: space-between;
+        }
+		.main-content .contents .row .card{ /* 2021-10-19 AlpaDesign 추가 */
+			border-radius: 10px;
+			box-shadow: 0 3px 15px 3px rgb(0 0 0 / 7%); /* 2021-11-02 수정 */
+			/* box-shadow: 0 0 3px 3px rgb(0 0 0/ 3%); */
+		}
+		.slick-slider__single.d-flex{
+			display:block !important;
+			width: 100% !important;
+		}
+		.main-content .contents .row .card .slick-slider__single{ /* 2021-10-19 AlpaDesign 추가 */
+			align-items: start;
+		}
+		.main-content .contents .row .card .data_percent{
+		    font-size: 11px;
+		    display: table;
+		    height: 100%;
+		    text-align: right;
+		}
+		.main-content .contents .row .card .data_percent ul{
+			display:table-cell;
+			vertical-align:middle;
+			line-height: 1.89;
+		}
+		
+		.slick-slider.slick-dots-bottom .slick-dots {
+		 	margin: 0 0 5px;
+		}
+		
+		.main-content .contents .slick-slider .slick-dots li.slick-active button{
+			background-color:#3B7366;
+		}
+		.main-content .contents .slick-slider .slick-dots li{
+			width:30px;
+			padding:0;
+			margin-left:10px;
+		}
+		.main-content .contents .slick-slider .slick-dots li:first-child{
+			margin-left:0;
+		}
+		.main-content .contents .slick-slider .slick-dots li button{
+			width:100%;
+		}
+		.main-content .contents .color-primary{
+			color: #222222;
+		}
+		.main-content .col-lg-12 .card .card-body ul.map li{
+			float:left;
+			width:calc((100% - 50px)/2);
+			margin-left: 50px;
+			overflow: hidden;
+		}
+		.main-content .col-lg-12 .card .card-body ul.map li:first-child{
+			margin-left:0;
+		}
+		.main-content .card-body ul.map li img {
+			width: 100%;
+		}
+		.data_relative{
+    		position:relative;
+    	}
+		.data_number{
+    		position: absolute;
+   		    left: 25%;
+   		    top: 46%;
+    	}
+
+        #google_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            height: 200px;
+        }
+
+        #google_container li {
+            flex: 1;
+            height: 100%;
+        }
+    	.main-content .contents .container-fluid{
+    		max-width: 100%;
+    		padding-top: 30px;
+    	}
+    	
+    	
+    	/* 2021 - 11 - 01 수정 */
+    	.main-content .contents .row .card .card-body #doughnut.slick-slider {width: 100%; display: flex; justify-content: center;}
+    	.container-fluid .col-lg-12 .card .card-body {padding: 10px 1.56rem 10px;}
+    	
+    	.main-content .contents .container-fluid {padding-top: 15px}
+    	.col-lg-12 .card .card-body .slick-slider__single {width:50%}
+    	.col-lg-12 .card .card-body .slick-slider__single .color-primary {margin: 10px -70px 0 0 !important; white-space: nowrap;}
+    	.col-lg-12 .card .card-body .slick-slider__single .data_percent {margin-right: 58px;}
+    	.col-lg-12 .card .card-body .slick-slider__single:last-child .data_percent:last-child {margin-right: 0px;}
+    	.container-fluid:last-child .col-lg-12 .card .card-body {padding-bottom: 40px}
+    	/* 두변쨰 카드 */
+    	.container-fluid .col-lg-12 .card .color-primary {margin-top: 2rem !important; margin-bottom: 0 !important; margin-left: 2rem !important; font-size: 18px;}
+    	.col-lg-12 .card .card-body #google_container {height: 400px}
+    	
+    	/* 2021 - 11 - 02 수정 */
+    	.footer-wrapper, .container-fluid, .col-lg-12 {background-color: #FCFCFC;}
+    	
+    	
+		@media only screen and (min-width: 992px){ /* 2021-10-19 AlpaDesign 추가 */
+			.main-content .contents .row .col-lg-12{
+				padding:0 50px 0 50px;
+			}
+			.main-content .contents .row .col-lg-8{
+				padding:0 10px 0 50px;
+			}
+			.main-content .contents .row .col-lg-4{
+				padding:0 50px 0 10px;
+			}
+			
+		}
+		
+		.labels{
+			width: 100%;
+			text-align: right;
+		}
+		.labels.right_content_la{
+			text-align:left;
+			padding: 0 33px;
+		}
+		.labels li{
+			display: inline-block;
+			margin-left: 10px;
+			cursor:pointer;
+		}
+		.labels li:first-child{
+			margin-left:0;
+		}
+		.labels li span[class*="dought_"]{
+			width: 13px;
+			height: 13px;
+			border-radius: 50%;
+			display: inline-block;
+			margin: 0 5px;
+		}
+		.labels li span[class*="blue"]{
+			background-color: #6AB7FF;
+		}
+		.labels li span[class*="green"]{
+			background-color: #63D9B6;
+		}
+		.labels li span[class*="orange"]{
+			background-color: #FBAD55;
+		}
+    </style>
+</head>
+
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+
+<main class="main-content" style="background-color: #FCFCFC;">
+
+    <div class="contents" style="background-color: #FFFFFF;">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body" style="height: auto;">
+                            <div id="doughnut" class="slick-slider slick-dots-bottom" data-dots-slick='true'>
+                                <div class="slick-slider__single d-flex">
+                                    <p class="color-primary" style="color: black;  width: 100%; padding-bottom: 10px;">관리대장 상황</p>
+                                    <div class="data_relative">
+                                    	<div class="doughnut_cover">
+                                    		<div class="labels right_content_la">
+				                        		<ul>
+				                        			<li onclick="checked('check1')"><input type="checkbox" id="check1"><span class="dought_blue"></span>품종관리</li>
+				                        			<li onclick="checked('check2')"><input type="checkbox" id="check2"><span class="dought_green"></span>원종관리</li>
+				                        			<li onclick="checked('check3')"><input type="checkbox" id="check3"><span class="dought_orange"></span>도입자원관리</li>
+				                        		</ul>
+				                        	</div>
+                                        	<canvas id="bar1" style="height:210px; width:100%"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <p class="color-primary fa-lg mb-3 mt-5 ml-3">작목별 관리 현황</p>
+                        <div class="card-body">
+                        	<div class="labels">
+                        		<ul>
+                        			<li onclick="checked('check4')"><input type="checkbox" id="check4"><span class="dought_blue"></span>고추</li>
+                        			<li onclick="checked('check5')"><input type="checkbox" id="check5"><span class="dought_green"></span>무</li>
+                        			<li onclick="checked('check6')"><input type="checkbox" id="check6"><span class="dought_orange"></span>배추</li>
+                        		</ul>
+                        	</div>
+                            <div>
+                                <canvas id="bar2" style="height: 344px; width:100%"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <p class="color-primary fa-lg mb-3 mt-5 ml-3">등록 자료 현황</p>
+                        <div class="card-body">
+                            <div>
+                                <canvas id="bar3" style="height: 368px; width:100%"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!--  <div class="container-fluid" style="display:none;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <p class="color-primary fa-lg mb-3 mt-5 ml-3" id="test_click">시교 진행 현황</p>
+                        <div class="card-body">
+                        	<ul class="map" id="google_container">
+                        		<li id="google_map1"><img src="../assets/vendor_assets/img/map1.png" alt="지도1"></li>
+                        		<li id="google_map2"><img src="../assets/vendor_assets/img/map2.png" alt="지도2"></li>
+                        	</ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+</main>
+
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+
+<script type="text/javascript">	
+var ctx = document.getElementById("bar1");
+var bar1 = new Chart(ctx, {
+    type: 'bar',
+    
+    data: {
+        labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월" , "11월", "12월"],
+        datasets: [
+            {
+                label: '품종관리',
+                data: [210, 10, 10,20],
+                backgroundColor:
+                    'rgb(106, 183, 255)',
+                stack: 'Stack 0'
+            },
+            {
+                label: '원종관리',
+                data: [210, 10, 10,20],
+                backgroundColor:
+                    'rgb(99,217,182)',
+                stack: 'Stack 0',
+                stackSeries : true,
+            },
+            {
+                label: '도입자원관리',
+                data: [161, 221, 199],
+                backgroundColor:
+                    'rgb(255,173,85)',
+                stack: 'Stack 0',
+                stackSeries : true,
+            }
+            
+        ],
+        stackSeries : true,
+    },
+    options: {
+    	
+    	responsive: false,
+        scales: {
+            xAxes: [{
+                barPercentage: 0.5
+            }],
+            yAxes: [{
+                ticks: {
+                    stepSize: 300,
+                }
+            }],
+        },
+        legend: {
+        	display: false,
+            position: "top",
+            labels: {
+                usePointStyle: true,
+            },
+        },
+        
+    },
+    
+});
+
+var ctx = document.getElementById("bar2");
+var bar1 = new Chart(ctx, {
+    type: 'horizontalBar',
+    
+    data: {
+        labels: ["품종관리", "원종관리", "도입자원관리"],
+        datasets: [
+            {
+                label: '고추',
+                data: [210, 10, 10,20],
+                backgroundColor:
+                    'rgb(106, 183, 255)'
+            },
+            {
+                label: '무',
+                data: [210, 10, 10,20],
+                backgroundColor:
+                    'rgb(99,217,182)'
+            },
+            {
+                label: '배추',
+                data: [161, 221, 199],
+                backgroundColor:
+                    'rgb(255,173,85)'
+            }
+            
+        ],
+    },
+    options: {
+    	indexAxis: 'y',
+    	responsive: true,
+        
+        legend: {
+        	display: false,
+            position: "top",
+            labels: {
+                usePointStyle: true,
+            },
+        },
+        
+    },
+    
+});
+
+var ctx = document.getElementById("bar3");
+var bar1 = new Chart(ctx, {
+    type: 'pie',
+    
+    data: {
+        labels: ["사진", "문서"],
+        datasets: [
+        	{
+        		data: [
+        			"70",
+        			"30"
+        		],
+        		backgroundColor: [
+        			'rgb(251, 173, 85)',
+        			'rgb(106,183,255)'
+        		],
+        		borderWidth: 0, label: "Dataset 1"
+
+        	}
+        ],
+    },
+    options: {
+        legend: {
+            position: "bottom",
+            labels: {
+                usePointStyle: true,
+            },
+        },
+        
+    },
+    
+});
+
+function checked(e){ // 체크박스 텍스트 눌렀을때 체크박스 클릭
+	const element = document.getElementById(e);
+	
+	(element.checked == true) ? element.checked=false : element.checked= true ;
+	
+}
+</script>
+
+</body>
+
+</html>
