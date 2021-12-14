@@ -848,12 +848,12 @@
                                             <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                         </th:block>
                                     </select>
-                                    <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
+                                   <!--  <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
                                         <img src="../assets/vendor_assets/img/icon1.png" alt="">
                                     </button>
                                     <button class="btn btn-lg btn-primary data_btn2" title="표시항목 선택" onclick="DisplayBtn();">
                                         <img src="../assets/vendor_assets/img/icon3.png" alt="">
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                         </div>
@@ -2367,7 +2367,7 @@
                     const headerArr = [
                     	{
                             'header': 'No',
-                            'name': 'breed_id',
+                            'name': 'idx',
                             'width': 50,
                         },
                     	{
@@ -2405,6 +2405,8 @@
                     }
 					
                     breedgrid.setColumns(headerArr);
+                    
+                    
                     //breedgrid.setResetData(result.standardList);
                     
                     // const dataArr = [];
@@ -2540,6 +2542,8 @@
             });
         }
     }
+    
+    
     
     const copareFunction = function(){
     	

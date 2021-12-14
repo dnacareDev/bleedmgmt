@@ -633,6 +633,7 @@
             // html += "<tr>";
 
             $.each(firstSheet, function (idx, value) {
+            	console.log(value);
                 let headerArr = {}
                 if (!idx.startsWith('!')) {
                     // html += "<th><div class='this_check'><input type='checkbox' value='" + value.h + "'><span class='check_box_design'></span><span class='check_span'>" + value.h + "</span></div></th>";
