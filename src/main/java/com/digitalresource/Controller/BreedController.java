@@ -4,6 +4,8 @@ import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Detail;
 import com.digitalresource.Entity.StandardList;
 import com.digitalresource.Service.*;
+
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +72,7 @@ public class BreedController {
 
 		List<Detail> details = detailService.SelectDetailListByResource(resourceId);	
 		List<StandardList> standardList = breedService.selectStandard(resourceId);
+
 		result.put("standardList",standardList);
 		result.put("detail", details);
 
@@ -82,8 +85,19 @@ public class BreedController {
 		int result = 0;
 		
 		result = breedService.insertBreed(resource_id,data);
-		
-		
+
+		return result;
+	}
+
+	@ResponseBody
+	@RequestMapping("selectBreedDateGroup")
+	public Map<String, Object> SelectDateGroup(@RequestParam("datalist_type") String datalist_type) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+//		List<Map<String, String>> dataGroup = d_service.SelectDateGroup(datalist_type);
+//
+//		result.put("dataGroup", dataGroup);
+
 		return result;
 	}
 }

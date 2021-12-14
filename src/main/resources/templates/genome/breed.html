@@ -896,7 +896,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">품종관리 > 첨부파일</h6>
+                    <h6 class="modal-title"><span th:text="${type}"></span> > 첨부파일</h6>
                     <span class="breed_title"></span>
                 </div>
                 <div class="modal-body">
@@ -931,7 +931,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white " id="file_modal">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">품종관리 > 첨부파일</h6>
+                    <h6 class="modal-title"><span th:text="${type}"></span> > 첨부파일</h6>
                     <span class="breed_title"></span>
                 </div>
                 <form action="insertBreedFile" id="insertFile" method="POST" enctype="multipart/form-data">
@@ -980,7 +980,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white ">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">품종관리 > 첨부파일</h6>
+                    <h6 class="modal-title"><span th:text="${type}"></span> > 첨부파일</h6>
                     <span class="breed_title"></span>
                 </div>
                 <form action="updateBreedFile" id="modifyFile" method="POST" enctype="multipart/form-data">
@@ -1437,7 +1437,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white ">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">품종관리 > 데이터 등록</h6>
+                    <h6 class="modal-title"><span th:text="${type}"></span> > 데이터 등록</h6>
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-0">
@@ -1472,7 +1472,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white ">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">품종관리 > 데이터 등록</h6>
+                    <h6 class="modal-title"><span th:text="${type}"></span> > 데이터 등록</h6>
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-0" style="justify-content:end">
@@ -1525,7 +1525,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white ">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">품종관리 > 데이터 등록</h6>
+                    <h6 class="modal-title"><span th:text="${type}"></span> > 데이터 등록</h6>
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-0" style="justify-content:end">
@@ -1731,7 +1731,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">품종관리 > 시교자원관리</h6>
+                    <h6 class="modal-title"><span th:text="${type}"></span> > 시교자원관리</h6>
                     <span class="sample_title"></span>
                 </div>
                 <div class="modal-body">
@@ -1838,7 +1838,7 @@
         <div class="modal-dialog modal-md" role="document" style="margin: 5rem auto; box-shadow: 20px 1px 30px rgb(0 0 0 / 50%);">
             <div class="modal-content modal-bg-white">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">품종관리 > 시교자원관리 > 시교 출고 대장</h6>
+                    <h6 class="modal-title"><span th:text="${type}"></span> > 시교자원관리 > 시교 출고 대장</h6>
                 </div>
                 <div class="modal-body">
                     <div>
@@ -1880,6 +1880,14 @@
 
     function testbtn() {
         location.href='/excelTemplate/' + $("#CropSelect").val() + '_품종관리.xlsx'
+    }
+
+    function dataToggle(one, two) {
+        $(one).modal("hide");
+
+        setTimeout(function () {
+            $(two).modal("show");
+        }, 5);
     }
 
     let c = 0;
@@ -2405,62 +2413,28 @@
                     for (let i = 0; i < result.standardList.length; i++) {
                         let rowArr = {};
 
-                        rowArr = {'file': '<i class="bi bi-file-earmark-arrow-down"></i>', 'breed_id': result.standardList[i].detail_id};
+                        rowArr = {'file': '<i class="bi bi-file-earmark-arrow-down"></i>', 'breed_id': result.standardList[i].resource_id};
 
-                        if (result.breed[i].standard_count == 0) {
-                            rowArr['status'] = '<span style="color:red">EMPTY</span>';
+                        // if (result.standardList[i].standard_count == 0) {
+                        //     rowArr['status'] = '<span style="color:red">EMPTY</span>';
+                        // } else {
+                        //     rowArr['status'] = '<span style="color:blue">PROGRESS</span>';
+                        // }
 
-                        } else {
-                            rowArr['status'] = '<span style="color:blue">PROGRESS</span>';
-                        }
+                        var rowData = result.standardList[i].standard_data;
 
-                        for (var j = 0; j < result.breed[i].breed_standard.length; j++) {
-                            var rowData = result.breed[i].breed_standard[j].standard;
-                            rowArr[headerName[j]] = rowData;
+                        if(result.standardList[i].detail_id == headerName[i]) {
+                            rowArr[headerName[i]] = rowData;
                         }
 
                         dataArr.push(rowArr);
                     }
-
 
                     breedgrid.resetData(dataArr);
 
                     breedgrid.on('check', (ev) => {
                         breedgrid.getRow(ev.rowKey).breed_id;
                     })
-
-                    breedgrid.on('click', (ev) => {
-                        if (ev.targetType === 'cell' && (ev.columnName === '2' || ev.columnName === '277' || ev.columnName === '388' || ev.columnName === '626' || ev.columnName === '749' || ev.columnName === '912' || ev.columnName === '1076' || ev.columnName === '1254' || ev.columnName === '1412' || ev.columnName === '1599')) {
-                            var value_sample = ev.nativeEvent.srcElement;
-                            var value_mom = breedgrid.getRow(ev.rowKey)[4];
-                            var value_dad = breedgrid.getRow(ev.rowKey)[5];
-
-                            SearchSample(value_sample);
-                            SearchBasic(value_mom, value_dad);
-                        } else if (ev.targetType === 'cell' && ev.columnName === '4') {
-                            var value_sample1 = breedgrid.getRow(ev.rowKey)[2];
-                            var value_mom1 = ev.nativeEvent.srcElement;
-                            var value_dad1 = breedgrid.getRow(ev.rowKey)[5];
-
-                            SearchSample1(value_sample1);
-                            SearchBasic1(value_mom1, value_dad1);
-                        } else if (ev.targetType === 'cell' && ev.columnName === '5') {
-                            var value_sample2 = breedgrid.getRow(ev.rowKey)[2];
-                            var value_mom2 = breedgrid.getRow(ev.rowKey)[4];
-                            var value_dad2 = ev.nativeEvent.srcElement;
-
-                            SearchSample2(value_sample2);
-                            SearchBasic2(value_mom2, value_dad2);
-                        } else if (ev.targetType === 'cell' && ev.columnName === 'file') {
-                            var id = breedgrid.getRow(ev.rowKey).breed_id;
-
-                            FileBtn(id);
-                        } else if (ev.targetType === 'cell' && ev.columnName === 'status') {
-                            var e_id = breedgrid.getRow(ev.rowKey).breed_id;
-
-                            EmptyBtn(e_id);
-                        }
-                    });
 
                     var before = null;
                     var after = null;
@@ -2599,26 +2573,28 @@
             var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
             callback(firstSheet);
 
-            delete firstSheet.A1;
-            delete firstSheet.A2;
+            console.log('firstSheet', firstSheet);
+
             var rowdata = XLSX.utils.sheet_to_json(firstSheet);
 
-            var keys = Object.values(rowdata[1]);
+            console.log('rowdata', rowdata);
+
+            var keys = Object.values(rowdata[0]);
 
             var html = "";
 
-            for (var i = 1; i < rowdata.length; i++) {
-                if (i === 1) {
+            for (var i = 0; i < rowdata.length; i++) {
+                if (i === 0) {
                     html += "<thead class='text-center'>";
                     html += "<tr>";
 
-                    $.each(rowdata[1], function (idx, value) {
+                    $.each(rowdata[0], function (idx, value) {
                         html += "<th><span class='excel-title'>" + value + "</span></th>";
                     })
 
                     html += "</tr>";
                     html += "</thead>";
-                } else if (i !== 1) {
+                } else if (i !== 0) {
                     html += "<tbody class='text-center'>";
                     html += "<tr class='excel_tr'>";
 
@@ -2697,6 +2673,7 @@
 
                 rowdata[k] = obj;
             }
+
             $("#excel_data").empty();
             $("#excel_data").append(html);
         };
