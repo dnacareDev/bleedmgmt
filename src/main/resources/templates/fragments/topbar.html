@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user = ${#authentication.principal}"> -->
+ <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user = ${#authentication.principal}">
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <style>
@@ -46,6 +46,7 @@
             </form>
             <div class="top-menu">
                 <div class="strikingDash-top-menu position-relative">
+                    <input type="hidden" id="user_type" th:value="${user.user_type}">
                     <ul>
                         <li>
                             <a href="/home" id="home">
@@ -60,7 +61,7 @@
                             </a>
                             <ul class="subMenu" id="subMenuList">
                                 <li>
-                                    <a href="/breed">OO 관리</a>
+                                    <a href="/breed"></a>
                                 </li>
                             </ul>
                         </li>
@@ -71,16 +72,16 @@
                             </a>
                             <ul class="subMenu">
                                 <li>
-                                    <a href="">Correlation</a>
+                                    <a onclick="research(0);">Correlation</a>
                                 </li>
                                 <li>
-                                    <a href="">Trait Viewer</a>
+                                    <a onclick="research(1);">Trait Viewer</a>
                                 </li>
                                 <li>
-                                    <a href="">MABC - data</a>
+                                    <a onclick="research(2);">MABC - data</a>
                                 </li>
                                 <li>
-                                    <a href="">MABC - analysis</a>
+                                    <a onclick="research(3);">MABC - analysis</a>
                                 </li>
                             </ul>
                         </li>
@@ -97,7 +98,7 @@
                                     <a href="/character">종자원 특성 조사 관리</a>
                                 </li>
                                 <li>
-                                    <a href="/income">사용이력</a>
+                                    <a onclick="notReady();">사용이력</a>
                                 </li>
                             </ul>
                         </li>
@@ -109,7 +110,7 @@
             <ul class="navbar-right__menu">
                 <li class="nav-search d-none">
                     <a href="" class="search-toggle">
-                        <i class="la la-search"></i>
+                        <!-- <i class="la la-search"></i> -->
                         <i class="la la-times"></i>
                     </a>
                     <form action="/" class="search-form-topMenu">
@@ -119,33 +120,23 @@
                 </li>
                 <li class="nav-author">
                     <div class="dropdown-custom">
-                        <a href="javascript:" class="nav-item-toggle"><img src="/img/author-nav.jpg" alt="" class="rounded-circle"></a>
+                        <a href="javascript:" class="nav-item-toggle">
+                            <img src="/img/author-nav.jpg" alt="" class="rounded-circle">
+                        </a>
                         <div class="dropdown-wrapper">
                             <div class="nav-author__info">
                                 <div class="author-img">
                                     <img src="/img/author-nav.jpg" alt="" class="rounded-circle">
                                 </div>
                                 <div>
-                                    <!-- <h6 th:text="${user.user_name}"></h6> -->
-                                    <span>UI Designer</span>
+                                    <h6 th:text="${user.user_name}"></h6>
+                                    <!-- <span>UI Designer</span> -->
                                 </div>
                             </div>
                             <div class="nav-author__options">
                                 <ul>
                                     <li>
-                                        <a href=""><span data-feather="user"></span> Profile</a>
-                                    </li>
-                                    <li>
-                                        <a href=""><span data-feather="settings"></span> Settings</a>
-                                    </li>
-                                    <li>
-                                        <a href=""><span data-feather="key"></span> Billing</a>
-                                    </li>
-                                    <li>
-                                        <a href=""><span data-feather="users"></span> Activity</a>
-                                    </li>
-                                    <li>
-                                        <a href=""><span data-feather="bell"></span> Help</a>
+                                        <a onclick="return modalShow('#settings');"><span data-feather="settings"></span> Settings</a>
                                     </li>
                                 </ul>
                                 <a href="/logout" class="nav-author__signout"><span data-feather="log-out"></span> Sign Out</a>
@@ -157,15 +148,45 @@
             <div class="navbar-right__mobileAction d-md-none">
                 <a href="" class="btn-search">
                     <span data-feather="search"></span>
-                    <span data-feather="x"></span></a>
-                <a href="" class="btn-author-action">
-                    <span data-feather="more-vertical"></span></a>
+                    <span data-feather="x"></span>
+                </a>
+                <a href="#none" class="btn-author-action">
+                    <span data-feather="more-vertical"></span>
+                </a>
             </div>
         </div>
     </nav>
 </header>
+<div class="modal-basic modal fade show pop1" id="settings" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content modal-bg-white" style="width: 750px;">
+            <div class="modal-header" style="border: none">
+                <h6 class="modal-title">비밀번호 변경</h6>
+            </div>
+            <div class="modal-body clearfix" id="checking_password">
+                <span class="passwordM" style=" color: red; font-size: 10px; text-align: center;">비밀번호가 다릅니다 다시 확인해주세요</span>
+                <div class="form-group mb-0 clearfix" style="padding: 10px 0;">
+                    <span style="vertical-align: middle;">변경할 비밀번호</span>
+                    <input id="passwordCh1" type="password" name="" style="width: 70%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
+                </div>
+                <div class="form-group mb-0 clearfix" style="clear: both;">
+                    <span style="vertical-align: middle;">비밀번호 확인</span>
+                    <input id="passwordCh2" type="password" name="" style="width: 70%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
+                </div>
+            </div>
+            <div class="modal-footer clearfix" style="border: none; clear:both;">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                <input type="submit" class="btn btn-primary btn-sm" value="저장" onclick="UpdateBtn();">
+            </div>
+        </div>
+    </div>
+</div>
+</header>
 
 <script type="text/javascript">
+    function modalShow(e) {
+        $(e).modal("show");
+    }
 
     window.onload = function () {
         $.ajax({
@@ -186,6 +207,32 @@
                 data_list.append(data_add);
             }
         })
+    }
+
+    function research(e) {
+        var user_type = $("#user_type").val();
+
+        if (user_type == 2) {
+            return Alert("접근 권한이 없습니다.");
+        } else {
+            if (e == 0) {
+                return Alert1("준비 중입니다.");
+                location.href = "";
+            } else if (e == 1) {
+                return Alert1("준비 중입니다.");
+                location.href = "";
+            } else if (e == 2) {
+                return Alert1("준비 중입니다.");
+                location.href = "";
+            } else if (e == 3) {
+                return Alert1("준비 중입니다.");
+                location.href = "";
+            }
+        }
+    }
+
+    function notReady() {
+        return Alert1("준비 중입니다.");
     }
 
 </script>

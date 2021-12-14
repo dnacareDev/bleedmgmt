@@ -2,6 +2,7 @@ package com.digitalresource.Mapper;
 
 import com.digitalresource.Entity.Crop;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface CropMapper {
     public int deleteCropByCategory(int category_id);
 
     public List<Crop> selectCropByCategory(int category_id);
+
+    public String SelectCropById(@Param("crop_id") int crop_id);
+
+    public List<Crop> SearchCropList(@Param("type") String type);
 }

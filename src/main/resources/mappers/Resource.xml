@@ -77,4 +77,8 @@
 	<select id="SearchResourceId" resultType="int">
 		SELECT resource_id FROM resource WHERE crop_id = #{crop_id} AND resource_name_id = #{resource_name_id}
 	</select>
+
+	<select id="SelectCropId" resultType="int">
+		SELECT crop_id FROM resource WHERE resource_name_id = #{resource_name_id}
+	</select>
 </mapper>

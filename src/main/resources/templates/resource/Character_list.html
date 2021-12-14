@@ -849,6 +849,12 @@
             text-indent: 20px;
             font-size: 14px;
         }
+
+        #traitGrid .tui-grid-body-area td[data-column-name='trait_file'] {
+            color: mediumblue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -880,18 +886,6 @@
                                             <option value="20">20개</option>
                                             <option value="30">30개</option>
                                         </select>
-                                        <!--<select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" id="CropSelect">-->
-                                        <!--    <option value="고추">고추</option>-->
-                                        <!--    <option value="대파">대파</option>-->
-                                        <!--    <option value="멜론">멜론</option>-->
-                                        <!--    <option value="무">무</option>-->
-                                        <!--    <option value="배추">배추</option>-->
-                                        <!--    <option value="수박">수박</option>-->
-                                        <!--    <option value="양배추">양배추</option>-->
-                                        <!--    <option value="양파">양파</option>-->
-                                        <!--    <option value="참외">참외</option>-->
-                                        <!--    <option value="토마토">토마토</option>-->
-                                        <!--</select>-->
                                     </form>
                                 </div>
                             </div>
@@ -1135,7 +1129,6 @@
                             {
                                 header: '작목서설',
                                 name: 'crop_name',
-                                editor: 'text',
                                 onchange:'test()'
                             },
                             {
@@ -1150,13 +1143,11 @@
                             },
                             {
                                 header: '조사기준화일',
-                                name: 'trait_file',
-                                editor: 'text',
+                                name: 'trait_file'
                             },
                             {
                                 header: '생성날짜',
-                                name: 'create_date',
-                                editor: 'text',
+                                name: 'create_date'
                             }
                         ],
                         pageOptions: {
@@ -1164,11 +1155,28 @@
                         }
                     });
 
+                    const dataArr = [];
+
+                    for (let i = 0; i < result.trait.length; i++) {
+                        let rowArr = {
+                            'category_name': result.trait[i].category_name,
+                            'crop_name': result.trait[i].crop_name,
+                            'trait_description': result.trait[i].trait_description,
+                            'trait_year': result.trait[i].trait_year,
+                            'trait_file': '<div data-value="' + result.trait[i].trait_file + '">download</div>',
+                            'create_date': result.trait[i].create_date
+                        }
+
+                        dataArr.push(rowArr);
+                    }
+
+                    traitGrid.resetData(dataArr);
+
                     traitGrid.on('afterChange', (ev)=>{
                     	var after = ev.changes[0].value;
                     	var before = ev.changes[0].prevValue;
                     	var rowKey = ev.changes[0].rowKey;
-                    	console.log(ev);
+
                     	var data = {"limit": rowKey, "trait_description":after}
                     	if(after != before){
                     		$.ajax(
@@ -1180,6 +1188,14 @@
                     			}		
                     		)
                     	}
+                    });
+
+                    traitGrid.on('click', (ev) => {
+                        console.log(ev);
+
+                        if (ev.targetType === 'cell' && ev.columnName === 'trait_file') {
+                            location.href='excelTemplate/sampleTemplate.xlsx'
+                        }
                     });
                 }
             

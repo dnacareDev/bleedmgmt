@@ -19,4 +19,8 @@ public interface CropService {
     public List<Crop> selectCropByCategory(int category_id);
 
     public int checkDuplicateCropName(String crop_name);
+
+    public String SelectCropById(int crop_id);
+
+    public List<Crop> SearchCropList(String type);
 }

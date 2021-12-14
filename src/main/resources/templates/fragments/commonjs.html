@@ -165,27 +165,21 @@
         $("#alert button").click(function(){
             $("#alert, .dim").hide();
 
-            return true;
+            return location.reload();
         });
         return false;
     }
-    /*
-    function Confirm(text){
-        $("#confirm").show(300);
-        $(".dim").show();
-        $("#confirm .title_text").text(text);
 
-        $("#confirm #ok_button").click(function(e){
-            $("#confirm").hide();
-            $(".dim").hide();
-            return true;
+    function Alert1(text){ //popup
+
+        $("#alert").show();
+        $(".dim").show();
+        $("#alert .title_text").text(text);
+
+        $("#alert button").click(function(){
+            $("#alert, .dim").hide();
         });
-        $("#confirm #no_button").click(function(e){
-            $("#confirm").hide();
-            $(".dim").hide();
-            return false;
-        });
-    }*/
+    }
 
 </script>
 

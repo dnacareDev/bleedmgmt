@@ -153,4 +153,9 @@ public class ResourceServiceImpl implements ResourceService {
   public Integer SearchResourceId(int crop_id, int resource_name_id) {
     return resourceMapper.SearchResourceId(crop_id, resource_name_id);
   }
+
+  @Override
+  public Integer SelectCropId(int resource_name_id) {
+    return resourceMapper.SelectCropId(resource_name_id);
+  }
 }

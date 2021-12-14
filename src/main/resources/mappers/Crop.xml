@@ -38,4 +38,15 @@
     <select id="checkDuplicateCropName" parameterType="String" resultType="int">
         SELECT COUNT(*) from crop WHERE crop_name = #{crop_name}
     </select>
+
+    <select id="SelectCropById" resultType="String">
+        SELECT * FROM crop WHERE crop_id = #{crop_id}
+    </select>
+
+    <select id="SearchCropList" resultType="Crop">
+        select c.* from resource r
+        inner join resource_name rn on r.resource_name_id = rn.resource_name_id
+        inner join crop c on c.crop_id = r.crop_id where rn.resource_name = #{type};
+    </select>
+
 </mapper>

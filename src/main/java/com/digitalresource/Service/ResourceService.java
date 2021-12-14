@@ -28,4 +28,6 @@ public interface ResourceService {
   public List<ResourceName> resourceList();
 
   Integer SearchResourceId(int crop_id, int resource_name_id);
+
+  Integer SelectCropId(int resource_name_id);
 }
