@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+
+    <style>
+        table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+		.top-menu .main-content{
+			background-color:#FCFCFC;
+		}
+		.top-menu .main-content .contents{
+			background-color:#FCFCFC;
+		}
+		.atbd-box{
+			display: inherit;
+		    width: 100%;
+		    justify-content: center;
+		}
+		.atbd-upload{
+			flex: 0 0 50%;
+		}
+		.atbd-box a {
+			width:100%;
+		}
+		.atbd-box button{
+			background-color:#217566;
+			border: 1px solid #217566;
+			margin-left: 10px;
+		}
+		.top-menu .main-content .card{
+			padding-bottom: 100px;
+		}
+		.top-menu .main-content .btn-primary{
+			background-color:#EDF6F1;
+			color:#217566;
+		}
+		.top-menu .main-content .btn-primary img{
+			margin-right: 10px;
+		}
+		.top-menu .main-content .align-items-center{
+			justify-content: center;
+		}
+		select{
+			margin-left: 25px;
+		}
+		.top-menu .main-content .form-group{
+			margin-left: 30px;
+   		    padding-bottom: 0;
+		}
+		.main-content .form-group input[type=text]{
+			margin-left: 25px;
+		}
+		@media (min-width: 576px){
+			.top-menu .main-content .modal-dialog {
+			    max-width: 850px;
+			    margin: 1.75rem auto;
+			}
+		}
+    </style>
+
+</head>
+
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+
+<main class="main-content">
+
+    <div class="contents">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-extra mt-20 mr-20">
+                            <div class="breadcrumb-main" style="float: left;">
+                                <h4 class="text-capitalize breadcrumb-title">DATA 관리</h4>
+                            </div>
+                        </div>
+                        <div class="atbd-box">
+	                        <div class="atbd-upload">
+	                            <div class="atbd-upload__button">
+	                                <a href="javascript:void(0)" class="btn btn-lg btn-outline-lighten btn-upload"
+	                                   onclick="$('#upload').click()"> <span data-feather="upload"></span>Click to Upload</a>
+	                                <input type="file" name="upload-3" class="upload-one" id="upload">
+	                            </div>
+	                        </div>
+	                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#analysis">분석 실행</button>
+	                        <button type="button" class="btn btn-primary btn-sm"><img src="../assets/vendor_assets/img/arrow_bottom.png">Example data download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- modal code -->
+    <div class="modal-basic modal fade show" id="analysis" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+                <div class="modal-body">
+                    <form action="" name="searchForm" class="d-flex align-items-center add-contact__form my-sm-0 my-2">
+                        회복율 정렬
+                        <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;">
+                            <option>원래대로</option>
+                            <option>null</option>
+                            <option>null</option>
+                        </select>
+                        <div class="form-group mb-0">
+	                        <span>회복율 필터</span>
+	                        <input type="text" class="form-control form-control-lg" value="%" style="text-align: right">
+                   		</div>
+                    </form>
+                    
+                    <div>
+                        <img class="" src="../assets/vendor_assets/img/map1.png" width="100%" height="100%" alt="img"/>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary btn-sm" style="background-color:#217566; color:#fff">
+                        <span data-feather="download"></span>download
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+
+<script type="text/javascript">
+
+</script>
+
+</body>
+
+</html>
