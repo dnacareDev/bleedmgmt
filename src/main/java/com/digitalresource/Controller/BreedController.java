@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,7 +60,6 @@ public class BreedController {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
 		int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name);
-
 		int resourceId = 0;
 
 		for(int i = 0; i < resourceNameId.length; i++) {
@@ -70,7 +70,7 @@ public class BreedController {
 		}
 
 		List<Detail> details = detailService.SelectDetailListByResource(resourceId);	
-		List<StandardList> standardList = breedService.selectStandard(resourceId);
+		List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
 		result.put("standardList",standardList);
 		result.put("detail", details);
 
@@ -85,6 +85,13 @@ public class BreedController {
 		result = breedService.insertBreed(resource_id,data);
 		
 		
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("deleteBreed")
+	public int deleteBreed(String breed_id) {
+		int result = breedService.deleteBreed(breed_id);
 		return result;
 	}
 }

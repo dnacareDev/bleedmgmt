@@ -17,4 +17,10 @@ public interface BreedMapper {
 	int insertStandard(Map<String, Object> map);
 
 	List<StandardList> selectStandard(int resourceId);
+
+	int selectDetailCount(int resource_id);
+
+	int deleteBreed(String breed_id);
+
+	int deleteStandard(String breed_id);
 }

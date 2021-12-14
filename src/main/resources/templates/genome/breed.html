@@ -2043,14 +2043,19 @@
             }
 
             var data = {'breed_id': total_id};
-
+            console.log(l);
+            console.log(breedgrid.getCheckedRows());
+			console.log(total_id);
+			var formData = new FormData();
+			formData.append("breed_id",total_id);
             if (confirm("삭제하시겠습니까?") == true) {
                 $.ajax(
                     {
                         url: 'deleteBreed',
                         method: 'POST',
-                        dataType: 'json',
-                        data: data,
+                        processData : false,
+        				contentType : false,
+                        data: formData,
                         success: function (result) {
                             if (result == 0) {
                                 return Alert("삭제에 실패하였습니다.");
@@ -2345,12 +2350,11 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                	console.log(result);
                     breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: [],
+                        data: result.standardList,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2361,7 +2365,12 @@
                     });
 
                     const headerArr = [
-                        {
+                    	{
+                            'header': 'No',
+                            'name': 'breed_id',
+                            'width': 50,
+                        },
+                    	{
                             'header': '첨부파일',
                             'name': 'file',
                             'width': 100,
@@ -2378,6 +2387,7 @@
                     for (let i = 1; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
                         var colName = result.detail[i].detail_id;
+                        
 
                         headerName[i] = result.detail[i].detail_id;
 
@@ -2393,9 +2403,10 @@
 
                         headerArr.push(arr);
                     }
-
+					
                     breedgrid.setColumns(headerArr);
-
+                    //breedgrid.setResetData(result.standardList);
+                    
                     // const dataArr = [];
                     //
                     // for (let i = 0; i < result.breed.length; i++) {
@@ -2523,14 +2534,23 @@
 
             breedgrid.on('afterChange', (ev) => {
                 for (let i = 0; i < ev.changes.length; i++) {
+                	console.log(ev.changes[i]);
                     breedData.push({"detail_id": ev.changes[i].columnName, "standard": ev.changes[i].value})
                 }
             });
         }
     }
+    
+    const copareFunction = function(){
+    	
+    } 
 
     function saveRow() {
 	console.log(breedData);
+	const sortBreed = [...breedData].sort((a,b) => a?.detail_id - b?.detail_id)
+	console.table(sortBreed)
+	
+	
 	let resource_id = $('#resource_id').val();
         $.ajax(
             {
@@ -2538,7 +2558,7 @@
                 method: 'POST',
                 dataType: 'json',
                 data: {
-                    "data": JSON.stringify(breedData),
+                    "data": JSON.stringify(sortBreed),
                     "resource_id":resource_id
                 },
                 success: function (result) {
