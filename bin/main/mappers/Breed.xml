@@ -11,6 +11,12 @@
     	select #{breed_id}, (select d.detail_id from resource r inner join detail d on r.resource_id = d.resource_id where r.resource_id = ${resource_id} limit ${limit},1), #{standard_data}
     </insert>
     
+    <update id="updateStandardCell" >
+        UPDATE standard SET
+        standard_data = #{standard_data} 
+        WHERE standard_id = #{standard_id}
+    </update>
+    
     <select id="selectStandard" resultType="StandardList">
     	select s.standard_id,d.detail_id, s.standard_data, b.resource_id, b.breed_row from breed b 
 		inner join standard s on b.breed_id = s.breed_id

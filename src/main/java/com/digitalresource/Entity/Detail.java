@@ -11,3 +11,4 @@ public class Detail {
     private int detail_index;
     private int detail_info;
 }
+ 

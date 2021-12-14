@@ -81,6 +81,19 @@ System.out.println(crop_id);
 	}
 	
 	@ResponseBody
+	@RequestMapping("updateStandardCell")
+	public int updateStandardCell(@RequestParam(value="standard_data") String standard_data,@RequestParam(value="standard_id") int standard_id) {
+		int result = 0;
+		
+		StandardList standard = new StandardList();
+		standard.setStandard_data(standard_data);
+		standard.setStandard_id(standard_id);
+		result = breedService.updateStandardCell(standard);
+		return result;
+	}
+	
+	
+	@ResponseBody
 	@RequestMapping("insertBreed2")
 	public int insertBreed(@RequestParam(value="data")String data, @RequestParam(value="resource_id") int resource_id, @RequestParam(value="crop_id")int crop_id, @RequestParam(value="resource_name") String resource_name) {
 		int result = 0;

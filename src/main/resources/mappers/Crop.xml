@@ -38,7 +38,7 @@
     <select id="checkDuplicateCropName" parameterType="String" resultType="int">
         SELECT COUNT(*) from crop WHERE crop_name = #{crop_name}
     </select>
-
+ 
     <select id="SelectCropById" resultType="String">
         SELECT * FROM crop WHERE crop_id = #{crop_id}
     </select>
