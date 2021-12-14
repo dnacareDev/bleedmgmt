@@ -861,6 +861,7 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" id="resource_id" th:value="${resource_id}"></input>
                         <div class='card-extra mt-10 mb-10 mr-20 plus_btn_submit1'>
                             <button type='button' id="cancelRow" onclick="cancelRow()">취소</button>
                             <button type='button' id="saveRow" onclick="saveRow()">저장</button>
@@ -2348,6 +2349,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                	console.log(result);
                     breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
@@ -2521,7 +2523,7 @@
             breedgrid.prependRow(newRow);
             breedgrid.check(cnt);
 
-            breedData.push({'detail_id': 1, 'standard': $("#CropSelect").val()})
+            // breedData.push({'detail_id': 1, 'standard': $("#CropSelect").val()})
 
             breedgrid.on('afterChange', (ev) => {
                 for (let i = 0; i < ev.changes.length; i++) {
@@ -2532,14 +2534,16 @@
     }
 
     function saveRow() {
-
+	console.log(breedData);
+	let resource_id = $('#resource_id').val();
         $.ajax(
             {
                 url: 'insertBreed2',
                 method: 'POST',
                 dataType: 'json',
                 data: {
-                    "data": JSON.stringify(breedData)
+                    "data": JSON.stringify(breedData),
+                    "resource_id":resource_id
                 },
                 success: function (result) {
                     if (result == 0) {
