@@ -573,18 +573,6 @@
             text-align: center;
         }
 
-        #sampleGrid .tui-grid-body-area td[data-column-name='sample_code'], #sampleGrid .tui-grid-body-area td[data-column-name='sample_seed'] {
-            color: mediumblue;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        #outcomeGrid .tui-grid-body-area td[data-column-name='sample_outcome_num'] {
-            color: mediumblue;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         #saveRow {
             float: right;
             color: #fff;
@@ -646,9 +634,7 @@
         }
 
 
-
-
-        #data_upload12 .form-group button, #data_upload2 .form-group button, #basic_file .form-group button, #data_upload11 .form-group button, #data_upload21 .form-group button{
+        #data_upload12 .form-group button, #data_upload2 .form-group button, #basic_file .form-group button, #data_upload11 .form-group button, #data_upload21 .form-group button {
             height: 45px;
             padding: 0 20px;
             background-color: #217566;
@@ -658,11 +644,11 @@
             margin-left: 10px;
         }
 
-        #data_upload2 .form-group button, #basic_file .form-group button,  #data_upload21 .form-group button {
+        #data_upload2 .form-group button, #basic_file .form-group button, #data_upload21 .form-group button {
             margin-left: 0;
         }
 
-        #data_upload12 .form-group input[type=text], #data_upload2 .form-group input[type=text], #basic_file .form-group input[type=text],  #data_upload21 .form-group input[type=text], #data_upload11 .form-group input[type=text] {
+        #data_upload12 .form-group input[type=text], #data_upload2 .form-group input[type=text], #basic_file .form-group input[type=text], #data_upload21 .form-group input[type=text], #data_upload11 .form-group input[type=text] {
             flex: 0 0 30%;
             cursor: pointer;
         }
@@ -672,19 +658,20 @@
             background-size: 15px;
             color: #B2B2B2;
         }
+
         #data_upload12 .atbd-upload, #data_upload2 .atbd-upload, #data_upload21 .atbd-upload, #data_upload11 .atbd-upload {
             width: 100%;
             height: 300px;
             overflow: auto;
         }
 
-        #data_upload12 .atbd-upload table,  #data_upload11 .atbd-upload table {
+        #data_upload12 .atbd-upload table, #data_upload11 .atbd-upload table {
             width: max-content;
             border: none;
-            min-width:100%;
+            min-width: 100%;
         }
 
-        #data_upload2 .atbd-upload table, #data_upload21 .atbd-upload table{
+        #data_upload2 .atbd-upload table, #data_upload21 .atbd-upload table {
             width: 100%;
         }
 
@@ -697,7 +684,7 @@
             border-bottom: 1px solid #E8EEF2;
         }
 
-        #data_upload12 .atbd-upload table thead th, #data_upload2 .atbd-upload table thead th,  #data_upload21 .atbd-upload table thead th, #data_upload11 .atbd-upload table thead th {
+        #data_upload12 .atbd-upload table thead th, #data_upload2 .atbd-upload table thead th, #data_upload21 .atbd-upload table thead th, #data_upload11 .atbd-upload table thead th {
             background-color: #F7F7F8;
             color: #222222;
             font-size: 16px;
@@ -849,6 +836,16 @@
             text-align: left;
             text-indent: 20px;
             font-size: 14px;
+        }
+
+        #sampleGrid .tui-grid-body-area td[data-column-name='resource_template'], #sampleGrid .tui-grid-body-area td[data-column-name='resource_character_template_file'] {
+            color: mediumblue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .tui-grid-cell {
+            background-color: white;
         }
     </style>
 </head>
@@ -1196,10 +1193,9 @@
     var samplegrid = null;
 
     function SearchSample(e) {
-        var sample_name = $("#CropSelect").val();
         var limit = $("#limit").val();
 
-        var data = {"sample_name": sample_name, "page_num": e, "limit": limit};
+        var data = {"page_num": e, "limit": limit};
 
         $.ajax(
             {
@@ -1223,29 +1219,24 @@
                             {
                                 header: '작목',
                                 name: 'crop_name',
-                                editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
                                 header: '자원관리종류',
                                 name: 'resource_name',
-                                editor: 'text',
                                 sortable: true,
-                                sortingType: 'asc',
-                                filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                                sortingType: 'asc'
                             },
                             {
                                 header: '관리자원양식',
                                 name: 'resource_template',
-                                editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
                                 header: '자체특성양식',
                                 name: 'resource_character_template_file',
-                                editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             },
@@ -1259,7 +1250,6 @@
                             {
                                 header: '생성날짜',
                                 name: 'create_date',
-                                editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
                             }
@@ -1268,84 +1258,70 @@
                             perPage: limit,
                         }
                     });
-                    
-                    samplegrid.on('afterChange', (ev)=>{
-                    	var after = ev.changes[0].value;
-                    	var before = ev.changes[0].prevValue;
-                    	var rowKey = ev.changes[0].rowKey;
 
-                    	var data = {"limit": rowKey, "use_name":after}
+                    samplegrid.on('afterChange', (ev) => {
+                        var after = ev.changes[0].value;
+                        var before = ev.changes[0].prevValue;
+                        var rowKey = ev.changes[0].rowKey;
 
-                    	if(after != before){
-                    		$.ajax(
-                    			{
-                    				url:'change-resource-use',
-                    				method:'POST',
-                    				dataType: 'json',
+                        var data = {"limit": rowKey, "use_name": after}
+
+                        if (after != before) {
+                            $.ajax(
+                                {
+                                    url: 'change-resource-use',
+                                    method: 'POST',
+                                    dataType: 'json',
                                     data: data,
-                                    success:function(result){
-                                    	if(result ==0){
-                                    		Alert('"사용", "비사용"만 입력 가능합니다.')
-                                    	}
-                                    }
-                    			}		
-                    		)
-                    	}
-                    });
-
-                    samplegrid.on('click', (ev) => {
-                        if (ev.targetType === 'cell' && ev.columnName === 'sample_seed') {
-                            var value_seed = ev.nativeEvent.srcElement;
-
-                            SearchSeed(value_seed);
-                        } else if (ev.targetType === 'cell' && ev.columnName === 'sample_code') {
-                            var value_breed = ev.nativeEvent.srcElement;
-
-                            SearchBreed(value_breed);
-                        } else if (ev.targetType === 'cell' && ev.columnName === 'file') {
-                            var id = samplegrid.getRow(ev.rowKey).sample_id;
-
-                            FileBtn(id);
-                        }else if(ev.targetType === 'cell' && ev.columnName === 'resource_template' ){
-                        	var data = {"file_name" : ev.nativeEvent.srcElement.innerText};
-                        	$.ajax(
-                                    {
-                                        url: 'resourceDownloadFile',
-                                        method: 'POST',
-                                        dataType: 'json',
-                                        data: data,
-                                        success: function (result) {
-                                            if (result == 0) {
-                                                return Alert("수정에 실패하였습니다.")
-                                            }
+                                    success: function (result) {
+                                        if (result == 0) {
+                                            Alert('"사용", "비사용"만 입력 가능합니다.')
                                         }
-                                    });
-                        	console.log(ev.nativeEvent.srcElement.innerText);
+                                    }
+                                }
+                            )
                         }
                     });
 
                     const dataArr = [];
 
-                    for (let i = 0; i < result.sample.length; i++) {
+                    for (let i = 0; i < result.resourceList.length; i++) {
                         let rowArr = {
-                            'file': '<i class="bi bi-file-earmark-arrow-down"></i>',
-                            'sample_id': result.sample[i].sample_id,
-                            'sample_name': result.sample[i].sample_name,
-                            'sample_code': result.sample[i].sample_code,
-                            'sample_country': result.sample[i].sample_country,
-                            'sample_type': result.sample[i].sample_type,
-                            'sample_mate': result.sample[i].sample_mate,
-                            'sample_seed': result.sample[i].sample_seed,
-                            'sample_amount': result.sample[i].sample_amount,
-                            'sample_sprout': result.sample[i].sample_sprout,
-                            'sample_purity': result.sample[i].sample_purity,
-                            'sample_comment': result.sample[i].sample_comment
+                            'resource_id': result.resourceList[i].resource_id,
+                            'crop_name': result.resourceList[i].crop_name,
+                            'resource_name': result.resourceList[i].resource_name,
+                            'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">download</div>',
+                            'resource_character_template_file': '<div data-value="' + result.resourceList[i].resource_character_template_file + '">download</div>',
+                            'use_name': result.resourceList[i].use_name,
+                            'create_date': result.resourceList[i].create_date
                         }
 
                         dataArr.push(rowArr);
                     }
 
                     samplegrid.resetData(dataArr);
+
+                    samplegrid.on('click', (ev) => {
+                        if (ev.targetType === 'cell' && ev.columnName === 'resource_template') {
+                            let value = ev.nativeEvent.srcElement;
+                            let fileName = value.dataset.value;
+
+                            if (fileName == 'null') {
+                                return Alert("파일이 존재하지 않습니다.")
+                            } else {
+                                location.href = 'upload/' + value.dataset.value;
+                            }
+                        } else if (ev.targetType === 'cell' && ev.columnName === 'resource_character_template_file') {
+                            let value = ev.nativeEvent.srcElement;
+                            let fileName = value.dataset.value;
+
+                            if (fileName == 'null') {
+                                return Alert("파일이 존재하지 않습니다.")
+                            } else {
+                                location.href = 'upload/' + value.dataset.value;
+                            }
+                        }
+                    });
 
                     var before = null;
                     var after = null;

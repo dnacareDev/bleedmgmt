@@ -1,5 +1,11 @@
 package com.digitalresource.Controller;
 
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.Detail;
+import com.digitalresource.Entity.StandardList;
+import com.digitalresource.Service.*;
+
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.digitalresource.Entity.Crop;
-import com.digitalresource.Entity.Detail;
-import com.digitalresource.Entity.StandardList;
-import com.digitalresource.Service.BreedService;
-import com.digitalresource.Service.CropService;
-import com.digitalresource.Service.DetailService;
-import com.digitalresource.Service.ResourceNameService;
-import com.digitalresource.Service.ResourceService;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class BreedController {
@@ -83,8 +84,19 @@ public class BreedController {
 		int result = 0;
 		
 		result = breedService.insertBreed(resource_id,data);
-		
-		
+
+		return result;
+	}
+
+	@ResponseBody
+	@RequestMapping("selectBreedDateGroup")
+	public Map<String, Object> SelectDateGroup(@RequestParam("datalist_type") String datalist_type) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+//		List<Map<String, String>> dataGroup = d_service.SelectDateGroup(datalist_type);
+//
+//		result.put("dataGroup", dataGroup);
+
 		return result;
 	}
 	

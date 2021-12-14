@@ -855,6 +855,10 @@
             text-decoration: underline;
             cursor: pointer;
         }
+
+        .tui-grid-cell {
+            background-color: white;
+        }
     </style>
 </head>
 
@@ -1191,10 +1195,10 @@
                     });
 
                     traitGrid.on('click', (ev) => {
-                        console.log(ev);
-
                         if (ev.targetType === 'cell' && ev.columnName === 'trait_file') {
-                            location.href='excelTemplate/sampleTemplate.xlsx'
+                            var value = ev.nativeEvent.srcElement;
+
+                            location.href='upload/' + value.dataset.value;
                         }
                     });
                 }
