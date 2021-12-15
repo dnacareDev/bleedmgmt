@@ -300,11 +300,10 @@
                                 </div>
                                 <div class="data_type data_type3">
                                     <span class="sub_title">입력항목 파일</span>
-                                    <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none">
-                                    <div class="data_files" onclick="filesFunction()">
+                                    <div class="data_files" onclick="return filed('#excelFile');">
                                         <img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>템플릿 엑셀 첨부</span>
                                     </div>
-                                    <input type="file" id="data_file1" style="display: none;"> <!-- file  -->
+                                    <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none">
                                 </div>
                             </div>
                             <div class="data_cover2 clearfix">
@@ -315,7 +314,7 @@
                                     <span class="sub_title">특성항목 파일</span>
                                     <div class="data_files" onclick="return filed('#data_file2')"><img src="../assets/vendor_assets/img/upload.png"
                                                                                                        alt="file업로드"><span>템플릿 엑셀 첨부</span></div>
-                                    <input type="file" id="data_file2" onchange="excelExprotFile(event)" style="display: none;"> <!-- file  -->
+                                    <input type="file" id="data_file2" onchange="excelExportFile1(event)" style="display: none;"> <!-- file  -->
 
                                     <div class="this_check" id="digitalCheckBox"><input class="digitalCheck" type="checkbox" style="display:none;"><span
                                         class="check_box_design"></span><span class="check_span">종자원 특성 조사 기준 사용</span>
@@ -524,7 +523,7 @@
         excelExportCommon(event, handleExcelDataAll);
     }
 
-    function excelExprotFile(event) {
+    function excelExportFile1(event) {
         excelExportFile(event, handleExcelDataAll);
     }
 

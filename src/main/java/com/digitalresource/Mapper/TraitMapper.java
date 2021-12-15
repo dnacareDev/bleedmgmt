@@ -18,4 +18,6 @@ public interface TraitMapper {
   int changeTrait(Map<String, Object> param);
 
   List<Trait> traitDescriptionList();
+
+  int changeYear(Map<String, Object> param);
 }

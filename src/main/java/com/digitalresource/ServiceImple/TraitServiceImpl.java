@@ -39,4 +39,9 @@ public class TraitServiceImpl implements TraitService {
 	public List<Trait> traitDescriptionList() {
 		return mapper.traitDescriptionList();
 	}
+
+	@Override
+	public int changeYear(Map<String, Object> param) {
+		return mapper.changeYear(param);
+	}
 }

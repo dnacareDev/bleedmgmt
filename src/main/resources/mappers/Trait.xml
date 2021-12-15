@@ -30,4 +30,10 @@
 	<select id="traitDescriptionList" resultType="Trait">
 		select trait_id,trait_description, feature_group from trait;
 	</select>
+
+	<update id="changeYear" parameterType="int">
+		update trait
+		set trait_year = #{trait_year}
+		where trait_id= (select trait_id from (select trait_id from trait limit #{limit},1) as trait_id)
+	</update>
 </mapper>
