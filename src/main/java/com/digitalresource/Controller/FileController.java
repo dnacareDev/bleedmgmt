@@ -1,18 +1,23 @@
 package com.digitalresource.Controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +35,32 @@ public class FileController
 		
 		return fileName;
 	}
+	
+	@GetMapping(value = "/upload", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<Resource> download(String filename){
+        ResponseEntity<Resource> result = null;
+
+        try {
+            String originFileName = URLDecoder.decode(filename, "UTF-8");
+            
+            System.out.println("/upload/" + originFileName);
+            Resource file = new FileSystemResource("/upload/" + originFileName);
+
+            if(!file.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            
+            String onlyFileName = originFileName.substring(originFileName.lastIndexOf("_") + 1);
+            HttpHeaders header = new HttpHeaders();
+            header.add("Content-Disposition", "attachment; filename=" + onlyFileName);
+
+            result = new ResponseEntity<>(file, header, HttpStatus.OK);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+	
 	
 	// 파일 다운로드
 	@ResponseBody

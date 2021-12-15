@@ -20,7 +20,9 @@ public interface ResourceMapper {
     public Resource selectResourceById(int resource_id);
 
     public int deleteResouceByCropCategory(int crop_id);
-
+    
+    int deleteResource(Resource resource);
+    
     public int deleteReourceByCrop(int crop_id);
 
 	public int insertResource(Resource resource);

@@ -1,0 +1,579 @@
+@charset "utf-8";
+.card {
+    box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%);
+}
+
+table {
+    border-top: 1px solid grey;
+    border-collapse: collapse;
+}
+
+th, td {
+    border-bottom: 2px solid #E5E9F2;
+    padding: 10px;
+    text-align: center;
+    font-weight: initial;
+}
+
+th, tbody tr {
+    background-color: white;
+}
+
+.main-content .card-extra .justify-content-end .atbd-button-list {
+    width: 100%;
+    margin: 0;
+}
+
+.main-content .nav-tabs .nav-link.active, .main-content .nav-tabs .nav-item.show .nav-link, .modal-basic .atbd-tab .nav-link {
+    color: #D9D9D9;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.main-content .atbd-tab .nav-link:after {
+    background-color: #f4f5f7;
+}
+
+.modal-basic .atbd-tab .nav-tabs .nav-item.active a {
+    border-radius: 21px;
+    background-color: #EDF6F1;
+    color: #217566;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.modal-basic .atbd-tab .nav-tabs .nav-item a::after,
+.modal-basic .atbd-tab .nav-tabs:after {
+    display: none;
+}
+
+.content_title {
+    width: 100%;
+    background-color: #F7F7F8;
+    padding: 10px 0;
+}
+
+/*.content_title li { alpaDesign 수정
+    float: left;
+    width: 50%;
+    text-align: center;
+}*/
+
+.content_1 {
+    padding: 20px;
+    max-height: 500px;
+    overflow: auto;
+    line-height: 2;
+}
+
+.content_1 .title {
+    float: left;
+}
+
+.content_1 .input_text {
+    float: right;
+    width: 50%;
+}
+
+.content_1 .input_text input[type="text"] {
+    width: 100%;
+}
+
+.content_1 li {
+    display: inline-block;
+    width: 100%;
+    color: #222222;
+    font-size: 16px;
+}
+
+.pop1 .modal-dialog textarea {
+    width: 100%;
+    height: 300px;
+    border-radius: 5px;
+    border: 1px solid #D9D9D9;
+}
+
+.pop1 .modal-dialog .btn-upload {
+    width: 100%;
+}
+
+.pop1 .atbd-upload__file {
+    display: none;
+}
+
+.pop2 .modal-header {
+    display: -webkit-box;
+}
+
+.main-content .pop1 .form-group input[type=text] {
+    flex: 0 0 85%;
+}
+
+.main-content .pop1 .form-group span {
+    flex: 0 0 10%;
+}
+
+.main-content .pop1 a.btn-outline-lighten {
+    display: block;
+    text-align: left;
+    color: #B2B2B2;
+}
+
+#gen-messege {
+    display: table;
+}
+
+#gen-messege .modal-dialog {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#gen-messege .modal-dialog .modal-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 40px 0;
+}
+
+#gen-messege .modal-dialog .modal-content .messege {
+    padding-bottom: 30px;
+}
+
+.main-content .modal-body {
+    width: 100%;
+}
+
+.main-content .modal-body .content_title ul li {
+    display: inline-block;
+    width: calc((100% - 50px) / 2);
+    margin-left: 40px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.main-content .modal-body ul li:first-child {
+    margin-left: 0;
+}
+
+.main-content .modal-body ul li img {
+    width: 100%;
+}
+
+#google_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    height: 500px;
+}
+
+#google_container li {
+    flex: 1;
+    height: 100%;
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 1014px;
+        margin: 1.75rem auto;
+    }
+
+    #recent .modal-dialog {
+        max-width: 1300px;
+        margin: 1.75rem auto;
+    }
+
+    /* 2021 - 11 - 02 수정 */
+    .pop1 .modal-dialog {
+        max-width: 750px;
+    }
+
+    .pop4 .modal-dialog {
+        max-width: 750px;
+        margin: 0 auto;
+    }
+}
+
+.btn.btn-light.btn-transparent-light {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+}
+
+.main-content .contents .container-fluid {
+    max-width: 100%;
+    padding: 50px;
+}
+
+.bg-white > .row {
+    padding-top: 50px;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+td .btn i.bi-file-earmark-arrow-down {
+    color: #000;
+}
+
+.table td {
+    padding: 0px 12px;
+    vertical-align: middle;
+    font-size: 14px;
+    border-bottom: 2px solid #d9d9d9;
+}
+
+.table th {
+    font-size: 16px;
+    border-top: 1px solid #d9d9d9;
+}
+
+.table thead th {
+    border-bottom: 2px solid #adadad;
+}
+
+#table2 td {
+    padding: 12px 12px;
+    font-size: 14px
+}
+
+#table2 th {
+    font-size: 16px
+}
+
+.main-content .table thead th span.title:before,
+.main-content .table thead th span.title:after,
+.main-content .table thead th i {
+    display: none;
+}
+
+.main-content .table thead th > img {
+    margin: 6px 0 0 12px;
+}
+
+#data_upload .form-group input[type=text]::placeholder {
+    text-align: left;
+    text-indent: 20px
+}
+
+.popup_wrap {
+    display: none
+}
+
+.popup_wrap.on {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.popup_wrap.on .popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 150px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    padding-top: 40px
+}
+
+.popup_wrap.on .close {
+    opacity: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    font-size: 14px;
+    background-color: #1e695c;
+    display: block;
+    height: 35px;
+    width: 90px;
+    color: #fff;
+    font-weight: 400;
+    border-radius: 6px
+}
+
+
+#data_upload .modal-body .form-group {
+    justify-content: flex-start;
+}
+
+#data_upload .form-group button, #data_upload2 .form-group button, #data_upload3 .form-group button, #sample_file .form-group button {
+    height: 45px;
+    padding: 0 20px;
+    background-color: #217566;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+#data_upload2 .form-group button, #data_upload3 .form-group button, #sample_file .form-group button {
+    margin-left: 0;
+}
+
+#data_upload .form-group input[type=text], #data_upload2 .form-group input[type=text], #data_upload3 .form-group input[type=text], #sample_file .form-group input[type=text] {
+    flex: 0 0 30%;
+    cursor: pointer;
+}
+
+#data_upload .form-group input[type=text]::-webkit-input-placeholder {
+    background: url("../assets/vendor_assets/img/upload.png") no-repeat 0 3px;
+    background-size: 15px;
+    color: #B2B2B2;
+}
+
+#data_upload .atbd-upload, #data_upload2 .atbd-upload, #data_upload3 .atbd-upload, #sample_file .atbd-upload {
+    width: 100%;
+    height: 300px;
+    overflow: auto;
+}
+
+#data_upload .atbd-upload table {
+    min-width: max-content;
+    border: none;
+}
+
+#data_upload2 .atbd-upload table, #data_upload3 .atbd-upload table, #sample_file .atbd-upload table {
+    width: 100%;
+}
+
+#data_upload table thead tr, #data_upload2 table thead tr, #data_upload3 table thead tr, #sample_file table thead tr {
+    border-top: none;
+    border-bottom: 2px solid #E8EEF2;
+}
+
+#data_upload table tbody tr, #data_upload2 table tbody tr, #data_upload3 table tbody tr, #sample_file table tbody tr {
+    border-bottom: 1px solid #E8EEF2;
+}
+
+#data_upload .atbd-upload table thead th, #data_upload2 .atbd-upload table thead th, #data_upload3 .atbd-upload table thead th, #sample_file .atbd-upload table thead th {
+    background-color: #F7F7F8;
+    color: #222222;
+    font-size: 16px;
+}
+
+#data_upload .atbd-upload table tbody td, #data_upload2 .atbd-upload table tbody td, #data_upload3 .atbd-upload table tbody td, #sample_file .atbd-upload table tbody td {
+    background-color: #fff;
+    color: #666666;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+/* 2021 - 11 - 02 수정 */
+#data_upload .form-group button {
+    line-height: 2rem;
+    font-size: 13px;
+    height: 34px;
+    margin-left: 5px;
+}
+
+#data_upload .form-group input[type=text] {
+    height: 34px;
+}
+
+#data_upload .form-group input[type=text]::placeholder {
+    text-align: left;
+    text-indent: 20px;
+    font-size: 14px;
+}
+
+.contents .container-fluid {
+    background-color: #FCFCFC;
+}
+
+#excel_data {
+    width: 100%;
+}
+
+.modal-content .modal-footer {
+    padding-bottom: 28px;
+    padding-right: 24px;
+}
+
+.modal-search {
+    width: 250px;
+}
+
+.btn-primary {
+    border: none;
+}
+
+.main-content .card-extra .justify-content-end .atbd-button-list .data_btn1,
+.main-content .card-extra .justify-content-end .atbd-button-list .data_btn2,
+.main-content .card-extra .justify-content-end .atbd-button-list .form-control {
+    height: 36px;
+}
+
+.main-content .card-extra .justify-content-end .atbd-button-list .data_btn1,
+.main-content .card-extra .justify-content-end .atbd-button-list .data_btn2 {
+    width: 31px;
+    margin-top: 12px;
+    padding: 0px 19px;
+}
+
+
+.atbd-button-list button {
+    margin: 5px 3px;
+}
+
+#data_upload2 .form-group button, #data_upload3 .form-group button, #sample_file .form-group button {
+    height: 34px;
+    line-height: 2rem;
+    font-size: 13px;
+}
+
+#excel_data {
+    width: 100%;
+}
+
+.col-4 .bottom_btn > span {
+    height: 34px;
+    line-height: 2rem;
+    font-size: 13px;
+}
+
+/* 푸터 배경색 */
+.footer-wrapper {
+    background-color: #FCFCFC;
+}
+
+.contextmenu li {
+    border-left: 3px solid transparent;
+    transition: ease .2s;
+}
+
+.contextmenu li a {
+    display: block;
+    padding: 10px;
+    color: #B0BEC5;
+    background: #FFFFFF;
+    text-decoration: none;
+    transition: ease .2s;
+}
+
+.contextmenu li:hover {
+    border-left: 3px solid #9C27B0;
+}
+
+.contextmenu li:hover a {
+    color: #FFFFFF;
+}
+
+/* input 크기 */
+.rowInput {
+    width: 115px;
+}
+
+.box_center .buttonLi button {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #217566;
+    background-color: transparent;
+    border-radius: 50%;
+}
+
+.box_center .buttonLi button svg {
+    display: none;
+}
+
+.box_center .buttonLi button span {
+    position: relative;
+}
+
+.box_center .buttonLi button span::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 2px;
+    height: 10px;
+    background-color: #217566;
+    transform: rotate(45deg);
+}
+
+.box_center .buttonLi button span::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 2px;
+    height: 10px;
+    background-color: #217566;
+    transform: rotate(-45deg);
+}
+
+.box_center .buttonLi button span.left_btn::before {
+    left: -2px;
+    transform: rotate(-45deg);
+}
+
+.box_center .buttonLi button span.left_btn::after {
+    left: -2px;
+    transform: rotate(45deg);
+}
+
+#grid2 .tab-content .row .detail_list li {
+    width: 100%;
+    border-bottom: 1px solid #E2E3E5;
+}
+
+#grid2 .tab-content .row .list-group {
+    width: 100%;
+    margin: 0 !important;
+}
+
+#grid2 .tab-content .row .detail_list li:hover,
+#grid2 .tab-content .row .display_list li:hover {
+    background-color: #EDF6F1;
+}
+
+#grid2 .tab-content .row .detail_list li.active,
+#grid2 .tab-content .row .display_list li.active {
+    background-color: #217566;
+    color: #fff;
+    border: none;
+}
+
+#grid2 .tab-content .row .display_list li .row {
+    margin-left: 0;
+    margin-right: 0;
+    display: block;
+}
+
+#grid2 input[type="checkbox"] {
+    display: none !important;
+}
+
+#grid2 .tab-content .row li {
+    padding: 0 10px !important;
+}
+
+input[type="text"].updateInput {
+    border: none;
+    height: 45px;
+    text-align: center;
+}
+
+#sampleGrid .tui-grid-body-area td[data-column-name='sample_code'], #sampleGrid .tui-grid-body-area td[data-column-name='sample_seed']  {
+    color: mediumblue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#outcomeGrid .tui-grid-body-area td[data-column-name='sample_outcome_num'] {
+    color: mediumblue;
+    text-decoration: underline;
+    cursor: pointer;
+}

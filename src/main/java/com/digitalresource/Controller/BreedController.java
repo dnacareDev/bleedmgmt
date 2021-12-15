@@ -62,7 +62,6 @@ public class BreedController {
 	@RequestMapping("searchHeader")
 	public Map<String, Object> SearchBreed(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
-System.out.println(crop_id);
 		int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name);
 		int resourceId = 0;
 
@@ -117,8 +116,8 @@ System.out.println(crop_id);
 	
 	@ResponseBody
 	@RequestMapping("deleteBreed")
-	public int deleteBreed(String breed_id) {
-		int result = breedService.deleteBreed(breed_id);
+	public int deleteBreed(String breed_id, String breed_row) {
+		int result = breedService.deleteBreed(breed_id,breed_row);
 		return result;
 	}
 }

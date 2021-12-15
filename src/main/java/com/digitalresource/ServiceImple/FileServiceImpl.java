@@ -21,7 +21,6 @@ public class FileServiceImpl implements FileService {
         }
         result = mapper.registFile(file);
         if(result < 0){
-            //Err Cd
             return result;
         }
 

@@ -1,0 +1,51 @@
+@charset "utf-8";
+::-webkit-scrollbar {width:8px; height: 8px;}
+::-webkit-scrollbar-track {background:#efefef;}
+::-webkit-scrollbar-thumb {background-color:rgba(185, 185, 185, 0.336); border-radius: 4px;}
+
+.card {padding: 30px 50px;}
+
+
+.container-fluid .row .card {border-radius: 10px; overflow: hidden;}
+.container-fluid .row .card.breadcrumb-main {float: none;}
+.container-fluid .row .card .atbd-button-list {display: flex; align-items: center; margin-bottom: 20px; justify-content: flex-end;}
+.container-fluid .row .card .atbd-button-list .btn-lg {margin: 0 3px;}
+.bg-white .row {padding-top: 10px;}
+
+.file_input {}
+.file_input > input[type="file"] {display: none;}
+.file_input > label {display: inline-block; width: 17px; height: 21px; background: url('./add_file.png') no-repeat center center;}
+
+
+main.main-content .contents .tui-is-selected {background-color: #217566; border: 1px solid #217566;}
+
+/* .atbd-upload > table */
+#main .modal-basic .modal-body .atbd-upload > table {display: inline-block; width: 100%;}
+
+/* .atbd-upload > table - tr 공통 */
+#main .modal-basic .modal-body .atbd-upload > table > thead,
+#main .modal-basic .modal-body .atbd-upload > table > tbody {width: 100%; display: block; background-color: #fff; }
+#main .modal-basic .modal-body .atbd-upload > table tr {width: 100%;  display: flex;}
+
+/* .atbd-upload > table - thead */
+#main .modal-basic .modal-body .atbd-upload > table > thead > tr {    border-bottom: 1px solid rgb(202, 202, 202); background-color: #fff;}
+
+/* .atbd-upload > table - tbody */
+ #main .modal-basic .modal-body .atbd-upload > table > tbody {height: 250px; border-bottom: 1px solid gray;}
+ #main .modal-basic .modal-body .atbd-upload > table > tbody > tr {border-bottom: none;}
+
+/* .atbd-upload > table - th,td */
+#main .modal-basic .modal-body .atbd-upload > table tr > th,
+#main .modal-basic .modal-body .atbd-upload > table tr > td {padding: 0px; line-height: 40px; width: 100%;}
+
+/* .atbd-upload > table - th */
+#main .modal-basic .modal-body .atbd-upload > table tr > th { font-size: 13px; color: #222222; border-bottom: none; background-color: #fff;}
+#main .modal-basic .modal-body .atbd-upload > table tr > th:not(:last-child) {border-right: 1px solid #eee;}
+
+/* .atbd-upload > table - td */
+#main .modal-basic .modal-body .atbd-upload > table > tbody > tr > td {height: auto;display: table-cell; border-bottom: 1px solid #eee; background-color: #f4f4f4; font-size: 13px;}
+#main .modal-basic .modal-body .atbd-upload > table > tbody > tr > td:not(:last-child) {border-right: 1px solid #eee;}
+
+
+
+

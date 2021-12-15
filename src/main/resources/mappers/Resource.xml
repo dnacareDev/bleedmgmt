@@ -19,6 +19,15 @@
     <delete id="deleteResourceByCrop" parameterType="int">
         DELETE FROM resource WHERE crop_id = #{crop_id}
     </delete>
+    <delete id="deleteResource" parameterType="int">
+   		 update resource
+		set resource_use = 0 
+		where resource_id in (  
+    	select resource_id from (
+    	select resource_id from resource where resource_id in(${resource_name})) a) 
+    </delete>
+    
+    
 
     <insert id="insertResource" useGeneratedKeys="true" keyProperty="resource_id" >
     	insert into resource(resource_name_id, crop_id, 
@@ -52,10 +61,13 @@
     </insert>
     
     <select id="searchResource" resultType="ResourceList">
-    	select r.*, rn.*,t.trait_description, c.crop_name ,(if(resource_use = 1, '사용','비사용'))as use_name from resource r
+    	select r.*, rn.*,t.trait_description, c.crop_name ,(if(resource_use = 1, '사용','비사용'))as use_name 
+    	from resource r 
 		left join trait t on r.trait_id = t.trait_id
 		inner join crop c on c.crop_id= r.crop_id
-		inner join resource_name rn on rn.resource_name_id = r.resource_name_id
+		inner join resource_name rn on rn.resource_name_id = r.resource_name_id 
+		where r.resource_use != 0 
+		ORDER BY r.resource_id DESC 
     </select>
     
     <select id="selectResourceCount" resultType="int">
@@ -71,7 +83,7 @@
     </update>
     
     <select id="resourceList" resultType="resourceName">
-   		select * from resource_name group by resource_name;
+    	select rn.* from resource_name rn LEFT JOIN resource r ON r.resource_name_id=rn.resource_name_id WHERE r.resource_use != 0 group by rn.resource_name 
     </select>
 
 	<select id="SearchResourceId" resultType="int">

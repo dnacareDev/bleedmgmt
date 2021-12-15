@@ -578,10 +578,8 @@
         	if(obj[i]["feature_investigation"] == null){        		
         		obj[i]["feature_investigation"] = "NULL";
         	}
-	        console.log(obj[i])
         }
         obj = JSON.stringify(obj)
-        console.log("obj!",cropCategory);
 
 		formData.append("attribute_item",obj);
 		formData.append("crop_name",cropName);
@@ -598,7 +596,8 @@
                 dataType: 'json',
                 data: formData,
                 success: function (result) {
-                	return location.href='character'
+                	location.href='/character';
+                	return;
                 }
             } 
         )

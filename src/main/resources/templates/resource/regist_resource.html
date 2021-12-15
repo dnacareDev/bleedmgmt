@@ -402,7 +402,6 @@
     }
 
     function file_handler(e) { //파일 클릭시 파일명 업로드
-
         var file_name = $(file_this_file).val(); //파일 이름;
         file_this_id.text(file_name); // 클릭한 파일첨부 div 박스 element에 파일이름과 경로 생성
     }
@@ -580,13 +579,17 @@
             var endCount = 1;
             $.each(firstSheet, function (idx, value) {
             	
+
             	if(currentCount > endCount)
             		return;
             	
+            	var no = idx.replace(/[^0-9]/g,'');
+            	if(no != 1){ return; }
             	if(value.t == "n" && value.v == endCount && value.w == "1"){ 
             		currentCount++;
             		return;
             	}
+            	
             	
                 let headerArr = {}
                 if (!idx.startsWith('!')) {
@@ -628,10 +631,11 @@
             var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
             var firstSheetName = sheetNameList[0]; // 첫번째 시트명
             var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
-            callback(firstSheet);
-
-            console.log(firstSheetName	);
-
+            callback(firstSheet);	
+            
+            event.target.parentElement.getElementsByTagName("span")[1].innerHTML = input.files[0].name;
+            
+            
             headerGrid = new tui.Grid({
                 el: document.getElementById('headerGrid'),
                 scrollX: true,
@@ -647,10 +651,12 @@
             var currentCount = 1;
             var endCount = 1;
             $.each(firstSheet, function (idx, value) {
-            	
+	
             	if(currentCount > endCount)
             		return;
             	
+            	var no = idx.replace(/[^0-9]/g,'');
+            	if(no != 1){ return; }
             	if(value.t == "n" && value.v == endCount && value.w == "1"){ 
             		currentCount++;
             		return;
@@ -705,7 +711,6 @@
             let crop_id = $("#crop_id").val();
             let feature_group = $("#featureId").val();
 
-            console.log(crop_id);
             var formData = new FormData();
 
             formData.append("inputFile", $("#excelFile")[0].files[0]);
@@ -764,9 +769,11 @@
                 var endCount = 1;
                 
                 $.each(result, function (idx, value) {
+
                 	if(currentCount > endCount)
                 		return;
-                	
+
+                
                 	if(value.t == "n" && value.v == endCount && value.w == "1"){ 
                 		currentCount++;
                 		return;

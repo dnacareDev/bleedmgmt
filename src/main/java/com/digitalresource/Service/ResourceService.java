@@ -3,6 +3,8 @@ package com.digitalresource.Service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Entity.ResourceList;
@@ -11,7 +13,7 @@ import com.digitalresource.Entity.ResourceName;
 public interface ResourceService {
   public int registResource(Resource resource);
 
-  public int deleteResource(int resource_id);
+  public int deleteResource(Resource resource);
 
   public int deleteReourceByCrop(int crop_id);
 
@@ -24,6 +26,8 @@ public interface ResourceService {
   public List<ResourceList> searchResource();
 
   public int changeResourceUse(Map<String, Object> map);
+  
+  public int deleteResource(String resource_id);
 
   public List<ResourceName> resourceList();
 

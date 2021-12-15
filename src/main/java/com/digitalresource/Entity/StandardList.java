@@ -9,6 +9,7 @@ public class StandardList {
 	private String standard_data;
 	private int resource_id;
 	private int breed_row;
+	private int breed_id;	
 	private String file_id;
 }
  

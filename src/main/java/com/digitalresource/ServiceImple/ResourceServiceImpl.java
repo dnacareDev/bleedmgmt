@@ -63,26 +63,8 @@ public class ResourceServiceImpl implements ResourceService {
   }
 
   @Override
-  public int deleteResource(int resource_id) {
-    int result = -1;
-    Resource resource = resourceMapper.selectResourceById(resource_id);
-    int count = resourceMapper.getCountResourceName(resource.getResource_id());
-    if (count == 0)
-      nameService.deleteResourceName(resource.getResource_name_id());
-    result = fileService.deleteFile(resource.getResource_template_id());
-    if (result < 0) {
-      //Err
-      return result;
-    }
-
-    /*
-     * Delete Resource_detail
-     * Delete Resource_breed
-     * Delete Resource_standard
-     * */
-
-
-    return result;
+  public int deleteResource(Resource resource) {
+    return resourceMapper.deleteResource(resource);
   }
 
   @Override
@@ -158,4 +140,9 @@ public class ResourceServiceImpl implements ResourceService {
   public Integer SelectCropId(int resource_name_id) {
     return resourceMapper.SelectCropId(resource_name_id);
   }
+@Override
+public int deleteResource(String resource_id) {
+	// TODO Auto-generated method stub
+	return 0;
+}
 }

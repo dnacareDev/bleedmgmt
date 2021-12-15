@@ -2036,19 +2036,19 @@
             return Alert("삭제 권한이 없습니다.");
         } else {
             var total_id = [];
+            var breed_rows = [];
 
             var l = breedgrid.getCheckedRows().length;
 
             for (let i = 0; i < l; i++) {
                 total_id.push(breedgrid.getCheckedRows()[i].breed_id);
+                breed_rows.push(breedgrid.getCheckedRows()[i].breed_row);
             }
-
-            var data = {'breed_id': total_id};
-            console.log(l);
-            console.log(breedgrid.getCheckedRows());
-			console.log(total_id);
+            
+            var data = {'breed_id': total_id , 'breed_row' : breed_rows};
 			var formData = new FormData();
 			formData.append("breed_id",total_id);
+			formData.append("breed_row",breed_rows);
             if (confirm("삭제하시겠습니까?") == true) {
                 $.ajax(
                     {
@@ -2138,6 +2138,10 @@
 
     // 통합 분석
     function AnalysisBtn() {
+    	
+    	Alert("준비 중입니다.");
+    	return;;
+    	
         var crop = $("#CropSelect").val();
 
         var total_id = [];
@@ -2344,9 +2348,6 @@
         var limit = $("#limit").val();
 
         var data = {"crop_id": crop_id, "resource_name": resource_name};
-        console.log(resource_name);
-        console.log(crop_id);
-        console.log(data);
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2354,27 +2355,33 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                	
+                	//breed_id
                 	gridDataArray = result.standardList;
                 	let dataList = [];
+                	
                 	for(var i =0;i<result.standardList.length ;i++){
+                		
                 		let data = result.standardList[i];
-                		let tempArray = [];
-                		for(var key in data){
-                			tempArray.push(data[key].standard_data);
+                		let tempArray = []; 
+                		
+                		for(var key in data){ 
+                			tempArray.push(data[key].standard_data ? data[key].standard_data : "");
                     	}
                 		
-                		dataList.push(tempArray);
+                		for(var key in data){
+                			tempArray.breed_id = data[key].breed_id;
+                    		tempArray.breed_row = data[key].breed_row;
+                    		break;
+                    	}
                 		
+                		tempArray.idx = i + 1;
+                		dataList.push(tempArray);
                 	}
-                	
-                	
-                	console.log(dataList);
                 	
                     breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
-                        scrollY: false,
+                        scrollY: false, 
                         data: dataList,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
@@ -2385,7 +2392,6 @@
                         }
                     });
 
-                    console.log(result.standardList)
                     const headerArr = [
                     	{
                             'header': 'No',
@@ -2404,19 +2410,19 @@
                         }
                     ];
 
+                    breedgrid.setColumns(headerArr);
                     var headerName = [];
 
                     for (let i = 1; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
-                        var colName = result.detail[i].detail_id;
-                        
+                        var colName = i + 1;//result.detail[i].detail_id;
+
 
                         headerName[i] = result.detail[i].detail_id;
 
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
                         let arr = {}
-
                         if(result.detail[i].detail_info == 0) {
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 150, 'filter': filter}
                         } else {
@@ -2427,20 +2433,27 @@
                     }
 					
                     breedgrid.setColumns(headerArr);
+                    
                     breedgrid.on('beforeChange', ev => {
-
                     	
-                    	
-                    	if(ev.origin != "cell")
+                    	if(ev.origin != "cell" && ev.origin != "paste")
                     		return;
-
+                    	
 						try{
 							for(var i =0;i<ev.changes.length;i++){
 	                    		let changeItem = ev.changes[i];
+	                    		let list = gridDataArray[changeItem.rowKey];
+	                    		let count = 0;
+	                    		let standard = {};
 	                    		
-	                    		let standard = gridDataArray[changeItem.rowKey][changeItem.columnName + 1];
+	                    		for(var key in list){
+	                    			if(count++ == parseInt(changeItem.columnName)){
+	                    				standard = list[key];
+		                    			break;
+	                    			}
+	                    		}
+	                    		
 	                    		var data = { "standard_id": standard.standard_id , "standard_data" : changeItem.nextValue};
-	                            
 	                    		$.ajax({
 	                                 url: 'updateStandardCell',
 	                                 method: 'POST',
@@ -2455,9 +2468,8 @@
 	                    	}
 						}
 						catch(e){
-							
+
 						}
-                    	
                     });
                     
                     //breedgrid.setResetData(result.standardList);

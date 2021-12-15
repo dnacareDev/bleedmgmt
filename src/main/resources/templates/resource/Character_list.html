@@ -1131,6 +1131,11 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+
+                	console.log(result.trait);
+                	console.log(result.trait);
+                	console.log(result.trait);
+                	
                     traitGrid = new tui.Grid({
                         el: document.getElementById('traitGrid'),
                         scrollX: false,
@@ -1212,9 +1217,7 @@
 
                             let a = document.createElement('a');
                             a.style.display = 'none';
-                            a.href = 'http://3.37.64.204/upload/' + value.dataset.value;
-                            // the filename you want
-                            a.download = 'sample.xlsx'
+                            a.href = '/upload?filename=' + value.dataset.value;
                             document.body.appendChild(a);
                             a.click();
                             

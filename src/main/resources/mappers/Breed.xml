@@ -18,7 +18,7 @@
     </update>
     
     <select id="selectStandard" resultType="StandardList">
-    	select s.standard_id,d.detail_id, s.standard_data, b.resource_id, b.breed_row from breed b 
+    	select s.standard_id,d.detail_id, s.standard_data, b.resource_id, b.breed_row , b.breed_id from breed b 
 		inner join standard s on b.breed_id = s.breed_id
 		inner join detail d on s.detail_id = d.detail_id where b.resource_id = #{resource_id};
     </select>
@@ -30,17 +30,17 @@
     <delete id="deleteStandard">
     	delete from standard 
         where standard_id 
-        in(
+        in( 
         select  standard_id from
         (select standard_id from standard where breed_id in 
-        (select breed_id from breed where breed_row in(${breed_id}))) a);
+        (select breed_id from breed where breed_id in(${breed_id}))) a);
     </delete>
     
     <delete id="deleteBreed">
     	delete from breed 
-    	where breed_id in (
+    	where breed_id in ( 
     	select breed_id from (
-    	select breed_id from breed where breed_row in(${breed_id})) a);
+    	select breed_id from breed where breed_id in(${breed_id})) a);
     </delete>
     
     <select id="selectResourceId" resultType="int">

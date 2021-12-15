@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalresource.Mapper.DetailMapper">
+    <insert id="registDetails" parameterType="Map">
+        INSERT INTO detail(
+            resource_id,
+            detail_type,
+            detail_name,
+            detail_index,
+            detail_info
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{resource_id},
+                #{item.detail_type},
+                #{item.detail_name},
+                #{item.detail_index},
+                #{item.detail_info}
+            ) 
+        </foreach>
+    </insert>
+
+    <select id="SelectDetailListByResource" parameterType="int" resultType="Detail">
+        SELECT * FROM detail WHERE resource_id = #{resource_id}
+        ORDER BY detail_index
+    </select>
+
+</mapper>

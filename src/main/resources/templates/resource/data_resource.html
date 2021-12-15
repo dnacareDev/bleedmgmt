@@ -847,6 +847,8 @@
         .tui-grid-cell {
             background-color: white;
         }
+        .btn_box {display: flex; align-items: center; justify-content: flex-start;}
+        .btn_box button {margin-right: 4px;}
     </style>
 </head>
 
@@ -902,7 +904,10 @@
                             <div class="bg-white">
                                 <div id="sampleGrid"></div>
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-4 btn_box">
+                                        <button class="btn btn-lg btn-primary bottom_btn" onclick="DeleteSample(0)">
+                                            <span>비사용</span>
+                                        </button>
                                     </div>
                                     <div class="col-4">
                                         <div class="row" style="justify-content: center;">
@@ -974,30 +979,33 @@
     var emptyEls;
 
     // 시교자원 삭제
-    function DeleteSample() {
+    function DeleteSample(type) {
         var user_type = $("#user_type").val();
 
         if (user_type != 0) {
             return Alert("삭제 권한이 없습니다.");
         } else {
-            if (tablechk === 0) {
                 var total_id = [];
 
                 var l = samplegrid.getCheckedRows().length;
 
                 for (let i = 0; i < l; i++) {
-                    total_id.push(samplegrid.getCheckedRows()[i].sample_id)
+                    total_id.push(samplegrid.getCheckedRows()[i].resource_id)
                 }
-
-                var data = {'sample_id': total_id};
-
+                var formData = new FormData();
+    			formData.append("resource_name",total_id);
+    			formData.append("resource_use",type);
+    			
+                var data = {'resource_id': total_id};
+				
                 if (confirm("삭제하시겠습니까?") == true) {
                     $.ajax(
                         {
-                            url: 'deleteSample',
+                            url: 'deleteResource',
                             method: 'POST',
-                            dataType: 'json',
-                            data: data,
+                            processData : false,
+            				contentType : false,
+                            data: formData,
                             success: function (result) {
                                 if (result == 0) {
                                     return Alert("삭제에 실패하였습니다.");
@@ -1009,37 +1017,8 @@
                 } else {
                     return false;
                 }
-            } else {
-                var total_id1 = [];
-
-                var l1 = outcomegrid.getCheckedRows().length;
-
-                for (let i = 0; i < l1; i++) {
-                    total_id1.push(outcomegrid.getCheckedRows()[i].sample_outcome_id)
-                }
-
-                var data1 = {'sample_outcome_id': total_id1};
-
-                if (confirm("삭제하시겠습니까?") == true) {
-                    $.ajax(
-                        {
-                            url: 'deleteOutcome',
-                            method: 'POST',
-                            dataType: 'json',
-                            data: data1,
-                            success: function (result) {
-                                if (result == 0) {
-                                    return Alert("삭제에 실패하였습니다.");
-                                } else {
-                                    location.reload()
-                                }
-                            }
-                        });
-                } else {
-                    return false;
-                }
-            }
         }
+            
     }
 
     // 시교자원 삭제
@@ -1204,6 +1183,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                	
                     samplegrid = new tui.Grid({
                         el: document.getElementById('sampleGrid'),
                         scrollX: false,
@@ -1240,13 +1220,14 @@
                                 sortable: true,
                                 sortingType: 'asc'
                             },
+                            /*
                             {
                                 header: '사용여부',
                                 name: 'use_name',
                                 editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
-                            },
+                            },*/
                             {
                                 header: '생성날짜',
                                 name: 'create_date',
@@ -1306,14 +1287,13 @@
                             let value = ev.nativeEvent.srcElement;
                             let fileName = value.dataset.value;
                             if (fileName == 'null') {
-                                return Alert("파일이 존재하지 않습니다.")
+                                Alert("파일이 존재하지 않습니다.")
+                               	return;
                             } else {
                             	
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
-                                a.href = 'http://3.37.64.204/upload/' + value.dataset.value;
-                                // the filename you want
-                                a.download = 'sample.xlsx'
+                                a.href = '/upload?filename=' + value.dataset.value;
                                 document.body.appendChild(a);
                                 a.click();
                             	
@@ -1328,9 +1308,7 @@
 
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
-                                a.href = 'http://3.37.64.204/upload/' + value.dataset.value;
-                                // the filename you want
-                                a.download = 'sample.xlsx'
+                                a.href = '/upload?filename=' + value.dataset.value;
                                 document.body.appendChild(a);
                                 a.click();
                             }

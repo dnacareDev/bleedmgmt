@@ -117,10 +117,8 @@ public class ResourceController {
     Map<String, Object> param = new HashMap<String, Object>();
     ResourceName resourceName = new ResourceName();
     resourceName.setResource_name(resource_name);
-    System.out.println(resourceName.getResource_name_id());
     // insert resource_name
     int resource_id = RNService.insertResource_name(resourceName);
-    System.out.println(resourceName.getResource_name_id());
     // 파일 업로드 및 파일 이름 저장
     String inputFile_name = "";
     String charFile_name = "";
@@ -133,7 +131,7 @@ public class ResourceController {
 
       inputFile_name = fileController.ChangeFileName(extension[1]);
       String origin_inputFile_name = inputFile.getOriginalFilename();
-      String path = "upload";
+      String path = "/upload";
 
       File filePath = new File(path);
       if (!filePath.exists())
@@ -149,7 +147,7 @@ public class ResourceController {
 
       charFile_name = fileController.ChangeFileName(extension[1]);
       String origin_charFile_name = charFile.getOriginalFilename();
-      String path = "upload";
+      String path = "/upload";
 
       File filePath = new File(path);
       if (!filePath.exists())
@@ -181,8 +179,7 @@ public class ResourceController {
   @ResponseBody
   @RequestMapping("resourceDownloadFile")
   public ResponseEntity<Object> resourceDownloadFile(@RequestParam(value = "file_name") String file_name) {
-    String path = "upload/" + file_name;
-    System.out.println(file_name);
+    String path = "/upload/" + file_name;
 
     try {
       Path filePath = Paths.get(path);
@@ -222,7 +219,15 @@ public class ResourceController {
     }
     return result;
   }
-
+  
+  @ResponseBody
+  @RequestMapping("deleteResource")
+  public int deleteResource(Resource resource) {
+    int result = 0;
+    result = RService.deleteResource(resource);
+    return result;
+  }
+  
   @ResponseBody
   @RequestMapping("resource-list")
   public ResponseEntity<?> resourceList() {

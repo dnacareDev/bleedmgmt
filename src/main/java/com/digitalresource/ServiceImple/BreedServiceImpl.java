@@ -24,7 +24,7 @@ public class BreedServiceImpl implements BreedService {
 
 	@Autowired
 	private BreedMapper breedMapper;
-	
+	 
 	@Override
 	public int insertBreed(int resource_id, String data,int crop_id, String resource_name) {
 		Map<String,Object> param = new HashMap<String, Object>();
@@ -68,8 +68,6 @@ public class BreedServiceImpl implements BreedService {
 					map.put("standard_data", "");
 			}
 			result = breedMapper.insertStandard(map);
-			System.out.println("result");
-			System.out.println(result);
 			cnt++;
 		}
 		return result;
@@ -96,8 +94,9 @@ public class BreedServiceImpl implements BreedService {
 		List<Map<String, Object>> bodyList = new ArrayList<Map<String, Object>>();
 		Map<String , Object> dataMap = new HashMap<String , Object>();
 		int idx = 0;
-		int breed_row = 0;
+		int breed_id = 0;
 		int detail_id = 0;
+		int breed_row = 0;
 		// System.out.println(list.get(0).getBreed_row());
 		if(list.size() != 0 ) {			
 			breed_row = list.get(0).getBreed_row();		
@@ -108,30 +107,35 @@ public class BreedServiceImpl implements BreedService {
 					dataMap.put(String.valueOf(item.getDetail_id()) , item);
 
 				}else {
-					dataMap.put("breed_id", breed_row);
+					dataMap.put("breed_row", item.getBreed_row());
+					dataMap.put("breed_id", item.getBreed_id());
 					dataMap.put("detail_id", item.getDetail_id());
 					dataMap.put("idx", idx++);
 					bodyList.add(dataMap);
-
+					
 					breed_row = item.getBreed_row();
+					breed_id = item.getBreed_id();
 					detail_id = item.getDetail_id();
 					dataMap = new HashMap<String , Object>();
 					dataMap.put(String.valueOf(item.getDetail_id()) , item);
 				}
 			}
 			dataMap.put("idx", idx++);
-			dataMap.put("breed_id", breed_row);
+			dataMap.put("breed_row", breed_row);
+			dataMap.put("breed_id", breed_id);
 			dataMap.put("detail_id", detail_id);
 			bodyList.add(dataMap);
 		return bodyList;
 	}
 
 	@Override
-	public int deleteBreed(String breed_id) {
+	public int deleteBreed(String breed_id, String breed_row) {
+
 		int deleteResult = breedMapper.deleteStandard(breed_id);
 		int result = 0;
 		if(deleteResult != 0) {
 			result = breedMapper.deleteBreed(breed_id);
+			System.out.println(result);
 		}
 		return result;
 	}
