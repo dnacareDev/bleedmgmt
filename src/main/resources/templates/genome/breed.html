@@ -2006,16 +2006,14 @@
 
     // 통합 분석
     function AnalysisBtn() {
-<<<<<<< HEAD
     	
     	Alert("준비 중입니다.");
     	return;;
     	
+        /*
+
         var crop = $("#CropSelect").val();
-=======
         return Alert("준비 중입니다.")
-        /*var crop = $("#CropSelect").val();
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
 
         var total_id = [];
 
@@ -2221,10 +2219,7 @@
         var limit = $("#limit").val();
 
         var data = {"crop_id": crop_id, "resource_name": resource_name};
-<<<<<<< HEAD
-=======
 
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2232,7 +2227,6 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-<<<<<<< HEAD
                 	//breed_id
                 	gridDataArray = result.standardList;
                 	let dataList = [];
@@ -2246,7 +2240,7 @@
                 			tempArray.push(data[key].standard_data ? data[key].standard_data : "");
                     	}
                 		
-                		for(var key in data){
+                		for(var key in data){ 	
                 			tempArray.breed_id = data[key].breed_id;
                     		tempArray.breed_row = data[key].breed_row;
                     		break;
@@ -2255,34 +2249,12 @@
                 		tempArray.idx = i + 1;
                 		dataList.push(tempArray);
                 	}
-=======
 
-                	// let dataList = [];
-                    //
-                	// for(var i =0;i<result.standardList.length ;i++){
-                	// 	let data = result.standardList[i];
-                	// 	let tempArray = [];
-                	// 	for(var key in data){
-                	// 		tempArray.push(data[key].standard_data);
-                    // 	}
-                	//
-                	// 	dataList.push(tempArray);
-                	//
-                	// }
-                    //
-                	// console.log('dataList : ', dataList);
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
-                	
                     breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
-<<<<<<< HEAD
-                        scrollY: false, 
-                        data: dataList,
-=======
                         scrollY: false,
-                        data: result.standardList,
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
+                        data: dataList,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2311,28 +2283,21 @@
                     ];
 
                     breedgrid.setColumns(headerArr);
+                    console.log(dataList);
+                    console.log(gridDataArray);
                     var headerName = [];
 
                     for (let i = 0; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
-<<<<<<< HEAD
-                        var colName = i + 1;//result.detail[i].detail_id;
-
-=======
-                        var colName = result.detail[i].detail_id;
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
+                        var colName = i + 1;
 
                         headerName[i] = result.detail[i].detail_id;
 
+                    	console.log(colName)
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
                         let arr = {}
-<<<<<<< HEAD
                         if(result.detail[i].detail_info == 0) {
-=======
-
-                        if(result.detail[i].detail_info != 2) {
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 150, 'filter': filter}
                         } else {
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
@@ -2342,16 +2307,9 @@
                     }
 					
                     breedgrid.setColumns(headerArr);
-<<<<<<< HEAD
-                    
                     breedgrid.on('beforeChange', ev => {
                     	
                     	if(ev.origin != "cell" && ev.origin != "paste")
-=======
-
-                    breedgrid.on('beforeChange', ev => {
-                    	if(ev.origin != "cell")
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
                     		return;
                     	
 						try{
@@ -2406,7 +2364,6 @@
 
                             rowArr[headerName[i]] = rowData;
 
-                            console.log(rowArr);
                         }
 
                         dataArr.push(rowArr);
