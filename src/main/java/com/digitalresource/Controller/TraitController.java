@@ -73,7 +73,7 @@ public class TraitController {
     
     @ResponseBody
     @RequestMapping("change-trait")
-    public int changeTrait(@RequestParam("trait_description")String trait_description, @RequestParam("limit") int limit) {
+    public int changeTrait(@RequestParam("trait_description") String trait_description, @RequestParam("limit") int limit) {
     	Map<String,Object> param = new HashMap<String, Object>();
     	param.put("trait_description", trait_description);
     	param.put("limit", limit);
@@ -86,5 +86,15 @@ public class TraitController {
     public List<Trait> traitDescriptionList(){
     	List<Trait> traitList = traitService.traitDescriptionList();
     	return traitList;
+    }
+
+    @ResponseBody
+    @RequestMapping("change-year")
+    public int changeYear(@RequestParam("trait_year") int trait_year, @RequestParam("limit") int limit) {
+        Map<String,Object> param = new HashMap<String, Object>();
+        param.put("trait_year", trait_year);
+        param.put("limit", limit);
+        int result = traitService.changeYear(param);
+        return result;
     }
 }

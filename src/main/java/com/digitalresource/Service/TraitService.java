@@ -17,4 +17,5 @@ public interface TraitService {
 
 	List<Trait> traitDescriptionList();
 
+	int changeYear(Map<String, Object> param);
 }

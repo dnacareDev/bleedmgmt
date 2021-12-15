@@ -10,7 +10,7 @@ public class Trait {
   private int trait_id;
   private int crop_id;
   private String trait_description;
-  private String trait_year;
+  private int trait_year;
   private String trait_file;
   private LocalDate create_date;
   private LocalDate modify_date;

@@ -1025,6 +1025,7 @@
             }
         }
     }
+
     // 시교자원 삭제
 
     /* 첨부파일 */
@@ -1087,8 +1088,8 @@
         $("#uploads_origin_file").text(files.uploads_origin_file);
         $("#uploads_file").val(files.uploads_file);
         //$("#file_download").attr("href", "downloadFile?uploads_file=" + files.uploads_file);
-        
-        $("#file_download").onclick = function(){
+
+        $("#file_download").onclick = function () {
 
             let a = document.createElement('a');
             a.style.display = 'none';
@@ -1097,12 +1098,13 @@
             a.download = 'sample.xlsx'
             document.body.appendChild(a);
             a.click();
-            
+
         }
 
         $("#sample_file").modal("hide");
         $("#modify_file").modal("show");
     }
+
     /* 첨부파일 */
 
     // DB에 저장된 데이터 읽어와서 테이블에 보여줌
@@ -1150,7 +1152,7 @@
                             {
                                 header: '작목서설',
                                 name: 'crop_name',
-                                onchange:'test()'
+                                onchange: 'test()'
                             },
                             {
                                 header: '설명',
@@ -1172,6 +1174,7 @@
                             }
                         ],
                         pageOptions: {
+                            useClient: true,
                             perPage: limit,
                         }
                     });
@@ -1193,22 +1196,43 @@
 
                     traitGrid.resetData(dataArr);
 
-                    traitGrid.on('afterChange', (ev)=>{
-                    	var after = ev.changes[0].value;
-                    	var before = ev.changes[0].prevValue;
-                    	var rowKey = ev.changes[0].rowKey;
+                    traitGrid.on('afterChange', (ev) => {
+                        var rowKey = ev.changes[0].rowKey;
 
-                    	var data = {"limit": rowKey, "trait_description":after}
-                    	if(after != before){
-                    		$.ajax(
-                    			{
-                    				url:'change-trait',
-                    				method:'POST',
-                    				dataType: 'json',
-                                    data: data,
-                    			}		
-                    		)
-                    	}
+                        if (ev.changes[0].columnName == "trait_description") {
+                            var before = ev.changes[0].prevValue;
+                            var after = ev.changes[0].value;
+
+                            var data = {"limit": rowKey, "trait_description": after}
+
+                            if (after != before) {
+                                $.ajax(
+                                    {
+                                        url: 'change-trait',
+                                        method: 'POST',
+                                        dataType: 'json',
+                                        data: data,
+                                    }
+                                )
+                            }
+                        } else if (ev.changes[0].columnName == "trait_year") {
+                            var before = ev.changes[0].prevValue;
+                            var after = ev.changes[0].value;
+
+                            var data = {"limit": rowKey, "trait_year": after}
+
+                            if (after != before) {
+                                $.ajax(
+                                    {
+                                        url: 'change-year',
+                                        method: 'POST',
+                                        dataType: 'json',
+                                        data: data,
+                                    }
+                                )
+                            }
+                        }
+
                     });
 
                     traitGrid.on('click', (ev) => {
@@ -1220,11 +1244,11 @@
                             a.href = '/upload?filename=' + value.dataset.value;
                             document.body.appendChild(a);
                             a.click();
-                            
+
                         }
                     });
                 }
-            
+
             });
     }
 
