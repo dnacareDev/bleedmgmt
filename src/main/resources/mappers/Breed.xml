@@ -46,4 +46,73 @@
     <select id="selectResourceId" resultType="int">
     	select resource_id from resource where resource_name_id in (select resource_name_id from resource_name where resource_name = #{resource_name}) and crop_id = #{crop_id}
     </select>
+
+    <!-- 첨부파일 목록 조회 -->
+    <select id="SelectBreedFile" parameterType="int" resultType="BreedFile">
+        SELECT * FROM breed_file bf
+                          LEFT JOIN uploads u ON bf.breed_file_id = u.breed_file_id
+        WHERE bf.breed_id = #{breed_id}
+    </select>
+
+    <!-- 첨부파일 내용 등록 -->
+    <insert id="InsertBreedFile" parameterType="BreedFile">
+        INSERT INTO breed_file
+        (breed_id, breed_file_title, breed_file_contents, create_date, modify_date)
+        VALUES
+        (#{breed_id}, #{breed_file_title}, #{breed_file_contents}, NOW(), NOW())
+        <selectKey resultType="int" keyProperty="breed_file_id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!-- 첨부파일 등록 -->
+    <insert id="InsertBreedUpload" parameterType="Uploads">
+        INSERT INTO uploads
+            (uploads_file, uploads_origin_file, uploads_type, uploads_cat, breed_file_id, create_date, modify_date)
+        VALUES
+            (#{uploads_file}, #{uploads_origin_file}, 0, 0, #{breed_file_id}, NOW(), NOW())
+    </insert>
+
+    <!-- 첨부파일 내용 수정 -->
+    <update id="UpdateBreedFile" parameterType="BreedFile">
+        UPDATE breed_file
+        SET breed_file_title = #{breed_file_title}, breed_file_contents = #{breed_file_contents}, modify_date = NOW()
+        WHERE breed_file_id = #{breed_file_id}
+    </update>
+
+    <!-- 첨부파일 수정 -->
+    <update id="UpdateBreedUpload" parameterType="Uploads">
+        UPDATE uploads
+        SET uploads_file = #{uploads_file}, uploads_origin_file = #{uploads_origin_file}, modify_date = NOW()
+        WHERE breed_file_id = #{breed_file_id}
+    </update>
+
+    <!-- 첨부파일 내용 삭제 -->
+    <delete id="DeleteFile" parameterType="java.util.ArrayList">
+        DELETE FROM breed_file
+        WHERE
+        <foreach collection="array" item="item" open="(" close=")" separator="OR">
+            breed_id = #{item}
+        </foreach>
+    </delete>
+
+    <!-- 첨부파일 삭제 -->
+    <delete id="DeleteUploads" parameterType="java.util.ArrayList">
+        DELETE FROM uploads
+        WHERE
+        <foreach collection="list" item="item" open="(" close=")" separator="OR">
+            uploads_id = #{item.uploads_id}
+        </foreach>
+    </delete>
+
+    <!-- 첨부파일 조회 -->
+    <select id="SelectUploads" parameterType="java.util.ArrayList" resultType="Uploads">
+        SELECT * FROM uploads u
+        LEFT JOIN breed_file bf ON u.breed_file_id = bf.breed_file_id
+        LEFT JOIN breed b ON bf.breed_id = b.breed_id
+        WHERE
+        <foreach collection="array" item="item" open="(" close=")" separator="OR">
+            b.breed_id = #{item}
+        </foreach>
+    </select>
 </mapper>

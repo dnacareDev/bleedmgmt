@@ -96,9 +96,10 @@
 
         .pop1 .modal-dialog textarea {
             width: 100%;
-            height: 300px;
+            height: 150px;
             border-radius: 5px;
             border: 1px solid #D9D9D9;
+            margin-top: 20px;
         }
 
         .pop1 .modal-dialog .btn-upload {
@@ -811,6 +812,11 @@
                 box-shadow: 0 2.5em 0 0;
             }
         }
+
+        /* 여기서부터 */
+        .main-content .form-group:nth-child(2) {display: block; width: 100%;}
+        .image-container { width: 300px; height: 200px; margin: 0 auto;}
+        .image-container img { width: 100%; height: 100%; object-fit: contain;}
     </style>
 </head>
 <body class="layout-light top-menu overlayScroll">
@@ -981,10 +987,10 @@
                             <input type="text" class="form-control form-control-lg inputText" id="breed_file_title" name="breed_file_title">
                         </div>
                         <div class="form-group mb-0">
-                            <textarea id="breed_file_contents" name="breed_file_contents" style="resize:none;"></textarea>
                             <div class="image-container">
-                                <img style="width: 500px;" id="preview-image">
+                                <img id="preview-image">
                             </div>
+                            <textarea id="breed_file_contents" name="breed_file_contents" style="resize:none;"></textarea>
                         </div>
                         <div>
                             <div class="atbd-upload">
@@ -2261,14 +2267,13 @@
                         var colHeader = result.detail[i].detail_name;
                         var colName = i + 1;//result.detail[i].detail_id;
 
-
                         headerName[i] = result.detail[i].detail_id;
 
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
                         let arr = {}
-                        if(result.detail[i].detail_info == 0) {
-                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 150, 'filter': filter}
+                        if(result.detail[i].detail_info != 2) {
+                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
                         } else {
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
                         }
@@ -2337,7 +2342,6 @@
 
                         tempArray.idx = i + 1;
 
-                        console.log(tempArray);
                         dataList.push(tempArray);
                     }
 
