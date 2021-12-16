@@ -637,12 +637,6 @@
             background-color: #FCFCFC;
         }
 
-        #breedGrid .tui-grid-body-area td[data-column-name='2'], #breedGrid .tui-grid-body-area td[data-column-name='4'], #breedGrid .tui-grid-body-area td[data-column-name='5'], #breedGrid .tui-grid-body-area td[data-column-name='277'], #breedGrid .tui-grid-body-area td[data-column-name='388'], #breedGrid .tui-grid-body-area td[data-column-name='626'], #breedGrid .tui-grid-body-area td[data-column-name='749'], #breedGrid .tui-grid-body-area td[data-column-name='912'], #breedGrid .tui-grid-body-area td[data-column-name='1076'], #breedGrid .tui-grid-body-area td[data-column-name='1254'], #breedGrid .tui-grid-body-area td[data-column-name='1412'], #breedGrid .tui-grid-body-area td[data-column-name='1599'] {
-            color: mediumblue;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         #breedGrid .tui-grid-body-area td[data-column-name='status'], #breedGrid .tui-grid-body-area td[data-column-name='file'] {
             cursor: pointer;
         }
@@ -2227,33 +2221,11 @@
                 data: data,
                 success: function (result) {
                 	//breed_id
-                	gridDataArray = result.standardList;
-                	let dataList = [];
-                	
-                	for(var i =0;i<result.standardList.length ;i++){
-                		
-                		let data = result.standardList[i];
-                		let tempArray = []; 
-                		
-                		for(var key in data){ 
-                			tempArray.push(data[key].standard_data ? data[key].standard_data : "");
-                    	}
-                		
-                		for(var key in data){
-                			tempArray.breed_id = data[key].breed_id;
-                    		tempArray.breed_row = data[key].breed_row;
-                    		break;
-                    	}
-                		
-                		tempArray.idx = i + 1;
-                		dataList.push(tempArray);
-                	}
-
                 	breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false, 
-                        data: dataList,
+                        data: [],
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2282,6 +2254,7 @@
                     ];
 
                     breedgrid.setColumns(headerArr);
+
                     var headerName = [];
 
                     for (let i = 1; i < result.detail.length; i++) {
@@ -2302,12 +2275,10 @@
 
                         headerArr.push(arr);
                     }
-                    
-                    
-					
+
                     breedgrid.setColumns(headerArr);
+
                     breedgrid.on('beforeChange', ev => {
-                    	
                     	if(ev.origin != "cell" && ev.origin != "paste")
                     		return;
                     	
@@ -2344,45 +2315,39 @@
 						}
                     });
 
-                    const dataArr = [];
+                    gridDataArray = result.standardList;
+                    let dataList = [];
 
-                    for (let i = 0; i < result.standardList.length; i++) {
-                        let rowArr = {};
+                    for(var i = 0; i < result.standardList.length; i++){
 
-                        rowArr = {'file': '<i class="bi bi-file-earmark-arrow-down"></i>'};
+                        let data = result.standardList[i];
+                        let tempArray = [];
 
-                        /*if (result.breed[i].standard_count == 0) {
-                            rowArr['status'] = '<span style="color:red">EMPTY</span>';
-
-                        } else {
-                            rowArr['status'] = '<span style="color:blue">PROGRESS</span>';
-                        }*/
-
-                        for (var j = 0; j < Object.keys(result.standardList[i]).length; j++) {
-                            var rowData = result.standardList[i][headerName[i]].standard_data;
-
-                            rowArr[headerName[i]] = rowData;
-
+                        for(var key in data){
+                            tempArray.push(data[key].standard_data ? data[key].standard_data : "");
                         }
 
-                        dataArr.push(rowArr);
+                        for(var key in data){
+                            tempArray.breed_id = data[key].breed_id;
+                            tempArray.breed_row = data[key].breed_row;
+                            break;
+                        }
+
+                        tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+
+                        tempArray.idx = i + 1;
+
+                        console.log(tempArray);
+                        dataList.push(tempArray);
                     }
 
-                    breedgrid.resetData(dataArr);
+                    breedgrid.resetData(dataList);
 
                     breedgrid.on('check', (ev) => {
                         breedgrid.getRow(ev.rowKey).breed_id;
                     })
 
                     breedgrid.on('click', (ev) => {
-                        // if (ev.targetType === 'cell' && (ev.columnName === '2' || ev.columnName === '277' || ev.columnName === '388' || ev.columnName === '626' || ev.columnName === '749' || ev.columnName === '912' || ev.columnName === '1076' || ev.columnName === '1254' || ev.columnName === '1412' || ev.columnName === '1599')) {
-                        //     var value_sample = ev.nativeEvent.srcElement;
-                        //     var value_mom = breedgrid.getRow(ev.rowKey)[4];
-                        //     var value_dad = breedgrid.getRow(ev.rowKey)[5];
-                        //
-                        //     SearchSample(value_sample);
-                        //     SearchBasic(value_mom, value_dad);
-                        // }
                         if (ev.targetType === 'cell' && ev.columnName === 'file') {
                             var id = breedgrid.getRow(ev.rowKey).breed_id;
 
@@ -2466,12 +2431,6 @@
             });
         }
     }
-    
-    
-    
-    const copareFunction = function(){
-    	
-    } 
 
     function saveRow() {
 	console.log(breedData);
