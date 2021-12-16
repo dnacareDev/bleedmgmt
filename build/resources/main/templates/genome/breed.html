@@ -637,12 +637,6 @@
             background-color: #FCFCFC;
         }
 
-        #breedGrid .tui-grid-body-area td[data-column-name='2'], #breedGrid .tui-grid-body-area td[data-column-name='4'], #breedGrid .tui-grid-body-area td[data-column-name='5'], #breedGrid .tui-grid-body-area td[data-column-name='277'], #breedGrid .tui-grid-body-area td[data-column-name='388'], #breedGrid .tui-grid-body-area td[data-column-name='626'], #breedGrid .tui-grid-body-area td[data-column-name='749'], #breedGrid .tui-grid-body-area td[data-column-name='912'], #breedGrid .tui-grid-body-area td[data-column-name='1076'], #breedGrid .tui-grid-body-area td[data-column-name='1254'], #breedGrid .tui-grid-body-area td[data-column-name='1412'], #breedGrid .tui-grid-body-area td[data-column-name='1599'] {
-            color: mediumblue;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         #breedGrid .tui-grid-body-area td[data-column-name='status'], #breedGrid .tui-grid-body-area td[data-column-name='file'] {
             cursor: pointer;
         }
@@ -2006,16 +2000,14 @@
 
     // 통합 분석
     function AnalysisBtn() {
-<<<<<<< HEAD
     	
     	Alert("준비 중입니다.");
     	return;;
     	
+        /*
+
         var crop = $("#CropSelect").val();
-=======
         return Alert("준비 중입니다.")
-        /*var crop = $("#CropSelect").val();
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
 
         var total_id = [];
 
@@ -2221,10 +2213,6 @@
         var limit = $("#limit").val();
 
         var data = {"crop_id": crop_id, "resource_name": resource_name};
-<<<<<<< HEAD
-=======
-
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2232,57 +2220,12 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-<<<<<<< HEAD
                 	//breed_id
-                	gridDataArray = result.standardList;
-                	let dataList = [];
-                	
-                	for(var i =0;i<result.standardList.length ;i++){
-                		
-                		let data = result.standardList[i];
-                		let tempArray = []; 
-                		
-                		for(var key in data){ 
-                			tempArray.push(data[key].standard_data ? data[key].standard_data : "");
-                    	}
-                		
-                		for(var key in data){
-                			tempArray.breed_id = data[key].breed_id;
-                    		tempArray.breed_row = data[key].breed_row;
-                    		break;
-                    	}
-                		
-                		tempArray.idx = i + 1;
-                		dataList.push(tempArray);
-                	}
-=======
-
-                	// let dataList = [];
-                    //
-                	// for(var i =0;i<result.standardList.length ;i++){
-                	// 	let data = result.standardList[i];
-                	// 	let tempArray = [];
-                	// 	for(var key in data){
-                	// 		tempArray.push(data[key].standard_data);
-                    // 	}
-                	//
-                	// 	dataList.push(tempArray);
-                	//
-                	// }
-                    //
-                	// console.log('dataList : ', dataList);
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
-                	
-                    breedgrid = new tui.Grid({
+                	breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
-<<<<<<< HEAD
                         scrollY: false, 
-                        data: dataList,
-=======
-                        scrollY: false,
-                        data: result.standardList,
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
+                        data: [],
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2291,7 +2234,7 @@
                             perPage: limit
                         }
                     });
-
+                	
                     const headerArr = [
                     	{
                             'header': 'No',
@@ -2311,28 +2254,20 @@
                     ];
 
                     breedgrid.setColumns(headerArr);
+
                     var headerName = [];
 
-                    for (let i = 0; i < result.detail.length; i++) {
+                    for (let i = 1; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
-<<<<<<< HEAD
                         var colName = i + 1;//result.detail[i].detail_id;
 
-=======
-                        var colName = result.detail[i].detail_id;
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
 
                         headerName[i] = result.detail[i].detail_id;
 
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
                         let arr = {}
-<<<<<<< HEAD
                         if(result.detail[i].detail_info == 0) {
-=======
-
-                        if(result.detail[i].detail_info != 2) {
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 150, 'filter': filter}
                         } else {
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
@@ -2340,18 +2275,11 @@
 
                         headerArr.push(arr);
                     }
-					
+
                     breedgrid.setColumns(headerArr);
-<<<<<<< HEAD
-                    
-                    breedgrid.on('beforeChange', ev => {
-                    	
-                    	if(ev.origin != "cell" && ev.origin != "paste")
-=======
 
                     breedgrid.on('beforeChange', ev => {
-                    	if(ev.origin != "cell")
->>>>>>> e31a8d0e152746efba3947f09f1cd78f80168390
+                    	if(ev.origin != "cell" && ev.origin != "paste")
                     		return;
                     	
 						try{
@@ -2387,46 +2315,39 @@
 						}
                     });
 
-                    const dataArr = [];
+                    gridDataArray = result.standardList;
+                    let dataList = [];
 
-                    for (let i = 0; i < result.standardList.length; i++) {
-                        let rowArr = {};
+                    for(var i = 0; i < result.standardList.length; i++){
 
-                        rowArr = {'file': '<i class="bi bi-file-earmark-arrow-down"></i>'};
+                        let data = result.standardList[i];
+                        let tempArray = [];
 
-                        /*if (result.breed[i].standard_count == 0) {
-                            rowArr['status'] = '<span style="color:red">EMPTY</span>';
-
-                        } else {
-                            rowArr['status'] = '<span style="color:blue">PROGRESS</span>';
-                        }*/
-
-                        for (var j = 0; j < Object.keys(result.standardList[i]).length; j++) {
-                            var rowData = result.standardList[i][headerName[i]].standard_data;
-
-                            rowArr[headerName[i]] = rowData;
-
-                            console.log(rowArr);
+                        for(var key in data){
+                            tempArray.push(data[key].standard_data ? data[key].standard_data : "");
                         }
 
-                        dataArr.push(rowArr);
+                        for(var key in data){
+                            tempArray.breed_id = data[key].breed_id;
+                            tempArray.breed_row = data[key].breed_row;
+                            break;
+                        }
+
+                        tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+
+                        tempArray.idx = i + 1;
+
+                        console.log(tempArray);
+                        dataList.push(tempArray);
                     }
 
-                    breedgrid.resetData(dataArr);
+                    breedgrid.resetData(dataList);
 
                     breedgrid.on('check', (ev) => {
                         breedgrid.getRow(ev.rowKey).breed_id;
                     })
 
                     breedgrid.on('click', (ev) => {
-                        // if (ev.targetType === 'cell' && (ev.columnName === '2' || ev.columnName === '277' || ev.columnName === '388' || ev.columnName === '626' || ev.columnName === '749' || ev.columnName === '912' || ev.columnName === '1076' || ev.columnName === '1254' || ev.columnName === '1412' || ev.columnName === '1599')) {
-                        //     var value_sample = ev.nativeEvent.srcElement;
-                        //     var value_mom = breedgrid.getRow(ev.rowKey)[4];
-                        //     var value_dad = breedgrid.getRow(ev.rowKey)[5];
-                        //
-                        //     SearchSample(value_sample);
-                        //     SearchBasic(value_mom, value_dad);
-                        // }
                         if (ev.targetType === 'cell' && ev.columnName === 'file') {
                             var id = breedgrid.getRow(ev.rowKey).breed_id;
 
@@ -2510,12 +2431,6 @@
             });
         }
     }
-    
-    
-    
-    const copareFunction = function(){
-    	
-    } 
 
     function saveRow() {
 	console.log(breedData);
