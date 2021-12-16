@@ -2219,7 +2219,6 @@
         var limit = $("#limit").val();
 
         var data = {"crop_id": crop_id, "resource_name": resource_name};
-
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2240,7 +2239,7 @@
                 			tempArray.push(data[key].standard_data ? data[key].standard_data : "");
                     	}
                 		
-                		for(var key in data){ 	
+                		for(var key in data){
                 			tempArray.breed_id = data[key].breed_id;
                     		tempArray.breed_row = data[key].breed_row;
                     		break;
@@ -2250,10 +2249,10 @@
                 		dataList.push(tempArray);
                 	}
 
-                    breedgrid = new tui.Grid({
+                	breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
-                        scrollY: false,
+                        scrollY: false, 
                         data: dataList,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
@@ -2263,7 +2262,7 @@
                             perPage: limit
                         }
                     });
-
+                	
                     const headerArr = [
                     	{
                             'header': 'No',
@@ -2283,17 +2282,15 @@
                     ];
 
                     breedgrid.setColumns(headerArr);
-                    console.log(dataList);
-                    console.log(gridDataArray);
                     var headerName = [];
 
-                    for (let i = 0; i < result.detail.length; i++) {
+                    for (let i = 1; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
-                        var colName = i + 1;
+                        var colName = i + 1;//result.detail[i].detail_id;
+
 
                         headerName[i] = result.detail[i].detail_id;
 
-                    	console.log(colName)
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
                         let arr = {}
@@ -2305,6 +2302,8 @@
 
                         headerArr.push(arr);
                     }
+                    
+                    
 					
                     breedgrid.setColumns(headerArr);
                     breedgrid.on('beforeChange', ev => {
