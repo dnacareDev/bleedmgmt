@@ -3,12 +3,9 @@ package com.digitalresource.Mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.digitalresource.Entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.digitalresource.Entity.Breed;
-import com.digitalresource.Entity.CountSelect;
-import com.digitalresource.Entity.StandardList;
 
 @Mapper
 public interface BreedMapper {
@@ -28,4 +25,8 @@ public interface BreedMapper {
 	int deleteStandard(String breed_id);
 
 	int selectResourceId(Map<String, Object> param);
+
+	int InsertBreedFile(BreedFile breed_file);
+
+	int InsertBreedUpload(Uploads upload);
 }

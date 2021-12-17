@@ -1,9 +1,6 @@
 package com.digitalresource.Controller;
 
-import com.digitalresource.Entity.BreedFile;
-import com.digitalresource.Entity.Crop;
-import com.digitalresource.Entity.Detail;
-import com.digitalresource.Entity.StandardList;
+import com.digitalresource.Entity.*;
 import com.digitalresource.Service.*;
 
 import java.io.File;
@@ -149,14 +146,14 @@ public class BreedController {
 
 		Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-		int insert_file = service.InsertBreedFile(breed_file);
+		int insert_file = breedService.InsertBreedFile(breed_file);
 
 		Uploads upload = new Uploads();
 		upload.setUploads_file(file_name);
 		upload.setUploads_origin_file(origin_file_name);
 		upload.setBreed_file_id(breed_file.getBreed_file_id());
 
-		int insert_upload = service.InsertBreedUpload(upload);
+		int insert_upload = breedService.InsertBreedUpload(upload);
 
 		mv.setViewName("redirect:/breed");
 

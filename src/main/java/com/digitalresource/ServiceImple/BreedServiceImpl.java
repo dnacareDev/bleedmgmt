@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.digitalresource.Entity.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.digitalresource.Entity.Breed;
-import com.digitalresource.Entity.CountSelect;
-import com.digitalresource.Entity.StandardList;
 import com.digitalresource.Mapper.BreedMapper;
 import com.digitalresource.Service.BreedService;
 
@@ -138,5 +136,15 @@ public class BreedServiceImpl implements BreedService {
 			System.out.println(result);
 		}
 		return result;
+	}
+
+	@Override
+	public int InsertBreedFile(BreedFile breed_file) {
+		return breedMapper.InsertBreedFile(breed_file);
+	}
+
+	@Override
+	public int InsertBreedUpload(Uploads upload) {
+		return breedMapper.InsertBreedUpload(upload);
 	}
 }

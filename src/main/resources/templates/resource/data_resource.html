@@ -1287,7 +1287,7 @@
                         if (ev.targetType === 'cell' && ev.columnName === 'resource_template') {
                             let value = ev.nativeEvent.srcElement;
                             let fileName = value.dataset.value;
-                            if (fileName == 'null') {
+                            if (fileName == 'null' || fileName == undefined) {
                                 Alert("파일이 존재하지 않습니다.")
                                	return;
                             } else {
@@ -1303,7 +1303,7 @@
                             let value = ev.nativeEvent.srcElement;
                             let fileName = value.dataset.value;
 
-                            if (fileName == 'null') {
+                            if (fileName == 'null' || fileName == undefined) {
                                 return Alert("파일이 존재하지 않습니다.")
                             } else {
 
