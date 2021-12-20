@@ -43,4 +43,6 @@ public interface ResourceMapper {
 	public Integer SelectCropId(@Param("resource_name_id") int resource_name_id);
 
 	public List<Detail> selectDetailHead(Map<String, Object> param);
+
+	public int detailDisplayAction(String detailIds);
 }

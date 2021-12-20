@@ -98,4 +98,10 @@
 		select d.detail_id,d.detail_name, d.detail_info from resource r inner join resource_name rn on rn.resource_name_id = r.resource_name_id
 		inner join detail d on d.resource_id = r.resource_id where rn.resource_name = #{resource_name} and r.crop_id = #{crop_id};
 	</select>
+	
+	<update id="detailDisplayAction">
+		update detail
+		set detail_display = 0
+		where detail_id in (${detail})
+	</update>
 </mapper>

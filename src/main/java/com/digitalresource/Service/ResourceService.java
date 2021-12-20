@@ -37,4 +37,6 @@ public interface ResourceService {
 	Integer SelectCropId(int resource_name_id);
 
 	public List<Detail> selectDetailHead(Map<String, Object> param);
+
+	public int detailDisplayAction(String detailIds);
 }

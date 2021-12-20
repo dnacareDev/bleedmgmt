@@ -151,4 +151,9 @@ public int deleteResource(String resource_id) {
 public List<Detail> selectDetailHead(Map<String, Object> param) {
 	return resourceMapper.selectDetailHead(param);
 }
+
+@Override
+public int detailDisplayAction(String detailIds) {
+	return resourceMapper.detailDisplayAction(detailIds);
+}
 }

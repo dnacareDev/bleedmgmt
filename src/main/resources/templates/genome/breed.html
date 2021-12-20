@@ -271,6 +271,10 @@
             width: 100%;
             border-bottom: 1px solid #E2E3E5;
         }
+        #grid2 .tab-content .row .detail_list li.checked {
+        	color:#fff;
+           background-color: #217566;
+        }
 
         #grid2 .tab-content .row .list-group {
             width: 100%;
@@ -1066,7 +1070,7 @@
     <!-- 표시 헤더 선택 모달창 -->
     <div class="modal-basic modal fade show pop2" id="grid2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
-            <form action="insertBreedDisplay" method="POST" enctype="multipart/form-data">
+            <form action="detail-display" method="POST" enctype="multipart/form-data">
                 <div class="modal-content modal-bg-white">
                     <div class="modal-header" style="border: none">
                         <h6 class="modal-title" id="display_title"></h6>
@@ -1496,15 +1500,18 @@
     }
 
     $(function () {
-        $("#grid2 .content_1 li").click(function (e) {
+    	console.log("check:", $("#grid2 .content_1 li"));
+    	/*
+        $("#grid2 .detail_list .list-group li").click(function (e) {
             $(this).toggleClass("checked");
-
+			console.log("click -------------");
             if ($(this).hasClass("checked") == true) {
                 $(this).children().eq(0).prop("checked", true);
             } else {
                 $(this).children().eq(0).prop("checked", false);
             }
         });
+    	*/
 
         $("#grid2 .top_box li").click(function () {
             $("#grid2 .content_1 li").each(function (i, e) {
@@ -1644,10 +1651,33 @@
                    			$("#display_container3").append(add_list);
                    		}
                    	}
+                   	
+                   	$("#grid2 .detail_list .list-group li").click(function (e) {
+                   	
+                        $(this).toggleClass("checked");
+            			console.log("click -------------");
+                        if ($(this).hasClass("checked") == true) {
+                            $(this).children().eq(0).prop("checked", true);
+                        } else {
+                            $(this).children().eq(0).prop("checked", false);
+                        }
+                    });
                 }
             });
 
         $("#grid2").modal("show");
+        
+        /* li where */
+        
+        /*
+        for(var i = 0; i < detailListEls.length; i++){
+        	detailListEls[i].addEventListener("click", function(e){
+        		console.log("click!!!!!");
+        	})
+        }
+        */
+        /*
+        */
     }
 
     // 특성상태 버튼
@@ -1747,35 +1777,69 @@
 
     /* 헤더 선택 */
     function PlusResearch(e) {
-        var step_container = $("#display_container" + e);
+    	console.log(e);
+        var step_container = $("#step_container" + e);
+        
+        let step_contain = document.querySelector('#step_container' + e);
+        const left_container = document.querySelector('#display_container' + e);
+        console.log(step_container);
         var length = step_container.children().length;
 
         var add_list = "";
-
-        $(document).find("input:checkbox[name=chk_research]:checked").each(function () {
-            var research_id = $(this).val();
-            var research_title = $(this).next().text();
-
-            if (length == 0) {
-                length = 1;
-            } else {
-                length++;
-            }
-
-            add_list += '<div data-id="' + research_id + '" class="list-group step">';
-            add_list += '<li class="list-group-item-sm list-group-item">';
-            add_list += '<div class="row">';
-            add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
-            add_list += '<input type="hidden" name="detail_id" value="' + research_id + '">';
-            add_list += '<span class="research-title">' + research_title + '</span>';
-            add_list += '</div>';
-            add_list += '</li>';
-            add_list += '</div>';
-
-            $(this).parent().remove();
+        
+        console.log(left_container,"left");
+        let checked_list = left_container.querySelectorAll(".list-group-item-sm.list-group-item.checked");
+        
+        checked_list.forEach(li => {
+        	const detail_id = li.querySelector('input[name="detail_id"]').value;
+        	const detail_text = li.querySelector('.research-title').innerText;
+        	//console.log(span)
+        	console.log(detail_id);
+        	console.log(detail_text);
+        	
+        	 add_list += '<div data-id="' + detail_id + '" class="list-group step">';
+             add_list += '<li class="list-group-item-sm list-group-item">';
+             add_list += '<div class="row">';
+             add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+             add_list += '<input type="hidden" name="detail_id" value="' + detail_id + '">';
+             add_list += '<span class="research-title">' + detail_text + '</span>';
+             add_list += '</div>';
+             add_list += '</li>';
+             add_list += '</div>';
+             
         });
+        
+        step_contain.innerHTML += add_list;
+        
+        console.log(checked_list,"checked_list")
+        
 
-        step_container.append(add_list);
+//         $(document).find("input:checkbox[name='mis_research']:checked").each(function () {
+//         	console.log(123);
+        	
+//             var research_id = $(this).val();
+//             var research_title = $(this).next().text();
+
+//             if (length == 0) {
+//                 length = 1;
+//             } else {
+//                 length++;
+//             }
+
+//             add_list += '<div data-id="' + research_id + '" class="list-group step">';
+//             add_list += '<li class="list-group-item-sm list-group-item">';
+//             add_list += '<div class="row">';
+//             add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+//             add_list += '<input type="hidden" name="detail_id" value="' + research_id + '">';
+//             add_list += '<span class="research-title">' + research_title + '</span>';
+//             add_list += '</div>';
+//             add_list += '</li>';
+//             add_list += '</div>';
+
+//             $(this).parent().remove();
+//         });
+// 		console.log(add_list,"add_list");
+//         step_container.append(add_list);
 
         CheckFunction();
     }
@@ -1912,8 +1976,12 @@
     }
 
     function CheckFunction() {
+    	console.log(123);
+    	console.log($('#grid2 .tab-content .row .row li'));
+    	console.log($('#grid2 .tab-content li').off('click').on('click'));
         // 박스안 리스트 클릭시 체크박스 체크
-        $('#grid2 .tab-content .row li').off('click').on('click', function (e) {
+        $('#grid2 .tab-content li').off('click').on('click', function (e) {
+        	console.log(1231231);
             e.preventDefault();
 
             $(this).toggleClass("active");

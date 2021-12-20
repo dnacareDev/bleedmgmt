@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ContentDisposition;
@@ -247,6 +248,17 @@ public class ResourceController {
 	  param.put("resource_name", resource_name);
 	  List<Detail> detailList = RService.selectDetailHead(param);
 	  map.put("detailList", detailList);
+	  return ResponseEntity.ok(map);
+  }
+  
+  @RequestMapping("detail-display")
+  public ResponseEntity<?> detailDisplayAction(@RequestParam("detail_id") String[] detailList){
+	  Map<String,Object> map = new HashMap<String, Object>();
+	  
+	  String detailIds = detailList.toString().substring(1,detailList.toString().length());
+	  detailIds = detailIds.substring(0, detailIds.length()-1);
+	  int result = RService.detailDisplayAction(detailIds);
+	  map.put("result", result);
 	  return ResponseEntity.ok(map);
   }
 }
