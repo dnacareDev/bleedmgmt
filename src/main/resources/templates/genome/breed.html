@@ -879,7 +879,7 @@
                                         <option value="20">20개</option>
                                         <option value="30">30개</option>
                                     </select>
-                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect">
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect"onChange="changeSelect(this)">
                                         <th:block th:each="list : ${cropList}">
                                             <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                             <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
@@ -1247,7 +1247,7 @@
                 <div class="modal-body">
                     <div class="form-group mb-0">
                         <button onclick="dataToggle('#data_upload2', '#data_upload');">데이터 등록</button>
-                        <button type="button" onclick="testbt n()">등록서식 다운로드</button>
+                        <button type="button" onclick="testbtn()">등록서식 다운로드</button>
                     </div>
                     <div>
                         <div class="atbd-upload">
@@ -1584,8 +1584,68 @@
 
     // 표시항목 버튼
     function DisplayBtn() {
-        $("#display_title").text($(".titleType")[0].innerText + " > " + $("#CropSelect")[0].innerText);
+    	$("#display_container1").empty();
+    	$("#display_container2").empty();
+    	$("#display_container3").empty();
+    	var crop_id = $("#CropSelect").val();
+    	var resource_name = $(".manage")[0].innerText;
+		console.log(crop_id);
+		console.log(resource_name);
+    	var crop_text = $("#CropSelect option:selected").text();
+        $("#display_title").text($(".titleType")[0].innerText + " > " + crop_text);
         $("#display_name").val($("#CropSelect")[0].innerText);
+        console.log($("#CropSelect")[0]);
+        
+        var data = {"crop_id":crop_id , "resource_name":  resource_name}
+        // ajax로 가져오기
+        $.ajax(
+            {
+                url: 'detail-head',
+                method: 'POST',
+                dataType: 'json',
+                resource_name,
+                data : data,
+                success: function (result) {
+                   	for(var i = 0; i<result.detailList.length; i++){
+                   		var list = result.detailList[i];
+                   		var add_list = "";
+                   		if(list.detail_info == 0){
+                   			add_list += '<div data-id="' + list.detail_id + '" class="list-group step">';
+                            add_list += '<li class="list-group-item-sm list-group-item">';
+                            add_list += '<div class="">';
+                            add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+                            add_list += '<input type="hidden" name="detail_id" value="' + list.detail_id + '">';
+                            add_list += '<span class="research-title">' + list.detail_name + '</span>';
+                            add_list += '</div>';
+                            add_list += '</li>';
+                            add_list += '</div>';
+                   			$("#display_container1").append(add_list);
+                   		}else if(list.detail_info == 1){
+                   			add_list += '<div data-id="' + list.detail_id + '" class="list-group step">';
+                            add_list += '<li class="list-group-item-sm list-group-item">';
+                            add_list += '<div class="">';
+                            add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+                            add_list += '<input type="hidden" name="detail_id" value="' + list.detail_id + '">';
+                            add_list += '<span class="research-title">' + list.detail_name + '</span>';
+                            add_list += '</div>';
+                            add_list += '</li>';
+                            add_list += '</div>';
+                   			$("#display_container2").append(add_list);
+                   		}else if(list.detail_info == 2){
+                   			add_list += '<div data-id="' + list.detail_id + '" class="list-group step">';
+                            add_list += '<li class="list-group-item-sm list-group-item">';
+                            add_list += '<div class="">';
+                            add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+                            add_list += '<input type="hidden" name="detail_id" value="' + list.detail_id + '">';
+                            add_list += '<span class="research-title">' + list.detail_name + '</span>';
+                            add_list += '</div>';
+                            add_list += '</li>';
+                            add_list += '</div>';
+                   			$("#display_container3").append(add_list);
+                   		}
+                   	}
+                }
+            });
 
         $("#grid2").modal("show");
     }
@@ -1687,7 +1747,7 @@
 
     /* 헤더 선택 */
     function PlusResearch(e) {
-        var step_container = $("#step_container" + e);
+        var step_container = $("#display_container" + e);
         var length = step_container.children().length;
 
         var add_list = "";
@@ -1961,6 +2021,7 @@
     var gridDataArray = null;
 
     function SearchBreedgrid(e) {
+    	console.log($("#CropSelect"));
         var crop_id = $("#CropSelect").val();
         var resource_name = $(".manage")[0].innerText;
         var limit = $("#limit").val();
@@ -2677,7 +2738,9 @@
             document.getElementById("preview-image").src = '/upload/' + e;
         }
     }
-
+	function changeSelect(){
+		console.log(1);
+	}
 </script>
 </body>
 </html>

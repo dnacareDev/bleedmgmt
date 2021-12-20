@@ -1,5 +1,6 @@
 package com.digitalresource.Mapper;
 
+import com.digitalresource.Entity.Detail;
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Entity.ResourceList;
 import com.digitalresource.Entity.ResourceName;
@@ -40,4 +41,6 @@ public interface ResourceMapper {
 	public Integer SearchResourceId(@Param("crop_id") int crop_id, @Param("resource_name_id") int resource_name_id);
 
 	public Integer SelectCropId(@Param("resource_name_id") int resource_name_id);
+
+	public List<Detail> selectDetailHead(Map<String, Object> param);
 }
