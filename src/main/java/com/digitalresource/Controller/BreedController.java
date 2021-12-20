@@ -159,4 +159,22 @@ public class BreedController {
 
 		return mv;
 	}
+
+	@ResponseBody
+	@RequestMapping("searchBreed")
+	public Map<String, Object> SearchBreed(Authentication auth, @RequestParam("breed_name") String breed_name) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+		User user = (User) auth.getPrincipal();
+//
+//		List<Detail> detail = service.SearchBreedDetail(breed_name);                  // 품종 작물별 컬럼 조회
+//		List<Display> display = service.SelectDisplay(user.getUser_id(), breed_name);          // 사용자별 품종 표시항목 조회
+//
+//		result.put("detail", detail);
+//		result.put("display", display);
+
+		result.put("test", 1);
+
+		return result;
+	}
 }
