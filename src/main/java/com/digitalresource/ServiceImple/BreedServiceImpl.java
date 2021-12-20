@@ -147,4 +147,14 @@ public class BreedServiceImpl implements BreedService {
 	public int InsertBreedUpload(Uploads upload) {
 		return breedMapper.InsertBreedUpload(upload);
 	}
+
+	@Override
+	public List<Breed> SearchBreed(String breed_name) {
+		return breedMapper.SearchBreed(breed_name);
+	}
+
+	@Override
+	public String SearchCropName(int breed_name) {
+		return breedMapper.SearchCropName(breed_name);
+	}
 }

@@ -9,4 +9,6 @@ public class Breed {
 	private String create_date;
 	private int row_file;
 	private String variety_name;
+
+	private int detail_count;						// 세부정보 수
 }

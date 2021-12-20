@@ -3,13 +3,10 @@ package com.digitalresource.Service;
 import java.util.List;
 import java.util.Map;
 
-import com.digitalresource.Entity.BreedFile;
-import com.digitalresource.Entity.Uploads;
+import com.digitalresource.Entity.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.digitalresource.Entity.StandardList;
 
 public interface BreedService {
 	
@@ -26,4 +23,8 @@ public interface BreedService {
 	int InsertBreedFile(BreedFile breed_file);
 
 	int InsertBreedUpload(Uploads upload);
+
+	List<Breed> SearchBreed(String breed_name);
+
+	String SearchCropName(int breed_name);
 }

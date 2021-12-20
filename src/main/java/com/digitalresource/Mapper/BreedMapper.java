@@ -29,4 +29,8 @@ public interface BreedMapper {
 	int InsertBreedFile(BreedFile breed_file);
 
 	int InsertBreedUpload(Uploads upload);
+
+  List<Breed> SearchBreed(String breed_name);
+
+	String SearchCropName(int breed_name);
 }
