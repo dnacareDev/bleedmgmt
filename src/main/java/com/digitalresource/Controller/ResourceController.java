@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.Detail;
 import com.digitalresource.Entity.Feature;
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Entity.ResourceList;
@@ -235,5 +236,17 @@ public class ResourceController {
     List<ResourceName> resourceList = RService.resourceList();
     map.put("resourceList", resourceList);
     return ResponseEntity.ok(map);
+  }
+  
+  @ResponseBody
+  @RequestMapping("detail-head")
+  public ResponseEntity<?> selectDetailHead(@RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name){
+	  Map<String,Object> map = new HashMap<String, Object>();
+	  Map<String,Object> param = new HashMap<String, Object>();
+	  param.put("crop_id", crop_id);
+	  param.put("resource_name", resource_name);
+	  List<Detail> detailList = RService.selectDetailHead(param);
+	  map.put("detailList", detailList);
+	  return ResponseEntity.ok(map);
   }
 }

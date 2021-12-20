@@ -93,4 +93,9 @@
 	<select id="SelectCropId" resultType="int">
 		SELECT crop_id FROM resource WHERE resource_name_id = #{resource_name_id}
 	</select>
+	
+	<select id="selectDetailHead" resultType="Detail">
+		select d.detail_id,d.detail_name, d.detail_info from resource r inner join resource_name rn on rn.resource_name_id = r.resource_name_id
+		inner join detail d on d.resource_id = r.resource_id where rn.resource_name = #{resource_name} and r.crop_id = #{crop_id};
+	</select>
 </mapper>

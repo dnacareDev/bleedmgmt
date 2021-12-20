@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.digitalresource.Entity.Detail;
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Entity.ResourceList;
 import com.digitalresource.Entity.ResourceName;
@@ -144,5 +145,10 @@ public class ResourceServiceImpl implements ResourceService {
 public int deleteResource(String resource_id) {
 	// TODO Auto-generated method stub
 	return 0;
+}
+
+@Override
+public List<Detail> selectDetailHead(Map<String, Object> param) {
+	return resourceMapper.selectDetailHead(param);
 }
 }
