@@ -22,7 +22,7 @@
     </insert>
 
     <select id="SelectDetailListByResource" parameterType="int" resultType="Detail">
-        SELECT * FROM detail WHERE resource_id = #{resource_id}
+        SELECT * FROM detail WHERE resource_id = #{resource_id} and detail_display=1
         ORDER BY detail_index
     </select>
 

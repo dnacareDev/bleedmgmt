@@ -1613,8 +1613,28 @@
 		}
 		return add_list;
 	}
+	
+	function createList1(list){
+		var add_list = "";
+		if(list.length > 0){
+			for(var i = 0; i < list.length; i++){
+				var item = list[i];
+				add_list += '<div data-id="' + item.detail_id + '" class="list-group step">';
+		        add_list += '<li class="list-group-item-sm list-group-item">';
+		        add_list += '<div class="row">';
+		        add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+		        add_list += '<input type="hidden" name="detail_id_checked" value="' + item.detail_id + '">';
+		        add_list += '<span class="research-title">' + item.detail_name + '</span>';
+		        add_list += '</div>';
+		        add_list += '</li>';
+		        add_list += '</div>';
+			}
+		}
+		return add_list;
+	}
     // 표시항목 버튼
     function DisplayBtn() {
+    	
     	$("#display_container1").empty();
     	$("#display_container2").empty();
     	$("#display_container3").empty();
@@ -1642,15 +1662,28 @@
                    		var list = result.detailList[i];
                    		var add_list = "";
                    		var cData = {detail_id: list.detail_id, detail_name: list.detail_name};
-                   		if(list.detail_info == 0){
-                   			rightList_one.push(cData);
-                   			$("#step_container1").html(createList(rightList_one));
-                   		}else if(list.detail_info == 2){
-                            rightList_two.push(cData);
-                   			$("#step_container2").html(createList(rightList_two));
-                   		}else if(list.detail_info == 1){
-                   			rightList_three.push(cData);
-                   			$("#step_container3").html(createList(rightList_three));
+                   		if(list.detail_display === 0){
+                   			if(list.detail_info == 0){
+	                   			rightList_one.push(cData);
+	                   			$("#display_container1").html(createList(rightList_one));
+	                   		}else if(list.detail_info == 2){
+	                            rightList_two.push(cData);
+	                   			$("#display_container2").html(createList(rightList_two));
+	                   		}else if(list.detail_info == 1){
+	                   			rightList_three.push(cData);
+	                   			$("#display_container3").html(createList(rightList_three));
+	                   		}
+                   		}else if(list.detail_display === 1){                   			
+	                   		if(list.detail_info == 0){
+	                   			rightList_one.push(cData);
+	                   			$("#step_container1").html(createList(rightList_one));
+	                   		}else if(list.detail_info == 2){
+	                            rightList_two.push(cData);
+	                   			$("#step_container2").html(createList(rightList_two));
+	                   		}else if(list.detail_info == 1){
+	                   			rightList_three.push(cData);
+	                   			$("#step_container3").html(createList(rightList_three));
+	                   		}
                    		}
                    	}
                    	
@@ -1684,7 +1717,7 @@
                    	
                    	console.log(	$("#grid2 .detail_list"),"erererereere");
                    	$("#grid2 .detail_list .list-group li").click(function (e) {
-                   		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                   		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!2");
                         $(this).toggleClass("active");
             			console.log("click -------------");
             			
@@ -1695,13 +1728,13 @@
                         }
                     });
                   	$("#grid2 .display_list .list-group li").click(function (e) {
-                   		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                   		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!3");
                         $(this).toggleClass("active");
             			console.log("click -------------");
                         if ($(this).hasClass("checked") == true) {
-                            $(this).children().eq(0).prop("checked", true);
+                            $(this).children().eq(0).prop("active", true);
                         } else {
-                            $(this).children().eq(0).prop("checked", false);
+                            $(this).children().eq(0).prop("active", false);
                         }
                     });
                 }
@@ -1821,41 +1854,66 @@
 	*/
     /* 헤더 선택 */
     function PlusResearch(e) {
-    	console.log(e);
-        var step_container = $("#step_container" + e);
-        
-        let step_contain = document.querySelector('#step_container' + e);
-        const left_container = document.querySelector('#display_container' + e);
-        console.log(step_container);
-        var length = step_container.children().length;
-
+		var step_container = $("#step_container" + e);
+        var display_container = $("#display_container" + e);
         var add_list = "";
+        const left_container = document.querySelector('#display_container' + e);
         
-        console.log(left_container,"left");
-        let checked_list = left_container.querySelectorAll(".list-group-item-sm.list-group-item.checked");
+        let all_list = left_container.querySelectorAll(".list-group-item-sm.list-group-item");
+        all_list = Array.prototype.slice.call(all_list);
+        let checked_list = left_container.querySelectorAll(".list-group-item-sm.list-group-item.active");
+        checked_list = Array.prototype.slice.call(checked_list);
         
-        checked_list.forEach(li => {
-        	const detail_id = li.querySelector('input[name="detail_id"]').value;        	
-        	const detail_text = li.querySelector('.research-title').innerText;
-        	//console.log(span)
-        	console.log(detail_id);
-        	console.log(detail_text);
-        	
-        	 add_list += '<div data-id="' + detail_id + '" class="list-group step">';
-             add_list += '<li class="list-group-item-sm list-group-item">';
-             add_list += '<div class="row">';
-             add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
-             add_list += '<input type="hidden" name="detail_id_checked" value="' + detail_id + '">';
-             add_list += '<span class="research-title">' + detail_text + '</span>';
-             add_list += '</div>';
-             add_list += '</li>';
-             add_list += '</div>';
-             
-        });
-         
-        step_contain.innerHTML += add_list;
+        var whichSelect = [];
+        for(var i = 0; i < checked_list.length; i++){
+        	var matchIndex = all_list.indexOf(checked_list[i]);
+        	whichSelect.push(leftList_one[matchIndex].detail_id);
+        	 if(e == 1){
+       		 	rightList_one.push(leftList_one[matchIndex]);
+             }else if(e == 2){
+            	 rightList_two.push(leftList_two[matchIndex]);
+             }else if(e == 3){
+            	 rightList_three.push(leftList_three[matchIndex]);
+             }
+        }
         
-        console.log(checked_list,"checked_list")
+        if(e == 1){
+        	for(var i = 0; i < leftList_one.length; i++){
+            	for(var t = 0; t < whichSelect.length; t++){
+            		if(leftList_one[i].detail_id ===  whichSelect[t]){
+            			leftList_one.splice(i, 1);
+                	}
+            		
+            	}
+            }
+        	rightList_one.sort((a,b) => a?.detail_id - b?.detail_id);
+        	display_container.html(createList(leftList_one));
+            step_container.html(createList1(rightList_one));
+        }else if(e == 2){
+        	for(var i = 0; i < rightList_two.length; i++){
+            	for(var t = 0; t < whichSelect.length; t++){
+            		if(rightList_two[i].detail_id ===  whichSelect[t]){
+            			rightList_two.splice(i, 1);
+                	}
+            		
+            	}
+            }
+        	leftList_two.sort((a,b) => a?.detail_id - b?.detail_id);
+        	display_container.html(createList(leftList_two));
+            step_container.html(createList1(rightList_two));
+        }else if(e == 3){
+        	for(var i = 0; i < rightList_three.length; i++){
+            	for(var t = 0; t < whichSelect.length; t++){
+            		if(rightList_three[i].detail_id ===  whichSelect[t]){
+            			rightList_three.splice(i, 1);
+                	}
+            		
+            	}
+            }
+        	leftList_three.sort((a,b) => a?.detail_id - b?.detail_id);
+        	display_container.html(createList(leftList_three));
+            step_container.html(createList1(rightList_three));
+        }
         
 
 //         $(document).find("input:checkbox[name='mis_research']:checked").each(function () {
@@ -1890,6 +1948,7 @@
 
     //조사방법 체크박스 삭제
     function MinusResearch(e) {
+        var step_container = $("#step_container" + e);
         var display_container = $("#display_container" + e);
         var add_list = "";
         const right_container = document.querySelector('#step_container' + e);
@@ -1923,7 +1982,7 @@
             }
         	leftList_one.sort((a,b) => a?.detail_id - b?.detail_id);
         	display_container.html(createList(leftList_one));
-            step_container.html(createList(rightList_one));
+            step_container.html(createList1(rightList_one));
         }else if(e == 2){
         	for(var i = 0; i < rightList_two.length; i++){
             	for(var t = 0; t < whichSelect.length; t++){
@@ -1935,7 +1994,7 @@
             }
         	leftList_two.sort((a,b) => a?.detail_id - b?.detail_id);
         	display_container.html(createList(leftList_two));
-            step_container.html(createList(rightList_two));
+            step_container.html(createList1(rightList_two));
         }else if(e == 3){
         	for(var i = 0; i < rightList_three.length; i++){
             	for(var t = 0; t < whichSelect.length; t++){
@@ -1947,9 +2006,9 @@
             }
         	leftList_three.sort((a,b) => a?.detail_id - b?.detail_id);
         	display_container.html(createList(leftList_three));
-            step_container.html(createList(rightList_three));
+            step_container.html(createList1(rightList_three));
         }
-        var length = display_container.children().length;
+       /*  var length = display_container.children().length;
 
         var add_list = "";
 
@@ -1970,9 +2029,9 @@
             add_list += '</li>';
 
             $(this).parent().parent().remove();
-        });
+        }); */
 
-        display_container.append(add_list);
+/*         display_container.append(add_list); */
         CheckFunction();
     }
 

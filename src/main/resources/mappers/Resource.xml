@@ -95,8 +95,8 @@
 	</select>
 	
 	<select id="selectDetailHead" resultType="Detail">
-		select d.detail_id,d.detail_name, d.detail_info from resource r inner join resource_name rn on rn.resource_name_id = r.resource_name_id
-		inner join detail d on d.resource_id = r.resource_id where rn.resource_name = #{resource_name} and r.crop_id = #{crop_id};
+		select d.detail_id,d.detail_name, d.detail_info,d.detail_display from resource r inner join resource_name rn on rn.resource_name_id = r.resource_name_id
+		inner join detail d on d.resource_id = r.resource_id where rn.resource_name = #{resource_name} and r.crop_id = #{crop_id} and detail_info not in(4,3);
 	</select>
 	
 	<update id="detailDisplayAction">

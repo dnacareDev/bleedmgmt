@@ -10,5 +10,6 @@ public class Detail {
     private String detail_name;
     private int detail_index;
     private int detail_info;
+    private int detail_display;
 }
  
