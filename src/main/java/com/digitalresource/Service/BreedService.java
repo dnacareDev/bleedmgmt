@@ -27,4 +27,10 @@ public interface BreedService {
 	List<Breed> SearchBreed(String breed_name);
 
 	String SearchCropName(int breed_name);
+
+	int InsertBreed(Breed breed);
+
+	List<Detail> SelectDetailExcel(int resource_id);
+
+	int InsertExcel(List<StandardList> standards);
 }

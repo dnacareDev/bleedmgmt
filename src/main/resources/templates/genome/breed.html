@@ -889,9 +889,9 @@
                                             <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
                                         </th:block>
                                     </select>
-                                    <!--  <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
-                                         <img src="../assets/vendor_assets/img/icon1.png" alt="">
-                                     </button> -->
+                                    <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
+                                        <img src="../assets/vendor_assets/img/icon1.png" alt="">
+                                    </button>
                                     <button class="btn btn-lg btn-primary data_btn2" title="표시항목 선택" onclick="DisplayBtn();">
                                         <img src="../assets/vendor_assets/img/icon3.png" alt="">
                                     </button>
@@ -1596,13 +1596,11 @@
     	$("#display_container3").empty();
     	var crop_id = $("#CropSelect").val();
     	var resource_name = $(".manage")[0].innerText;
-		console.log(crop_id);
-		console.log(resource_name);
+
     	var crop_text = $("#CropSelect option:selected").text();
         $("#display_title").text($(".titleType")[0].innerText + " > " + crop_text);
         $("#display_name").val($("#CropSelect")[0].innerText);
-        console.log($("#CropSelect")[0]);
-        
+
         var data = {"crop_id":crop_id , "resource_name":  resource_name}
         // ajax로 가져오기
         $.ajax(
@@ -2089,7 +2087,6 @@
     var gridDataArray = null;
 
     function SearchBreedgrid(e) {
-    	console.log($("#CropSelect"));
         var crop_id = $("#CropSelect").val();
         var resource_name = $(".manage")[0].innerText;
         var limit = $("#limit").val();
@@ -2197,9 +2194,6 @@
 
                     gridDataArray = result.standardList;
                     let dataList = [];
-
-                    console.log(result.standardList);
-                    console.log(result.standardList.length);
 
                     for (var i = 0; i < result.standardList.length; i++) {
 
@@ -2327,6 +2321,7 @@
         var resource_name = $(".manage")[0].innerText;
 
         let resource_id = $('#resource_id').val();
+
         $.ajax(
             {
                 url: 'insertBreed2',
@@ -2393,47 +2388,50 @@
             var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
             callback(firstSheet);
 
+            console.log(firstSheet);
+
             delete firstSheet.A1;
-            delete firstSheet.A2;
             var rowdata = XLSX.utils.sheet_to_json(firstSheet);
 
-            var keys = Object.values(rowdata[1]);
+            console.log(rowdata);
+
+            var keys = Object.values(rowdata[0]);
 
             var html = "";
 
-            for (var i = 1; i < rowdata.length; i++) {
-                if (i === 1) {
+            for (var i = 0; i < rowdata.length; i++) {
+                if (i === 0) {
                     html += "<thead class='text-center'>";
                     html += "<tr>";
 
-                    $.each(rowdata[1], function (idx, value) {
+                    $.each(rowdata[0], function (idx, value) {
                         html += "<th><span class='excel-title'>" + value + "</span></th>";
                     })
 
                     html += "</tr>";
                     html += "</thead>";
-                } else if (i !== 1) {
+                } else if (i !== 0) {
                     html += "<tbody class='text-center'>";
                     html += "<tr class='excel_tr'>";
 
-                    var tmp = Object.keys(rowdata[1]);
+                    var tmp = Object.keys(rowdata[0]);
                     var j = 0;
 
                     $.each(rowdata[i], function (idx, value) {
                         // 공백처리
                         if (idx == tmp[j]) {
-                            if (idx === "__EMPTY_6" || idx === "__EMPTY_8" || idx === "__EMPTY_10") {
-                                if (value == "-") {
-                                    html += "<td class='excel'><span>" + value + "</span></td>";
-                                    j++;
-                                } else {
-                                    html += "<td class='excel'><span>" + excelDateToJSDate(value) + "</span></td>";
-                                    j++
-                                }
-                            } else {
+                            // if (idx === "__EMPTY_6" || idx === "__EMPTY_8" || idx === "__EMPTY_10") {
+                            //     if (value == "-") {
+                            //         html += "<td class='excel'><span>" + value + "</span></td>";
+                            //         j++;
+                            //     } else {
+                            //         html += "<td class='excel'><span>" + excelDateToJSDate(value) + "</span></td>";
+                            //         j++
+                            //     }
+                            // } else {
                                 html += "<td class='excel'><span>" + value + "</span></td>";
                                 j++;
-                            }
+                            // }
 
                         } else {
                             var idx_str = idx.replace(/[^0-9]/g, '');
@@ -2446,18 +2444,18 @@
                                 html += "<td><span> </span></td>";
                             }
 
-                            if (idx === "__EMPTY_6" || idx === "__EMPTY_8" || idx === "__EMPTY_10") {
-                                if (value == "-") {
-                                    html += "<td class='excel'><span>" + value + "</span></td>";
-                                    j++;
-                                } else {
-                                    html += "<td class='excel'><span>" + excelDateToJSDate(value) + "</span></td>";
-                                    j++
-                                }
-                            } else {
+                            // if (idx === "__EMPTY_6" || idx === "__EMPTY_8" || idx === "__EMPTY_10") {
+                            //     if (value == "-") {
+                            //         html += "<td class='excel'><span>" + value + "</span></td>";
+                            //         j++;
+                            //     } else {
+                            //         html += "<td class='excel'><span>" + excelDateToJSDate(value) + "</span></td>";
+                            //         j++
+                            //     }
+                            // } else {
                                 html += "<td class='excel'><span>" + value + "</span></td>";
                                 j++;
-                            }
+                            // }
 
                             j = idx_str;
                             j++;
@@ -2550,7 +2548,7 @@
         let s = String(e);
         s = s.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
 
-        var data = {"datalist_date": s, "breed_name": $("#CropSelect").val()};
+        var data = {"datalist_date": s, "crop_id": $("#CropSelect").val()};
 
         $.ajax(
             {
@@ -2603,12 +2601,14 @@
 
     /* 엑셀 입력 */
     function InsertExcel() {
+        var crop_id = $("#CropSelect").val();
         var excel_list = $(".excel_tr");
 
         var total_arr = [];
         var excel_arr = [];
         for (var i = 0; i < excel_list.length; i++) {
             excel_arr = [];
+            excel_arr.push(crop_id);
 
             var items = $(".excel_tr")[i].childNodes;
 
@@ -2619,6 +2619,8 @@
             total_arr.push(excel_arr);
         }
 
+        let resource_id = $('#resource_id').val();
+
         $("#excel_list").val(JSON.stringify(total_arr));
 
         $.ajax(
@@ -2627,7 +2629,8 @@
                 method: 'POST',
                 dataType: 'json',
                 data: {
-                    "excel_list": JSON.stringify(total_arr)
+                    "excel_list": JSON.stringify(total_arr),
+                    "resource_id": resource_id
                 },
                 success: function (result) {
 
@@ -2635,9 +2638,9 @@
 
                     let listData = [];
 
-                    let breed_name = $("#CropSelect").val();
+                    let crop_id = $("#CropSelect").val();
 
-                    let lData = {"datalist_type": 'breed', "datalist_date": now, "breed_name": breed_name};
+                    let lData = {"datalist_type": 'breed', "datalist_date": now, "crop_id": crop_id};
 
                     listData.push(lData);
 
