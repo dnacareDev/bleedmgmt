@@ -258,20 +258,12 @@ public class ResourceController {
 		  @RequestParam("resource_name_re") String resoruce_name,
 		  @RequestParam("crop_name_re") String crop_name){
 	  Map<String,Object> map = new HashMap<String, Object>();
-	  for(String id : detailList) {
-		  System.out.println(id);
-	  }
-//	  String detailIds = Arrays.toString(detailList).substring(1,detailList.toString().length());
 	  String detailIds = Arrays.toString(detailList);
 	  detailIds = detailIds.substring(1,detailIds.length());
 	  detailIds = detailIds.substring(0,detailIds.length() -1);
 	  System.out.println(detailIds);
-	  System.out.println(resoruce_name);
-	  System.out.println(crop_name);
-//	  detailIds = detailIds.substring(0, detailIds.length()-1);
-//	  System.out.println(detailIds);
-//	  int result = RService.detailDisplayAction(detailIds);
-//	  map.put("result", result);
+	  int result = RService.detailDisplayAction(detailIds);
+	  map.put("result", result);
 	  return ResponseEntity.ok(map);
   }
 }

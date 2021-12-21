@@ -6,6 +6,16 @@
     	select #{resource_id}, now(), (select crop_name from crop c inner join resource r on c.crop_id = r.crop_id where r.resource_id = #{resource_id}),(select ifnull(max(breed_row)+1,1) from breed where  resource_id = #{resource_id})
     </insert>
 
+    <insert id="InsertBreed" parameterType="Breed">
+        INSERT INTO breed
+        (resource_id, create_date, variety_name)
+        VALUES
+        (#{resource_id}, NOW(), #{variety_name})
+        <selectKey resultType="int" keyProperty="breed_id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
 	<insert id="insertStandard" useGeneratedKeys="true" keyProperty="standard_id">
     	insert into standard (breed_id, detail_id, standard_data)
     	select #{breed_id}, (select d.detail_id from resource r inner join detail d on r.resource_id = d.resource_id where r.resource_id = ${resource_id} limit ${limit},1), #{standard_data}
@@ -136,4 +146,18 @@
         SELECT crop_name FROM crop
         WHERE crop_id = #{crop_id}
     </select>
+
+    <select id="SelectDetailExcel" parameterType="int" resultType="Detail">
+        SELECT * FROM detail
+        WHERE detail_type = 2 AND resource_id = #{resource_id}
+    </select>
+
+    <insert id="InsertExcel" parameterType="java.util.ArrayList">
+        INSERT INTO standard
+        (breed_id, detail_id, standard_data)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.breed_id}, #{item.detail_id}, #{item.standard_data})
+        </foreach>
+    </insert>
 </mapper>

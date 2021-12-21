@@ -1480,7 +1480,15 @@
 <!-- 공통 js -->
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 <script type="text/javascript">
-
+	/* data list controll */
+	var leftList_one = new Array();
+	var leftList_two = new Array();
+	var leftList_three = new Array();
+	
+	var rightList_one = new Array();
+	var rightList_two = new Array();
+	var rightList_three = new Array();
+	
     function testbtn() {
         location.href = '/excelTemplate/' + $("#CropSelect").val() + '_품종관리.xlsx'
     }
@@ -1584,12 +1592,32 @@
             return false;
         }
     });
-
+	function createList(list){ /* 리스트반환 */
+		var add_list = "";
+		if(list.length > 0){
+			for(var i = 0; i < list.length; i++){
+				var item = list[i];
+				add_list += '<div data-id="' + item.detail_id + '" class="list-group step">';
+		        add_list += '<li class="list-group-item-sm list-group-item">';
+		        add_list += '<div class="">';
+		        add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+		        add_list += '<input type="hidden" name="detail_id_checked" value="' + item.detail_id + '">';
+		        add_list += '<span class="research-title">' + item.detail_name + '</span>';
+		        add_list += '</div>';
+		        add_list += '</li>';
+		        add_list += '</div>';
+			}
+		}
+		return add_list;
+	}
     // 표시항목 버튼
     function DisplayBtn() {
     	$("#display_container1").empty();
     	$("#display_container2").empty();
     	$("#display_container3").empty();
+    	$("#step_container1").empty();
+    	$("#step_container2").empty();
+    	$("#step_container3").empty();
     	var crop_id = $("#CropSelect").val();
     	var resource_name = $(".manage")[0].innerText;
     	var crop_text = $("#CropSelect option:selected").text();
@@ -1611,44 +1639,61 @@
                    	for(var i = 0; i<result.detailList.length; i++){
                    		var list = result.detailList[i];
                    		var add_list = "";
+                   		var cData = {detail_id: list.detail_id, detail_name: list.detail_name};
                    		if(list.detail_info == 0){
-                   			add_list += '<div data-id="' + list.detail_id + '" class="list-group step">';
-                            add_list += '<li class="list-group-item-sm list-group-item">';
-                            add_list += '<div class="">';
-                            add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
-                            add_list += '<input type="hidden" name="detail_id_checked" value="' + list.detail_id + '">';
-                            add_list += '<span class="research-title">' + list.detail_name + '</span>';
-                            add_list += '</div>';
-                            add_list += '</li>';
-                            add_list += '</div>';
-                   			$("#display_container1").append(add_list);
+                   			rightList_one.push(cData);
+                   			$("#step_container1").html(createList(rightList_one));
                    		}else if(list.detail_info == 2){
-                   			add_list += '<div data-id="' + list.detail_id + '" class="list-group step">';
-                            add_list += '<li class="list-group-item-sm list-group-item">';
-                            add_list += '<div class="">';
-                            add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
-                            add_list += '<input type="hidden" name="detail_id_checked" value="' + list.detail_id + '">';
-                            add_list += '<span class="research-title">' + list.detail_name + '</span>';
-                            add_list += '</div>';
-                            add_list += '</li>';
-                            add_list += '</div>';
-                   			$("#display_container2").append(add_list);
+                            rightList_two.push(cData);
+                   			$("#step_container2").html(createList(rightList_two));
                    		}else if(list.detail_info == 1){
-                   			add_list += '<div data-id="' + list.detail_id + '" class="list-group step">';
-                            add_list += '<li class="list-group-item-sm list-group-item">';
-                            add_list += '<div class="">';
-                            add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
-                            add_list += '<input type="hidden" name="detail_id_checked" value="' + list.detail_id + '">';
-                            add_list += '<span class="research-title">' + list.detail_name + '</span>';
-                            add_list += '</div>';
-                            add_list += '</li>';
-                            add_list += '</div>';
-                   			$("#display_container3").append(add_list);
+                   			rightList_three.push(cData);
+                   			$("#step_container3").html(createList(rightList_three));
                    		}
                    	}
                    	
+                   	/* // 교환
+                	const right_container1 = document.querySelector('#display_container1');
+                	const right_container2 = document.querySelector('#display_container2');
+                	const right_container3 = document.querySelector('#display_container3');
+                	let cont1 = right_container1.querySelectorAll(".list-group-item-sm.list-group-item");
+                	let cont2 = right_container2.querySelectorAll(".list-group-item-sm.list-group-item");
+                	let cont3 = right_container3.querySelectorAll(".list-group-item-sm.list-group-item");
+                	var add_list="";
+                	cont1.forEach(li =>{
+                		const detail_id = li.querySelector('input[name="detail_id_checked"]').value;
+                		const detail_text = li.querySelector('.research-title').innerText;
+                		
+                		add_list += '<div data-id="' + detail_id + '" class="list-group step">';
+                        add_list += '<li class="list-group-item-sm list-group-item">';
+                        add_list += '<div class="">';
+                        add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
+                        add_list += '<input type="hidden" name="detail_id" value="' + detail_id + '">';
+                        add_list += '<span class="research-title">' + detail_text + '</span>';
+                        add_list += '</div>';
+                        add_list += '</li>';
+                        add_list += '</div>';
+                        $("#step_container1").append(add_list);
+                        add_list="";
+                	})
+                	console.log(cnt1,"cnt1"); */
+                	
+                   	console.log("create:",leftList_one);
+                   	
+                   	console.log(	$("#grid2 .detail_list"),"erererereere");
                    	$("#grid2 .detail_list .list-group li").click(function (e) {
-                   		
+                   		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        $(this).toggleClass("active");
+            			console.log("click -------------");
+            			
+                        if ($(this).hasClass("checked") == true) {
+                            $(this).children().eq(0).prop("active", true);
+                        } else {
+                            $(this).children().eq(0).prop("active", false);
+                        }
+                    });
+                  	$("#grid2 .display_list .list-group li").click(function (e) {
+                   		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         $(this).toggleClass("active");
             			console.log("click -------------");
             			
@@ -1777,7 +1822,9 @@
             }
         }
     }
-
+	/*
+	{detail_id: ,detail_name:}
+	*/
     /* 헤더 선택 */
     function PlusResearch(e) {
     	console.log(e);
@@ -1808,7 +1855,7 @@
         let checked_list = left_container.querySelectorAll(".list-group-item-sm.list-group-item.active");
         
         checked_list.forEach(li => {
-        	const detail_id = li.querySelector('input[name="detail_id_checked"]').value;        	
+        	const detail_id = li.querySelector('input[name="detail_id"]').value;        	
         	const detail_text = li.querySelector('.research-title').innerText;
         	//console.log(span)
         	console.log(detail_id);
@@ -1818,7 +1865,7 @@
              add_list += '<li class="list-group-item-sm list-group-item">';
              add_list += '<div class="row">';
              add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
-             add_list += '<input type="hidden" name="detail_id" value="' + detail_id + '">';
+             add_list += '<input type="hidden" name="detail_id_checked" value="' + detail_id + '">';
              add_list += '<span class="research-title">' + detail_text + '</span>';
              add_list += '</div>';
              add_list += '</li>';
@@ -1826,7 +1873,7 @@
              console.log("li selector" , li);
             
         });
-        
+         
         step_contain.innerHTML += add_list;
         
         console.log(step_contain,"-------------------------checked_list")
@@ -1868,38 +1915,66 @@
     function MinusResearch(e) {
         var step_container = $("#step_container" + e);
         var display_container = $("#display_container" + e);
-        console.log(display_container, 'dasdsadas');
-        var length = display_container.children().length;
-		console.log(display_container,"xodud");
         var add_list = "";
         const right_container = document.querySelector('#step_container' + e);
+        
+        let all_list = right_container.querySelectorAll(".list-group-item-sm.list-group-item");
+        all_list = Array.prototype.slice.call(all_list);
         let checked_list = right_container.querySelectorAll(".list-group-item-sm.list-group-item.active");
-        // let checked_list = display_container[0].querySelectorAll(".active");
-		console.log("qaz",checked_list);
-		checked_list.forEach(li => {
-			console.log("li",li);
-        	const detail_id = li.querySelector('input[name="detail_id"]').value;        	
-        	const detail_text = li.querySelector('.research-title').innerText;
-        	//console.log(span)
-        	console.log(detail_id , "detail_id");
-        	console.log(detail_text , " detail_text");
-        		console.log("1111111  li selector" , add_list);
-        	 add_list += '<div data-id="' + detail_id + '" class="list-group step">';
-             add_list += '<li class="list-group-item-sm list-group-item">';
-             add_list += '<div class="">';
-             add_list += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
-             add_list += '<input type="hidden" name="detail_id_checked" value="' + detail_id + '">';
-             add_list += '<span class="research-title">' + detail_text + '</span>';
-             add_list += '</div>';
-             add_list += '</li>';
-             add_list += '</div>';
-             console.log("2222222   li selector" , add_list);
-            
-        });
-		console.log("333333333   li selector" , add_list);
-		display_container.append(add_list);
-		console.log(display_container,"-----------222222");
-        $(".active").parent(".step").empty();
+        checked_list = Array.prototype.slice.call(checked_list);
+        
+        var whichSelect = [];
+        for(var i = 0; i < checked_list.length; i++){
+        	var matchIndex = all_list.indexOf(checked_list[i]);
+        	whichSelect.push(rightList_one[matchIndex].detail_id);
+        	 if(e == 1){
+       		 	leftList_one.push(rightList_one[matchIndex]);
+             }else if(e == 2){
+            	 leftList_two.push(rightList_two[matchIndex]);
+             }else if(e == 3){
+            	 leftList_three.push(rightList_three[matchIndex]);
+             }
+        }
+        
+        if(e == 1){
+        	for(var i = 0; i < rightList_one.length; i++){
+            	for(var t = 0; t < whichSelect.length; t++){
+            		if(rightList_one[i].detail_id ===  whichSelect[t]){
+            			rightList_one.splice(i, 1);
+                	}
+            		
+            	}
+            }
+        	leftList_one.sort((a,b) => a?.detail_id - b?.detail_id);
+        	display_container.html(createList(leftList_one));
+            step_container.html(createList(rightList_one));
+        }else if(e == 2){
+        	for(var i = 0; i < rightList_two.length; i++){
+            	for(var t = 0; t < whichSelect.length; t++){
+            		if(rightList_two[i].detail_id ===  whichSelect[t]){
+            			rightList_two.splice(i, 1);
+                	}
+            		
+            	}
+            }
+        	leftList_two.sort((a,b) => a?.detail_id - b?.detail_id);
+        	display_container.html(createList(leftList_two));
+            step_container.html(createList(rightList_two));
+        }else if(e == 3){
+        	for(var i = 0; i < rightList_three.length; i++){
+            	for(var t = 0; t < whichSelect.length; t++){
+            		if(rightList_three[i].detail_id ===  whichSelect[t]){
+            			rightList_three.splice(i, 1);
+                	}
+            		
+            	}
+            }
+        	leftList_three.sort((a,b) => a?.detail_id - b?.detail_id);
+        	display_container.html(createList(leftList_three));
+            step_container.html(createList(rightList_three));
+        }
+        
+		
         CheckFunction();
     }
 
