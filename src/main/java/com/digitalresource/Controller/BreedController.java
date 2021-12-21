@@ -45,6 +45,9 @@ public class BreedController {
 	private BreedService breedService;
 
 	@Autowired
+	private DataListService datalistService;
+
+	@Autowired
 	private FileController fileController;
 
 	@RequestMapping("/breed")
@@ -109,18 +112,6 @@ public class BreedController {
 		int result = 0;
 		
 		result = breedService.insertBreed(resource_id,data,crop_id,resource_name);
-
-		return result;
-	}
-
-	@ResponseBody
-	@RequestMapping("selectBreedDateGroup")
-	public Map<String, Object> SelectDateGroup(@RequestParam("datalist_type") String datalist_type) {
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
-
-//		List<Map<String, String>> dataGroup = d_service.SelectDateGroup(datalist_type);
-//
-//		result.put("dataGroup", dataGroup);
 
 		return result;
 	}
@@ -227,5 +218,39 @@ public class BreedController {
 		return 1;
 	}
 
+	@ResponseBody
+	@RequestMapping("selectBreedDateGroup")
+	public Map<String, Object> SelectDateGroup(@RequestParam("resource_name") String resource_name) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
+		List<Map<String, String>> dataGroup = datalistService.SelectDateGroup(resource_name);
+
+		result.put("dataGroup", dataGroup);
+
+		return result;
+	}
+
+//	@ResponseBody
+//	@RequestMapping("insertBreedDataList")
+//	public DataList InsertDataList(@ModelAttribute DataList dataList, @RequestParam("listData") String listData) {
+//		JSONArray arr = new JSONArray(listData);
+//
+//		JSONObject obj = arr.getJSONObject(0);
+//
+//		List<Breed> breed = breedService.SearchBreedExcel(obj.getString("breed_name"));
+//
+//		for (int i = 0; i < breed.size(); i++) {
+//			if (Objects.equals(breed.get(i).getCreate_date().split(" ")[0], obj.getString("datalist_date"))) {
+//				dataList.setDatalist_type(obj.getString("datalist_type"));
+//				dataList.setDatalist_date(obj.getString("datalist_date"));
+//				dataList.setTarget_id(breed.get(i).getBreed_id());
+//			} else {
+//				continue;
+//			}
+//
+//			datalistService.InsertDataList(dataList);
+//		}
+//
+//		return dataList;
+//	}
 }

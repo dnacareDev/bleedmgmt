@@ -1428,7 +1428,6 @@
                                             <div class="content_1 clearfix">
                                                 <ul class="detail_list2" name="기본 정보">
                                                     <li>
-                                                        <div class="title">작물</div>
                                                         <div class="input_text"><input type="text" name="breed_name"></div>
                                                     </li>
                                                 </ul>
@@ -1875,9 +1874,7 @@
     // 통합 분석
     function AnalysisBtn() {
 
-        Alert("준비 중입니다.");
-        return;
-        ;
+        return Alert("준비 중입니다.");
 
         /*
 
@@ -2504,8 +2501,9 @@
             return Alert("등록 권한이 없습니다.");
         } else {
             $("#data_upload2").modal();
+            var resource_name = $(".manage")[0].innerText;
 
-            let data = {"datalist_type": 'breed'};
+            let data = {"resource_name": resource_name};
 
             $.ajax(
                 {

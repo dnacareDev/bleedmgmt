@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thekiban.Mapper.DataListMapper">
+
+    <select id="SelectDataList" resultType="DataList">
+        SELECT *
+        FROM dataList
+    </select>
+
+    <insert id="InsertDataList" parameterType="DataList">
+        INSERT INTO dataList
+        (datalist_id, resource_name, datalist_date, breed_id)
+        VALUES
+        (#{datalist_id}, #{resource_name}, #{datalist_date}, #{breed_id})
+    </insert>
+
+    <!-- 날짜 별로 그룹화 해서 가져오기 -->
+    <select id="SelectDateGroup" resultType="hashmap">
+        SELECT resource_name, datalist_date, COUNT(target_id) AS cnt FROM dataList
+        WHERE resource_name = #{resource_name}
+        GROUP BY datalist_date
+    </select>
+
+    <select id="SelectTarget" resultType="int">
+        SELECT breed_id FROM dataList
+        WHERE datalist_date = #{datalist_date} AND resource_name = #{resource_name}
+    </select>
+
+    <select id="SelectTargetCount" parameterType="String" resultType="int">
+        SELECT COUNT(breed_id) FROM dataList
+        WHERE datalist_date = #{datalist_date}
+    </select>
+</mapper>
