@@ -157,4 +157,19 @@ public class BreedServiceImpl implements BreedService {
 	public String SearchCropName(int breed_name) {
 		return breedMapper.SearchCropName(breed_name);
 	}
+
+	@Override
+	public int InsertBreed(Breed breed) {
+		return breedMapper.InsertBreed(breed);
+	}
+
+	@Override
+	public List<Detail> SelectDetailExcel(int resource_id) {
+		return breedMapper.SelectDetailExcel(resource_id);
+	}
+
+	@Override
+	public int InsertExcel(List<StandardList> standards) {
+		return breedMapper.InsertExcel(standards);
+	}
 }

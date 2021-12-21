@@ -9,12 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServlet;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -79,13 +79,9 @@ public class BreedController {
 		List<Detail> details = detailService.SelectDetailListByResource(resourceId);	
 		List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
 
-		System.out.println(standardList);
-
 		String crop_name = breedService.SearchCropName(crop_id);
 
 		List<Breed> breed = breedService.SearchBreed(crop_name);
-
-		System.out.println(breed);
 
 		result.put("breed", breed);
 		result.put("standardList",standardList);
@@ -190,4 +186,46 @@ public class BreedController {
 
 		return result;
 	}
+
+	@ResponseBody
+	@RequestMapping("excelBreed")
+	public int excelUpload(@RequestParam("excel_list") String excel_list, @RequestParam("resource_id") int resource_id) {
+
+		JSONArray arr = new JSONArray(excel_list);
+
+		List<StandardList> standards = new ArrayList<StandardList>();
+
+		for (int i = 0; i < arr.length(); i++) {
+			JSONArray item = arr.getJSONArray(i);
+
+			System.out.println(i + " : " + item);
+
+			int crop_id = Integer.parseInt(item.getString(0));
+
+			String variety_name = breedService.SearchCropName(crop_id);
+
+			Breed breed = new Breed();
+			breed.setVariety_name(variety_name);
+			breed.setResource_id(resource_id);
+
+			int breed_result = breedService.InsertBreed(breed);
+
+			List<Detail> detail = breedService.SelectDetailExcel(resource_id);
+
+			for (int j = 0; j < detail.size(); j++) {
+				StandardList standard = new StandardList();
+
+				standard.setBreed_id(breed.getBreed_id());
+				standard.setDetail_id(detail.get(j).getDetail_id());
+				standard.setStandard_data((String) item.get(j + 1));
+
+				standards.add(standard);
+			}
+		}
+		breedService.InsertExcel(standards);
+
+		return 1;
+	}
+
+
 }
