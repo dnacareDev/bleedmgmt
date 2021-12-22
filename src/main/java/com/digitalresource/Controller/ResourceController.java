@@ -2,6 +2,7 @@ package com.digitalresource.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,7 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.catalina.connector.Response;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ContentDisposition;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Detail;
@@ -253,17 +256,40 @@ public class ResourceController {
   }
   
   @RequestMapping("detail-display")
-  public ResponseEntity<?> detailDisplayAction(
-		  @RequestParam("detail_id") String[] detailList,
+  public String detailDisplayAction(
+		  @RequestParam(value = "detail_id", required=false) String[] detailList,
+		  @RequestParam(value = "detail_id_checked", required=false) String[] detailCheckList,
+		  ModelAndView mv,
 		  @RequestParam("resource_name_re") String resoruce_name,
-		  @RequestParam("crop_name_re") String crop_name){
+		  @RequestParam("crop_id_re") String crop_id,
+		  @RequestParam("resource_id_re")String resource_id,
+		  RedirectAttributes redirectAttributes
+		  ) throws IOException{
 	  Map<String,Object> map = new HashMap<String, Object>();
-	  String detailIds = Arrays.toString(detailList);
-	  detailIds = detailIds.substring(1,detailIds.length());
-	  detailIds = detailIds.substring(0,detailIds.length() -1);
-	  System.out.println(detailIds);
-	  int result = RService.detailDisplayAction(detailIds);
-	  map.put("result", result);
-	  return ResponseEntity.ok(map);
+	  Map<String,Object> param = new HashMap<String, Object>();
+	  int result = 0;
+
+	  if(detailList != null) {		  
+		  String detailIds = Arrays.toString(detailList);
+		  detailIds = detailIds.substring(1,detailIds.length());
+		  detailIds = detailIds.substring(0,detailIds.length() -1);
+		  param.put("detail", detailIds);
+		  param.put("detail_display", 0);
+		  RService.detailDisplayAction(param);
+	  }
+	  
+	  if(detailCheckList != null) {		  
+		  String detailCheck = Arrays.toString(detailCheckList);
+		  detailCheck = detailCheck.substring(1, detailCheck.length());
+		  detailCheck = detailCheck.substring(0, detailCheck.length()-1);
+		  param.put("detail_display", 1);
+		  param.put("detail", detailCheck);
+		  RService.detailDisplayAction(param);
+	  }
+	  redirectAttributes.addAttribute("type", resoruce_name);
+	  redirectAttributes.addAttribute("id", resource_id);
+	  redirectAttributes.addAttribute("crop_id", crop_id);
+	  
+	  return "redirect:/breed?type={type}&id={id}&crop_id={crop_id}";
   }
 }

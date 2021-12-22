@@ -153,7 +153,7 @@ public List<Detail> selectDetailHead(Map<String, Object> param) {
 }
 
 @Override
-public int detailDisplayAction(String detailIds) {
-	return resourceMapper.detailDisplayAction(detailIds);
+public int detailDisplayAction(Map<String, Object> param) {
+	return resourceMapper.detailDisplayAction(param);
 }
 }

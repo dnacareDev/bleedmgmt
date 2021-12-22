@@ -38,5 +38,5 @@ public interface ResourceService {
 
 	public List<Detail> selectDetailHead(Map<String, Object> param);
 
-	public int detailDisplayAction(String detailIds);
+	public int detailDisplayAction(Map<String, Object> param);
 }
