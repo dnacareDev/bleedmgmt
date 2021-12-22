@@ -101,7 +101,7 @@
 	
 	<update id="detailDisplayAction">
 		update detail
-		set detail_display = 0
+		set detail_display = ${detail_display}
 		where detail_id in (${detail})
 	</update>
 </mapper>
