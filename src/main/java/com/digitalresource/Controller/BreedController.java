@@ -51,12 +51,12 @@ public class BreedController {
 	private FileController fileController;
 
 	@RequestMapping("/breed")
-	public ModelAndView breed(ModelAndView mv, @RequestParam(value="type") String type,@RequestParam(value="id") int resource_id,@RequestParam(value="crop_id", required = false)int crop_id) {
+	public ModelAndView breed(ModelAndView mv, @RequestParam(value="type") String type, @RequestParam(value="id") int resource_id, @RequestParam(value="crop_id", required = false) int crop_id) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
 		List<Crop> crops = cropService.SearchCropList(type);
 	
-		mv.addObject("crop_id",crop_id);
+		mv.addObject("crop_id", crop_id);
 		mv.addObject("cropList", crops);
 		mv.addObject("type", type);
 		mv.addObject("resource_id", resource_id);

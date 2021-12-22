@@ -4,15 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.digitalresource.Entity.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.digitalresource.Entity.Detail;
-import com.digitalresource.Entity.Resource;
-import com.digitalresource.Entity.ResourceList;
-import com.digitalresource.Entity.ResourceName;
 import com.digitalresource.Mapper.ResourceMapper;
 import com.digitalresource.Service.DetailService;
 import com.digitalresource.Service.FileService;
@@ -156,4 +153,14 @@ public List<Detail> selectDetailHead(Map<String, Object> param) {
 public int detailDisplayAction(Map<String, Object> param) {
 	return resourceMapper.detailDisplayAction(param);
 }
+
+  @Override
+  public int SelectCropCount(String resource_name, String crop_name) {
+    return resourceMapper.SelectCropCount(resource_name, crop_name);
+  }
+
+  @Override
+  public MonthCount SelectCropMonth(String crop_name, String month, String resource_name) {
+    return resourceMapper.SelectCropMonth(crop_name, month, resource_name);
+  }
 }

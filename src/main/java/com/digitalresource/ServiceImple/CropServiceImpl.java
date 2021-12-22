@@ -92,4 +92,5 @@ public class CropServiceImpl implements CropService {
     public List<Crop> SearchCropList(String type) {
         return mapper.SearchCropList(type);
     }
+
 }

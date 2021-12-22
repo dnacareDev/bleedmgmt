@@ -3,13 +3,8 @@ package com.digitalresource.Service;
 import java.util.List;
 import java.util.Map;
 
+import com.digitalresource.Entity.*;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.digitalresource.Entity.Crop;
-import com.digitalresource.Entity.Detail;
-import com.digitalresource.Entity.Resource;
-import com.digitalresource.Entity.ResourceList;
-import com.digitalresource.Entity.ResourceName;
 
 public interface ResourceService {
 	public int registResource(Resource resource);
@@ -39,4 +34,8 @@ public interface ResourceService {
 	public List<Detail> selectDetailHead(Map<String, Object> param);
 
 	public int detailDisplayAction(Map<String, Object> param);
+
+	int SelectCropCount(String resource_name, String crop_name);
+
+	MonthCount SelectCropMonth(String crop_name, String month, String resource_name);
 }

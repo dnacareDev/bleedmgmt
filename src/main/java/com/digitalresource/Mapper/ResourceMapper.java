@@ -1,9 +1,6 @@
 package com.digitalresource.Mapper;
 
-import com.digitalresource.Entity.Detail;
-import com.digitalresource.Entity.Resource;
-import com.digitalresource.Entity.ResourceList;
-import com.digitalresource.Entity.ResourceName;
+import com.digitalresource.Entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -47,4 +44,8 @@ public interface ResourceMapper {
 	public int detailDisplayAction(String detailIds);
 
 	public int detailDisplayAction(Map<String, Object> param);
+
+  int SelectCropCount(String resource_name, String crop_name);
+
+	MonthCount SelectCropMonth(String crop_name, String month, String resource_name);
 }

@@ -883,7 +883,7 @@
                                         <option value="20">20개</option>
                                         <option value="30">30개</option>
                                     </select>
-                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect"onChange="changeSelect(this)">
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect" onChange="changeSelect(this)">
                                         <th:block th:each="list : ${cropList}">
                                             <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                             <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
@@ -2281,16 +2281,15 @@
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
                         let arr = {}
-                        if (result.detail[i].detail_info != 2) {
-                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
-                        } else {
+                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+                        } else {
+                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
                         }
 
                         headerArr.push(arr);
 
                     }
-                    console.log('headerArr : ', headerArr);
 
                     breedgrid.setColumns(headerArr);
 
@@ -2348,10 +2347,7 @@
 
                         for (var key in data) {
                             tempArray.breed_id = data[key].breed_id;
-                            console.log('breed_id : ', tempArray.breed_id)
-
                             tempArray.breed_row = data[key].breed_row;
-                            console.log('breed_row : ', tempArray.breed_row)
                             break;
                         }
 
@@ -2363,11 +2359,16 @@
                             tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                         }
 
+                        // console.log('standard : ', result.standardList[i]);
+                        //
+                        // for(let j = 0; j < result.standardList[i].length; j++) {
+                        //     console.log('result.standardList[i][j]', result.standardList[i][j]);
+                        // }
+
                         tempArray.idx = i + 1;
 
                         dataList.push(tempArray);
                     }
-                    console.log('dataList : ', dataList)
 
                     breedgrid.resetData(dataList);
 

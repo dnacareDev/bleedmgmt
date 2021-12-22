@@ -1,5 +1,6 @@
 package com.digitalresource.ServiceImple;
 
+import com.digitalresource.Entity.ChartCount;
 import com.digitalresource.Entity.Detail;
 import com.digitalresource.Entity.Resource;
 import com.digitalresource.Mapper.DetailMapper;
@@ -29,5 +30,10 @@ public class DetailServiceImpl implements DetailService {
   @Override
   public List<Detail> SelectDetailListByResource(int resource_id) {
     return mapper.SelectDetailListByResource(resource_id);
+  }
+
+  @Override
+  public ChartCount SelectFileCount() {
+    return mapper.SelectFileCount();
   }
 }
