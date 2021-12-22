@@ -137,6 +137,17 @@
         </choose>
     </select>
 
+    <select id="SearchBreedExcel" resultType="Breed">
+        SELECT *,
+        (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND d.detail_info = 2 AND s.standard_data IS NOT NULL) AS detail_count
+        FROM breed b
+        <choose>
+            <when test="crop_name != 'none'">
+                WHERE b.variety_name = #{crop_name}
+            </when>
+        </choose>
+    </select>
+
     <select id="SearchBreedDetail" parameterType="String" resultType="Detail">
         SELECT * FROM detail
         WHERE (detail_info = 1 OR detail_info = 2) AND detail_name = #{crop_name}
