@@ -28,7 +28,7 @@
     </update>
     
     <select id="selectStandard" resultType="StandardList">
-    	select s.standard_id,d.detail_id, s.standard_data, b.resource_id, b.breed_row , b.breed_id from breed b 
+    	select s.standard_id, d.detail_id, s.standard_data, b.resource_id, b.breed_row, b.breed_id from breed b
 		inner join standard s on b.breed_id = s.breed_id
 		inner join detail d on s.detail_id = d.detail_id where b.resource_id = #{resource_id};
     </select>
