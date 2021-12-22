@@ -223,8 +223,6 @@ public class BreedController {
 	public Map<String, Object> SelectDateGroup(@RequestParam("resource_name") String resource_name) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-		System.out.println(resource_name);
-
 		List<Map<String, String>> dataGroup = datalistService.SelectDateGroup(resource_name);
 
 		result.put("dataGroup", dataGroup);
@@ -257,5 +255,13 @@ public class BreedController {
 		}
 
 		return dataList;
+	}
+
+	@ResponseBody
+	@RequestMapping("selectBreedStandard")
+	public List<StandardList> SelectBreedStandard(@RequestParam("breed_id") int breed_id) {
+		List<StandardList> result = breedService.SelectBreedStandard(breed_id);
+
+		return result;
 	}
 }

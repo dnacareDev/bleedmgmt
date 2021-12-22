@@ -1426,7 +1426,7 @@
                                                 </ul>
                                             </div>
                                             <div class="content_1 clearfix">
-                                                <ul class="detail_list2" name="기본 정보">
+                                                <ul class="detail_list2" name="0">
                                                     <li>
                                                         <div class="input_text"><input type="text" name="breed_name"></div>
                                                     </li>
@@ -1441,7 +1441,7 @@
                                                 </ul>
                                             </div>
                                             <div class="content_1 clearfix">
-                                                <ul class="detail_list2" name="특성 정보 (종자원 기준)">
+                                                <ul class="detail_list2" name="2">
                                                 </ul>
                                             </div>
                                         </div>
@@ -1453,7 +1453,7 @@
                                                 </ul>
                                             </div>
                                             <div class="content_1 clearfix">
-                                                <ul class="detail_list2" name="특성 정보 (사내 기준)">
+                                                <ul class="detail_list2" name="1">
                                                 </ul>
                                             </div>
                                         </div>
@@ -1648,7 +1648,7 @@
         $("#display_title").text($(".titleType")[0].innerText + " > " + crop_text);
         $("#display_name").val($("#CropSelect")[0].innerText);
 
-        var data = {"crop_id":crop_id , "resource_name":  resource_name}
+        var data = {"crop_id":crop_id , "resource_name": resource_name}
         // ajax로 가져오기
         $.ajax(
             {
@@ -1775,7 +1775,7 @@
                     var empty_list = $(".empty_list");
 
                     for (var i = 0; i < empty_list.length; i++) {
-                        empty_list.eq(i).val(result[i].standard);
+                        empty_list.eq(i).val(result[i].standard_data);
                     }
                 }
             });
@@ -1787,14 +1787,15 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
+        SearchBreed(1);
         SearchBreedgrid(1);
     });
 
     // 작물 선택
     $("#CropSelect").change(function () {
         breedgrid.destroy();
-        //123
-        // SearchBreed(1);
+
+        SearchBreed(1);
         SearchBreedgrid(1);
     })
 
@@ -1802,7 +1803,7 @@
     $("#limit").change(function () {
         breedgrid.destroy();
 
-        // SearchBreed(1);
+        SearchBreed(1);
         SearchBreedgrid(1);
     })
 
@@ -2312,7 +2313,9 @@
                         }
 
                         headerArr.push(arr);
+
                     }
+                    console.log('headerArr : ', headerArr);
 
                     breedgrid.setColumns(headerArr);
 
@@ -2361,12 +2364,19 @@
                         let tempArray = [];
 
                         for (var key in data) {
-                            tempArray.push(data[key].standard_data ? data[key].standard_data : "");
+                            if(typeof data[key] === "number") {
+                                continue;
+                            } else {
+                                tempArray.push(data[key].standard_data ? data[key].standard_data : "");
+                            }
                         }
 
                         for (var key in data) {
                             tempArray.breed_id = data[key].breed_id;
+                            console.log('breed_id : ', tempArray.breed_id)
+
                             tempArray.breed_row = data[key].breed_row;
+                            console.log('breed_row : ', tempArray.breed_row)
                             break;
                         }
 
@@ -2382,6 +2392,7 @@
 
                         dataList.push(tempArray);
                     }
+                    console.log('dataList : ', dataList)
 
                     breedgrid.resetData(dataList);
 
@@ -2548,12 +2559,8 @@
             var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
             callback(firstSheet);
 
-            console.log(firstSheet);
-
             delete firstSheet.A1;
             var rowdata = XLSX.utils.sheet_to_json(firstSheet);
-
-            console.log(rowdata);
 
             var keys = Object.values(rowdata[0]);
 
@@ -2880,6 +2887,50 @@
 	function changeSelect(){
 		console.log(1);
 	}
+
+    function SearchBreed(e) {
+        var crop_id = $("#CropSelect").val();
+        var resource_name = $(".manage")[0].innerText;
+
+        var data = {"crop_id": crop_id , "resource_name": resource_name}
+
+        $.ajax(
+            {
+                url: 'detail-head',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    var detail_list2 = $(".detail_list2");
+                    var detail_add2 = "";
+
+                    for (var i = 0; i < detail_list2.length; i++) {
+                        detail_add2 = "";
+
+                        for (var j = 0; j < result.detailList.length; j++) {
+
+                            // 특성상태
+                            if (result.detailList[j].detail_info == detail_list2.eq(i).attr("name")) {
+                                detail_add2 += '<li>';
+                                detail_add2 += '<div class="title">' + result.detailList[j].detail_name + '</div>';
+                                detail_add2 += '<div class="input_text">';
+                                detail_add2 += '<input type="text" class="empty_list" name="standard">';
+                                detail_add2 += '<input type="hidden" name="detail_id" value="' + result.detailList[j].detail_id + '"></div>';
+                                detail_add2 += '</div>';
+                                detail_add2 += '</li>';
+                            }
+                        }
+
+                        detail_list2.eq(i).empty();
+                        detail_list2.eq(i).append(detail_add2);
+                    }
+
+                    $("#offset").val(result.offset);
+                    CheckFunction();
+                }
+
+            });
+    }
 </script>
 </body>
 </html>

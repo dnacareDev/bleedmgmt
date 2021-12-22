@@ -171,4 +171,9 @@
             (#{item.breed_id}, #{item.detail_id}, #{item.standard_data})
         </foreach>
     </insert>
+
+    <select id="SelectBreedStandard" parameterType="int" resultType="StandardList">
+        SELECT * FROM standard
+        WHERE breed_id = #{breed_id}
+    </select>
 </mapper>

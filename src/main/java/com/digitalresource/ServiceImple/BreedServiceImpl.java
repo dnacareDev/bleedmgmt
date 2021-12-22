@@ -172,4 +172,9 @@ public class BreedServiceImpl implements BreedService {
 	public int InsertExcel(List<StandardList> standards) {
 		return breedMapper.InsertExcel(standards);
 	}
+
+	@Override
+	public List<StandardList> SelectBreedStandard(int breed_id) {
+		return breedMapper.SelectBreedStandard(breed_id);
+	}
 }
