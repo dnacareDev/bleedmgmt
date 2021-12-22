@@ -82,6 +82,8 @@ public class BreedController {
 		List<Detail> details = detailService.SelectDetailListByResource(resourceId);	
 		List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
 
+		System.out.println(standardList);
+
 		String crop_name = breedService.SearchCropName(crop_id);
 
 		List<Breed> breed = breedService.SearchBreed(crop_name);
