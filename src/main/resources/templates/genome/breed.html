@@ -1787,7 +1787,6 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        SearchBreed(1);
         SearchBreedgrid(1);
     });
 
@@ -2657,7 +2656,7 @@
         reader.readAsBinaryString(input.files[0]);
     }
 
-    /* 엑셀 등록 창 */
+    /* 엑셀 목록 창 */
     function openExcel() {
         var user_type = $("#user_type").val();
 
@@ -2800,9 +2799,11 @@
 
                     let listData = [];
 
+                    let resource_name = $(".manage")[0].innerText;
+
                     let crop_id = $("#CropSelect").val();
 
-                    let lData = {"datalist_type": 'breed', "datalist_date": now, "crop_id": crop_id};
+                    let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id};
 
                     listData.push(lData);
 
@@ -2867,101 +2868,6 @@
         }
 
         return [y, m, d].join('-');
-    }
-
-    function SearchBreed(e) {
-        var breed_name = $("#CropSelect").val();
-
-        var data = {"breed_name": breed_name};
-
-        $.ajax(
-            {
-                url: 'searchBreed',
-                method: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    var detail_list = $(".detail_list");
-                    var detail_add = "";
-
-                    var detail_list2 = $(".detail_list2");
-                    var detail_add2 = "";
-
-                    var display_list = $(".display_list");
-                    var display_add = "";
-
-                    // detail
-                    for (var i = 0; i < detail_list.length; i++) {
-                        detail_add = "";
-                        detail_add2 = "";
-                        display_add = "";
-
-                        // for (var j = 0; j < result.detail.length; j++) {
-                        //     // 표시항목
-                        //     if (result.detail[j].detail_spec == detail_list.eq(i).attr("name")) {
-                        //         var check = true;
-                        //
-                        //         for (var k = 0; k < result.display.length; k++) {
-                        //             if (result.display[k].detail_id == result.detail[j].detail_id) {
-                        //                 check = false;
-                        //
-                        //                 if (result.detail[j].detail_title == "첨부파일 관리") {
-                        //                     continue;
-                        //                 } else {
-                        //                     display_add += '<div data-id="' + result.detail[j].detail_id + '" class="list-group step">';
-                        //                     display_add += '<li class="list-group-item-sm list-group-item">';
-                        //                     display_add += '<div class="row">';
-                        //                     display_add += '<input type="checkbox" class="checkbox mr-2" name="mis_research">';
-                        //                     display_add += '<span class="research-title">' + result.detail[j].detail_title + '</span>';
-                        //                     /* display_add += '<input type="hidden" id="detail_id" name="detail_id" value="' + result.detail[j].detail_id + '">'; */
-                        //                     display_add += '<input type="hidden" name="detail_id" value="' + result.detail[j].detail_id + '">';
-                        //                     display_add += '</div>';
-                        //                     display_add += '</li>';
-                        //                     display_add += '</div>';
-                        //                 }
-                        //             }
-                        //         }
-                        //
-                        //         if (check) {
-                        //             if (result.detail[j].detail_title == "첨부파일 관리") {
-                        //                 continue;
-                        //             } else {
-                        //                 detail_add += '<li>';
-                        //                 detail_add += '<input type="checkbox" class="check_box" name="chk_research" value="' + result.detail[j].detail_id + '">';
-                        //                 detail_add += '<div class="title">' + result.detail[j].detail_title + '</div>';
-                        //                 detail_add += '</li>';
-                        //             }
-                        //         }
-                        //     }
-                        //
-                        //     // 특성상태
-                        //     if (result.detail[j].detail_spec == detail_list.eq(i).attr("name")) {
-                        //         detail_add2 += '<li>';
-                        //         detail_add2 += '<div class="title">' + result.detail[j].detail_title + '</div>';
-                        //         detail_add2 += '<div class="input_text">';
-                        //         detail_add2 += '<input type="text" class="empty_list" name="standard">';
-                        //         detail_add2 += '<input type="hidden" name="detail_id" value="' + result.detail[j].detail_id + '"></div>';
-                        //         detail_add2 += '</div>';
-                        //         detail_add2 += '</li>';
-                        //     }
-                        // }
-
-                        // detail_list.eq(i).empty();
-                        // detail_list.eq(i).append(detail_add);
-                        //
-                        // detail_list2.eq(i).empty();
-                        // detail_list2.eq(i).append(detail_add2);
-                        //
-                        // display_list.eq(i).empty();
-                        // display_list.eq(i).append(display_add);
-                    }
-
-                    $("#offset").val(result.offset);
-                    CheckFunction();
-                    // namedClick();// 추가  alpadesign  2021-11-08
-                }
-
-            });
     }
 
     function imgView(e) {

@@ -223,6 +223,8 @@ public class BreedController {
 	public Map<String, Object> SelectDateGroup(@RequestParam("resource_name") String resource_name) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
+		System.out.println(resource_name);
+
 		List<Map<String, String>> dataGroup = datalistService.SelectDateGroup(resource_name);
 
 		result.put("dataGroup", dataGroup);
@@ -230,27 +232,30 @@ public class BreedController {
 		return result;
 	}
 
-//	@ResponseBody
-//	@RequestMapping("insertBreedDataList")
-//	public DataList InsertDataList(@ModelAttribute DataList dataList, @RequestParam("listData") String listData) {
-//		JSONArray arr = new JSONArray(listData);
-//
-//		JSONObject obj = arr.getJSONObject(0);
-//
-//		List<Breed> breed = breedService.SearchBreedExcel(obj.getString("breed_name"));
-//
-//		for (int i = 0; i < breed.size(); i++) {
-//			if (Objects.equals(breed.get(i).getCreate_date().split(" ")[0], obj.getString("datalist_date"))) {
-//				dataList.setDatalist_type(obj.getString("datalist_type"));
-//				dataList.setDatalist_date(obj.getString("datalist_date"));
-//				dataList.setTarget_id(breed.get(i).getBreed_id());
-//			} else {
-//				continue;
-//			}
-//
-//			datalistService.InsertDataList(dataList);
-//		}
-//
-//		return dataList;
-//	}
+	@ResponseBody
+	@RequestMapping("insertBreedDataList")
+	public DataList InsertDataList(@ModelAttribute DataList dataList, @RequestParam("listData") String listData) {
+		JSONArray arr = new JSONArray(listData);
+
+		JSONObject obj = arr.getJSONObject(0);
+
+		int crop_id = Integer.parseInt(obj.getString("crop_id"));
+		String variety_name = breedService.SearchCropName(crop_id);
+
+		List<Breed> breed = breedService.SearchBreed(variety_name);
+
+		for (int i = 0; i < breed.size(); i++) {
+			if (Objects.equals(breed.get(i).getCreate_date().split(" ")[0], obj.getString("datalist_date"))) {
+				dataList.setResource_name(obj.getString("resource_name"));
+				dataList.setDatalist_date(obj.getString("datalist_date"));
+				dataList.setBreed_id(breed.get(i).getBreed_id());
+			} else {
+				continue;
+			}
+
+			datalistService.InsertDataList(dataList);
+		}
+
+		return dataList;
+	}
 }
