@@ -86,6 +86,7 @@ public class BreedController {
 
 		List<Breed> breed = breedService.SearchBreed(crop_name);
 
+
 		result.put("breed", breed);
 		result.put("standardList",standardList);
 		result.put("detail", details);
@@ -121,6 +122,9 @@ public class BreedController {
 	@ResponseBody
 	@RequestMapping("deleteBreed")
 	public int deleteBreed(String breed_id, String breed_row) {
+		System.out.println(breed_id);
+		System.out.println("breed_id ========================");
+		System.out.println(breed_row);
 		int result = breedService.deleteBreed(breed_id,breed_row);
 		return result;
 	}

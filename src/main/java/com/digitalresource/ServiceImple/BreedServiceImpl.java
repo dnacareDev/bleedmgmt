@@ -132,6 +132,7 @@ public class BreedServiceImpl implements BreedService {
 		int deleteResult = breedMapper.deleteStandard(breed_id);
 		int result = 0;
 		if(deleteResult != 0) {
+			breedMapper.deleteStandards(breed_id);
 			result = breedMapper.deleteBreed(breed_id);
 			System.out.println(result);
 		}

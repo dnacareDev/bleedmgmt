@@ -1798,6 +1798,8 @@
             var l = breedgrid.getCheckedRows().length;
 
             for (let i = 0; i < l; i++) {
+                console.log(breedgrid.getCheckedRows()[i].breed_id , "breed_id");
+                console.log(breedgrid.getCheckedRows()[i] , "breed");
                 total_id.push(breedgrid.getCheckedRows()[i].breed_id);
                 breed_rows.push(breedgrid.getCheckedRows()[i].breed_row);
             }
@@ -2240,12 +2242,11 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                    //breed_id
                     breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: [],
+                        data: result.standardList,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2302,6 +2303,8 @@
 
                     breedgrid.setColumns(headerArr);
 
+                    gridDataArray = result.standardList;
+
                     breedgrid.on('beforeChange', ev => {
                         if (ev.origin != "cell" && ev.origin != "paste")
                             return;
@@ -2309,7 +2312,11 @@
                         try {
                             for (var i = 0; i < ev.changes.length; i++) {
                                 let changeItem = ev.changes[i];
+                                console.log('changeItem : ', changeItem);
+
                                 let list = gridDataArray[changeItem.rowKey];
+                                console.log('list : ', list);
+
                                 let count = 0;
                                 let standard = {};
 
@@ -2338,7 +2345,6 @@
                         }
                     });
 
-                    gridDataArray = result.standardList;
                     let dataList = [];
 
                     for (var i = 0; i < result.standardList.length; i++) {

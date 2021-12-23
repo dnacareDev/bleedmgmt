@@ -41,4 +41,6 @@ public interface BreedMapper {
 	int InsertExcel(List<StandardList> standards);
 
 	List<StandardList> SelectBreedStandard(int breed_id);
+
+	int deleteStandards(String breed_id);
 }
