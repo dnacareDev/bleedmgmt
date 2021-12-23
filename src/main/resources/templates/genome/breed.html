@@ -2257,11 +2257,6 @@
 
                     const headerArr = [
                         {
-                            'header': 'No',
-                            'name': 'idx',
-                            'width': 50,
-                        },
-                        {
                             'header': '첨부파일',
                             'name': 'file',
                             'width': 100,
@@ -2346,8 +2341,6 @@
                     gridDataArray = result.standardList;
                     let dataList = [];
 
-                    console.log(result.standardList);
-
                     for (var i = 0; i < result.standardList.length; i++) {
 
                         let data = result.standardList[i];
@@ -2376,6 +2369,7 @@
                         // }
 
                         tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                        tempArray['breed_id'] = result.standardList[i].breed_id;
                         tempArray['img'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                         tempArray['doc'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
 

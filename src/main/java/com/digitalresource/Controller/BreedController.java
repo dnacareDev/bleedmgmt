@@ -82,8 +82,6 @@ public class BreedController {
 		List<Detail> details = detailService.SelectDetailListByResource(resourceId);	
 		List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
 
-		System.out.println(standardList);
-
 		String crop_name = breedService.SearchCropName(crop_id);
 
 		List<Breed> breed = breedService.SearchBreed(crop_name);
@@ -112,7 +110,9 @@ public class BreedController {
 	@RequestMapping("insertBreed2")
 	public int insertBreed(@RequestParam(value="data")String data, @RequestParam(value="resource_id") int resource_id, @RequestParam(value="crop_id")int crop_id, @RequestParam(value="resource_name") String resource_name) {
 		int result = 0;
-		
+
+		System.out.println(data);
+
 		result = breedService.insertBreed(resource_id,data,crop_id,resource_name);
 
 		return result;
@@ -191,8 +191,6 @@ public class BreedController {
 		for (int i = 0; i < arr.length(); i++) {
 			JSONArray item = arr.getJSONArray(i);
 
-			System.out.println(i + " : " + item);
-
 			int crop_id = Integer.parseInt(item.getString(0));
 
 			String variety_name = breedService.SearchCropName(crop_id);
@@ -201,6 +199,7 @@ public class BreedController {
 			breed.setVariety_name(variety_name);
 			breed.setResource_id(resource_id);
 
+//			int breed_result = breedService.insertBreed(resource_id, data, crop_id, resource_name);
 			int breed_result = breedService.InsertBreed(breed);
 
 			List<Detail> detail = breedService.SelectDetailExcel(resource_id);
