@@ -213,7 +213,11 @@ public class BreedController {
 
 				standard.setBreed_id(breed.getBreed_id());
 				standard.setDetail_id(detail.get(j).getDetail_id());
-				standard.setStandard_data((String) item.get(j + 1));
+				if(j < item.length()) {
+					standard.setStandard_data((String) item.get(j + 1));
+				} else {
+					standard.setStandard_data("");
+				}
 
 				standards.add(standard);
 			}
