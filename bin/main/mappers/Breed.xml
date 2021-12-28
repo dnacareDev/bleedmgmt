@@ -3,14 +3,15 @@
 <mapper namespace="com.digitalresource.Mapper.BreedMapper">
     <insert id="insertBreed" useGeneratedKeys="true" keyProperty="breed_id">
     	insert into breed (resource_id, create_date, variety_name, breed_row)
-    	select #{resource_id}, now(), (select crop_name from crop c inner join resource r on c.crop_id = r.crop_id where r.resource_id = #{resource_id}),(select ifnull(max(breed_row)+1,1) from breed where  resource_id = #{resource_id})
+    	select #{resource_id}, now(), (select crop_name from crop c inner join resource r on c.crop_id = r.crop_id where r.resource_id = #{resource_id}), (select ifnull(max(breed_row)+1,1) from breed where  resource_id = #{resource_id})
     </insert>
 
     <insert id="InsertBreed" parameterType="Breed">
         INSERT INTO breed
-        (resource_id, create_date, variety_name)
-        VALUES
-        (#{resource_id}, NOW(), #{variety_name})
+        (resource_id, create_date, variety_name, breed_row)
+        select
+        #{resource_id}, NOW(), #{variety_name},
+        (select ifnull((select max(breed_row)+1 from breed), 1) from dual)
         <selectKey resultType="int" keyProperty="breed_id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -28,7 +29,7 @@
     </update>
     
     <select id="selectStandard" resultType="StandardList">
-    	select s.standard_id,d.detail_id, s.standard_data, b.resource_id, b.breed_row , b.breed_id from breed b 
+    	select s.standard_id, d.detail_id, s.standard_data, b.resource_id, b.breed_row, b.breed_id from breed b
 		inner join standard s on b.breed_id = s.breed_id
 		inner join detail d on s.detail_id = d.detail_id where b.resource_id = #{resource_id};
     </select>
@@ -171,4 +172,15 @@
             (#{item.breed_id}, #{item.detail_id}, #{item.standard_data})
         </foreach>
     </insert>
+
+    <select id="SelectBreedStandard" parameterType="int" resultType="StandardList">
+        SELECT * FROM standard
+        WHERE breed_id = #{breed_id}
+    </select>
+
+    <delete id="deleteStandards">
+        DELETE
+        FROM standard
+        WHERE breed_id in(${breed_id});
+    </delete>
 </mapper>

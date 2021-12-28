@@ -1,0 +1,177 @@
+<!-- <!doctype html> -->
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user = ${#authentication.principal}">
+      <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<head>
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <style>
+       
+        .clearfix::after{clear:both; content: ""; display: block;}
+
+        .title{
+            font-size:15px;
+            padding-bottom:50px;
+        }
+        .container{
+            max-width: 100%;
+            margin:50px auto;
+        }
+        .contents{
+            width:100%;
+            padding-left:0;
+        }
+        .text{
+        	float:left;
+            border: 1px solid #222222;
+            width:80%;
+            height:45px;
+            border-radius: 5px;
+            background-color: #FFFFFF;
+        }
+        .submit{
+        	float:left;
+            border: 1px solid #217566;
+            border-radius: 5px;
+            height:45px;
+            font-size: 13px;
+            color:#fff;
+            width: calc((20% - 20px)/2);
+            margin-left: 10px;
+            background-color: #217566;
+        }
+        #filed{
+            display:none;
+        }
+        .top-menu .contents, .top-menu a{
+        	padding-left: 0;
+        }
+        .container a{
+        	color: #217566;
+        	text-decoration: underline;
+        }
+        .data_file{
+        	/*border: 1px solid #ddd;*/
+        	background-color: #fff;
+        }
+        
+        .data_file .top_menu_bar{
+        	width:100%;
+        	text-align:left;
+        	padding: 15px 0 0 0;
+        	/*border-bottom: 1px solid #EDF6F1;*/
+        }
+        .data_file .top_menu_bar li{
+        	display:inline-block;
+        	padding: 10px 20px;
+        	background-color: transparent;
+        	color:#D9D9D9;
+        	cursor:pointer;
+        	border-radius: 5px 5px 0 0;
+        }
+        .data_file .top_menu_bar li.active{
+        	background-color: #EDF6F1;
+        	color:#217566;
+        }
+        .data_file .contents{
+        	display:none;
+        	text-align:center;
+        	background-color: #fff;
+        	padding: 50px 0;
+   			margin-top: 0;
+   			border: 1px solid #EDF6F1;
+        }
+        .main-content .container-fluid {
+		    max-width: 100%;
+		    padding: 50px;
+		    padding-top: 30px;
+		    padding-bottom: 30px;
+		}
+		.card{
+			padding: 30px;
+			box-shadow:0 3px 20px 3px rgb(0 0 0 / 7%);
+		}
+		/*.main-content {
+			min-height: auto;
+			height: calc((100vh - 219.25px)/1);
+		}*/
+    </style>
+</head>
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+<div class="mobile-author-actions"></div>
+<th:block th:include="/../fragments/topbar.html"></th:block>
+<main class="main-content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12 mb-30">
+				<div class="card">
+					<div class="breadcrumb-main" style="float: left;">
+						<h4 class="text-capitalize breadcrumb-title">MABC - Analysis</h4>
+					</div>
+					<div class="contents" style="background-color: #fff">
+						<form action="insertMatrix" id="insertFile" method="POST" enctype="multipart/form-data" class="clearfix" style="margin-top:15px;">
+							<button type="button" class="submit" onclick="fileds();" style="margin-left: 0; width: 74%;background-color: #fff; border: 1px solid #D9D9D9; color:#B2B2B2; font-size:14px;text-align:left; padding: 0 15px"><i class="bi bi-upload" style="margin-right:5px; font-size:14px;vertical-align:middle"></i><span style="vertical-align:middle; font-weight:500;">Click to Upload</span></button>
+							<button type="submit" class="submit">분석실행</button>
+							<input type="file" id="filed" name="file">
+							<div class="downLoad_cover" style="float:left; margin-left:10px; width: calc((32% - 20px)/2); text-align: center;">
+								<a href="" style="color:#217566; padding:12px 10px; background-color:#EDF6F1;border-radius: 5px;display:block; font-size:14px; white-space: nowrap;overflow: hidden;width: 100%;text-overflow: ellipsis;"><i class="bi bi-download" style="margin-right:5px; font-size:14px;vertical-align:middle"></i><span style="vertical-align:middle">Example data download</span></a>
+							</div>
+						</form>
+					</div>
+					<div class="data_file" style="overflow: auto; height: auto; margin-top: 4px;">
+						<div class="top_menu_bar">
+							<ul>
+								<li>distance matrix</li>
+								<li>Phylogenic tree</li>
+								<li>PCA plot</li>
+								<li>pedigree map</li>
+							</ul>
+						</div>
+						<div class="content_type1 contents">
+							<th:block th:if="${path != null}">
+								<img th:src="|http://112.169.63.197:8883/common/r/result/${path}/${path}_distancematrix.png|">
+							</th:block>
+						</div>
+						<div class="content_type2 contents">
+							<th:block th:if="${path != null}">
+								<img th:src="|http://112.169.63.197:8883/common/r/result/${path}/${path}_phylogenictree3.png|">
+							</th:block>
+						</div>
+						<div class="content_type3 contents">
+							<th:block th:if="${path != null}">
+								<img th:src="|http://112.169.63.197:8883/common/r/result/${path}/${path}_pca.png|">
+							</th:block>
+						</div>
+						<div class="content_type4 contents">
+							<!-- <img th:src="|http://112.169.63.197:8883/common/r/result/${path}/${path}_distancematrix.png|"> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<script>
+	let n=0
+	$(".data_file .top_menu_bar li").eq(n).addClass("active");
+	$(".data_file .contents").eq(n).show();
+	$(".data_file .top_menu_bar li").click(function(){
+		n=$(this).index();
+		
+		$(".data_file .top_menu_bar li").removeClass("active");
+		$(this).addClass("active");
+		$(".data_file .contents").hide();
+		$(".data_file .contents").eq(n).show();
+	});
+	
+	function fileds(e)
+	{
+	    $("#filed").trigger("click");
+	}
+</script>
+<!-- 공통 하단 -->
+ <th:block th:include="/../fragments/footer.html"></th:block> 
+<!-- 공통 js -->
+ <th:block th:include="/../fragments/commonjs.html"></th:block> 
+</body>
+</html>

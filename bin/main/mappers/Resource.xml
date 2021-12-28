@@ -2,106 +2,147 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalresource.Mapper.ResourceMapper">
 
-<!--    사용되는 자원 관리 이름 갯수-->
+    <!--    사용되는 자원 관리 이름 갯수-->
     <select id="getCountResourceName" parameterType="int" resultType="int">
-        SELECT COUNT(*) FROM resource WHERE resoucre_name_id = #{resource_name_id}
+        SELECT COUNT(*)
+        FROM resource
+        WHERE resoucre_name_id = #{resource_name_id}
     </select>
 
     <select id="selectResourceById" parameterType="int" resultType="Resource">
-        SELECT * FROM resource WHERE resource_id = #{resource_id}
+        SELECT *
+        FROM resource
+        WHERE resource_id = #{resource_id}
     </select>
 
     <delete id="deleteResourceByCropCategory" parameterType="int">
-        DELETE FROM resource WHERE crop_id IN
-        (SELECT crop_id FROM crop WHERE category_id = #{category_id})
+        DELETE
+        FROM resource
+        WHERE crop_id IN
+              (SELECT crop_id FROM crop WHERE category_id = #{category_id})
     </delete>
 
     <delete id="deleteResourceByCrop" parameterType="int">
-        DELETE FROM resource WHERE crop_id = #{crop_id}
+        DELETE
+        FROM resource
+        WHERE crop_id = #{crop_id}
     </delete>
     <delete id="deleteResource" parameterType="int">
-   		 update resource
-		set resource_use = 0 
-		where resource_id in (  
-    	select resource_id from (
-    	select resource_id from resource where resource_id in(${resource_name})) a) 
+        update resource
+        set resource_use = 0
+        where resource_id in (
+            select resource_id
+            from (
+                     select resource_id
+                     from resource
+                     where resource_id in (${resource_name})) a)
     </delete>
-    
-    
 
-    <insert id="insertResource" useGeneratedKeys="true" keyProperty="resource_id" >
-    	insert into resource(resource_name_id, crop_id, 
-    	<if test="trait_id != ''">
-	    	trait_id, 
-    	</if>
-    	<if test="resource_template != ''">
-    		resource_template,
-    	</if>
-    	<if test="resource_character_template_file != ''">    	
-    	 	resource_character_template_file, 
-    	</if>
-	    	 resource_use, create_date,detail_count)
-	    	values(#{resource_name_id}, #{crop_id},
-    	<if test="trait_id != ''">
-	    	#{trait_id},
-    	</if>
-    	<if test="resource_template != ''">
-	    	#{resource_template},
-    	</if>
-    	<if test="resource_character_template_file != ''">
-    	   	 #{resource_character_template_file},
-    	</if>
-    	  1, 
-    	  now(), #{detail_count});
+
+    <insert id="insertResource" useGeneratedKeys="true" keyProperty="resource_id">
+        insert into resource(resource_name_id, crop_id,
+        <if test="trait_id != ''">
+            trait_id,
+        </if>
+        <if test="resource_template != ''">
+            resource_template,
+        </if>
+        <if test="resource_character_template_file != ''">
+            resource_character_template_file,
+        </if>
+        resource_use, create_date,detail_count)
+        values(#{resource_name_id}, #{crop_id},
+        <if test="trait_id != ''">
+            #{trait_id},
+        </if>
+        <if test="resource_template != ''">
+            #{resource_template},
+        </if>
+        <if test="resource_character_template_file != ''">
+            #{resource_character_template_file},
+        </if>
+        1,
+        now(), #{detail_count});
     </insert>
-    
+
     <insert id="registerDetail">
-    	insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info)
-    	values(#{resource_id},#{detail_type},#{detail_name},#{detail_index},#{detail_info});
+        insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info)
+        values (#{resource_id}, #{detail_type}, #{detail_name}, #{detail_index}, #{detail_info});
     </insert>
-    
+
     <select id="searchResource" resultType="ResourceList">
-    	select r.*, rn.*,t.trait_description, c.crop_name ,(if(resource_use = 1, '사용','비사용'))as use_name 
-    	from resource r 
-		left join trait t on r.trait_id = t.trait_id
-		inner join crop c on c.crop_id= r.crop_id
-		inner join resource_name rn on rn.resource_name_id = r.resource_name_id 
-		where r.resource_use != 0 
-		ORDER BY r.resource_id DESC 
+        select r.*, rn.*, t.trait_description, c.crop_name, (if(resource_use = 1, '사용', '비사용')) as use_name
+        from resource r
+                 left join trait t on r.trait_id = t.trait_id
+                 inner join crop c on c.crop_id = r.crop_id
+                 inner join resource_name rn on rn.resource_name_id = r.resource_name_id
+        where r.resource_use != 0
+        ORDER BY r.resource_id DESC
     </select>
-    
+
     <select id="selectResourceCount" resultType="int">
-    	select count(*) from resource r
-		inner join trait t on r.trait_id = t.trait_id
-		inner join crop c on c.crop_id= r.crop_id;
+        select count(*)
+        from resource r
+                 inner join trait t on r.trait_id = t.trait_id
+                 inner join crop c on c.crop_id = r.crop_id;
     </select>
-    
+
     <update id="changeResourceUse">
-    	update resource
-		set resource_use = ${use_name}
-		where resource_id = (select resource_id from (select resource_id from resource limit ${limit}, 1) as resurce_id);
+        update resource
+        set resource_use = ${use_name}
+        where resource_id = (select resource_id from (select resource_id from resource limit ${limit}, 1) as resurce_id);
     </update>
-    
+
     <select id="resourceList" resultType="resourceName">
-    	select rn.* from resource_name rn LEFT JOIN resource r ON r.resource_name_id=rn.resource_name_id WHERE r.resource_use != 0 group by rn.resource_name 
+        select rn.*
+        from resource_name rn
+                 LEFT JOIN resource r ON r.resource_name_id = rn.resource_name_id
+        WHERE r.resource_use != 0
+        group by rn.resource_name
     </select>
 
-	<select id="SearchResourceId" resultType="int">
-		SELECT resource_id FROM resource WHERE crop_id = #{crop_id} AND resource_name_id = #{resource_name_id}
-	</select>
+    <select id="SearchResourceId" resultType="int">
+        SELECT resource_id
+        FROM resource
+        WHERE crop_id = #{crop_id}
+          AND resource_name_id = #{resource_name_id}
+    </select>
 
-	<select id="SelectCropId" resultType="int">
-		SELECT crop_id FROM resource WHERE resource_name_id = #{resource_name_id}
-	</select>
-	
-	<select id="selectDetailHead" resultType="Detail">
-		select d.detail_id,d.detail_name, d.detail_info,d.detail_display from resource r inner join resource_name rn on rn.resource_name_id = r.resource_name_id
-		inner join detail d on d.resource_id = r.resource_id where rn.resource_name = #{resource_name} and r.crop_id = #{crop_id} and detail_info not in(4,3);
-	</select>
-	
-	<update id="detailDisplayAction">
-		update detail
-		set detail_display = ${detail_display}
-		where detail_id in (${detail})
-	</update>
+    <select id="SelectCropId" resultType="int">
+        SELECT crop_id
+        FROM resource
+        WHERE resource_name_id = #{resource_name_id}
+    </select>
+
+    <select id="selectDetailHead" resultType="Detail">
+        select d.detail_id, d.detail_name, d.detail_info, d.detail_display
+        from resource r
+                 inner join resource_name rn on rn.resource_name_id = r.resource_name_id
+                 inner join detail d on d.resource_id = r.resource_id
+        where rn.resource_name = #{resource_name}
+          and r.crop_id = #{crop_id}
+          and detail_info not in (4, 3);
+    </select>
+
+    <update id="detailDisplayAction">
+        update detail
+        set detail_display = ${detail_display}
+        where detail_id in (${detail})
+    </update>
+
+    <select id="SelectCropCount" resultType="int">
+        SELECT SUM(rn.resource_name = #{resource_name} AND c.crop_name = #{crop_name}) AS count_crop
+        FROM resource r
+                 INNER JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
+                 INNER JOIN crop c ON r.crop_id = c.crop_id
+                 INNER JOIN breed b ON b.resource_id = r.resource_id;
+    </select>
+
+    <select id="SelectCropMonth" resultType="monthcount">
+        SELECT resource_name, count(resource_name) AS resource_count, DATE_FORMAT(create_date, '%m') AS mon
+        FROM resource_name rn
+                 INNER JOIN breed b on rn.resource_name_id = b.resource_id
+        WHERE b.variety_name = #{crop_name} AND DATE_FORMAT(create_date, '%m') = #{month} AND resource_name = #{resource_name}
+        group by resource_name;
+    </select>
 </mapper>
