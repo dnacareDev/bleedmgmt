@@ -8,14 +8,16 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class DigitalResourceApplication extends SpringBootServletInitializer {
-
-  public static void main(String[] args) {
-    SpringApplication.run(DigitalResourceApplication.class, args);
-  }
-
-  @Override
-  protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
-    return application.sources(DigitalResourceApplication.class);
-  }
+public class DigitalResourceApplication extends SpringBootServletInitializer
+{
+	public static void main(String[] args)
+	{
+		SpringApplication.run(DigitalResourceApplication.class, args);
+	}
+  
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application)
+	{
+		return application.sources(DigitalResourceApplication.class);
+	}
 }
