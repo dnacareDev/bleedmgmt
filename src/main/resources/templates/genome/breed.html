@@ -1161,7 +1161,7 @@
                                                                     <div class="col-lg-5">
                                                                         <div class="row" style="overflow:auto; min-height: 500px; border: 1px solid #D9D9D9;">
                                                                             <div class="list-group mt-2" style="max-height: 500px; orverfolw-y: auto;">
-                                                                                <ul class="detail_list" id="display_container2" name="원예형질 (종자원 기준)">
+                                                                                <ul class="detail_list" id="display_container2" name="특성 정보(종자원 기준)">
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -1203,7 +1203,7 @@
                                                                     <div class="col-lg-5">
                                                                         <div class="row" style="overflow:auto; min-height: 500px; border: 1px solid #D9D9D9;">
                                                                             <div class="list-group mt-2" style="max-height: 500px; overflow-y: auto;">
-                                                                                <ul class="detail_list" id="display_container3" name="원예형질 (사내 기준)">
+                                                                                <ul class="detail_list" id="display_container3" name="특성 정보(사내 기준)">
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -1353,24 +1353,6 @@
                             <div class="atbd-upload" id="file_grid">
                                 <table id="excel_data">
                                     <thead id="breedHead">
-                                    <th><span class="title">작물</span></th>
-                                    <th><span class="title">시교명(ID)</span></th>
-                                    <th><span class="title">품종명</span></th>
-                                    <th><span class="title">모계 계통명(ID)</span></th>
-                                    <th><span class="title">부계 계통명(ID)</span></th>
-                                    <th><span class="title">생산판매 (신고번호)</span></th>
-                                    <th><span class="title">생산판매 (신고일자)</span></th>
-                                    <th><span class="title">보호출원 (출원번호)</span></th>
-                                    <th><span class="title">보호출원 (출원일자)</span></th>
-                                    <th><span class="title">보호등록 (등록번호)</span></th>
-                                    <th><span class="title">보호등록 (등록일자)</span></th>
-                                    <th><span class="title">미등록 (현지 상업화)</span></th>
-                                    <th><span class="title">목표 시장</span></th>
-                                    <th><span class="title">형태 구분1</span></th>
-                                    <th><span class="title">형태 구분2</span></th>
-                                    <th><span class="title">작물 타입1</span></th>
-                                    <th><span class="title">작물 타입2</span></th>
-                                    <th><span class="title">비고</span></th>
                                     </thead>
                                     <tbody id="breedBody">
                                     </tbody>
@@ -1487,13 +1469,13 @@
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 <script type="text/javascript">
     /* data list controll */
-    var leftList_one = new Array();
-    var leftList_two = new Array();
-    var leftList_three = new Array();
+    var leftList_one = [];
+    var leftList_two = [];
+    var leftList_three = [];
 
-    var rightList_one = new Array();
-    var rightList_two = new Array();
-    var rightList_three = new Array();
+    var rightList_one = [];
+    var rightList_two = [];
+    var rightList_three = [];
 
     function testbtn() {
         location.href = '/excelTemplate/' + $("#CropSelect").val() + '_품종관리.xlsx'
@@ -1508,6 +1490,31 @@
             $(two).modal("show");
         }, 5);
     }
+
+    /* s : localstorage 저장 예제 */
+    function setLocalS(key, value) {
+        localStorage.setItem(key, value);
+    }
+
+    function getLocalS(key, useRemove) {
+        let result = "";
+        if (localStorage.getItem(key) !== null) {
+            result = localStorage.getItem(key);
+            if (useRemove) {
+                removeLocalS(key);
+            }
+            return result;
+        } else {
+            result = 2;
+            return result;
+        }
+    }
+
+    function removeLocalS(key) {
+        localStorage.removeItem(key);
+    }
+
+    /* e : localstorage 저장 예제 */
 
     $(function () {
         /*
@@ -1765,6 +1772,8 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
+        $("#CropSelect").val(getLocalS("breed_crop"));
+
         SearchBreed(1);
         SearchBreedgrid(1);
     });
@@ -1775,6 +1784,9 @@
 
         SearchBreed(1);
         SearchBreedgrid(1);
+        setLocalS("breed_crop", $("#CropSelect").val());
+
+        console.log($("#CropSelect"));
     })
 
     // 갯수 선택
@@ -1798,8 +1810,8 @@
             var l = breedgrid.getCheckedRows().length;
 
             for (let i = 0; i < l; i++) {
-                console.log(breedgrid.getCheckedRows()[i].breed_id , "breed_id");
-                console.log(breedgrid.getCheckedRows()[i] , "breed");
+                console.log(breedgrid.getCheckedRows()[i].breed_id, "breed_id");
+                console.log(breedgrid.getCheckedRows()[i], "breed");
                 total_id.push(breedgrid.getCheckedRows()[i].breed_id);
                 breed_rows.push(breedgrid.getCheckedRows()[i].breed_row);
             }
@@ -1849,7 +1861,14 @@
         var whichSelect = [];
         for (var i = 0; i < checked_list.length; i++) {
             var matchIndex = all_list.indexOf(checked_list[i]);
-            whichSelect.push(leftList_one[matchIndex].detail_id);
+            if (e == 1) {
+                whichSelect.push(leftList_one[matchIndex].detail_id);
+            } else if(e == 2) {
+                whichSelect.push(leftList_two[matchIndex].detail_id);
+            } else if(e == 3) {
+                whichSelect.push(leftList_three[matchIndex].detail_id);
+            }
+
             if (e == 1) {
                 rightList_one.push(leftList_one[matchIndex]);
             } else if (e == 2) {
@@ -1872,27 +1891,27 @@
             display_container.html(createList(leftList_one));
             step_container.html(createList1(rightList_one));
         } else if (e == 2) {
-            for (var i = 0; i < rightList_two.length; i++) {
+            for (var i = 0; i < leftList_two.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
-                    if (rightList_two[i].detail_id === whichSelect[t]) {
-                        rightList_two.splice(i, 1);
+                    if (leftList_two[i].detail_id === whichSelect[t]) {
+                        leftList_two.splice(i, 1);
                     }
 
                 }
             }
-            leftList_two.sort((a, b) => a?.detail_id - b?.detail_id);
+            rightList_two.sort((a, b) => a?.detail_id - b?.detail_id);
             display_container.html(createList(leftList_two));
             step_container.html(createList1(rightList_two));
         } else if (e == 3) {
-            for (var i = 0; i < rightList_three.length; i++) {
+            for (var i = 0; i < leftList_three.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
-                    if (rightList_three[i].detail_id === whichSelect[t]) {
-                        rightList_three.splice(i, 1);
+                    if (leftList_three[i].detail_id === whichSelect[t]) {
+                        leftList_three.splice(i, 1);
                     }
 
                 }
             }
-            leftList_three.sort((a, b) => a?.detail_id - b?.detail_id);
+            rightList_three.sort((a, b) => a?.detail_id - b?.detail_id);
             display_container.html(createList(leftList_three));
             step_container.html(createList1(rightList_three));
         }
@@ -1938,7 +1957,6 @@
 
         // 체크 해제
 
-
         let all_list = right_container.querySelectorAll(".list-group-item-sm.list-group-item");
         all_list = Array.prototype.slice.call(all_list);
         let checked_list = right_container.querySelectorAll(".list-group-item-sm.list-group-item.active");
@@ -1947,7 +1965,14 @@
         var whichSelect = [];
         for (var i = 0; i < checked_list.length; i++) {
             var matchIndex = all_list.indexOf(checked_list[i]);
-            whichSelect.push(rightList_one[matchIndex].detail_id);
+            if (e == 1) {
+                whichSelect.push(rightList_one[matchIndex].detail_id);
+            } else if(e == 2) {
+                whichSelect.push(rightList_two[matchIndex].detail_id);
+            } else if(e == 3) {
+                whichSelect.push(rightList_three[matchIndex].detail_id);
+            }
+
             if (e == 1) {
                 leftList_one.push(rightList_one[matchIndex]);
             } else if (e == 2) {
@@ -2246,7 +2271,7 @@
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: result.standardList,
+                        data: [],
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2380,7 +2405,6 @@
                         //     tempArray.breed_row = data[key].breed_row;
                         //     break;
                         // }
-
 
 
                         // console.log('standard : ', result.standardList[i]);

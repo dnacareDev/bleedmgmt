@@ -213,6 +213,7 @@ public class BreedController {
 
       List<Detail> detail = breedService.SelectDetailExcel(resource_id);
 
+
       for (int j = 0; j < detail.size(); j++) {
         StandardList standard = new StandardList();
 
@@ -227,6 +228,7 @@ public class BreedController {
         standards.add(standard);
       }
     }
+
     breedService.InsertExcel(standards);
 
     return 1;
@@ -275,6 +277,28 @@ public class BreedController {
   @RequestMapping("selectBreedStandard")
   public List<StandardList> SelectBreedStandard(@RequestParam("breed_id") int breed_id) {
     List<StandardList> result = breedService.SelectBreedStandard(breed_id);
+
+    return result;
+  }
+
+  @ResponseBody
+  @RequestMapping("searchTargetBreed")
+  public Map<String, Object> SearchTarget(Authentication auth, @RequestParam("datalist_date") String datalist_date, @RequestParam("breed_name") String breed_name) {
+    Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+    User user = (User) auth.getPrincipal();
+
+    List<Integer> breed_id = datalistService.SelectTarget(datalist_date, "breed");
+//    List<Detail> detail = breedService.SelectDetailExcel(resource_id);
+
+    Map<Integer, Object> Breed = new LinkedHashMap<Integer, Object>();
+
+    for (int i = 0; i < breed_id.size(); i++) {
+      Breed.put(i, breedService.SelectBreedStandard(breed_id.get(i)));
+    }
+
+    result.put("breed", Breed);
+//    result.put("detail", detail);
 
     return result;
   }
