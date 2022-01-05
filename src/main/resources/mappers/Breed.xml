@@ -219,4 +219,10 @@
         FROM standard
         WHERE breed_id in (${breed_id});
     </delete>
+
+    <update id="UpdateBreed">
+        UPDATE standard
+        SET standard = #{standard}
+        WHERE breed_id = #{breed_id} AND detail_id = #{detail_id}
+    </update>
 </mapper>

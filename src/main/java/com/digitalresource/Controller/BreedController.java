@@ -213,14 +213,17 @@ public class BreedController {
 
       List<Detail> detail = breedService.SelectDetailExcel(resource_id);
 
-
       for (int j = 0; j < detail.size(); j++) {
         StandardList standard = new StandardList();
-
         standard.setBreed_id(breed.getBreed_id());
         standard.setDetail_id(detail.get(j).getDetail_id());
+
         if (j < item.length()) {
-          standard.setStandard_data((String) item.get(j + 1));
+          if(!item.isNull(j + 1)) {
+            standard.setStandard_data((String) item.get(j + 1));
+          } else {
+            standard.setStandard_data("");
+          }
         } else {
           standard.setStandard_data("");
         }
@@ -299,6 +302,25 @@ public class BreedController {
 
     result.put("breed", Breed);
 //    result.put("detail", detail);
+
+    return result;
+  }
+
+  @ResponseBody
+  @RequestMapping("updateBreed")
+  public int UpdateBreed(@RequestParam("data") String data) {
+    int result = 0;
+
+    JSONArray arr = new JSONArray(data);
+
+    for (int i = 0; i < arr.length(); i++) {
+      JSONObject item = arr.getJSONObject(i);
+      int breed_id = item.getInt("breed_id");
+      int detail_id = item.getInt("detail_id");
+      String standard = item.getString("standard");
+
+      result = breedService.UpdateBreed(breed_id, detail_id, standard);
+    }
 
     return result;
   }
