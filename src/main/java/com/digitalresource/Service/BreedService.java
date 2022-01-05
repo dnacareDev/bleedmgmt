@@ -27,6 +27,8 @@ public interface BreedService {
 
 	List<Breed> SearchBreed(String breed_name);
 
+	List<Breed> SearchBreed2(String breed_name, int resource_id);
+
 	String SearchCropName(int breed_name);
 
 	int InsertBreed(Breed breed);

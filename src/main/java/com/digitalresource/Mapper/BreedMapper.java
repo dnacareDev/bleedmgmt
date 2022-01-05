@@ -33,6 +33,8 @@ public interface BreedMapper {
 
   List<Breed> SearchBreed(String breed_name);
 
+  List<Breed> SearchBreed2(@Param("crop_name") String breed_name, @Param("resource_id") int resource_id);
+
 	String SearchCropName(int breed_name);
 
 	int InsertBreed(Breed breed);

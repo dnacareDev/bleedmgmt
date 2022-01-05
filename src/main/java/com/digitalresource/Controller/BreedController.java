@@ -87,7 +87,7 @@ public class BreedController {
 
     String crop_name = breedService.SearchCropName(crop_id);
 
-    List<Breed> breed = breedService.SearchBreed(crop_name);
+    List<Breed> breed = breedService.SearchBreed2(crop_name, resourceId);
 
     result.put("breed", breed);
     result.put("standardList", standardList);
@@ -222,10 +222,10 @@ public class BreedController {
           if(!item.isNull(j + 1)) {
             standard.setStandard_data((String) item.get(j + 1));
           } else {
-            standard.setStandard_data("");
+            standard.setStandard_data(null);
           }
         } else {
-          standard.setStandard_data("");
+          standard.setStandard_data(null);
         }
 
         standards.add(standard);

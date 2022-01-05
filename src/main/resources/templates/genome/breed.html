@@ -1512,7 +1512,6 @@
             }
             return result;
         } else {
-            result = 2;
             return result;
         }
     }
@@ -2460,6 +2459,8 @@
                         tempArray['breed_id'] = result.standardList[i].breed_id;
                         tempArray['img'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                         tempArray['doc'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+
+                        console.log(result.breed[i]);
 
                         if (result.breed[i].detail_count == 0) {
                             tempArray['status'] = '<span style="color:red">EMPTY</span>';
