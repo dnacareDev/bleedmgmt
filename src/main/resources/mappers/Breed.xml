@@ -237,4 +237,12 @@
         SET standard_data = #{standard}
         WHERE breed_id = #{breed_id} AND detail_id = #{detail_id}
     </update>
+
+    <update id="UpdateAllBreed" parameterType="java.util.ArrayList">
+        <foreach collection="list" item="item" separator=";">
+            UPDATE standard
+            SET standard_data = #{item.standard}
+            WHERE breed_id = #{item.breed_id} AND detail_id = #{item.detail_id}
+        </foreach>
+    </update>
 </mapper>

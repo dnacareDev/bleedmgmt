@@ -324,4 +324,35 @@ public class BreedController {
 
     return result;
   }
+
+  @RequestMapping("updateAllBreed")
+  public int UpdateAllBreed(@RequestParam("breed_id") int breed_id, @RequestParam("detail_id") int[] detail_id, @RequestParam("standard_data") String[] standard_data) {
+    int result = 0;
+
+    List<StandardList> list = new ArrayList<StandardList>();
+
+    StandardList item = new StandardList();
+
+    for (int i = 0; i < detail_id.length; i++) {
+      item = new StandardList();
+
+      if (standard_data[i].equals("")) {
+        item.setBreed_id(breed_id);
+        item.setDetail_id(detail_id[i]);
+        item.setStandard_data(null);
+
+        list.add(item);
+      } else {
+        item.setBreed_id(breed_id);
+        item.setDetail_id(detail_id[i]);
+        item.setStandard_data(standard_data[i]);
+
+        list.add(item);
+      }
+    }
+
+    result = breedService.UpdateAllBreed(list);
+
+    return result;
+  }
 }

@@ -49,4 +49,7 @@ public interface BreedMapper {
 
 	int UpdateBreed(@Param("breed_id") int breed_id, @Param("detail_id") int detail_id, @Param("standard") String standard);
 
+	int UpdateAllBreed(List<StandardList> list);
+
+
 }

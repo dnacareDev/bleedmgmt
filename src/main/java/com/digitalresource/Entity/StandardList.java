@@ -1,7 +1,9 @@
 package com.digitalresource.Entity;
 
 import lombok.Data;
+import lombok.Getter;
 
+@Getter
 @Data
 public class StandardList {
 	private int standard_id;
