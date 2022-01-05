@@ -188,4 +188,9 @@ public class BreedServiceImpl implements BreedService {
   public List<StandardList> SelectBreedStandard(int breed_id) {
     return breedMapper.SelectBreedStandard(breed_id);
   }
+
+  @Override
+  public int UpdateBreed(int breed_id, int detail_id, String standard) {
+    return breedMapper.UpdateBreed(breed_id, detail_id, standard);
+  }
 }

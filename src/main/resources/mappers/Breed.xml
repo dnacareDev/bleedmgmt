@@ -222,7 +222,7 @@
 
     <update id="UpdateBreed">
         UPDATE standard
-        SET standard = #{standard}
+        SET standard_data = #{standard}
         WHERE breed_id = #{breed_id} AND detail_id = #{detail_id}
     </update>
 </mapper>
