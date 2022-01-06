@@ -1512,6 +1512,7 @@
             }
             return result;
         } else {
+            result = '2';
             return result;
         }
     }
@@ -1778,6 +1779,7 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
+        removeLocalS("breed_crop");
         $("#CropSelect").val(getLocalS("breed_crop"));
 
         SearchBreed(1);
@@ -2015,23 +2017,6 @@
         }
 
         CheckFunction();
-
-        selectorCheck = document.querySelectorAll(".detail_list li");
-        selectorCheck = Array.prototype.slice.call(selectorCheck);
-
-        selectorCheck2 = document.querySelectorAll(".display_list li");
-        selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
-
-        window.addEventListener("keydown", onKeyWindow);
-        window.addEventListener("keyup", onKeyWindow);
-
-        for (var t = 0; t < selectorCheck.length; t++) {
-            selectorCheck[t].addEventListener("click", onSectionSelector);
-        }
-
-        for (var g = 0; g < selectorCheck2.length; g++) {
-            selectorCheck2[g].addEventListener("click", offSectionSelector);
-        }
     }
 
     //조사방법 체크박스 삭제
@@ -2108,23 +2093,6 @@
         }
 
         CheckFunction();
-
-        selectorCheck = document.querySelectorAll(".detail_list li");
-        selectorCheck = Array.prototype.slice.call(selectorCheck);
-
-        selectorCheck2 = document.querySelectorAll(".display_list li");
-        selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
-
-        window.addEventListener("keydown", onKeyWindow);
-        window.addEventListener("keyup", onKeyWindow);
-
-        for (var t = 0; t < selectorCheck.length; t++) {
-            selectorCheck[t].addEventListener("click", onSectionSelector);
-        }
-
-        for (var g = 0; g < selectorCheck2.length; g++) {
-            selectorCheck2[g].addEventListener("click", offSectionSelector);
-        }
     }
 
     // 통합 분석

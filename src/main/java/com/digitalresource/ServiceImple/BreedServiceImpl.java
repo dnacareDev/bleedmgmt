@@ -1,21 +1,17 @@
 package com.digitalresource.ServiceImple;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.digitalresource.Entity.*;
+import com.digitalresource.Mapper.BreedMapper;
+import com.digitalresource.Service.BreedService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.digitalresource.Mapper.BreedMapper;
-import com.digitalresource.Service.BreedService;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class BreedServiceImpl implements BreedService {
@@ -102,11 +98,7 @@ public class BreedServiceImpl implements BreedService {
     int count = 0;
 
     for (StandardList item : list) {
-      System.out.println("count : " + count);
-
       if (item.getBreed_row() == breed_row) {
-        System.out.println("breed_row : " + breed_row);
-        System.out.println("item.getBreed_row() : " + item.getBreed_row());
 
         dataMap.put(String.valueOf(item.getDetail_id()), item);
       } else {

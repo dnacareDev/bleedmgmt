@@ -240,9 +240,7 @@
 
     <update id="UpdateAllBreed" parameterType="java.util.ArrayList">
         <foreach collection="list" item="item" separator=";">
-            UPDATE standard
-            SET standard_data = #{item.standard_data}
-            WHERE breed_id = #{item.breed_id} AND detail_id = #{item.detail_id}
+            UPDATE standard SET standard_data = #{item.standard_data} WHERE (breed_id = #{item.breed_id}) AND (detail_id = #{item.detail_id})
         </foreach>
     </update>
 </mapper>
