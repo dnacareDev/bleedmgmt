@@ -130,7 +130,7 @@
         where detail_id in (${detail})
     </update>
 
-    <select id="SelectCropCount" resultType="int">
+    <select id="SelectCropCount" resultType="integer">
         SELECT SUM(rn.resource_name = #{resource_name} AND c.crop_name = #{crop_name}) AS count_crop
         FROM resource r
                  INNER JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
@@ -142,7 +142,9 @@
         SELECT resource_name, count(resource_name) AS resource_count, DATE_FORMAT(create_date, '%m') AS mon
         FROM resource_name rn
                  INNER JOIN breed b on rn.resource_name_id = b.resource_id
-        WHERE b.variety_name = #{crop_name} AND DATE_FORMAT(create_date, '%m') = #{month} AND resource_name = #{resource_name}
+        WHERE b.variety_name = #{crop_name}
+          AND DATE_FORMAT(create_date, '%m') = #{month}
+          AND resource_name = #{resource_name}
         group by resource_name;
     </select>
 </mapper>
