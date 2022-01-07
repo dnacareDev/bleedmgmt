@@ -163,4 +163,9 @@ public int detailDisplayAction(Map<String, Object> param) {
   public MonthCount SelectCropMonth(String crop_name, String month, String resource_name) {
     return resourceMapper.SelectCropMonth(crop_name, month, resource_name);
   }
+
+  @Override
+  public Map<String, Object> SelectDetailInfo(String detail_id) {
+    return resourceMapper.SelectDetailInfo(detail_id);
+  }
 }

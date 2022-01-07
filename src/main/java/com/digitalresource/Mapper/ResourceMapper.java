@@ -48,4 +48,6 @@ public interface ResourceMapper {
   int SelectCropCount(String resource_name, String crop_name);
 
 	MonthCount SelectCropMonth(String crop_name, String month, String resource_name);
+
+	Map<String, Object> SelectDetailInfo(String detail_id);
 }

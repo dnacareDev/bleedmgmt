@@ -7,10 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -225,7 +222,7 @@ public class ResourceController {
     }
     return result;
   }
-  
+
   @ResponseBody
   @RequestMapping("deleteResource")
   public int deleteResource(Resource resource) {
@@ -233,7 +230,7 @@ public class ResourceController {
     result = RService.deleteResource(resource);
     return result;
   }
-  
+
   @ResponseBody
   @RequestMapping("resource-list")
   public ResponseEntity<?> resourceList() {
@@ -242,54 +239,102 @@ public class ResourceController {
     map.put("resourceList", resourceList);
     return ResponseEntity.ok(map);
   }
-  
+
   @ResponseBody
   @RequestMapping("detail-head")
-  public ResponseEntity<?> selectDetailHead(@RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name){
-	  Map<String,Object> map = new HashMap<String, Object>();
-	  Map<String,Object> param = new HashMap<String, Object>();
-	  param.put("crop_id", crop_id);
-	  param.put("resource_name", resource_name);
-	  List<Detail> detailList = RService.selectDetailHead(param);
-	  map.put("detailList", detailList);
-	  return ResponseEntity.ok(map);
+  public ResponseEntity<?> selectDetailHead(@RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> param = new HashMap<String, Object>();
+    param.put("crop_id", crop_id);
+    param.put("resource_name", resource_name);
+    List<Detail> detailList = RService.selectDetailHead(param);
+    map.put("detailList", detailList);
+    return ResponseEntity.ok(map);
   }
-  
+
   @RequestMapping("detail-display")
   public String detailDisplayAction(
-		  @RequestParam(value = "detail_id", required=false) String[] detailList,
-		  @RequestParam(value = "detail_id_checked", required=false) String[] detailCheckList,
-		  ModelAndView mv,
-		  @RequestParam("resource_name_re") String resoruce_name,
-		  @RequestParam("crop_id_re") String crop_id,
-		  @RequestParam("resource_id_re")String resource_id,
-		  RedirectAttributes redirectAttributes
-		  ) throws IOException{
-	  Map<String,Object> map = new HashMap<String, Object>();
-	  Map<String,Object> param = new HashMap<String, Object>();
-	  int result = 0;
+      @RequestParam(value = "detail_id", required = false) String[] detailList,
+      @RequestParam(value = "detail_id_checked", required = false) String[] detailCheckList,
+      ModelAndView mv,
+      @RequestParam("resource_name_re") String resoruce_name,
+      @RequestParam("crop_id_re") String crop_id,
+      @RequestParam("resource_id_re") String resource_id,
+      RedirectAttributes redirectAttributes
+  ) throws IOException {
+    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> param = new HashMap<String, Object>();
+    Map<String, Object> basic = new HashMap<String, Object>();
+    Map<String, Object> seed = new HashMap<String, Object>();
+    Map<String, Object> company = new HashMap<String, Object>();
+    int result = 0;
 
-	  if(detailList != null) {		  
-		  String detailIds = Arrays.toString(detailList);
-		  detailIds = detailIds.substring(1,detailIds.length());
-		  detailIds = detailIds.substring(0,detailIds.length() -1);
-		  param.put("detail", detailIds);
-		  param.put("detail_display", 0);
-		  RService.detailDisplayAction(param);
-	  }
-	  
-	  if(detailCheckList != null) {		  
-		  String detailCheck = Arrays.toString(detailCheckList);
-		  detailCheck = detailCheck.substring(1, detailCheck.length());
-		  detailCheck = detailCheck.substring(0, detailCheck.length()-1);
-		  param.put("detail_display", 1);
-		  param.put("detail", detailCheck);
-		  RService.detailDisplayAction(param);
-	  }
-	  redirectAttributes.addAttribute("type", resoruce_name);
-	  redirectAttributes.addAttribute("id", resource_id);
-	  redirectAttributes.addAttribute("crop_id", crop_id);
-	  
-	  return "redirect:/breed?type={type}&id={id}&crop_id={crop_id}";
+    Map<String, Object> detailIdArr = new HashMap<String, Object>(); // 표시 되는 것
+    Map<String, Object> detailIdArr2 = new HashMap<String, Object>(); // 표시 안되는 것
+
+    /*
+    * 표시 되는 거 -> 표시 안되게
+    * */
+    if (detailList != null) {
+      for (int i = 0; i < detailList.length; i++) {
+        detailIdArr = RService.SelectDetailInfo(detailList[i]);
+
+        System.out.println(detailList[i]);
+        if (detailIdArr.get("detail_info").equals(0) && detailIdArr.get("detail_display").equals(1)) {
+          basic.put("detail", detailList[i]);
+          basic.put("detail_display", 0);
+
+          System.out.println(basic);
+
+//          RService.detailDisplayAction(basic);
+        } else if (detailIdArr.get("detail_info").equals(1) && detailIdArr.get("detail_display").equals(1)) {
+          company.put("detail", detailList[i]);
+          company.put("detail_display", 0);
+
+          System.out.println(company);
+
+//          RService.detailDisplayAction(company);
+        } else if (detailIdArr.get("detail_info").equals(2) && detailIdArr.get("detail_display").equals(1)) {
+          seed.put("detail", detailList[i]);
+          seed.put("detail_display", 0);
+
+          System.out.println(seed);
+
+//          RService.detailDisplayAction(seed);
+        }
+      }
+    }
+
+    /*
+    * 표시 안되는 거 -> 표시되게
+    * */
+//    if (detailCheckList != null) {
+//      for (int i = 0; i < detailCheckList.length; i++) {
+//        detailIdArr2[i] = RService.SelectDetailInfo(detailCheckList[i]);
+//
+//        if (detailIdArr2[i] == 0) {
+//          basic.put("detail", detailCheckList[i]);
+//          basic.put("detail_display", 1);
+//
+//          RService.detailDisplayAction(basic);
+//        } else if (detailIdArr2[i] == 1) {
+//          company.put("detail", detailCheckList[i]);
+//          company.put("detail_display", 1);
+//
+//          RService.detailDisplayAction(company);
+//        } else if (detailIdArr2[i] == 2) {
+//          seed.put("detail", detailCheckList[i]);
+//          seed.put("detail_display", 1);
+//
+//          RService.detailDisplayAction(seed);
+//        }
+//      }
+//    }
+
+    redirectAttributes.addAttribute("type", resoruce_name);
+    redirectAttributes.addAttribute("id", resource_id);
+    redirectAttributes.addAttribute("crop_id", crop_id);
+
+    return "redirect:/breed?type={type}&id={id}&crop_id={crop_id}";
   }
 }

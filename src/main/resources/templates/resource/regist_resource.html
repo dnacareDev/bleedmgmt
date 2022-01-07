@@ -532,7 +532,10 @@
         constructor(props) {
             const el = document.createElement('input');
             el.type = 'checkbox';
+            el.checked = Boolean(props.value);
+
             this.el = el;
+            this.render(props)
         }
 
         getElement() {
@@ -548,7 +551,6 @@
         var input = event.target;
         var reader = new FileReader();
         charArr = [];
-        dataArr = [{'header': "첨부화일", 'name': "첨부화일", 'width': 120, 'renderer': CustomColumnHeader, "type": 1, "info": 4}];
         if (headerGrid != null) {
             headerGrid.destroy();
         }
@@ -577,7 +579,6 @@
             var endCount = 1;
 
             $.each(firstSheet, function (idx, value) {
-            	
 
             	if(currentCount > endCount)
             		return;
@@ -588,17 +589,17 @@
             		currentCount++;
             		return;
             	}
-            	
-            	
+
                 let headerArr = {}
                 if (!idx.startsWith('!')) {
                     // html += "<th><div class='this_check'><input type='checkbox' value='" + value.h + "'><span class='check_box_design'></span><span class='check_span'>" + value.h + "</span></div></th>";
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'renderer': CustomColumnHeader, 'type': 2, "info": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'renderer': { 'type' : CustomColumnHeader }, 'type': 2, "info": 0};
                     charArr.push(headerArr);
                     //dataArr.push(headerArr);
 
                 }
             })
+
             dataArr = dataArr.concat(inputArr, charArr, desArr);
             headerGrid.setColumns(dataArr);
 
@@ -620,7 +621,6 @@
         var input = event.target;
         var reader = new FileReader();
         inputArr = [];
-        dataArr = [{'header': "첨부화일", 'name': "첨부화일", 'width': 120, 'renderer': CustomColumnHeader, "type": 1, "info": 4}];
         if (headerGrid != null) {
             headerGrid.destroy();
         }
@@ -665,7 +665,7 @@
                 let headerArr = {}
                 if (!idx.startsWith('!')) {
                     // html += "<th><div class='this_check'><input type='checkbox' value='" + value.h + "'><span class='check_box_design'></span><span class='check_span'>" + value.h + "</span></div></th>";
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'renderer': CustomColumnHeader, 'type': 2, "info": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'renderer':  { 'type' : CustomColumnHeader }, 'type': 2, "info": 0};
                     // dataArr.push(headerArr);
                     inputArr.push(headerArr);
 
@@ -779,7 +779,7 @@
                 	}
                 	
                     let header = value.feature_num + ". " + value.feature_name;
-                    headerArr = {'header': header, 'name': header, 'width': 300, 'renderer': CustomColumnHeader, "type": 2, "info": 2};
+                    headerArr = {'header': header, 'name': header, 'width': 300, 'renderer':  { 'type' : CustomColumnHeader }, "type": 2, "info": 2};
                     desArr.push(headerArr);
                 });
 
