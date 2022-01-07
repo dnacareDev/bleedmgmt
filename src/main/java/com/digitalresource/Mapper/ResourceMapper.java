@@ -11,43 +11,43 @@ import org.springframework.security.core.parameters.P;
 
 @Mapper
 public interface ResourceMapper {
-    public int registResource(Resource resourec);
+  public int registResource(Resource resourec);
 
-    public int getCountResourceName(int resource_name_id);
+  public int getCountResourceName(@Param("resource_name_id") int resource_name_id);
 
-    public Resource selectResourceById(int resource_id);
+  public Resource selectResourceById(@Param("resource_id") int resource_id);
 
-    public int deleteResouceByCropCategory(int crop_id);
-    
-    int deleteResource(Resource resource);
-    
-    public int deleteReourceByCrop(int crop_id);
+  public int deleteResouceByCropCategory(@Param("crop_id") int crop_id);
 
-	public int insertResource(Resource resource);
+  int deleteResource(Resource resource);
 
-	public int registerDetail(Map<String, Object> map);
+  public int deleteReourceByCrop(@Param("crop_id") int crop_id);
 
-	public List<ResourceList> searchResource();
+  public int insertResource(Resource resource);
 
-	public int selectResourceCount();
+  public int registerDetail(Map<String, Object> map);
 
-	public int changeResourceUse(Map<String, Object> map);
+  public List<ResourceList> searchResource();
 
-	public List<ResourceName> resourceList();
+  public int selectResourceCount();
 
-	public Integer SearchResourceId(@Param("crop_id") int crop_id, @Param("resource_name_id") int resource_name_id);
+  public int changeResourceUse(Map<String, Object> map);
 
-	public Integer SelectCropId(@Param("resource_name_id") int resource_name_id);
+  public List<ResourceName> resourceList();
 
-	public List<Detail> selectDetailHead(Map<String, Object> param);
+  public Integer SearchResourceId(@Param("crop_id") int crop_id, @Param("resource_name_id") int resource_name_id);
 
-	public int detailDisplayAction(String detailIds);
+  public Integer SelectCropId(@Param("resource_name_id") int resource_name_id);
 
-	public int detailDisplayAction(Map<String, Object> param);
+  public List<Detail> selectDetailHead(Map<String, Object> param);
 
-	int SelectCropCount(@Param("resource_name") String resource_name, @Param("crop_name") String crop_name);
+  public int detailDisplayAction(@Param("detailIds") String detailIds);
 
-	MonthCount SelectCropMonth(@Param("crop_name") String crop_name, @Param("month") String month, @Param("resource_name") String resource_name);
+  public int detailDisplayAction(Map<String, Object> param);
 
-	Map<String, Object> SelectDetailInfo(String detail_id);
+  int SelectCropCount(@Param("resource_name") String resource_name, @Param("crop_name") String crop_name);
+
+  MonthCount SelectCropMonth(@Param("crop_name") String crop_name, @Param("month") String month, @Param("resource_name") String resource_name);
+
+  Map<String, Object> SelectDetailInfo(String detail_id);
 }

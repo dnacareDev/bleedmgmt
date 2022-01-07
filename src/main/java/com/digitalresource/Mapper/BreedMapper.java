@@ -15,15 +15,15 @@ public interface BreedMapper {
 
 	int insertStandard(Map<String, Object> map);
 
-	List<StandardList> selectStandard(int resourceId);
+	List<StandardList> selectStandard(@Param("resourceId") int resourceId);
 
-	CountSelect selectDetailCount(int resource_id);
+	CountSelect selectDetailCount(@Param("resource_id") int resource_id);
 
 	public int updateStandardCell(StandardList data);
 	
-	int deleteBreed(String breed_id);
+	int deleteBreed(@Param("breed_id") String breed_id);
 
-	int deleteStandard(String breed_id);
+	int deleteStandard(@Param("breed_id") String breed_id);
 
 	int selectResourceId(Map<String, Object> param);
 
@@ -31,21 +31,21 @@ public interface BreedMapper {
 
 	int InsertBreedUpload(Uploads upload);
 
-  List<Breed> SearchBreed(String breed_name);
+  List<Breed> SearchBreed(@Param("breed_name") String breed_name);
 
   List<Breed> SearchBreed2(@Param("crop_name") String breed_name, @Param("resource_id") int resource_id);
 
-	String SearchCropName(int breed_name);
+	String SearchCropName(@Param("breed_name") int breed_name);
 
 	int InsertBreed(Breed breed);
 
-	List<Detail> SelectDetailExcel(int resource_id);
+	List<Detail> SelectDetailExcel(@Param("resource_id") int resource_id);
 
 	int InsertExcel(List<StandardList> standards);
 
-	List<StandardList> SelectBreedStandard(int breed_id);
+	List<StandardList> SelectBreedStandard(@Param("breed_id") int breed_id);
 
-	int deleteStandards(String breed_id);
+	int deleteStandards(@Param("breed_id") String breed_id);
 
 	int UpdateBreed(@Param("breed_id") int breed_id, @Param("detail_id") int detail_id, @Param("standard") String standard);
 

@@ -17,15 +17,15 @@ public interface ResourceNameMapper {
 
   public int CountResourceNameByCrop(@Param("resource_name") String resource_name);
 
-  public ResourceName selectResourceName(String resource_name);
+  public ResourceName selectResourceName(@Param("resource_name") String resource_name);
 
   public int registResourceName(ResourceName registParam);
 
-  public int deleteResourceName(int resource_name_id);
+  public int deleteResourceName(@Param("resource_name_id") int resource_name_id);
 
   public int confirmResourceName(Map<String, Object> param);
 
-  public List<Feature> featureHeadList(int feature_group);
+  public List<Feature> featureHeadList(@Param("feature_group") int feature_group);
 
   public int registerResource(Map<String, Object> param);
 

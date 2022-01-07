@@ -8,19 +8,19 @@ import java.util.List;
 
 @Mapper
 public interface CropMapper {
-    public int checkDuplicateCropName(String crop_name);
+    public int checkDuplicateCropName(@Param("crop_name") String crop_name);
 
     public int registCrop(Crop crop);
 
     public List<Crop> selectCropList();
 
-    public List<Crop> selectCropListByResourceName(int resource_name_id);
+    public List<Crop> selectCropListByResourceName(@Param("resource_name_id") int resource_name_id);
 
-    public int deleteCropById(int crop_id);
+    public int deleteCropById(@Param("crop_id") int crop_id);
 
-    public int deleteCropByCategory(int category_id);
+    public int deleteCropByCategory(@Param("category_id") int category_id);
 
-    public List<Crop> selectCropByCategory(int category_id);
+    public List<Crop> selectCropByCategory(@Param("category_id") int category_id);
 
     public String SelectCropById(@Param("crop_id") int crop_id);
  
