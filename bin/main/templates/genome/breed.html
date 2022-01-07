@@ -1688,6 +1688,7 @@
                         var list = result.detailList[i];
                         var add_list = "";
                         var cData = {detail_id: list.detail_id, detail_name: list.detail_name};
+
                         if (list.detail_display === 0) {
                             if (list.detail_info == 0) {
                                 leftList_one.push(cData);
@@ -1984,7 +1985,6 @@
                     if (leftList_one[i].detail_id === whichSelect[t]) {
                         leftList_one.splice(i, 1);
                     }
-
                 }
             }
             rightList_one.sort((a, b) => a?.detail_id - b?.detail_id);
@@ -2060,7 +2060,6 @@
                     if (rightList_one[i].detail_id === whichSelect[t]) {
                         rightList_one.splice(i, 1);
                     }
-
                 }
             }
             leftList_one.sort((a, b) => a?.detail_id - b?.detail_id);
@@ -2072,7 +2071,6 @@
                     if (rightList_two[i].detail_id === whichSelect[t]) {
                         rightList_two.splice(i, 1);
                     }
-
                 }
             }
             leftList_two.sort((a, b) => a?.detail_id - b?.detail_id);
@@ -2084,7 +2082,6 @@
                     if (rightList_three[i].detail_id === whichSelect[t]) {
                         rightList_three.splice(i, 1);
                     }
-
                 }
             }
             leftList_three.sort((a, b) => a?.detail_id - b?.detail_id);

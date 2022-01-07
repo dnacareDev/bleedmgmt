@@ -147,4 +147,10 @@
           AND resource_name = #{resource_name}
         group by resource_name;
     </select>
+
+    <select id="SelectDetailInfo" resultType="HashMap">
+        SELECT detail_info, detail_display
+        FROM detail
+        WHERE detail_id = #{item.detail_id}
+    </select>
 </mapper>
