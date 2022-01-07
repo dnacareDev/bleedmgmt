@@ -2269,8 +2269,6 @@
                         }
                     ];
 
-                    breedgrid.setColumns(headerArr);
-
                     var headerName = [];
 
                     for (let i = 0; i < result.detail.length; i++) {
@@ -2312,10 +2310,8 @@
                         try {
                             for (var i = 0; i < ev.changes.length; i++) {
                                 let changeItem = ev.changes[i];
-                                console.log('changeItem : ', changeItem);
 
                                 let list = gridDataArray[changeItem.rowKey];
-                                console.log('list : ', list);
 
                                 let count = 0;
                                 let standard = {};
@@ -2352,6 +2348,17 @@
                         let data = result.standardList[i];
                         let tempArray = [];
 
+                        tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                        tempArray['breed_id'] = result.standardList[i].breed_id;
+                        tempArray['img'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                        tempArray['doc'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+
+                        if (result.breed[i].detail_count == 0) {
+                            tempArray['status'] = '<span style="color:red">EMPTY</span>';
+                        } else {
+                            tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
+                        }
+
                         for (var j = 0; j < headerName.length; j++) {
                             if (data[headerName[j]] != undefined) {
                                 tempArray[headerName[j]] = data[headerName[j]].standard_data;
@@ -2374,16 +2381,7 @@
                         //     break;
                         // }
 
-                        tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                        tempArray['breed_id'] = result.standardList[i].breed_id;
-                        tempArray['img'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                        tempArray['doc'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
 
-                        if (result.breed[i].detail_count == 0) {
-                            tempArray['status'] = '<span style="color:red">EMPTY</span>';
-                        } else {
-                            tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
-                        }
 
                         // console.log('standard : ', result.standardList[i]);
                         //
