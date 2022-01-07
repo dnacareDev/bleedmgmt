@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.digitalresource.Entity.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +27,8 @@ public interface BreedService {
 
 	List<Breed> SearchBreed(String breed_name);
 
+	List<Breed> SearchBreed2(String breed_name, int resource_id);
+
 	String SearchCropName(int breed_name);
 
 	int InsertBreed(Breed breed);
@@ -35,4 +38,8 @@ public interface BreedService {
 	int InsertExcel(List<StandardList> standards);
 
   List<StandardList> SelectBreedStandard(int breed_id);
+
+	int UpdateBreed(int breed_id, int detail_id, String standard);
+
+	int UpdateAllBreed(List<StandardList> list);
 }

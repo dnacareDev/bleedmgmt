@@ -2,6 +2,17 @@ package com.digitalresource.Controller;
 
 import com.digitalresource.Entity.*;
 import com.digitalresource.Service.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,24 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-
-import javax.servlet.http.HttpServlet;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class BreedController {
@@ -87,7 +80,7 @@ public class BreedController {
 
     String crop_name = breedService.SearchCropName(crop_id);
 
-    List<Breed> breed = breedService.SearchBreed(crop_name);
+    List<Breed> breed = breedService.SearchBreed2(crop_name, resourceId);
 
     result.put("breed", breed);
     result.put("standardList", standardList);
@@ -119,8 +112,6 @@ public class BreedController {
   @RequestMapping("insertBreed2")
   public int insertBreed(@RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name) {
     int result = 0;
-
-    System.out.println(data);
 
     result = breedService.insertBreed(resource_id, data, crop_id, resource_name);
 
@@ -215,18 +206,23 @@ public class BreedController {
 
       for (int j = 0; j < detail.size(); j++) {
         StandardList standard = new StandardList();
-
         standard.setBreed_id(breed.getBreed_id());
         standard.setDetail_id(detail.get(j).getDetail_id());
+
         if (j < item.length()) {
-          standard.setStandard_data((String) item.get(j + 1));
+          if(!item.isNull(j + 1)) {
+            standard.setStandard_data((String) item.get(j + 1));
+          } else {
+            standard.setStandard_data(null);
+          }
         } else {
-          standard.setStandard_data("");
+          standard.setStandard_data(null);
         }
 
         standards.add(standard);
       }
     }
+
     breedService.InsertExcel(standards);
 
     return 1;
@@ -277,5 +273,93 @@ public class BreedController {
     List<StandardList> result = breedService.SelectBreedStandard(breed_id);
 
     return result;
+  }
+
+  @ResponseBody
+  @RequestMapping("searchTargetBreed")
+  public Map<String, Object> SearchTarget(Authentication auth, @RequestParam("datalist_date") String datalist_date, @RequestParam("breed_name") String breed_name) {
+    Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+    User user = (User) auth.getPrincipal();
+
+    List<Integer> breed_id = datalistService.SelectTarget(datalist_date, "breed");
+//    List<Detail> detail = breedService.SelectDetailExcel(resource_id);
+
+    Map<Integer, Object> Breed = new LinkedHashMap<Integer, Object>();
+
+    for (int i = 0; i < breed_id.size(); i++) {
+      Breed.put(i, breedService.SelectBreedStandard(breed_id.get(i)));
+    }
+
+    result.put("breed", Breed);
+//    result.put("detail", detail);
+
+    return result;
+  }
+
+  @ResponseBody
+  @RequestMapping("updateBreed")
+  public int UpdateBreed(@RequestParam("data") String data) {
+    int result = 0;
+
+    JSONArray arr = new JSONArray(data);
+
+    for (int i = 0; i < arr.length(); i++) {
+      JSONObject item = arr.getJSONObject(i);
+
+      int breed_id = item.getInt("breed_id");
+      int detail_id = item.getInt("detail_id");
+      String standard = item.getString("standard");
+
+      System.out.println("change : " + breed_id + " " + detail_id + " " + standard);
+
+      if(standard.isEmpty()) {
+        result = breedService.UpdateBreed(breed_id, detail_id, null);
+      } else {
+        result = breedService.UpdateBreed(breed_id, detail_id, standard);
+      }
+
+    }
+
+    return result;
+  }
+
+  @RequestMapping("updateAllBreed")
+  public ModelAndView UpdateAllBreed(ModelAndView mv, @RequestParam("breed_id") int breed_id, @RequestParam("detail_id") int[] detail_id, @RequestParam("standard_data") String[] standard_data) {
+    int result = 0;
+
+    List<StandardList> list = new ArrayList<StandardList>();
+
+    StandardList item = new StandardList();
+
+    System.out.println("breed_id : " + breed_id);
+
+    for (int i = 0; i < detail_id.length; i++) {
+      item = new StandardList();
+
+      if (standard_data[i].equals("")) {
+        item.setBreed_id(breed_id);
+        item.setDetail_id(detail_id[i]);
+        item.setStandard_data(null);
+
+        list.add(item);
+      } else {
+        System.out.println("not null");
+        System.out.println("detail_id[i] :" + detail_id[i]);
+        System.out.println("standard_data : " + standard_data[i]);
+
+        item.setBreed_id(breed_id);
+        item.setDetail_id(detail_id[i]);
+        item.setStandard_data(standard_data[i]);
+
+        list.add(item);
+      }
+    }
+
+    result = breedService.UpdateAllBreed(list);
+
+    mv.setViewName("redirect:/breed");
+
+    return mv;
   }
 }

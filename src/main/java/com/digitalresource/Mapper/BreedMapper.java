@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.digitalresource.Entity.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper
@@ -32,6 +33,8 @@ public interface BreedMapper {
 
   List<Breed> SearchBreed(String breed_name);
 
+  List<Breed> SearchBreed2(@Param("crop_name") String breed_name, @Param("resource_id") int resource_id);
+
 	String SearchCropName(int breed_name);
 
 	int InsertBreed(Breed breed);
@@ -43,4 +46,10 @@ public interface BreedMapper {
 	List<StandardList> SelectBreedStandard(int breed_id);
 
 	int deleteStandards(String breed_id);
+
+	int UpdateBreed(@Param("breed_id") int breed_id, @Param("detail_id") int detail_id, @Param("standard") String standard);
+
+	int UpdateAllBreed(List<StandardList> list);
+
+
 }
