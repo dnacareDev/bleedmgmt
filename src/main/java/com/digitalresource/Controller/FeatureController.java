@@ -43,7 +43,7 @@ public class FeatureController {
 
     String file_name = fileController.ChangeFileName(extension[1]);
     String origin_file_name = file.getOriginalFilename();
-    String path = "upload";
+    String path = "/upload";
 
     File filePath = new File(path);
     if (!filePath.exists())

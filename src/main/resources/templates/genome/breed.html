@@ -2774,13 +2774,16 @@
         }
     }
 
-    /* 엑셀 등록 창 */
+    /* 엑셀 확인 창 */
 
     function ModifyDataBtn(e) {
         let s = String(e);
         s = s.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
 
         var data = {"datalist_date": s, "crop_id": $("#CropSelect").val()};
+
+        $("#data_upload2").modal("hide");
+        $("#data_upload3").modal("show");
 
         $.ajax(
             {
@@ -2789,9 +2792,9 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                    console.log(result);
+
                     if (result != null) {
-                        $("#data_upload2").modal("hide");
-                        $("#data_upload3").modal("show");
 
                         var header_list = $("#breedHead");
                         var header_add = "";
