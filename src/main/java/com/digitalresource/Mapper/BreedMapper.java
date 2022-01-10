@@ -15,7 +15,7 @@ public interface BreedMapper {
 
 	int insertStandard(Map<String, Object> map);
 
-	List<StandardList> selectStandard(@Param("resourceId") int resourceId);
+	List<StandardList> selectStandard(@Param("resource_id") int resourceId);
 
 	CountSelect selectDetailCount(@Param("resource_id") int resource_id);
 
@@ -35,7 +35,7 @@ public interface BreedMapper {
 
   List<Breed> SearchBreed2(@Param("crop_name") String breed_name, @Param("resource_id") int resource_id);
 
-	String SearchCropName(@Param("breed_name") int breed_name);
+	String SearchCropName(@Param("crop_id") int breed_name);
 
 	int InsertBreed(Breed breed);
 

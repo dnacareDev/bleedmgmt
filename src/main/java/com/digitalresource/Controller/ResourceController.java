@@ -272,64 +272,51 @@ public class ResourceController {
     Map<String, Object> detailIdArr = new HashMap<String, Object>(); // 표시 되는 것
     Map<String, Object> detailIdArr2 = new HashMap<String, Object>(); // 표시 안되는 것
 
-    /*
-    * 표시 되는 거 -> 표시 안되게
-    * */
     if (detailList != null) {
       for (int i = 0; i < detailList.length; i++) {
         detailIdArr = RService.SelectDetailInfo(detailList[i]);
 
-        System.out.println(detailList[i]);
-        if (detailIdArr.get("detail_info").equals(0) && detailIdArr.get("detail_display").equals(1)) {
+        if (detailIdArr.get("detail_info").equals(0)) {
           basic.put("detail", detailList[i]);
-          basic.put("detail_display", 0);
+          basic.put("detail_display", 1);
 
-          System.out.println(basic);
-
-//          RService.detailDisplayAction(basic);
-        } else if (detailIdArr.get("detail_info").equals(1) && detailIdArr.get("detail_display").equals(1)) {
+          RService.detailDisplayAction(basic);
+        } else if (detailIdArr.get("detail_info").equals(1)) {
           company.put("detail", detailList[i]);
-          company.put("detail_display", 0);
+          company.put("detail_display", 1);
 
-          System.out.println(company);
-
-//          RService.detailDisplayAction(company);
-        } else if (detailIdArr.get("detail_info").equals(2) && detailIdArr.get("detail_display").equals(1)) {
+          RService.detailDisplayAction(company);
+        } else if (detailIdArr.get("detail_info").equals(2)) {
           seed.put("detail", detailList[i]);
-          seed.put("detail_display", 0);
+          seed.put("detail_display", 1);
 
-          System.out.println(seed);
-
-//          RService.detailDisplayAction(seed);
+          RService.detailDisplayAction(seed);
         }
       }
     }
 
-    /*
-    * 표시 안되는 거 -> 표시되게
-    * */
-//    if (detailCheckList != null) {
-//      for (int i = 0; i < detailCheckList.length; i++) {
-//        detailIdArr2[i] = RService.SelectDetailInfo(detailCheckList[i]);
-//
-//        if (detailIdArr2[i] == 0) {
-//          basic.put("detail", detailCheckList[i]);
-//          basic.put("detail_display", 1);
-//
-//          RService.detailDisplayAction(basic);
-//        } else if (detailIdArr2[i] == 1) {
-//          company.put("detail", detailCheckList[i]);
-//          company.put("detail_display", 1);
-//
-//          RService.detailDisplayAction(company);
-//        } else if (detailIdArr2[i] == 2) {
-//          seed.put("detail", detailCheckList[i]);
-//          seed.put("detail_display", 1);
-//
-//          RService.detailDisplayAction(seed);
-//        }
-//      }
-//    }
+    if (detailCheckList != null) {
+      for (int i = 0; i < detailCheckList.length; i++) {
+        detailIdArr2 = RService.SelectDetailInfo(detailCheckList[i]);
+
+        if (detailIdArr2.get("detail_info").equals(0)) {
+          basic.put("detail", detailCheckList[i]);
+          basic.put("detail_display", 0);
+
+          RService.detailDisplayAction(basic);
+        } else if (detailIdArr2.get("detail_info").equals(1)) {
+          company.put("detail", detailCheckList[i]);
+          company.put("detail_display", 0);
+
+          RService.detailDisplayAction(company);
+        } else if (detailIdArr2.get("detail_info").equals(2)) {
+          seed.put("detail", detailCheckList[i]);
+          seed.put("detail_display", 0);
+
+          RService.detailDisplayAction(seed);
+        }
+      }
+    }
 
     redirectAttributes.addAttribute("type", resoruce_name);
     redirectAttributes.addAttribute("id", resource_id);

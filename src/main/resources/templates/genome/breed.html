@@ -1988,8 +1988,8 @@
                 }
             }
             rightList_one.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_one));
-            step_container.html(createList1(rightList_one));
+            display_container.html(createList1(leftList_one));
+            step_container.html(createList(rightList_one));
         } else if (e == 2) {
             for (var i = 0; i < leftList_two.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
@@ -2000,8 +2000,8 @@
                 }
             }
             rightList_two.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_two));
-            step_container.html(createList1(rightList_two));
+            display_container.html(createList1(leftList_two));
+            step_container.html(createList(rightList_two));
         } else if (e == 3) {
             for (var i = 0; i < leftList_three.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
@@ -2012,8 +2012,8 @@
                 }
             }
             rightList_three.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_three));
-            step_container.html(createList1(rightList_three));
+            display_container.html(createList1(leftList_three));
+            step_container.html(createList(rightList_three));
         }
 
         CheckFunction();
@@ -2063,8 +2063,8 @@
                 }
             }
             leftList_one.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_one));
-            step_container.html(createList1(rightList_one));
+            display_container.html(createList1(leftList_one));
+            step_container.html(createList(rightList_one));
         } else if (e == 2) {
             for (var i = 0; i < rightList_two.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
@@ -2074,8 +2074,8 @@
                 }
             }
             leftList_two.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_two));
-            step_container.html(createList1(rightList_two));
+            display_container.html(createList1(leftList_two));
+            step_container.html(createList(rightList_two));
         } else if (e == 3) {
             for (var i = 0; i < rightList_three.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
@@ -2085,8 +2085,8 @@
                 }
             }
             leftList_three.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_three));
-            step_container.html(createList1(rightList_three));
+            display_container.html(createList1(leftList_three));
+            step_container.html(createList(rightList_three));
         }
 
         CheckFunction();
@@ -2424,8 +2424,6 @@
                         tempArray['breed_id'] = result.standardList[i].breed_id;
                         tempArray['img'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                         tempArray['doc'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-
-                        console.log(result.breed[i]);
 
                         if (result.breed[i].detail_count == 0) {
                             tempArray['status'] = '<span style="color:red">EMPTY</span>';
