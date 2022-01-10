@@ -2318,7 +2318,7 @@
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: [],
+                        data: result.standardList,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2345,7 +2345,6 @@
 
                     for (let i = 0; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
-                        // var colName = i + 1;
                         var colName = result.detail[i].detail_id;
 
                         headerName[i] = result.detail[i].detail_id;

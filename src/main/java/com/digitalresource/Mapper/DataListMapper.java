@@ -14,7 +14,7 @@ public interface DataListMapper {
 
   int InsertDataList(DataList dataList);
 
-  List<Map<String, String>> SelectDateGroup(@Param("datalist_type") String datalist_type);
+  List<Map<String, String>> SelectDateGroup(@Param("resource_name") String datalist_type);
 
   List<Integer> SelectTarget(@Param("datalist_date") String datalist_date, @Param("datalist_type") String datalist_type);
 

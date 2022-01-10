@@ -43,7 +43,8 @@
         from breed b
                  inner join standard s on b.breed_id = s.breed_id
                  inner join detail d on s.detail_id = d.detail_id
-        where b.resource_id = #{resource_id};
+        where b.resource_id = #{resource_id}
+        order by b.breed_id desc;
     </select>
 
     <select id="selectDetailCount" resultType="CountSelect">
@@ -177,6 +178,7 @@
                 WHERE b.variety_name = #{crop_name} AND b.resource_id = #{resource_id}
             </when>
         </choose>
+        ORDER BY b.breed_id DESC
     </select>
 
     <select id="SearchBreedExcel" resultType="Breed">
