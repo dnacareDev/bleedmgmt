@@ -2,6 +2,8 @@ package com.digitalresource.Entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Breed {
 	private int breed_id;
@@ -11,4 +13,5 @@ public class Breed {
 	private String variety_name;
 
 	private int detail_count;						// 세부정보 수
+	private List<StandardList> standardList;
 }

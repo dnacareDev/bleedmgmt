@@ -76,14 +76,21 @@ public class BreedController {
     }
 
     List<Detail> details = detailService.SelectDetailListByResource(resourceId);
-    List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
+//    List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
 
     String crop_name = breedService.SearchCropName(crop_id);
 
     List<Breed> breed = breedService.SearchBreed2(crop_name, resourceId);
 
+    List<StandardList> standardLists = new ArrayList<StandardList>();
+
+    for(int i = 0; i < breed.size(); i++) {
+      standardLists = breedService.SelectStandard(breed.get(i).getBreed_id());
+
+      breed.get(i).setStandardList(standardLists);
+    }
+
     result.put("breed", breed);
-    result.put("standardList", standardList);
     result.put("detail", details);
 
 //    Gson gson = new Gson();
@@ -95,17 +102,17 @@ public class BreedController {
     return result;
   }
 
-  @ResponseBody
-  @RequestMapping("updateStandardCell")
-  public int updateStandardCell(@RequestParam(value = "standard_data") String standard_data, @RequestParam(value = "standard_id") int standard_id) {
-    int result = 0;
-
-    StandardList standard = new StandardList();
-    standard.setStandard_data(standard_data);
-    standard.setStandard_id(standard_id);
-    result = breedService.updateStandardCell(standard);
-    return result;
-  }
+//  @ResponseBody
+//  @RequestMapping("updateStandardCell")
+//  public int updateStandardCell(@RequestParam(value = "standard_data") String standard_data, @RequestParam(value = "standard_id") int standard_id) {
+//    int result = 0;
+//
+//    StandardList standard = new StandardList();
+//    standard.setStandard_data(standard_data);
+//    standard.setStandard_id(standard_id);
+//    result = breedService.updateStandardCell(standard);
+//    return result;
+//  }
 
 
   @ResponseBody
@@ -315,8 +322,6 @@ public class BreedController {
       int detail_id = item.getInt("detail_id");
       String standard = item.getString("standard");
 
-      System.out.println("change : " + breed_id + " " + detail_id + " " + standard);
-
       if(standard.isEmpty()) {
         result = breedService.UpdateBreed(breed_id, detail_id, null);
       } else {
@@ -336,8 +341,6 @@ public class BreedController {
 
     StandardList item = new StandardList();
 
-    System.out.println("breed_id : " + breed_id);
-
     for (int i = 0; i < detail_id.length; i++) {
       item = new StandardList();
 
@@ -348,10 +351,6 @@ public class BreedController {
 
         list.add(item);
       } else {
-        System.out.println("not null");
-        System.out.println("detail_id[i] :" + detail_id[i]);
-        System.out.println("standard_data : " + standard_data[i]);
-
         item.setBreed_id(breed_id);
         item.setDetail_id(detail_id[i]);
         item.setStandard_data(standard_data[i]);

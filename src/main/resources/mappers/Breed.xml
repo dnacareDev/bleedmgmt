@@ -47,6 +47,12 @@
         order by b.breed_id desc;
     </select>
 
+    <select id="SelectStandard" resultType="StandardList">
+        SELECT *
+        FROM standard
+        WHERE breed_id = #{breed_id}
+    </select>
+
     <select id="selectDetailCount" resultType="CountSelect">
         select max(detail_id) as max, min(detail_id) as min, count(detail_id) as count
         from detail
@@ -241,9 +247,9 @@
     </update>
 
     <update id="UpdateAllBreed" parameterType="java.util.ArrayList">
-            UPDATE standard
         <foreach collection="list" item="item" separator=";">
-            SET standard_data = #{item.standard_data}
+            UPDATE standard
+            SET standard = #{item.standard}
             WHERE breed_id = #{item.breed_id} AND detail_id = #{item.detail_id}
         </foreach>
     </update>

@@ -17,6 +17,8 @@ public interface BreedService {
 	
 	List<Map<String, Object>> selectStandard (int resourceId);
 
+	List<StandardList> SelectStandard (int breed_id);
+
 	public int deleteBreed(String breed_id);
 	
 	public int updateStandardCell(StandardList data);

@@ -2375,43 +2375,43 @@
 
                     gridDataArray = result.standardList;
 
-                    breedgrid.on('beforeChange', ev => {
-                        if (ev.origin != "cell" && ev.origin != "paste")
-                            return;
-
-                        try {
-                            for (var i = 0; i < ev.changes.length; i++) {
-                                let changeItem = ev.changes[i];
-
-                                let list = gridDataArray[changeItem.rowKey];
-
-                                let count = 0;
-                                let standard = {};
-
-                                for (var key in list) {
-                                    if (count++ == parseInt(changeItem.columnName)) {
-                                        standard = list[key];
-                                        break;
-                                    }
-                                }
-
-                                var data = {"standard_id": standard.standard_id, "standard_data": changeItem.nextValue};
-                                $.ajax({
-                                    url: 'updateStandardCell',
-                                    method: 'POST',
-                                    dataType: 'json',
-                                    data: data,
-                                    success: function (result) {
-                                        if (result == 0) {
-                                            return Alert("수정에 실패하였습니다.")
-                                        }
-                                    }
-                                });
-                            }
-                        } catch (e) {
-
-                        }
-                    });
+                    // breedgrid.on('beforeChange', ev => {
+                    //     if (ev.origin != "cell" && ev.origin != "paste")
+                    //         return;
+                    //
+                    //     try {
+                    //         for (var i = 0; i < ev.changes.length; i++) {
+                    //             let changeItem = ev.changes[i];
+                    //
+                    //             let list = gridDataArray[changeItem.rowKey];
+                    //
+                    //             let count = 0;
+                    //             let standard = {};
+                    //
+                    //             for (var key in list) {
+                    //                 if (count++ == parseInt(changeItem.columnName)) {
+                    //                     standard = list[key];
+                    //                     break;
+                    //                 }
+                    //             }
+                    //
+                    //             var data = {"standard_id": standard.standard_id, "standard_data": changeItem.nextValue};
+                    //             $.ajax({
+                    //                 url: 'updateStandardCell',
+                    //                 method: 'POST',
+                    //                 dataType: 'json',
+                    //                 data: data,
+                    //                 success: function (result) {
+                    //                     if (result == 0) {
+                    //                         return Alert("수정에 실패하였습니다.")
+                    //                     }
+                    //                 }
+                    //             });
+                    //         }
+                    //     } catch (e) {
+                    //
+                    //     }
+                    // });
 
                     let dataList = [];
 

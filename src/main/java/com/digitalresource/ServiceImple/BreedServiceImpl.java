@@ -98,12 +98,16 @@ public class BreedServiceImpl implements BreedService {
     int count = 0;
 
     for (StandardList item : list) {
+      System.out.println(count);
       if (item.getBreed_row() == breed_row) {
-
         dataMap.put(String.valueOf(item.getDetail_id()), item);
+        //System.out.println("breed_id : " + dataMap.get("breed_id"));
       } else {
         dataMap.put("breed_row", item.getBreed_row());
-        dataMap.put("breed_id", item.getBreed_id() - 1);
+        dataMap.put("breed_id", item.getBreed_id());
+
+        System.out.println("breed_id : " + dataMap.get("breed_id"));
+
         dataMap.put("detail_id", item.getDetail_id());
 //        dataMap.put("idx", idx++);
         bodyList.add(dataMap);
@@ -126,6 +130,11 @@ public class BreedServiceImpl implements BreedService {
     bodyList.add(dataMap);
 
     return bodyList;
+  }
+
+  @Override
+  public List<StandardList> SelectStandard(int breed_id) {
+    return breedMapper.SelectStandard(breed_id);
   }
 
   @Override

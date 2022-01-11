@@ -1080,7 +1080,7 @@
     <!-- 표시 헤더 선택 모달창 -->
     <div class="modal-basic modal fade show pop2" id="grid2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
-            <form action="detail-display" method="POST" enctype="multipart/form-data">
+            <!--<form action="detail-display" method="POST" enctype="multipart/form-data">-->
                 <div class="modal-content modal-bg-white">
                     <div class="modal-header" style="border: none">
                         <h6 class="modal-title" id="display_title"></h6>
@@ -1245,10 +1245,10 @@
                     </div>
                     <div class="modal-footer" style="border: none">
                         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
-                        <button type="submit" class="btn btn-primary btn-sm">저장</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="UpdateAllBtn()">저장</button>
                     </div>
                 </div>
-            </form>
+            <!--</form>-->
         </div>
     </div>
 
@@ -1749,6 +1749,8 @@
     }
 
     // 특성상태 버튼
+    let wideBreedId = 0;
+
     function EmptyBtn(e) {
         $("#display_title").text($(".titleType")[0].innerText + " > " + $("#CropSelect")[0].innerText);
         $("#display_name").val($("#CropSelect")[0].innerText);
@@ -1757,6 +1759,7 @@
         $("#grid3").modal("show");
 
         var data = {"breed_id": e};
+        wideBreedId = e;
 
         $.ajax(
             {
@@ -1774,9 +1777,44 @@
             });
     }
 
-    function UpdateAllBtn() {
-        $("#updateAllForm").submit();
+    /* s : input text 변경 이벤트 */
+    let wideUpdateValue = [];
+
+    function updateData(e) {
+        console.log(e.value);
+        console.log(e.name);
+        console.log(wideBreedId);
+
+        let stan_value = e.value;
+        let detail_id = e.name;
+        let breed_id = wideBreedId;
+
+        wideUpdateValue.push({"breed_id": breed_id, "detail_id": detail_id, "standard": stan_value});
     }
+
+    /* s : 특성상태 데이터 수정 버튼 */
+    function UpdateAllBtn() {
+        $.ajax(
+            {
+                url: 'updateBreed',
+                method: 'POST',
+                dataType: 'json',
+                data: {"data": JSON.stringify(wideUpdateValue)},
+                success: function (result) {
+                    if (result == 0) {
+                        return Alert("수정에 실패하였습니다.")
+                    } else {
+                        location.reload();
+                    }
+                }
+            });
+    }
+    /* e : 특성상태 데이터 수정 버튼 */
+
+    $(".empty_list").change(function (e) {
+        console.log("event : ", e);
+    })
+    /* e : input text 변경 이벤트 */
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
@@ -1917,10 +1955,8 @@
 
         var getList = document.querySelectorAll("#step_container" + (indexTab + 1) + " li");
         getList = Array.prototype.slice.call(getList);
-        console.log(getList)
         var target = e.currentTarget;
         var index = getList.indexOf(target);
-        console.log(index)
 
         if (keyShiftBool) {
             getList[index].classList.add("active");
@@ -1943,9 +1979,6 @@
     }
     /* e : 구간 체크박스 선택 */
 
-    /*
-    {detail_id: ,detail_name:}
-    */
     /* 헤더 선택 */
     function PlusResearch(e) {
         var step_container = $("#step_container" + e);
@@ -2298,7 +2331,6 @@
     }
 
     var breedgrid = null;
-    var gridDataArray = null;
     let updateBreedData = [];
 
     function SearchBreedgrid(e) {
@@ -2318,7 +2350,7 @@
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: result.standardList,
+                        data: [],
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2372,55 +2404,15 @@
 
                     breedgrid.setColumns(headerArr);
 
-                    gridDataArray = result.standardList;
+                    const dataList = [];
 
-                    breedgrid.on('beforeChange', ev => {
-                        if (ev.origin != "cell" && ev.origin != "paste")
-                            return;
+                    for (var i = 0; i < result.breed.length; i++) {
 
-                        try {
-                            for (var i = 0; i < ev.changes.length; i++) {
-                                let changeItem = ev.changes[i];
-
-                                let list = gridDataArray[changeItem.rowKey];
-
-                                let count = 0;
-                                let standard = {};
-
-                                for (var key in list) {
-                                    if (count++ == parseInt(changeItem.columnName)) {
-                                        standard = list[key];
-                                        break;
-                                    }
-                                }
-
-                                var data = {"standard_id": standard.standard_id, "standard_data": changeItem.nextValue};
-                                $.ajax({
-                                    url: 'updateStandardCell',
-                                    method: 'POST',
-                                    dataType: 'json',
-                                    data: data,
-                                    success: function (result) {
-                                        if (result == 0) {
-                                            return Alert("수정에 실패하였습니다.")
-                                        }
-                                    }
-                                });
-                            }
-                        } catch (e) {
-
-                        }
-                    });
-
-                    let dataList = [];
-
-                    for (var i = 0; i < result.standardList.length; i++) {
-
-                        let data = result.standardList[i];
-                        let tempArray = [];
+                        let data = result.breed[i].standardList;
+                        let tempArray = {};
 
                         tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                        tempArray['breed_id'] = result.standardList[i].breed_id;
+                        tempArray['breed_id'] = result.breed[i].breed_id;
                         tempArray['img'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                         tempArray['doc'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
 
@@ -2430,11 +2422,13 @@
                             tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                         }
 
-                        for (var j = 0; j < headerName.length; j++) {
-                            if (data[headerName[j]] != undefined) {
-                                tempArray[headerName[j]] = data[headerName[j]].standard_data;
-                            } else {
-                                continue;
+                        for (var j = 0; j < data.length; j++) {
+                            let rowData = data[j].standard_data;
+
+                            if(headerName[j] == data[j].detail_id) {
+                                tempArray[headerName[j]] = rowData;
+                            } else if(headerName[j + 1] == data[j].detail_id) {
+                                tempArray[headerName[j + 1]] = rowData;
                             }
                         }
 
@@ -2775,7 +2769,6 @@
     }
 
     /* 엑셀 확인 창 */
-
     function ModifyDataBtn(e) {
         let s = String(e);
         s = s.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
@@ -2956,6 +2949,7 @@
         console.log(1);
     }
 
+    /* s : 특성상태 표시 */
     function SearchBreed(e) {
         var crop_id = $("#CropSelect").val();
         var resource_name = $(".manage")[0].innerText;
@@ -2982,7 +2976,7 @@
                                 detail_add2 += '<li>';
                                 detail_add2 += '<div class="title">' + result.detailList[j].detail_name + '</div>';
                                 detail_add2 += '<div class="input_text">';
-                                detail_add2 += '<input type="text" class="empty_list" name="standard_data">';
+                                detail_add2 += '<input type="text" class="empty_list" onchange="updateData(this)" name="' + result.detailList[j].detail_id + '">';
                                 detail_add2 += '<input type="hidden" name="detail_id" value="' + result.detailList[j].detail_id + '"></div>';
                                 detail_add2 += '</div>';
                                 detail_add2 += '</li>';
@@ -2999,6 +2993,7 @@
 
             });
     }
+    /* e : 특성상태 표시 */
 </script>
 </body>
 </html>
