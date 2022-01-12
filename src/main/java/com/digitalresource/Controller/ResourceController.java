@@ -171,9 +171,8 @@ public class ResourceController {
     resource.setDetail_count(detail_count);
     resource.setResource_name_id(resourceName.getResource_name_id());
     resource.setDetailList(detail_list);
-    System.out.println(resource);
-    int result = RService.insertResource(resource);
 
+    int result = RService.insertResource(resource);
 
     return result;
   }

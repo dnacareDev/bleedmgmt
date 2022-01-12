@@ -258,6 +258,9 @@
             display: inline-block;
         }
 
+        input[type="checkbox"] {
+            display: inline-block;
+        }
 
         /* 푸터 배경색 */
         .footer-wrapper {
@@ -344,7 +347,7 @@
                                     <ul>
                                         <li>
                                             <div class="this_check">
-                                                <input type="checkbox">
+                                                <input type="checkbox" style="display: none">
                                                 <span class="check_box_design"></span>
                                                 <span class="check_span">사진등록</span>
                                             </div>
@@ -356,7 +359,7 @@
                                         </li>
                                         <li>
                                             <div class="this_check">
-                                                <input type="checkbox">
+                                                <input type="checkbox" style="display: none">
                                                 <span class="check_box_design"></span><span class="check_span">문서등록</span>
                                             </div>
                                             <input type="text" class="style_ver">
@@ -508,6 +511,7 @@
         filesBtn.dispatchEvent(eventList);
     }
 
+
     /* 엑셀 코드 */
     function handleExcelDataAll(sheet) {
         handleExcelDataHtml(sheet); // html 형태
@@ -528,33 +532,16 @@
 
     var headerGrid = null;
 
-    class CustomColumnHeader {
-        constructor(props) {
-            const el = document.createElement('input');
-            el.type = 'checkbox';
-            el.checked = Boolean(props.value);
-
-            this.el = el;
-            this.render(props)
-        }
-
-        getElement() {
-            return this.el;
-        }
-
-        render(props) {
-            this.el.value = String(props.value);
-        }
-    }
-
     /* s : 특성파일 추가 */
     function excelExportFile(evne, callback) {
         var input = event.target;
         var reader = new FileReader();
         charArr = [];
+
         if (headerGrid != null) {
             headerGrid.destroy();
         }
+
         reader.onload = function () {
 
             var fileData = reader.result;
@@ -569,6 +556,7 @@
                 scrollX: true,
                 scrollY: false,
                 data: [],
+                rowHeaders: ['checkbox'],
                 columns: []
             });
 
@@ -576,7 +564,6 @@
             var endCount = 1;
 
             $.each(firstSheet, function (idx, value) {
-
                 if (currentCount > endCount)
                     return;
 
@@ -594,24 +581,17 @@
                 let headerArr = {}
 
                 if (!idx.startsWith('!')) {
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'renderer': {'type': CustomColumnHeader}, 'type': 2, "info": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0};
                     charArr.push(headerArr);
                 }
             })
 
             dataArr = dataArr.concat(inputArr, charArr, desArr);
             headerGrid.setColumns(dataArr);
-
-            console.log(dataArr.length)
-
-            let bodyArr = {};
-
-            $("#excel_data").empty();
         };
 
         reader.readAsBinaryString(input.files[0]);
     }
-
     /* e : 특성파일 추가 */
 
     /* s : 헤더파일 추가 */
@@ -619,9 +599,11 @@
         var input = event.target;
         var reader = new FileReader();
         inputArr = [];
+
         if (headerGrid != null) {
             headerGrid.destroy();
         }
+
         reader.onload = function () {
             var fileData = reader.result;
             var wb = XLSX.read(fileData, {type: 'binary'});
@@ -640,8 +622,10 @@
 
             var currentCount = 1;
             var endCount = 1;
-            $.each(firstSheet, function (idx, value) {
+            let headerName = [];
+            let count = 0;
 
+            $.each(firstSheet, function (idx, value) {
                 if (currentCount > endCount)
                     return;
 
@@ -656,21 +640,32 @@
                     return;
                 }
 
-                let headerArr = {}
+                var headerArr = {};
 
                 if (!idx.startsWith('!')) {
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'renderer': {'type': CustomColumnHeader}, 'type': 2, "info": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0, "check": 0};
 
                     inputArr.push(headerArr);
-
                 }
+
+                headerName[count] = value.v;
+                count++;
             })
+
             dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
             headerGrid.setColumns(dataArr);
 
-            console.log(dataArr.length)
+            let bodyArr = {}
+            let dataSet = [];
 
-            $("#excel_data").empty();
+            for(let i = 0; i < dataArr.length; i++) {
+                bodyArr[headerName[i]] = '<input type=checkbox class="anaCheck" name="' + headerName[i] + '">';
+            }
+
+            dataSet.push(bodyArr);
+            headerGrid.resetData(dataSet);
+
+            console.log(dataArr)
         };
 
         reader.readAsBinaryString(input.files[0]);
@@ -695,6 +690,13 @@
 
     function saveResource() {
         if (checkName == 1) {
+            let checkBox = document.getElementsByClassName("anaCheck");
+
+            for(let i = 0; i < checkBox.length; i++) {
+                if(checkBox[i].checked == true) {
+                    dataArr[i].check = 1;
+                }
+            }
 
             let detail_count = dataArr.length;
             let dataList = JSON.stringify(dataArr);
@@ -753,9 +755,9 @@
                     scrollX: true,
                     scrollY: false,
                     data: [],
+                    rowHeaders: ['checkbox'],
                     columns: []
                 });
-
 
                 var currentCount = 1;
                 var endCount = 1;
@@ -765,20 +767,18 @@
                     if (currentCount > endCount)
                         return;
 
-
                     if (value.t == "n" && value.v == endCount && value.w == "1") {
                         currentCount++;
                         return;
                     }
 
                     let header = value.feature_num + ". " + value.feature_name;
-                    headerArr = {'header': header, 'name': header, 'width': 300, 'renderer': {'type': CustomColumnHeader}, "type": 2, "info": 2};
+                    headerArr = {'header': header, 'name': header, 'width': 300, "type": 2, "info": 2};
                     desArr.push(headerArr);
                 });
 
                 dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
                 headerGrid.setColumns(dataArr);
-                $("#excel_data").empty();
             }
         })
     }

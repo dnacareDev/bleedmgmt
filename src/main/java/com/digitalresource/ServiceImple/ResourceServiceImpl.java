@@ -88,24 +88,32 @@ public class ResourceServiceImpl implements ResourceService {
   @Override
   public int insertResource(Resource resource) {
     Map<String, Object> map = new HashMap<String, Object>();
-    // inert resource
+    // insert resource
     int resultResource = resourceMapper.insertResource(resource);
     // insert detail
     String jsonArr = resource.getDetailList();
     JSONArray arr = new JSONArray(jsonArr);
+
     map.put("resource_id", resource.getResource_id());
+
     int result = 0;
+
     for (int i = 0; i < arr.length(); i++) {
       JSONObject jsonObject = arr.getJSONObject(i);
+
       map.put("detail_name", jsonObject.get("name"));
       map.put("detail_type", jsonObject.get("type"));
       map.put("detail_info", jsonObject.get("info"));
+      map.put("detail_check", jsonObject.get("check"));
       map.put("detail_index", i + 1);
+
       result = resourceMapper.registerDetail(map);
+
       if (result == 0) {
         return 0;
       }
     }
+
     return result;
   }
 

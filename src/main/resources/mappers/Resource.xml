@@ -66,8 +66,8 @@
     </insert>
 
     <insert id="registerDetail">
-        insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info)
-        values (#{resource_id}, #{detail_type}, #{detail_name}, #{detail_index}, #{detail_info});
+        insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info, detail_check)
+        values (#{resource_id}, #{detail_type}, #{detail_name}, #{detail_index}, #{detail_info}, #{detail_check});
     </insert>
 
     <select id="searchResource" resultType="ResourceList">
