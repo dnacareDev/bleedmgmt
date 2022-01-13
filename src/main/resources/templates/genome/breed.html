@@ -878,7 +878,7 @@
                     <div class="card">
                         <div class="card-extra mt-20 mr-20">
                             <div class="breadcrumb-main" style="float: left;">
-                                <h4 class="text-capitalize breadcrumb-title manage" th:text="${type}"></h4>
+                                <h4 class="text-capitalize breadcrumb-title manage" id="title" th:text="${type}"></h4>
                                 <input type="hidden" id="user_type" th:value="${user.user_type}">
                             </div>
                             <div class="action-btn d-flex justify-content-end">
@@ -904,7 +904,8 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" id="resource_id" th:value="${resource_id}"></input>
+                        <input type="hidden" id="resource_id" th:value="${resource_id}">
+                        <input type="hidden" id="resource_name" th:value="${type}">
                         <div class='card-extra mt-10 mb-10 mr-20 plus_btn_submit1'>
                             <button type='button' id="cancelRow" onclick="cancelRow()">취소</button>
                             <button type='button' id="saveRow" onclick="saveRow()">저장</button>
@@ -1014,6 +1015,9 @@
                     </div>
                     <div class="modal-footer" style="border: none">
                         <input type="hidden" id="upload_id" name="breed_id">
+                        <input type="hidden" id="type" name="type" th:value="${type}">
+                        <input type="hidden" id="resource" name="resource_id" th:value="${resource_id}">
+                        <input type="hidden" id="crop_id" name="crop_id" th:value="${crop_id}">
                         <button type="button" class="btn btn-secondary btn-sm" onclick="dataToggle('#insert_file', '#breed_file')">취소</button>
                         <button type="button" class="btn btn-primary btn-sm" onclick="InsertFile()">저장</button>
                     </div>
@@ -1069,6 +1073,9 @@
                     </div>
                     <div class="modal-footer" style="border: none">
                         <input type="hidden" id="breed_file_id" name="breed_file_id">
+                        <input type="hidden" id="type" name="type" th:value="${type}">
+                        <input type="hidden" id="resource" name="resource_id" th:value="${resource_id}">
+                        <input type="hidden" id="crop_id" name="crop_id" th:value="${crop_id}">
                         <button type="button" class="btn btn-secondary btn-sm" onclick="dataToggle('#modify_file', '#breed_file')">취소</button>
                         <button type="submit" class="btn btn-primary btn-sm" onclick="modifyFile()">수정</button>
                     </div>
@@ -1352,7 +1359,7 @@
                     <div class="form-group mb-0" style="justify-content:end">
                         <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none"
                                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-                        <button onclick="filesFunction()" class="btn btn-primary btn-sm">불러오기</button>
+                        <!--<button onclick="filesFunction()" class="btn btn-primary btn-sm">불러오기</button>-->
                         <input type="file" name="" id="file_data_upload" style="display: none;">
                     </div>
                     <div>
@@ -1371,7 +1378,7 @@
                 </div>
                 <div class="modal-footer" style="border: none">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2');">취소</button>
-                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2'); InsertExcel();">등록</button>
+                    <!--<button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2'); InsertExcel();">등록</button>-->
                 </div>
             </div>
         </div>
@@ -1781,10 +1788,6 @@
     let wideUpdateValue = [];
 
     function updateData(e) {
-        console.log(e.value);
-        console.log(e.name);
-        console.log(wideBreedId);
-
         let stan_value = e.value;
         let detail_id = e.name;
         let breed_id = wideBreedId;
@@ -1816,10 +1819,11 @@
     })
     /* e : input text 변경 이벤트 */
 
+    let type = $("#title").text();
+
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        removeLocalS("breed_crop");
-        $("#CropSelect").val(getLocalS("breed_crop"));
+        $("#CropSelect").val(getLocalS(type));
 
         SearchBreed(1);
         SearchBreedgrid(1);
@@ -1831,9 +1835,7 @@
 
         SearchBreed(1);
         SearchBreedgrid(1);
-        setLocalS("breed_crop", $("#CropSelect").val());
-
-        console.log($("#CropSelect"));
+        setLocalS(type, $("#CropSelect").val());
     })
 
     // 갯수 선택
@@ -2149,8 +2151,8 @@
     }
 
     function FileBtn(e) {
+        $("#upload_id").val(e);
         $("#breed_file").modal("show");
-
         var data = {"breed_id": e};
 
         $.ajax(
@@ -2160,9 +2162,6 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                    $("#upload_id").val(e);
-                    $(".breed_title").text("시교명 : " + result.breed.standard);
-
                     var file_list = $("#file_list");
                     var file_add = "";
 
@@ -2339,6 +2338,9 @@
         var limit = $("#limit").val();
 
         var data = {"crop_id": crop_id, "resource_name": resource_name};
+
+        console.log(data);
+
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2436,10 +2438,6 @@
                     }
 
                     breedgrid.resetData(dataList);
-
-                    breedgrid.on('check', (ev) => {
-                        breedgrid.getRow(ev.rowKey).breed_id;
-                    })
 
                     breedgrid.on('editingStart', (ev) => {
                         if ($(".plus_btn_submit1")[0].style.display != 'block') {
@@ -2772,8 +2770,10 @@
     function ModifyDataBtn(e) {
         let s = String(e);
         s = s.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
+        let resource_id = $('#resource_id').val();
+        let resource_name = $('#resource_name').val();
 
-        var data = {"datalist_date": s, "crop_id": $("#CropSelect").val()};
+        var data = {"datalist_date": s, "resource_name": resource_name, "resource_id": resource_id};
 
         $("#data_upload2").modal("hide");
         $("#data_upload3").modal("show");
@@ -2785,7 +2785,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                    console.log(result);
+                    console.log("result : ", result);
 
                     if (result != null) {
 
@@ -2799,7 +2799,7 @@
                         header_add += '<tr>';
 
                         for (var i = 0; i < result.detail.length; i++) {
-                            header_add += '<th class="breedHead">' + result.detail[i].detail_title + '</th>'
+                            header_add += '<th class="breedHead">' + result.detail[i].detail_name + '</th>'
                         }
 
                         header_add += '</tr>';
@@ -2808,7 +2808,11 @@
                             add_list += '<tr>';
 
                             for (var j = 0; j < result.breed[i].length; j++) {
-                                add_list += '<td>' + result.breed[i][j].standard + '</td>';
+                                if(result.breed[i][j].standard_data != null) {
+                                    add_list += '<td>' + result.breed[i][j].standard_data + '</td>';
+                                } else {
+                                    add_list += '<td></td>';
+                                }
                             }
 
                             add_list += '</tr>';

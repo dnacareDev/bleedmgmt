@@ -29,9 +29,17 @@ public interface BreedMapper {
 
 	int selectResourceId(Map<String, Object> param);
 
+	List<BreedFile> SelectBreedFile(int breed_id);
+
 	int InsertBreedFile(BreedFile breed_file);
 
 	int InsertBreedUpload(Uploads upload);
+
+	// 첨부파일 내용 수정
+	int UpdateBreedFile(BreedFile breed_file);
+
+	// 첨부파일 수정
+	int UpdateBreedUpload(Uploads upload);
 
   List<Breed> SearchBreed(@Param("crop_name") String breed_name);
 

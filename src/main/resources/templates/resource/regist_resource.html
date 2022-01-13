@@ -387,6 +387,7 @@
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 <script type="text/javascript">
 
+    let headerArr = {};
     let dataArr = [];
     let inputArr = [];
     let charArr = [];
@@ -394,8 +395,10 @@
     let potoArr = [];
     let docArr = [];
     let checkName = 0;
+
     let file_this_id; // 클릭한 파일첨부 div 박스 element
     let file_this_file; // 클릭한 파일과 연동된 input type["file"]
+
     function filed(id) { //파일 첨부 클릭할경우
         $(id).trigger("click");
         $(id).on("change", file_handler);
@@ -437,8 +440,8 @@
                 $(element).prev().val("");
                 return Alert1("숫자를 입력 해주세요!");  /* 팝업에 날아오는 효과를 원하지 않으시다면 commonjs.html 에서 $("#alert").show(300); 을 $("#alert").show(0); 으로 바꿔주세요*/
             } else { // number타입이라면
-                for (let i = 0; i < input_val; i++) {
-                    inner_html += "<li><input type='text' onchange='intertHeaderTitle(this)' id=" + "input" + i + " value=''></li>";
+                for (let i = 1; i <= input_val; i++) {
+                    inner_html += "<li><input type='text' name='photo' onchange='insertHeaderTitle(this)' id='photo" + i + "' value=''></li>";
                 }
 
                 if ($(element).next().children().length > 0) { //추가된 input text가 1이상이라면
@@ -462,8 +465,8 @@
                 $(element).prev().val("");
                 return Alert1("숫자를 입력 해주세요!");  /* 팝업에 날아오는 효과를 원하지 않으시다면 commonjs.html 에서 $("#alert").show(300); 을 $("#alert").show(0); 으로 바꿔주세요*/
             } else { // number타입이라면
-                for (let i = 0; i < input_val; i++) {
-                    inner_html += "<li><input type='text' onchange='intertHeaderTitleDocu(this)' id=" + "input" + i + " value=''></li>";
+                for (let i = 1; i <= input_val; i++) {
+                    inner_html += "<li><input type='text' name='docs' onchange='insertHeaderTitleDocu(this)' id='docs" + i + "' value=''></li>";
                 }
 
                 if ($(element).next().children().length > 0) { //추가된 input text가 1이상이라면
@@ -536,6 +539,7 @@
     function excelExportFile(evne, callback) {
         var input = event.target;
         var reader = new FileReader();
+
         charArr = [];
 
         if (headerGrid != null) {
@@ -556,7 +560,6 @@
                 scrollX: true,
                 scrollY: false,
                 data: [],
-                rowHeaders: ['checkbox'],
                 columns: []
             });
 
@@ -578,16 +581,25 @@
                     return;
                 }
 
-                let headerArr = {}
-
                 if (!idx.startsWith('!')) {
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0, "check": 0};
+
                     charArr.push(headerArr);
                 }
             })
 
-            dataArr = dataArr.concat(inputArr, charArr, desArr);
+            dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
             headerGrid.setColumns(dataArr);
+
+            let bodyArr = {}
+            let dataSet = [];
+
+            for(let i = 0; i < dataArr.length; i++) {
+                bodyArr[headerName[i]] = '<input type=checkbox class="anaCheck" name="' + headerName[i] + '">';
+            }
+
+            dataSet.push(bodyArr);
+            headerGrid.resetData(dataSet);
         };
 
         reader.readAsBinaryString(input.files[0]);
@@ -598,6 +610,7 @@
     function excelExportCommon(event, callback) {
         var input = event.target;
         var reader = new FileReader();
+
         inputArr = [];
 
         if (headerGrid != null) {
@@ -622,8 +635,6 @@
 
             var currentCount = 1;
             var endCount = 1;
-            let headerName = [];
-            let count = 0;
 
             $.each(firstSheet, function (idx, value) {
                 if (currentCount > endCount)
@@ -640,16 +651,11 @@
                     return;
                 }
 
-                var headerArr = {};
-
                 if (!idx.startsWith('!')) {
                     headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0, "check": 0};
 
                     inputArr.push(headerArr);
                 }
-
-                headerName[count] = value.v;
-                count++;
             })
 
             dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
@@ -659,18 +665,15 @@
             let dataSet = [];
 
             for(let i = 0; i < dataArr.length; i++) {
-                bodyArr[headerName[i]] = '<input type=checkbox class="anaCheck" name="' + headerName[i] + '">';
+                bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
             }
 
             dataSet.push(bodyArr);
             headerGrid.resetData(dataSet);
-
-            console.log(dataArr)
         };
 
         reader.readAsBinaryString(input.files[0]);
     }
-
     /* e : 헤더파일 추가 */
 
     /* 종자원 관리 리스트 가져오기 */
@@ -755,7 +758,6 @@
                     scrollX: true,
                     scrollY: false,
                     data: [],
-                    rowHeaders: ['checkbox'],
                     columns: []
                 });
 
@@ -773,12 +775,22 @@
                     }
 
                     let header = value.feature_num + ". " + value.feature_name;
-                    headerArr = {'header': header, 'name': header, 'width': 300, "type": 2, "info": 2};
+                    headerArr = {'header': header, 'name': header, 'width': 300, "type": 2, "info": 2, "check": 0};
                     desArr.push(headerArr);
                 });
 
                 dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
                 headerGrid.setColumns(dataArr);
+
+                let bodyArr = {}
+                let dataSet = [];
+
+                for(let i = 0; i < dataArr.length; i++) {
+                    bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
+                }
+
+                dataSet.push(bodyArr);
+                headerGrid.resetData(dataSet);
             }
         })
     }
@@ -806,12 +818,19 @@
     });
     */
 
+    let photo_num = 0;
+    let docs_num = 0;
+
     /* 사진 추가시 */
-    function intertHeaderTitle(id) {
+    function insertHeaderTitle(id) {
+        photo_num = document.getElementsByName('photo').length;
+        docs_num = document.getElementsByName('docs').length;
+
+        potoArr = [];
+
         if (headerGrid != null) {
             headerGrid.destroy();
         }
-        dataArr = [{'header': "첨부화일", 'name': "첨부화일", 'width': 120, 'renderer': CustomColumnHeader, "type": 1, "info": 4}];
 
         headerGrid = new tui.Grid({
             el: document.getElementById('headerGrid'),
@@ -821,19 +840,36 @@
             columns: []
         });
 
-        headerArr = {'header': id.value, 'name': id.value, 'width': 120, 'renderer': CustomColumnHeader, "type": 0, "info": 3};
+        let headerArr = {'header': id.value, 'name': id.value, 'width': 120, "type": 0, "info": 3, "check": 0};
+
         potoArr.push(headerArr);
-        dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
+
+        dataArr = potoArr.concat(dataArr);
         headerGrid.setColumns(dataArr);
+
+        let add = photo_num + docs_num;
+
+        let bodyArr = {}
+        let dataSet = [];
+
+        for(let i = add; i < dataArr.length; i++) {
+            bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
+        }
+
+        dataSet.push(bodyArr);
+        headerGrid.resetData(dataSet);
     }
 
     /* 문서 등록 */
 
-    function intertHeaderTitleDocu(id) {
+    function insertHeaderTitleDocu(id) {
+        photo_num = document.getElementsByName('photo').length;
+        docs_num = document.getElementsByName('docs').length;
+
         if (headerGrid != null) {
             headerGrid.destroy();
         }
-        dataArr = [{'header': "첨부화일", 'name': "첨부화일", 'width': 120, 'renderer': CustomColumnHeader, "type": 1, "info": 4}];
+
         headerGrid = new tui.Grid({
             el: document.getElementById('headerGrid'),
             scrollX: true,
@@ -842,10 +878,23 @@
             columns: []
         });
 
-        headerArr = {'header': id.value, 'name': id.value, 'width': 120, 'renderer': CustomColumnHeader, "type": 1, "info": 3};
+        let headerArr = {'header': id.value, 'name': id.value, 'width': 120, "type": 1, "info": 3, "check": 0};
         docArr.push(headerArr);
-        dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
+
+        dataArr = docArr.concat(dataArr);
         headerGrid.setColumns(dataArr);
+
+        let add = photo_num + docs_num;
+
+        let bodyArr = {};
+        let dataSet = [];
+
+        for(let i = add; i < dataArr.length; i++) {
+            bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
+        }
+
+        dataSet.push(bodyArr);
+        headerGrid.resetData(dataSet);
     }
 </script>
 </body>

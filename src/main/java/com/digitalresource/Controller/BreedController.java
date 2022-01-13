@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -76,7 +77,6 @@ public class BreedController {
     }
 
     List<Detail> details = detailService.SelectDetailListByResource(resourceId);
-//    List<Map<String, Object>> standardList = breedService.selectStandard(resourceId);
 
     String crop_name = breedService.SearchCropName(crop_id);
 
@@ -102,19 +102,6 @@ public class BreedController {
     return result;
   }
 
-//  @ResponseBody
-//  @RequestMapping("updateStandardCell")
-//  public int updateStandardCell(@RequestParam(value = "standard_data") String standard_data, @RequestParam(value = "standard_id") int standard_id) {
-//    int result = 0;
-//
-//    StandardList standard = new StandardList();
-//    standard.setStandard_data(standard_data);
-//    standard.setStandard_id(standard_id);
-//    result = breedService.updateStandardCell(standard);
-//    return result;
-//  }
-
-
   @ResponseBody
   @RequestMapping("insertBreed2")
   public int insertBreed(@RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name) {
@@ -132,9 +119,22 @@ public class BreedController {
     return result;
   }
 
+  // 첨부 파일 조회
+  @ResponseBody
+  @RequestMapping("selectBreedFile")
+  public Map<String, Object> SelectBreedFile(@RequestParam("breed_id") int breed_id) {
+    Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+    List<BreedFile> breed_file = breedService.SelectBreedFile(breed_id);
+
+    result.put("breed_file", breed_file);
+
+    return result;
+  }
+
   // 첨부파일 등록
   @RequestMapping("insertBreedFile")
-  public ModelAndView InsertBreedFile(ModelAndView mv, @ModelAttribute BreedFile breed_file, @RequestParam("file") MultipartFile file) throws IOException {
+  public ModelAndView InsertBreedFile(ModelAndView mv, @ModelAttribute BreedFile breed_file, @RequestParam("file") MultipartFile file, @RequestParam("type") String type, @RequestParam("resource_id") int resource_id, @RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
     String[] extension = file.getOriginalFilename().split("\\.");
 
     String file_name = fileController.ChangeFileName(extension[1]);
@@ -162,7 +162,55 @@ public class BreedController {
 
     int insert_upload = breedService.InsertBreedUpload(upload);
 
-    mv.setViewName("redirect:/breed");
+    String str = URLEncoder.encode(type, "UTF-8");
+    String url = "/breed?type=" + str + "&id=" + resource_id + "&crop_id=" + crop_id;
+
+    mv.setViewName("redirect:" + url);
+
+    return mv;
+  }
+
+  // 첨부파일 수정
+  @RequestMapping("updateBreedFile")
+  public ModelAndView UpdateBreedFile(ModelAndView mv, @ModelAttribute BreedFile breed_file, @RequestParam("file") MultipartFile file, @RequestParam("type") String type, @RequestParam("resource_id") int resource_id, @RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
+    if (file.isEmpty()) {
+      int update_file = breedService.UpdateBreedFile(breed_file);
+    } else {
+//      String delete_path = "upload/" + breed_file.getUploads_file();
+      String delete_path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/" + breed_file.getUploads_file();
+      File origin_file = new File(delete_path);
+
+      if (origin_file.delete()) {
+        String[] extension = file.getOriginalFilename().split("\\.");
+
+        String file_name = fileController.ChangeFileName(extension[1]);
+        String origin_file_name = file.getOriginalFilename();
+
+        String path = "upload";
+
+        File filePath = new File(path);
+
+        if (!filePath.exists())
+          filePath.mkdirs();
+
+        Path fileLocation = Paths.get(path).toAbsolutePath().normalize();
+        Path targetLocation = fileLocation.resolve(file_name);
+
+        Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+        Uploads upload = new Uploads();
+        upload.setUploads_file(file_name);
+        upload.setUploads_origin_file(origin_file_name);
+        upload.setBreed_file_id(breed_file.getBreed_file_id());
+
+        int update_upload = breedService.UpdateBreedUpload(upload);
+      }
+    }
+
+    String str = URLEncoder.encode(type, "UTF-8");
+    String url = "/breed?type=" + str + "&id=" + resource_id + "&crop_id=" + crop_id;
+
+    mv.setViewName("redirect:" + url);
 
     return mv;
   }
@@ -284,26 +332,22 @@ public class BreedController {
 
   @ResponseBody
   @RequestMapping("searchTargetBreed")
-  public Map<String, Object> SearchTarget(Authentication auth, @RequestParam("datalist_date") String datalist_date, @RequestParam("crop_id") String crop_id) {
+  public Map<String, Object> SearchTarget(Authentication auth, @RequestParam("datalist_date") String datalist_date, @RequestParam("resource_name") String resource_name, @RequestParam("resource_id") int resource_id) {
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
     User user = (User) auth.getPrincipal();
 
-    int cropId = Integer.parseInt(crop_id);
-    String breed_name = breedService.SearchCropName(cropId);
-//    List<Integer> breed_id = datalistService.SelectTarget(datalist_date, resource_name);
-//    List<Detail> detail = breedService.SelectDetailExcel(resource_id);
+    List<Integer> breed_id = datalistService.SelectTarget(datalist_date, resource_name);
+    List<Detail> detail = breedService.SelectDetailExcel(resource_id);
 
     Map<Integer, Object> Breed = new LinkedHashMap<Integer, Object>();
 
-//    for (int i = 0; i < breed_id.size(); i++) {
-//      Breed.put(i, breedService.SelectBreedStandard(breed_id.get(i)));
-//    }
+    for (int i = 0; i < breed_id.size(); i++) {
+      Breed.put(i, breedService.SelectBreedStandard(breed_id.get(i)));
+    }
 
-    System.out.println("Breed : " + Breed);
-
-//    result.put("breed", Breed);
-//    result.put("detail", detail);
+    result.put("breed", Breed);
+    result.put("detail", detail);
 
     return result;
   }

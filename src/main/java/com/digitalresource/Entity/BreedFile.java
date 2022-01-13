@@ -11,7 +11,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("BreedFile")
 public class BreedFile {
   private int breed_file_id;
-  private int breed_id;
+  private Integer breed_id;
   private String breed_file_title;
   private String breed_file_contents;
   private String create_date;
