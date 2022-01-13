@@ -52,14 +52,12 @@ public class BreedServiceImpl implements BreedService {
         } else {
           map.put("resource_id", resource_id);
           map.put("limit", cnt);
-          map.put("standard_data", "");
+          map.put("standard_data", null);
         }
-
-
       } else {
         map.put("resource_id", resource_id);
         map.put("limit", cnt);
-        map.put("standard_data", "");
+        map.put("standard_data", null);
       }
       result = breedMapper.insertStandard(map);
       cnt++;

@@ -122,6 +122,7 @@
         where rn.resource_name = #{resource_name}
           and r.crop_id = #{crop_id}
           and detail_info not in (4, 3)
+          and detail_type = 2
     </select>
 
     <update id="detailDisplayAction">

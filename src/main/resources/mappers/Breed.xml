@@ -230,8 +230,9 @@
 
     <select id="SelectBreedStandard" parameterType="int" resultType="StandardList">
         SELECT *
-        FROM standard
-        WHERE breed_id = #{breed_id}
+        FROM standard s
+        INNER JOIN detail d ON s.detail_id = d.detail_id
+        WHERE breed_id = #{breed_id} AND
     </select>
 
     <delete id="deleteStandards">
