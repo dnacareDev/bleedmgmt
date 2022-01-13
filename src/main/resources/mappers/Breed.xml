@@ -60,15 +60,16 @@
     </select>
 
     <delete id="deleteStandard">
-        delete
-        from standard
+        delete from standard
         where standard_id
-                  in (
-                  select standard_id
-                  from (select standard_id
-                        from standard
-                        where breed_id in
-                              (select breed_id from breed where breed_id in (${breed_id}))) a);
+        in (select standard_id
+            from (select standard_id
+                  from standard
+                  where breed_id
+                  in (select breed_id
+                      from breed
+                      where breed_id
+                      in (${breed_id}))) a);
     </delete>
 
     <delete id="deleteBreed">
@@ -230,9 +231,14 @@
 
     <select id="SelectBreedStandard" parameterType="int" resultType="StandardList">
         SELECT *
-        FROM standard s
-        INNER JOIN detail d ON s.detail_id = d.detail_id
-        WHERE breed_id = #{breed_id} AND
+        FROM standard
+        WHERE breed_id = #{breed_id}
+    </select>
+
+    <select id="SelectBreedStandard2" parameterType="int" resultType="StandardList">
+        SELECT *
+        FROM standard
+        WHERE breed_id = #{breed_id} AND detail_id IN (SELECT detail_id FROM detail WHERE detail_type = 2)
     </select>
 
     <delete id="deleteStandards">
@@ -244,7 +250,8 @@
     <update id="UpdateBreed">
         UPDATE standard
         SET standard_data = #{standard}
-        WHERE breed_id = #{breed_id} AND detail_id = #{detail_id}
+        WHERE breed_id = #{breed_id}
+          AND detail_id = #{detail_id}
     </update>
 
     <update id="UpdateAllBreed" parameterType="java.util.ArrayList">

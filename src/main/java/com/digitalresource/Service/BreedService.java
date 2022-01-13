@@ -50,6 +50,8 @@ public interface BreedService {
 
   List<StandardList> SelectBreedStandard(int breed_id);
 
+  List<StandardList> SelectBreedStandard2(int breed_id);
+
 	int UpdateBreed(int breed_id, int detail_id, String standard);
 
 	int UpdateAllBreed(List<StandardList> list);

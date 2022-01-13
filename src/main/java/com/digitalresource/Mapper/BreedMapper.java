@@ -55,6 +55,8 @@ public interface BreedMapper {
 
 	List<StandardList> SelectBreedStandard(@Param("breed_id") int breed_id);
 
+	List<StandardList> SelectBreedStandard2(@Param("breed_id") int breed_id);
+
 	int deleteStandards(@Param("breed_id") String breed_id);
 
 	int UpdateBreed(@Param("breed_id") int breed_id, @Param("detail_id") int detail_id, @Param("standard") String standard);

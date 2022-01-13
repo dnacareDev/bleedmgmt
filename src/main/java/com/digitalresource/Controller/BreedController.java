@@ -325,7 +325,7 @@ public class BreedController {
   @ResponseBody
   @RequestMapping("selectBreedStandard")
   public List<StandardList> SelectBreedStandard(@RequestParam("breed_id") int breed_id) {
-    List<StandardList> result = breedService.SelectBreedStandard(breed_id);
+    List<StandardList> result = breedService.SelectBreedStandard2(breed_id);
 
     return result;
   }
