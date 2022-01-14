@@ -629,7 +629,8 @@
             background-color: #FCFCFC;
         }
 
-        #breedGrid .tui-grid-body-area td[data-column-name='status'], #breedGrid .tui-grid-body-area td[data-column-name='file'] {
+        #breedGrid .tui-grid-body-area td[data-column-name='status'], #breedGrid .tui-grid-body-area td[data-column-name='file'],
+        #breedGrid .tui-grid-body-area td[data-column-name*='img'], #breedGrid .tui-grid-body-area td[data-column-name*='doc'] {
             cursor: pointer;
         }
 
@@ -878,7 +879,7 @@
                     <div class="card">
                         <div class="card-extra mt-20 mr-20">
                             <div class="breadcrumb-main" style="float: left;">
-                                <h4 class="text-capitalize breadcrumb-title manage" th:text="${type}"></h4>
+                                <h4 class="text-capitalize breadcrumb-title manage" id="title" th:text="${type}"></h4>
                                 <input type="hidden" id="user_type" th:value="${user.user_type}">
                             </div>
                             <div class="action-btn d-flex justify-content-end">
@@ -904,7 +905,8 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" id="resource_id" th:value="${resource_id}"></input>
+                        <input type="hidden" id="resource_id" th:value="${resource_id}">
+                        <input type="hidden" id="resource_name" th:value="${type}">
                         <div class='card-extra mt-10 mb-10 mr-20 plus_btn_submit1'>
                             <button type='button' id="cancelRow" onclick="cancelRow()">취소</button>
                             <button type='button' id="saveRow" onclick="saveRow()">저장</button>
@@ -1014,6 +1016,10 @@
                     </div>
                     <div class="modal-footer" style="border: none">
                         <input type="hidden" id="upload_id" name="breed_id">
+                        <input type="hidden" id="file_type" name="file_type">
+                        <input type="hidden" id="type" name="type" th:value="${type}">
+                        <input type="hidden" id="resource" name="resource_id" th:value="${resource_id}">
+                        <input type="hidden" id="crop_id" name="crop_id" th:value="${crop_id}">
                         <button type="button" class="btn btn-secondary btn-sm" onclick="dataToggle('#insert_file', '#breed_file')">취소</button>
                         <button type="button" class="btn btn-primary btn-sm" onclick="InsertFile()">저장</button>
                     </div>
@@ -1069,6 +1075,9 @@
                     </div>
                     <div class="modal-footer" style="border: none">
                         <input type="hidden" id="breed_file_id" name="breed_file_id">
+                        <input type="hidden" id="type" name="type" th:value="${type}">
+                        <input type="hidden" id="resource" name="resource_id" th:value="${resource_id}">
+                        <input type="hidden" id="crop_id" name="crop_id" th:value="${crop_id}">
                         <button type="button" class="btn btn-secondary btn-sm" onclick="dataToggle('#modify_file', '#breed_file')">취소</button>
                         <button type="submit" class="btn btn-primary btn-sm" onclick="modifyFile()">수정</button>
                     </div>
@@ -1088,7 +1097,7 @@
                         <input type="hidden" id="resource_id_re" name="resource_id_re">
                         <input type="hidden" id="crop_id_re" name="crop_id_re">
                     </div>
-                    <div class="modal-body"  style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
+                    <div class="modal-body" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
                         <div class="tab-pane fade show active" id="control1" role="tabpanel" aria-labelledby="control1-tab">
                             <div class="tab-slide-content">
                                 <div class="atbd-tab tab-horizontal">
@@ -1352,7 +1361,7 @@
                     <div class="form-group mb-0" style="justify-content:end">
                         <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none"
                                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-                        <button onclick="filesFunction()" class="btn btn-primary btn-sm">불러오기</button>
+                        <!--<button onclick="filesFunction()" class="btn btn-primary btn-sm">불러오기</button>-->
                         <input type="file" name="" id="file_data_upload" style="display: none;">
                     </div>
                     <div>
@@ -1371,7 +1380,7 @@
                 </div>
                 <div class="modal-footer" style="border: none">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2');">취소</button>
-                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2'); InsertExcel();">등록</button>
+                    <!--<button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2'); InsertExcel();">등록</button>-->
                 </div>
             </div>
         </div>
@@ -1499,16 +1508,16 @@
     }
 
     /* s : localstorage 저장 예제 */
-    function setLocalS(key, value) {
-        localStorage.setItem(key, value);
+    function setSessionS(key, value) {
+        sessionStorage.setItem(key, value);
     }
 
-    function getLocalS(key, useRemove) {
+    function getSessionS(key, useRemove) {
         let result = "";
-        if (localStorage.getItem(key) !== null) {
-            result = localStorage.getItem(key);
+        if (sessionStorage.getItem(key) !== null) {
+            result = sessionStorage.getItem(key);
             if (useRemove) {
-                removeLocalS(key);
+                removeSessionS(key);
             }
             return result;
         } else {
@@ -1517,8 +1526,8 @@
         }
     }
 
-    function removeLocalS(key) {
-        localStorage.removeItem(key);
+    function removeSessionS(key) {
+        sessionStorage.removeItem(key);
     }
 
     /* e : localstorage 저장 예제 */
@@ -1722,6 +1731,7 @@
                             $(this).children().eq(0).prop("active", false);
                         }
                     });
+
                     $("#grid2 .display_list .list-group li").click(function (e) {
                         $(this).toggleClass("active");
                         if ($(this).hasClass("checked") == true) {
@@ -1730,6 +1740,25 @@
                             $(this).children().eq(0).prop("active", false);
                         }
                     });
+
+                    // 붙여줌
+                    //selectorCheck = document.querySelectorAll("input[type=checkbox][name=mis_research]");
+                    selectorCheck = document.querySelectorAll(".detail_list li");
+                    selectorCheck = Array.prototype.slice.call(selectorCheck);
+
+                    selectorCheck2 = document.querySelectorAll(".display_list li");
+                    selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
+
+                    window.addEventListener("keydown", onKeyWindow);
+                    window.addEventListener("keyup", onKeyWindow);
+
+                    for (var t = 0; t < selectorCheck.length; t++) {
+                        selectorCheck[t].addEventListener("click", onSectionSelector);
+                    }
+
+                    for (var g = 0; g < selectorCheck2.length; g++) {
+                        selectorCheck2[g].addEventListener("click", offSectionSelector);
+                    }
                 }
             });
 
@@ -1749,6 +1778,8 @@
     }
 
     // 특성상태 버튼
+    let wideBreedId = 0;
+
     function EmptyBtn(e) {
         $("#display_title").text($(".titleType")[0].innerText + " > " + $("#CropSelect")[0].innerText);
         $("#display_name").val($("#CropSelect")[0].innerText);
@@ -1757,6 +1788,7 @@
         $("#grid3").modal("show");
 
         var data = {"breed_id": e};
+        wideBreedId = e;
 
         $.ajax(
             {
@@ -1774,14 +1806,47 @@
             });
     }
 
-    function UpdateAllBtn() {
-        $("#updateAllForm").submit();
+    /* s : input text 변경 이벤트 */
+    let wideUpdateValue = [];
+
+    function updateData(e) {
+        let stan_value = e.value;
+        let detail_id = e.name;
+        let breed_id = wideBreedId;
+
+        wideUpdateValue.push({"breed_id": breed_id, "detail_id": detail_id, "standard": stan_value});
     }
+
+    /* s : 특성상태 데이터 수정 버튼 */
+    function UpdateAllBtn() {
+        $.ajax(
+            {
+                url: 'updateBreed',
+                method: 'POST',
+                dataType: 'json',
+                data: {"data": JSON.stringify(wideUpdateValue)},
+                success: function (result) {
+                    if (result == 0) {
+                        return Alert("수정에 실패하였습니다.")
+                    } else {
+                        location.reload();
+                    }
+                }
+            });
+    }
+
+    /* e : 특성상태 데이터 수정 버튼 */
+
+    $(".empty_list").change(function (e) {
+        console.log("event : ", e);
+    })
+    /* e : input text 변경 이벤트 */
+
+    let type = $("#title").text();
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        removeLocalS("breed_crop");
-        $("#CropSelect").val(getLocalS("breed_crop"));
+        $("#CropSelect").val(getSessionS(type));
 
         SearchBreed(1);
         SearchBreedgrid(1);
@@ -1793,9 +1858,7 @@
 
         SearchBreed(1);
         SearchBreedgrid(1);
-        setLocalS("breed_crop", $("#CropSelect").val());
-
-        console.log($("#CropSelect"));
+        setSessionS(type, $("#CropSelect").val());
     })
 
     // 갯수 선택
@@ -1862,7 +1925,7 @@
     function onKeyWindow(e) {
         if (e.type === "keydown") {
             if (e.keyCode === 16 && selectorOnce) {
-                console.log(e.keyCode)
+                console.log(e.keyCode);
                 keyShiftBool = true;
                 selectorOnce = false;
             }
@@ -1882,10 +1945,10 @@
 
         var getList = document.querySelectorAll("#display_container" + (indexTab + 1) + " li");
         getList = Array.prototype.slice.call(getList);
-        console.log(getList)
+        console.log('onSection getList : ', getList)
         var target = e.currentTarget;
         var index = getList.indexOf(target);
-        console.log(index)
+        console.log('onSection index : ', index)
 
         if (keyShiftBool) {
             getList[index].classList.add("active");
@@ -1917,10 +1980,11 @@
 
         var getList = document.querySelectorAll("#step_container" + (indexTab + 1) + " li");
         getList = Array.prototype.slice.call(getList);
-        console.log(getList)
+        console.log('offSection getList : ', getList)
+
         var target = e.currentTarget;
         var index = getList.indexOf(target);
-        console.log(index)
+        console.log('offSection getList : ', getList)
 
         if (keyShiftBool) {
             getList[index].classList.add("active");
@@ -1941,11 +2005,9 @@
             }
         }
     }
+
     /* e : 구간 체크박스 선택 */
 
-    /*
-    {detail_id: ,detail_name:}
-    */
     /* 헤더 선택 */
     function PlusResearch(e) {
         var step_container = $("#step_container" + e);
@@ -1964,9 +2026,9 @@
             var matchIndex = all_list.indexOf(checked_list[i]);
             if (e == 1) {
                 whichSelect.push(leftList_one[matchIndex].detail_id);
-            } else if(e == 2) {
+            } else if (e == 2) {
                 whichSelect.push(leftList_two[matchIndex].detail_id);
-            } else if(e == 3) {
+            } else if (e == 3) {
                 whichSelect.push(leftList_three[matchIndex].detail_id);
             }
 
@@ -1988,8 +2050,8 @@
                 }
             }
             rightList_one.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_one));
-            step_container.html(createList1(rightList_one));
+            display_container.html(createList1(leftList_one));
+            step_container.html(createList(rightList_one));
         } else if (e == 2) {
             for (var i = 0; i < leftList_two.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
@@ -2000,8 +2062,8 @@
                 }
             }
             rightList_two.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_two));
-            step_container.html(createList1(rightList_two));
+            display_container.html(createList1(leftList_two));
+            step_container.html(createList(rightList_two));
         } else if (e == 3) {
             for (var i = 0; i < leftList_three.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
@@ -2012,8 +2074,8 @@
                 }
             }
             rightList_three.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_three));
-            step_container.html(createList1(rightList_three));
+            display_container.html(createList1(leftList_three));
+            step_container.html(createList(rightList_three));
         }
 
         CheckFunction();
@@ -2039,9 +2101,9 @@
             var matchIndex = all_list.indexOf(checked_list[i]);
             if (e == 1) {
                 whichSelect.push(rightList_one[matchIndex].detail_id);
-            } else if(e == 2) {
+            } else if (e == 2) {
                 whichSelect.push(rightList_two[matchIndex].detail_id);
-            } else if(e == 3) {
+            } else if (e == 3) {
                 whichSelect.push(rightList_three[matchIndex].detail_id);
             }
 
@@ -2063,8 +2125,8 @@
                 }
             }
             leftList_one.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_one));
-            step_container.html(createList1(rightList_one));
+            display_container.html(createList1(leftList_one));
+            step_container.html(createList(rightList_one));
         } else if (e == 2) {
             for (var i = 0; i < rightList_two.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
@@ -2074,8 +2136,8 @@
                 }
             }
             leftList_two.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_two));
-            step_container.html(createList1(rightList_two));
+            display_container.html(createList1(leftList_two));
+            step_container.html(createList(rightList_two));
         } else if (e == 3) {
             for (var i = 0; i < rightList_three.length; i++) {
                 for (var t = 0; t < whichSelect.length; t++) {
@@ -2085,8 +2147,8 @@
                 }
             }
             leftList_three.sort((a, b) => a?.detail_id - b?.detail_id);
-            display_container.html(createList(leftList_three));
-            step_container.html(createList1(rightList_three));
+            display_container.html(createList1(leftList_three));
+            step_container.html(createList(rightList_three));
         }
 
         CheckFunction();
@@ -2115,40 +2177,108 @@
         }*/
     }
 
-    function FileBtn(e) {
-        $("#breed_file").modal("show");
+    function FileBtn(e, type) {
+        if (type == 'file') {
+            $("#upload_id").val(e);
+            $("#file_type").val(0);
+            $("#breed_file").modal("show");
 
-        var data = {"breed_id": e};
+            var data = {"breed_id": e, "file_type": 0};
 
-        $.ajax(
-            {
-                url: 'selectBreedFile',
-                method: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    $("#upload_id").val(e);
-                    $(".breed_title").text("시교명 : " + result.breed.standard);
+            $.ajax(
+                {
+                    url: 'selectBreedFile',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        var file_list = $("#file_list");
+                        var file_add = "";
 
-                    var file_list = $("#file_list");
-                    var file_add = "";
+                        for (var i = 0; i < result.breed_file.length; i++) {
+                            var file = JSON.stringify(result.breed_file[i]);
+                            var file_json = file.replace(/\"/g, "&quot;");
 
-                    for (var i = 0; i < result.breed_file.length; i++) {
-                        var file = JSON.stringify(result.breed_file[i]);
-                        var file_json = file.replace(/\"/g, "&quot;");
+                            file_add += '<tr>';
+                            file_add += '<td>' + (i + 1) + '</td>';
+                            file_add += '<td><button onclick="ModifyBtn(' + result.breed_file[i].breed_file_id + ')" style="border:0px; color:blue; background: white;">' + result.breed_file[i].breed_file_title + '</button></td>';
+                            file_add += '<td>' + result.breed_file[i].create_date + '</td>';
+                            file_add += '<td><input type="hidden" id="file_' + result.breed_file[i].breed_file_id + '" value="' + file.replace(/\"/g, "&quot;") + '"></td>';
+                            file_add += '</tr>';
+                        }
 
-                        file_add += '<tr>';
-                        file_add += '<td>' + (i + 1) + '</td>';
-                        file_add += '<td><button onclick="ModifyBtn(' + result.breed_file[i].breed_file_id + ')" style="border:0px; color:blue; background: white;">' + result.breed_file[i].breed_file_title + '</button></td>';
-                        file_add += '<td>' + result.breed_file[i].create_date + '</td>';
-                        file_add += '<td><input type="hidden" id="file_' + result.breed_file[i].breed_file_id + '" value="' + file.replace(/\"/g, "&quot;") + '"></td>';
-                        file_add += '</tr>';
+                        file_list.empty();
+                        file_list.append(file_add);
                     }
+                });
+        } else if (type == 'img') {
+            $("#upload_id").val(e);
+            $("#file_type").val(1);
+            $("#breed_file").modal("show");
 
-                    file_list.empty();
-                    file_list.append(file_add);
-                }
-            });
+            var data = {"breed_id": e, "file_type": 1};
+
+            $.ajax(
+                {
+                    url: 'selectBreedFile',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        var file_list = $("#file_list");
+                        var file_add = "";
+
+                        for (var i = 0; i < result.breed_file.length; i++) {
+                            var file = JSON.stringify(result.breed_file[i]);
+                            var file_json = file.replace(/\"/g, "&quot;");
+
+                            file_add += '<tr>';
+                            file_add += '<td>' + (i + 1) + '</td>';
+                            file_add += '<td><button onclick="ModifyBtn(' + result.breed_file[i].breed_file_id + ')" style="border:0px; color:blue; background: white;">' + result.breed_file[i].breed_file_title + '</button></td>';
+                            file_add += '<td>' + result.breed_file[i].create_date + '</td>';
+                            file_add += '<td><input type="hidden" id="file_' + result.breed_file[i].breed_file_id + '" value="' + file.replace(/\"/g, "&quot;") + '"></td>';
+                            file_add += '</tr>';
+                        }
+
+                        file_list.empty();
+                        file_list.append(file_add);
+                    }
+                });
+        } else if (type == 'doc') {
+            $("#upload_id").val(e);
+            $("#file_type").val(2);
+            $("#breed_file").modal("show");
+
+            var data = {"breed_id": e, "file_type": 2};
+
+            $.ajax(
+                {
+                    url: 'selectBreedFile',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        var file_list = $("#file_list");
+                        var file_add = "";
+
+                        for (var i = 0; i < result.breed_file.length; i++) {
+                            var file = JSON.stringify(result.breed_file[i]);
+                            var file_json = file.replace(/\"/g, "&quot;");
+
+                            file_add += '<tr>';
+                            file_add += '<td>' + (i + 1) + '</td>';
+                            file_add += '<td><button onclick="ModifyBtn(' + result.breed_file[i].breed_file_id + ')" style="border:0px; color:blue; background: white;">' + result.breed_file[i].breed_file_title + '</button></td>';
+                            file_add += '<td>' + result.breed_file[i].create_date + '</td>';
+                            file_add += '<td><input type="hidden" id="file_' + result.breed_file[i].breed_file_id + '" value="' + file.replace(/\"/g, "&quot;") + '"></td>';
+                            file_add += '</tr>';
+                        }
+
+                        file_list.empty();
+                        file_list.append(file_add);
+                    }
+                });
+        }
+
     }
 
     function InsertFileBtn() {
@@ -2298,7 +2428,6 @@
     }
 
     var breedgrid = null;
-    var gridDataArray = null;
     let updateBreedData = [];
 
     function SearchBreedgrid(e) {
@@ -2307,6 +2436,7 @@
         var limit = $("#limit").val();
 
         var data = {"crop_id": crop_id, "resource_name": resource_name};
+
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2345,10 +2475,9 @@
 
                     for (let i = 0; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
-                        // var colName = i + 1;
                         var colName = result.detail[i].detail_id;
 
-                        headerName[i] = result.detail[i].detail_id;
+                        headerName[colName] = result.detail[i].detail_id;
 
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
@@ -2358,9 +2487,11 @@
                             arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
-                                arr = {'header': colHeader, 'name': 'img', 'width': 100}
+                                arr = {'header': colHeader, 'name': 'img' + colName, 'width': 100, 'info': 'img'};
+                                headerName[i] = 'img' + colName;
                             } else if (result.detail[i].detail_type == 1) {
-                                arr = {'header': colHeader, 'name': 'doc', 'width': 100}
+                                arr = {'header': colHeader, 'name': 'doc' + colName, 'width': 100, 'info': 'doc'};
+                                headerName[i] = 'doc' + colName;
                             }
                         } else if (result.detail[i].detail_info == 4) {
                             continue;
@@ -2373,59 +2504,14 @@
 
                     breedgrid.setColumns(headerArr);
 
-                    gridDataArray = result.standardList;
+                    const dataList = [];
 
-                    // breedgrid.on('beforeChange', ev => {
-                    //     if (ev.origin != "cell" && ev.origin != "paste")
-                    //         return;
-                    //
-                    //     try {
-                    //         for (var i = 0; i < ev.changes.length; i++) {
-                    //             let changeItem = ev.changes[i];
-                    //
-                    //             let list = gridDataArray[changeItem.rowKey];
-                    //
-                    //             let count = 0;
-                    //             let standard = {};
-                    //
-                    //             for (var key in list) {
-                    //                 if (count++ == parseInt(changeItem.columnName)) {
-                    //                     standard = list[key];
-                    //                     break;
-                    //                 }
-                    //             }
-                    //
-                    //             var data = {"standard_id": standard.standard_id, "standard_data": changeItem.nextValue};
-                    //             $.ajax({
-                    //                 url: 'updateStandardCell',
-                    //                 method: 'POST',
-                    //                 dataType: 'json',
-                    //                 data: data,
-                    //                 success: function (result) {
-                    //                     if (result == 0) {
-                    //                         return Alert("수정에 실패하였습니다.")
-                    //                     }
-                    //                 }
-                    //             });
-                    //         }
-                    //     } catch (e) {
-                    //
-                    //     }
-                    // });
-
-                    let dataList = [];
-
-                    for (var i = 0; i < result.standardList.length; i++) {
-
-                        let data = result.standardList[i];
-                        let tempArray = [];
+                    for (var i = 0; i < result.breed.length; i++) {
+                        let data = result.breed[i].standardList;
+                        let tempArray = {};
 
                         tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                        tempArray['breed_id'] = result.standardList[i].breed_id;
-                        tempArray['img'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                        tempArray['doc'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-
-                        console.log(result.breed[i]);
+                        tempArray['breed_id'] = result.breed[i].breed_id;
 
                         if (result.breed[i].detail_count == 0) {
                             tempArray['status'] = '<span style="color:red">EMPTY</span>';
@@ -2433,22 +2519,28 @@
                             tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                         }
 
-                        for (var j = 0; j < headerName.length; j++) {
-                            if (data[headerName[j]] != undefined) {
-                                tempArray[headerName[j]] = data[headerName[j]].standard_data;
-                            } else {
-                                continue;
+                        for (var j = 1; j <= data.length; j++) {
+                            let rowData = data[j - 1].standard_data;
+
+                            if ((typeof headerName[j]) === 'string') {
+                                if (headerName[j].includes('img')) {
+                                    tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                                } else if (headerName[j].includes('doc')) {
+                                    tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                                }
+                            } else if ((typeof headerName[j]) === 'number') {
+                                if (headerName[j] == data[j - 1].detail_id) {
+                                    tempArray[headerName[j]] = rowData;
+                                }
                             }
                         }
+
+                        console.log('tempArray : ', tempArray);
 
                         dataList.push(tempArray);
                     }
 
                     breedgrid.resetData(dataList);
-
-                    breedgrid.on('check', (ev) => {
-                        breedgrid.getRow(ev.rowKey).breed_id;
-                    })
 
                     breedgrid.on('editingStart', (ev) => {
                         if ($(".plus_btn_submit1")[0].style.display != 'block') {
@@ -2457,12 +2549,25 @@
                     })
 
                     breedgrid.on('click', (ev) => {
-                        if (ev.targetType === 'cell' && ev.columnName === 'file') {
-                            var id = breedgrid.getRow(ev.rowKey).breed_id;
+                        console.log(ev);
+                        console.log(breedgrid.getRow(ev.rowKey));
+                    })
 
-                            FileBtn(id);
+                    breedgrid.on('click', (ev) => {
+                        if (ev.targetType === 'cell' && ev.columnName === 'file') {
+                            let id = breedgrid.getRow(ev.rowKey).breed_id;
+
+                            FileBtn(id, 'file');
+                        } else if (ev.targetType === 'cell' && ev.columnName.includes('img')) {
+                            let id = breedgrid.getRow(ev.rowKey).breed_id;
+
+                            FileBtn(id, 'img');
+                        } else if (ev.targetType === 'cell' && ev.columnName.includes('doc')) {
+                            let id = breedgrid.getRow(ev.rowKey).breed_id;
+
+                            FileBtn(id, 'doc');
                         } else if (ev.targetType === 'cell' && ev.columnName === 'status') {
-                            var e_id = breedgrid.getRow(ev.rowKey).breed_id;
+                            let e_id = breedgrid.getRow(ev.rowKey).breed_id;
 
                             EmptyBtn(e_id);
                         }
@@ -2777,13 +2882,17 @@
         }
     }
 
-    /* 엑셀 등록 창 */
-
+    /* 엑셀 확인 창 */
     function ModifyDataBtn(e) {
         let s = String(e);
         s = s.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
+        let resource_id = $('#resource_id').val();
+        let resource_name = $('#resource_name').val();
 
-        var data = {"datalist_date": s, "crop_id": $("#CropSelect").val()};
+        var data = {"datalist_date": s, "resource_name": resource_name, "resource_id": resource_id};
+
+        $("#data_upload2").modal("hide");
+        $("#data_upload3").modal("show");
 
         $.ajax(
             {
@@ -2792,9 +2901,9 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                    console.log("result : ", result);
+
                     if (result != null) {
-                        $("#data_upload2").modal("hide");
-                        $("#data_upload3").modal("show");
 
                         var header_list = $("#breedHead");
                         var header_add = "";
@@ -2806,7 +2915,7 @@
                         header_add += '<tr>';
 
                         for (var i = 0; i < result.detail.length; i++) {
-                            header_add += '<th class="breedHead">' + result.detail[i].detail_title + '</th>'
+                            header_add += '<th class="breedHead">' + result.detail[i].detail_name + '</th>'
                         }
 
                         header_add += '</tr>';
@@ -2815,7 +2924,11 @@
                             add_list += '<tr>';
 
                             for (var j = 0; j < result.breed[i].length; j++) {
-                                add_list += '<td>' + result.breed[i][j].standard + '</td>';
+                                if (result.breed[i][j].standard_data != null) {
+                                    add_list += '<td>' + result.breed[i][j].standard_data + '</td>';
+                                } else {
+                                    add_list += '<td></td>';
+                                }
                             }
 
                             add_list += '</tr>';
@@ -2956,6 +3069,7 @@
         console.log(1);
     }
 
+    /* s : 특성상태 표시 */
     function SearchBreed(e) {
         var crop_id = $("#CropSelect").val();
         var resource_name = $(".manage")[0].innerText;
@@ -2982,7 +3096,7 @@
                                 detail_add2 += '<li>';
                                 detail_add2 += '<div class="title">' + result.detailList[j].detail_name + '</div>';
                                 detail_add2 += '<div class="input_text">';
-                                detail_add2 += '<input type="text" class="empty_list" name="standard_data">';
+                                detail_add2 += '<input type="text" class="empty_list" onchange="updateData(this)" name="' + result.detailList[j].detail_id + '">';
                                 detail_add2 += '<input type="hidden" name="detail_id" value="' + result.detailList[j].detail_id + '"></div>';
                                 detail_add2 += '</div>';
                                 detail_add2 += '</li>';
@@ -2999,6 +3113,8 @@
 
             });
     }
+
+    /* e : 특성상태 표시 */
 </script>
 </body>
 </html>

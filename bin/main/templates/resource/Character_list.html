@@ -1237,17 +1237,19 @@
 
                     traitGrid.on('click', (ev) => {
                         if (ev.targetType === 'cell' && ev.columnName === 'trait_file') {
-                            var value = ev.nativeEvent.srcElement;
+                            let value = ev.nativeEvent.srcElement;
                             let fileName = value.dataset.value;
 
                             if (fileName == 'null' || fileName == undefined) {
                                 return Alert1("파일이 존재하지 않습니다.")
                             } else {
+
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
                                 a.href = '/upload?filename=' + value.dataset.value;
                                 document.body.appendChild(a);
                                 a.click();
+
                             }
                         }
                     });
