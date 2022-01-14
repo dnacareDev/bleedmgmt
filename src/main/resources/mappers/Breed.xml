@@ -95,7 +95,7 @@
         SELECT *
         FROM breed_file bf
                  LEFT JOIN uploads u ON bf.breed_file_id = u.breed_file_id
-        WHERE bf.breed_id = #{breed_id}
+        WHERE bf.breed_id = #{breed_id} AND bf.file_type = #{file_type}
     </select>
 
     <!-- 첨부파일 내용 등록 -->

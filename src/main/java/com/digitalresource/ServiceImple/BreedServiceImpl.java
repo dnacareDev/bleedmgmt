@@ -159,8 +159,8 @@ public class BreedServiceImpl implements BreedService {
   }
 
   @Override
-  public List<BreedFile> SelectBreedFile(int breed_id) {
-    return breedMapper.SelectBreedFile(breed_id);
+  public List<BreedFile> SelectBreedFile(int breed_id, int file_type) {
+    return breedMapper.SelectBreedFile(breed_id, file_type);
   }
 
   @Override

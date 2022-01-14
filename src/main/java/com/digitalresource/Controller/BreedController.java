@@ -122,10 +122,10 @@ public class BreedController {
   // 첨부 파일 조회
   @ResponseBody
   @RequestMapping("selectBreedFile")
-  public Map<String, Object> SelectBreedFile(@RequestParam("breed_id") int breed_id) {
+  public Map<String, Object> SelectBreedFile(@RequestParam("breed_id") int breed_id, @RequestParam("file_type") int file_type) {
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-    List<BreedFile> breed_file = breedService.SelectBreedFile(breed_id);
+    List<BreedFile> breed_file = breedService.SelectBreedFile(breed_id, file_type);
 
     result.put("breed_file", breed_file);
 

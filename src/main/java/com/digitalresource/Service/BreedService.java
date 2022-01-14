@@ -26,7 +26,7 @@ public interface BreedService {
 	int InsertBreedFile(BreedFile breed_file);
 
 	// 첨부파일 목록 조회
-	List<BreedFile> SelectBreedFile(int breed_id);
+	List<BreedFile> SelectBreedFile(int breed_id, int file_type);
 
 	// 첨부파일 내용 수정
 	int UpdateBreedFile(BreedFile breed_file);

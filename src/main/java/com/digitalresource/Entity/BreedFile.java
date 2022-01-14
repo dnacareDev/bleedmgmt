@@ -12,6 +12,7 @@ import org.apache.ibatis.type.Alias;
 public class BreedFile {
   private int breed_file_id;
   private Integer breed_id;
+  private int file_type;
   private String breed_file_title;
   private String breed_file_contents;
   private String create_date;
