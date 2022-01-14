@@ -1015,6 +1015,7 @@
                     </div>
                     <div class="modal-footer" style="border: none">
                         <input type="hidden" id="upload_id" name="breed_id">
+                        <input type="hidden" id="file_type" name="file_type" value="0">
                         <input type="hidden" id="type" name="type" th:value="${type}">
                         <input type="hidden" id="resource" name="resource_id" th:value="${resource_id}">
                         <input type="hidden" id="crop_id" name="crop_id" th:value="${crop_id}">
@@ -1506,16 +1507,16 @@
     }
 
     /* s : localstorage 저장 예제 */
-    function setLocalS(key, value) {
-        localStorage.setItem(key, value);
+    function setSessionS(key, value) {
+        sessionStorage.setItem(key, value);
     }
 
-    function getLocalS(key, useRemove) {
+    function getSessionS(key, useRemove) {
         let result = "";
-        if (localStorage.getItem(key) !== null) {
-            result = localStorage.getItem(key);
+        if (sessionStorage.getItem(key) !== null) {
+            result = sessionStorage.getItem(key);
             if (useRemove) {
-                removeLocalS(key);
+                removeSessionS(key);
             }
             return result;
         } else {
@@ -1524,8 +1525,8 @@
         }
     }
 
-    function removeLocalS(key) {
-        localStorage.removeItem(key);
+    function removeSessionS(key) {
+        sessionStorage.removeItem(key);
     }
 
     /* e : localstorage 저장 예제 */
@@ -1823,7 +1824,7 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        $("#CropSelect").val(getLocalS(type));
+        $("#CropSelect").val(getSessionS(type));
 
         SearchBreed(1);
         SearchBreedgrid(1);
@@ -1835,7 +1836,7 @@
 
         SearchBreed(1);
         SearchBreedgrid(1);
-        setLocalS(type, $("#CropSelect").val());
+        setSessionS(type, $("#CropSelect").val());
     })
 
     // 갯수 선택

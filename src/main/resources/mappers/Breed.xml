@@ -101,9 +101,9 @@
     <!-- 첨부파일 내용 등록 -->
     <insert id="InsertBreedFile" parameterType="BreedFile">
         INSERT INTO breed_file
-        (breed_id, breed_file_title, breed_file_contents, create_date, modify_date)
+        (breed_id, file_type, breed_file_title, breed_file_contents, create_date, modify_date)
         VALUES
-        (#{breed_id}, #{breed_file_title}, #{breed_file_contents}, NOW(), NOW())
+        (#{breed_id}, #{file_type}, #{breed_file_title}, #{breed_file_contents}, NOW(), NOW())
         <selectKey resultType="int" keyProperty="breed_file_id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
