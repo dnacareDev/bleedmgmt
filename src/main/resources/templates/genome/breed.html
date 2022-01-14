@@ -2437,8 +2437,6 @@
 
         var data = {"crop_id": crop_id, "resource_name": resource_name};
 
-        console.log(data);
-
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2479,7 +2477,7 @@
                         var colHeader = result.detail[i].detail_name;
                         var colName = result.detail[i].detail_id;
 
-                        headerName[i] = result.detail[i].detail_id;
+                        headerName[colName] = result.detail[i].detail_id;
 
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
@@ -2509,7 +2507,6 @@
                     const dataList = [];
 
                     for (var i = 0; i < result.breed.length; i++) {
-
                         let data = result.breed[i].standardList;
                         let tempArray = {};
 
@@ -2522,8 +2519,8 @@
                             tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                         }
 
-                        for (var j = 0; j < data.length; j++) {
-                            let rowData = data[j].standard_data;
+                        for (var j = 1; j <= data.length; j++) {
+                            let rowData = data[j - 1].standard_data;
 
                             if ((typeof headerName[j]) === 'string') {
                                 if (headerName[j].includes('img')) {
@@ -2532,14 +2529,13 @@
                                     tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                                 }
                             } else if ((typeof headerName[j]) === 'number') {
-                                if (headerName[j] == data[j].detail_id) {
+                                if (headerName[j] == data[j - 1].detail_id) {
                                     tempArray[headerName[j]] = rowData;
-                                } else if (headerName[j + 1] == data[j].detail_id) {
-                                    tempArray[headerName[j + 1]] = rowData;
                                 }
                             }
-
                         }
+
+                        console.log('tempArray : ', tempArray);
 
                         dataList.push(tempArray);
                     }
@@ -2550,6 +2546,11 @@
                         if ($(".plus_btn_submit1")[0].style.display != 'block') {
                             $(".plus_btn_submit2").css("display", "block");
                         }
+                    })
+
+                    breedgrid.on('click', (ev) => {
+                        console.log(ev);
+                        console.log(breedgrid.getRow(ev.rowKey));
                     })
 
                     breedgrid.on('click', (ev) => {
