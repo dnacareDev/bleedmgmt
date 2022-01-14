@@ -2488,10 +2488,10 @@
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
                                 arr = {'header': colHeader, 'name': 'img' + colName, 'width': 100, 'info': 'img'};
-                                headerName[i] = 'img' + colName;
+                                headerName[colName] = 'img' + colName;
                             } else if (result.detail[i].detail_type == 1) {
                                 arr = {'header': colHeader, 'name': 'doc' + colName, 'width': 100, 'info': 'doc'};
-                                headerName[i] = 'doc' + colName;
+                                headerName[colName] = 'doc' + colName;
                             }
                         } else if (result.detail[i].detail_info == 4) {
                             continue;
@@ -2519,23 +2519,27 @@
                             tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                         }
 
-                        for (var j = 1; j <= data.length; j++) {
+                        for (var j = 1; j < headerName.length; j++) {
                             let rowData = data[j - 1].standard_data;
 
                             if ((typeof headerName[j]) === 'string') {
+                                console.log(headerName[j]);
+                                console.log('string');
+                                console.log(rowData);
                                 if (headerName[j].includes('img')) {
                                     tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                                 } else if (headerName[j].includes('doc')) {
                                     tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                                 }
                             } else if ((typeof headerName[j]) === 'number') {
-                                if (headerName[j] == data[j - 1].detail_id) {
+                                console.log(headerName[j]);
+                                console.log('number');
+                                console.log(rowData);
+                                if (headerName[j] == data[j].detail_id) {
                                     tempArray[headerName[j]] = rowData;
                                 }
                             }
                         }
-
-                        console.log('tempArray : ', tempArray);
 
                         dataList.push(tempArray);
                     }
