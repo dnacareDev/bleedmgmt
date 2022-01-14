@@ -1288,8 +1288,7 @@
                             let value = ev.nativeEvent.srcElement;
                             let fileName = value.dataset.value;
                             if (fileName == 'null' || fileName == undefined) {
-                                Alert1("파일이 존재하지 않습니다.")
-                               	return;
+                                return Alert1("파일이 존재하지 않습니다.")
                             } else {
                             	
                                 let a = document.createElement('a');
