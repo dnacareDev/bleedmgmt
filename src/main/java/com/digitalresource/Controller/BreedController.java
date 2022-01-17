@@ -92,7 +92,6 @@ public class BreedController {
 
     result.put("breed", breed);
     result.put("detail", details);
-
 //    Gson gson = new Gson();
 //    String jsonString = gson.toJson(result.get("standardList"));
 //

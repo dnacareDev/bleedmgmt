@@ -41,6 +41,7 @@ public class BreedServiceImpl implements BreedService {
     String changeI = "";
     int cnt = 0;
     for (int i = countDetail.getMin(); i <= countDetail.getMax(); i++) {
+      System.out.println("i : " + i);
       if (arrMin != arrLength) {
         JSONObject jsonObject = arr.getJSONObject(arrMin);
         changeI = Integer.toString(i);

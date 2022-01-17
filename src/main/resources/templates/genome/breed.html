@@ -2442,11 +2442,11 @@
                         }
                     ];
 
-                    var headerName = [];
+                    let headerName = [];
                     let colName = [];
 
                     for (let i = 0; i < result.detail.length; i++) {
-                        var colHeader = result.detail[i].detail_name;
+                        let colHeader = result.detail[i].detail_name;
                         colName[i] = result.detail[i].detail_id;
 
                         headerName[colName[i]] = result.detail[i].detail_id;
@@ -2478,7 +2478,7 @@
 
                     const dataList = [];
 
-                    for (var i = 0; i < result.breed.length; i++) {
+                    for (let i = 0; i < result.breed.length; i++) {
                         let data = result.breed[i].standardList;
                         let tempArray = {};
 
@@ -2491,18 +2491,20 @@
                             tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                         }
 
-                        for (var j = 1; j < headerName.length; j++) {
-                            let rowData = data[j - 1].standard_data;
+                        for (let j = 1; j < headerName.length; j++) {
+                            console.log('colName : ', colName[j - 1]);
 
-                            if ((typeof headerName[j]) === 'string') {
-                                if (headerName[j].includes('img')) {
-                                    tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                                } else if (headerName[j].includes('doc')) {
-                                    tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                                }
+                            if ((typeof headerName[colName[j - 1]]) === 'string') {
+                                console.log('headerName : ',headerName[colName[j - 1]]);
+                                console.log('detail_id : ', data[j - 1].detail_id);
+
+                                tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                             } else if ((typeof headerName[colName[j - 1]]) === 'number') {
+                                console.log('headerName : ',headerName[colName[j - 1]]);
+                                console.log('detail_id : ', data[j - 1].detail_id);
+
                                 if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
-                                    tempArray[headerName[colName[j - 1]]] = rowData;
+                                    tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
                                 }
                             }
                         }
@@ -2582,7 +2584,7 @@
 
             var cnt = breedgrid.getRowCount();
 
-            const newRow = {'breed_id': null, '1': $("#CropSelect").val()};
+            const newRow = {'breed_id': null};
 
             breedgrid.prependRow(newRow);
             breedgrid.check(cnt);
@@ -2618,7 +2620,6 @@
                     if (result == 0) {
                         return Alert("저장에 실패하였습니다.");
                     } else {
-
                         window.location.href = "/breed?type=[[${type}]]&id=[[${resource_id}]]&crop_id=" + crop_id;
                         // location.reload();
                     }
