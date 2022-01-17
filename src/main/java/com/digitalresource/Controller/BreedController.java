@@ -330,7 +330,7 @@ public class BreedController {
       }
     }
 
-    List<Integer> breed_id = datalistService.SelectTarget(obj.getString("datalist_date"), obj.getString("resource_name"));
+    List<Integer> breed_id = datalistService.SelectTarget(obj.getString("datalist_date"), obj.getString("resource_name"), resource_id);
     List<Breed> breed = breedService.SearchBreed3(resource_id);
 
     for (int i = 0; i < breed.size(); i++) {
@@ -366,13 +366,13 @@ public class BreedController {
 
     User user = (User) auth.getPrincipal();
 
-    List<Integer> breed_id = datalistService.SelectTarget(datalist_date, resource_name);
+    List<Integer> breed_id = datalistService.SelectTarget(datalist_date, resource_name, resource_id);
     List<Detail> detail = breedService.SelectDetailExcel(resource_id);
 
     Map<Integer, Object> Breed = new LinkedHashMap<Integer, Object>();
 
     for (int i = 0; i < breed_id.size(); i++) {
-      Breed.put(i, breedService.SelectBreedStandard(breed_id.get(i)));
+      Breed.put(i, breedService.SelectBreedStandard2(breed_id.get(i)));
     }
 
     result.put("breed", Breed);

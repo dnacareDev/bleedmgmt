@@ -13,7 +13,7 @@ public interface DataListService {
 
   List<Map<String, String>> SelectDateGroup(int resource_id, String datalist_type);
 
-  List<Integer> SelectTarget(String datalist_date, String resource_name);
+  List<Integer> SelectTarget(String datalist_date, String resource_name, int resource_id);
 
   int SelectTargetCount(String datalist_date);
 

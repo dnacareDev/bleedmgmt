@@ -31,8 +31,8 @@ public class DataListServiceImpl implements DataListService {
   }
 
   @Override
-  public  List<Integer> SelectTarget(String datalist_date, String resource_name) {
-    return mapper.SelectTarget(datalist_date, resource_name);
+  public  List<Integer> SelectTarget(String datalist_date, String resource_name, int resource_id) {
+    return mapper.SelectTarget(datalist_date, resource_name, resource_id);
   }
 
   @Override

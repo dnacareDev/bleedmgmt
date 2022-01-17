@@ -17,7 +17,7 @@ public interface DataListMapper {
 
   List<Map<String, String>> SelectDateGroup(@Param("resource_id") int resource_id, @Param("resource_name") String datalist_type);
 
-  List<Integer> SelectTarget(@Param("datalist_date") String datalist_date, @Param("resource_name") String resource_name);
+  List<Integer> SelectTarget(@Param("datalist_date") String datalist_date, @Param("resource_name") String resource_name, @Param("resource_id") int resource_id);
 
   int SelectTargetCount(@Param("datalist_date") String datalist_date);
 
