@@ -220,6 +220,12 @@
           AND resource_id = #{resource_id}
     </select>
 
+    <select id="SelectDetailExcel2" parameterType="int" resultType="Detail">
+        SELECT *
+        FROM detail
+        WHERE resource_id = #{resource_id}
+    </select>
+
     <insert id="InsertExcel" parameterType="java.util.ArrayList">
         INSERT INTO standard
         (breed_id, detail_id, standard_data)

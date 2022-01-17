@@ -256,7 +256,7 @@ public class BreedController {
 //			int breed_result = breedService.insertBreed(resource_id, data, crop_id, resource_name);
       int breed_result = breedService.InsertBreed(breed);
 
-      List<Detail> detail = breedService.SelectDetailExcel(resource_id);
+      List<Detail> detail = breedService.SelectDetailExcel2(resource_id);
 
       for (int j = 0; j < detail.size(); j++) {
         StandardList standard = new StandardList();
@@ -277,9 +277,9 @@ public class BreedController {
       }
     }
 
-    breedService.InsertExcel(standards);
+    int result = breedService.InsertExcel(standards);
 
-    return 1;
+    return result;
   }
 
   @ResponseBody

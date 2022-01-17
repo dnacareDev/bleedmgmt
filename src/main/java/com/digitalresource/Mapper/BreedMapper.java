@@ -51,6 +51,8 @@ public interface BreedMapper {
 
 	List<Detail> SelectDetailExcel(@Param("resource_id") int resource_id);
 
+	List<Detail> SelectDetailExcel2(@Param("resource_id") int resource_id);
+
 	int InsertExcel(List<StandardList> standards);
 
 	List<StandardList> SelectBreedStandard(@Param("breed_id") int breed_id);

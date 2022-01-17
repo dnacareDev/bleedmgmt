@@ -46,6 +46,8 @@ public interface BreedService {
 
 	List<Detail> SelectDetailExcel(int resource_id);
 
+	List<Detail> SelectDetailExcel2(int resource_id);
+
 	int InsertExcel(List<StandardList> standards);
 
   List<StandardList> SelectBreedStandard(int breed_id);
