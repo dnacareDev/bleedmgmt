@@ -26,8 +26,8 @@ public class DataListServiceImpl implements DataListService {
   }
 
   @Override
-  public List<Map<String, String>> SelectDateGroup(String datalist_type) {
-    return mapper.SelectDateGroup(datalist_type);
+  public List<Map<String, String>> SelectDateGroup(int resource_id, String datalist_type) {
+    return mapper.SelectDateGroup(resource_id, datalist_type);
   }
 
   @Override
@@ -38,5 +38,10 @@ public class DataListServiceImpl implements DataListService {
   @Override
   public int SelectTargetCount(String datalist_date) {
     return mapper.SelectTargetCount(datalist_date);
+  }
+
+  @Override
+  public int DeleteList(int[] breed_id) {
+    return mapper.DeleteList(breed_id);
   }
 }

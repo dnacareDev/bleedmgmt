@@ -2402,11 +2402,11 @@
     let updateBreedData = [];
 
     function SearchBreedgrid(e) {
-        var crop_id = $("#CropSelect").val();
-        var resource_name = $(".manage")[0].innerText;
-        var limit = $("#limit").val();
+        let crop_id = $("#CropSelect").val();
+        let resource_name = $(".manage")[0].innerText;
+        let limit = $("#limit").val();
 
-        var data = {"crop_id": crop_id, "resource_name": resource_name};
+        let data = {"crop_id": crop_id, "resource_name": resource_name};
 
         $.ajax(
             {
@@ -2419,7 +2419,7 @@
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: [],
+                        data: result.breed,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2492,16 +2492,11 @@
                         }
 
                         for (let j = 1; j < headerName.length; j++) {
-                            console.log('colName : ', colName[j - 1]);
 
                             if ((typeof headerName[colName[j - 1]]) === 'string') {
-                                console.log('headerName : ',headerName[colName[j - 1]]);
-                                console.log('detail_id : ', data[j - 1].detail_id);
 
                                 tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                             } else if ((typeof headerName[colName[j - 1]]) === 'number') {
-                                console.log('headerName : ',headerName[colName[j - 1]]);
-                                console.log('detail_id : ', data[j - 1].detail_id);
 
                                 if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
                                     tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
@@ -2788,9 +2783,11 @@
             return Alert("등록 권한이 없습니다.");
         } else {
             $("#data_upload2").modal();
-            var resource_name = $(".manage")[0].innerText;
 
-            let data = {"resource_name": resource_name};
+            let resource_id = $('#resource_id').val();
+            let resource_name = $(".manage")[0].innerText;
+
+            let data = {"resource_id": resource_id, "resource_name": resource_name};
 
             $.ajax(
                 {
@@ -2846,7 +2843,6 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-
                     if (result != null) {
 
                         var header_list = $("#breedHead");
@@ -2934,7 +2930,7 @@
 
                     let crop_id = $("#CropSelect").val();
 
-                    let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id, "resource_id": $('#resource_id').val()};
+                    let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id};
 
                     listData.push(lData);
 

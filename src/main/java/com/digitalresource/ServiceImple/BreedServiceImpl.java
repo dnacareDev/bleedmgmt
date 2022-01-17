@@ -41,7 +41,6 @@ public class BreedServiceImpl implements BreedService {
     String changeI = "";
     int cnt = 0;
     for (int i = countDetail.getMin(); i <= countDetail.getMax(); i++) {
-      System.out.println("i : " + i);
       if (arrMin != arrLength) {
         JSONObject jsonObject = arr.getJSONObject(arrMin);
         changeI = Integer.toString(i);
@@ -182,6 +181,11 @@ public class BreedServiceImpl implements BreedService {
   @Override
   public List<Breed> SearchBreed2(String breed_name, int resource_id) {
     return breedMapper.SearchBreed2(breed_name, resource_id);
+  }
+
+  @Override
+  public List<Breed> SearchBreed3(int resource_id) {
+    return breedMapper.SearchBreed3(resource_id);
   }
 
   @Override

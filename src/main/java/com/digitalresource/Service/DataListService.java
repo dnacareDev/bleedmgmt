@@ -11,11 +11,12 @@ public interface DataListService {
 
   int InsertDataList(DataList dataList);
 
-  List<Map<String, String>> SelectDateGroup(String datalist_type);
+  List<Map<String, String>> SelectDateGroup(int resource_id, String datalist_type);
 
   List<Integer> SelectTarget(String datalist_date, String resource_name);
 
   int SelectTargetCount(String datalist_date);
 
+  int DeleteList(int[] breed_id);
 
 }

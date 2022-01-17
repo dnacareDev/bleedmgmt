@@ -9,15 +9,16 @@
 
     <insert id="InsertDataList" parameterType="DataList">
         INSERT INTO dataList
-        (datalist_id, resource_name, datalist_date, breed_id)
+        (datalist_id, resource_id, resource_name, datalist_date, breed_id)
         VALUES
-        (#{datalist_id}, #{resource_name}, #{datalist_date}, #{breed_id})
+        (#{datalist_id}, #{resource_id}, #{resource_name}, #{datalist_date}, #{breed_id})
     </insert>
 
     <!-- 날짜 별로 그룹화 해서 가져오기 -->
     <select id="SelectDateGroup" resultType="hashmap">
-        SELECT resource_name, datalist_date, COUNT(breed_id) AS cnt FROM dataList
-        WHERE resource_name = #{resource_name}
+        SELECT resource_name, datalist_date, COUNT(breed_id) AS cnt
+        FROM dataList
+        WHERE resource_id = #{resource_id} AND resource_name = #{resource_name}
         GROUP BY datalist_date
     </select>
 
@@ -30,4 +31,12 @@
         SELECT COUNT(breed_id) FROM dataList
         WHERE datalist_date = #{datalist_date}
     </select>
+
+    <delete id="DeleteList" parameterType="java.util.ArrayList">
+        DELETE FROM dataList
+        WHERE
+        <foreach collection="array" item="item" open="(" close=")" separator="OR">
+            breed_id = #{item}
+        </foreach>
+    </delete>
 </mapper>

@@ -40,6 +40,8 @@ public interface BreedService {
 
 	List<Breed> SearchBreed2(String breed_name, int resource_id);
 
+	List<Breed> SearchBreed3(int resource_id);
+
 	String SearchCropName(int breed_name);
 
 	int InsertBreed(Breed breed);

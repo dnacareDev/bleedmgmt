@@ -188,6 +188,14 @@
         ORDER BY b.breed_id DESC
     </select>
 
+    <select id="SearchBreed3" resultType="Breed">
+        SELECT *,
+        (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND d.detail_info = 2 AND (s.standard_data IS NOT NULL)) AS
+        detail_count
+        FROM breed b
+        WHERE b.resource_id = #{resource_id}
+    </select>
+
     <select id="SearchBreedExcel" resultType="Breed">
         SELECT *,
         (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND d.detail_info = 2 AND s.standard_data IS NOT NULL) AS
