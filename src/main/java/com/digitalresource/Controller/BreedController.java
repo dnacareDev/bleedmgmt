@@ -92,7 +92,7 @@ public class BreedController {
 
     result.put("breed", breed);
     result.put("detail", details);
-
+    result.put("resource_id", resourceId);
 //    Gson gson = new Gson();
 //    String jsonString = gson.toJson(result.get("standardList"));
 //
@@ -116,6 +116,13 @@ public class BreedController {
   @RequestMapping("deleteBreed")
   public int deleteBreed(String breed_id) {
     int result = breedService.deleteBreed(breed_id);
+
+    String[] str = breed_id.split(",");
+
+    int[] arr_breed = Arrays.stream(str).mapToInt(Integer::parseInt).toArray();
+
+    datalistService.DeleteList(arr_breed);
+
     return result;
   }
 
@@ -238,7 +245,6 @@ public class BreedController {
   @ResponseBody
   @RequestMapping("excelBreed")
   public int excelUpload(@RequestParam("excel_list") String excel_list, @RequestParam("resource_id") int resource_id) {
-
     JSONArray arr = new JSONArray(excel_list);
 
     List<StandardList> standards = new ArrayList<StandardList>();
@@ -254,22 +260,30 @@ public class BreedController {
       breed.setVariety_name(variety_name);
       breed.setResource_id(resource_id);
 
-//			int breed_result = breedService.insertBreed(resource_id, data, crop_id, resource_name);
       int breed_result = breedService.InsertBreed(breed);
 
-      List<Detail> detail = breedService.SelectDetailExcel(resource_id);
+      List<Detail> detail = breedService.SelectDetailExcel2(resource_id);
+
+      int cnt = 1;
 
       for (int j = 0; j < detail.size(); j++) {
         StandardList standard = new StandardList();
+
         standard.setBreed_id(breed.getBreed_id());
         standard.setDetail_id(detail.get(j).getDetail_id());
 
-        if (j < item.length()) {
-          if(!item.isNull(j + 1)) {
-            standard.setStandard_data((String) item.get(j + 1));
+        if(detail.get(j).getDetail_type() == 2) {
+          if (j < item.length()) {
+            if(!item.isNull(cnt)) {
+              standard.setStandard_data((String) item.get(cnt));
+            } else {
+              standard.setStandard_data(null);
+            }
           } else {
             standard.setStandard_data(null);
           }
+
+          cnt++;
         } else {
           standard.setStandard_data(null);
         }
@@ -278,17 +292,18 @@ public class BreedController {
       }
     }
 
-    breedService.InsertExcel(standards);
+    int result = breedService.InsertExcel(standards);
 
-    return 1;
+    return result;
+//    return 0;
   }
 
   @ResponseBody
   @RequestMapping("selectBreedDateGroup")
-  public Map<String, Object> SelectDateGroup(@RequestParam("resource_name") String resource_name) {
+  public Map<String, Object> SelectDateGroup(@RequestParam("resource_id") int resource_id, @RequestParam("resource_name") String resource_name) {
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-    List<Map<String, String>> dataGroup = datalistService.SelectDateGroup(resource_name);
+    List<Map<String, String>> dataGroup = datalistService.SelectDateGroup(resource_id, resource_name);
 
     result.put("dataGroup", dataGroup);
 
@@ -302,13 +317,25 @@ public class BreedController {
 
     JSONObject obj = arr.getJSONObject(0);
 
-    int crop_id = Integer.parseInt(obj.getString("crop_id"));
-    String variety_name = breedService.SearchCropName(crop_id);
+    int crop_id = obj.getInt("crop_id");
+    int[] resource_name_id = resourceNameService.SelectResourceNameId(obj.getString("resource_name"));
 
-    List<Breed> breed = breedService.SearchBreed(variety_name);
+    int resource_id = 0;
+
+    for(int i = 0; i < resource_name_id.length; i++) {
+      if(resourceService.SearchResourceId(crop_id, resource_name_id[i]) != null) {
+        resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i]);
+      } else {
+        continue;
+      }
+    }
+
+    List<Integer> breed_id = datalistService.SelectTarget(obj.getString("datalist_date"), obj.getString("resource_name"));
+    List<Breed> breed = breedService.SearchBreed3(resource_id);
 
     for (int i = 0; i < breed.size(); i++) {
       if (Objects.equals(breed.get(i).getCreate_date().split(" ")[0], obj.getString("datalist_date"))) {
+        dataList.setResource_id(resource_id);
         dataList.setResource_name(obj.getString("resource_name"));
         dataList.setDatalist_date(obj.getString("datalist_date"));
         dataList.setBreed_id(breed.get(i).getBreed_id());
@@ -316,7 +343,9 @@ public class BreedController {
         continue;
       }
 
-      datalistService.InsertDataList(dataList);
+      if(!breed_id.contains(breed.get(i).getBreed_id())) {
+        datalistService.InsertDataList(dataList);
+      }
     }
 
     return dataList;

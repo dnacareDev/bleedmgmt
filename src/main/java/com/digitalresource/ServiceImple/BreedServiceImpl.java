@@ -184,6 +184,11 @@ public class BreedServiceImpl implements BreedService {
   }
 
   @Override
+  public List<Breed> SearchBreed3(int resource_id) {
+    return breedMapper.SearchBreed3(resource_id);
+  }
+
+  @Override
   public String SearchCropName(int breed_name) {
     return breedMapper.SearchCropName(breed_name);
   }
@@ -196,6 +201,11 @@ public class BreedServiceImpl implements BreedService {
   @Override
   public List<Detail> SelectDetailExcel(int resource_id) {
     return breedMapper.SelectDetailExcel(resource_id);
+  }
+
+  @Override
+  public List<Detail> SelectDetailExcel2(int resource_id) {
+    return breedMapper.SelectDetailExcel2(resource_id);
   }
 
   @Override
