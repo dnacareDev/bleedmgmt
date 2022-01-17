@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,15 +16,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.digitalresource.Entity.AnalysisFile;
 import com.digitalresource.Entity.User;
 import com.digitalresource.RModule.RunEtcR;
+import com.digitalresource.Service.LabService;
 
 @Controller
 public class LabController
 {
-	@RequestMapping("matrix")
-	public ModelAndView Matrix(ModelAndView mv)
+	@Autowired
+	private LabService service;
+	
+	@RequestMapping("/matrix")
+	public ModelAndView Analysis(ModelAndView mv, Authentication auth)
 	{
+		User user = (User)auth.getPrincipal();
+		
+		int analysis_type = 1;
+		
+		AnalysisFile analysis = service.SelectAnalysisFile(user.getUser_id(), analysis_type);
+		
+		if(analysis != null)
+		{
+			String[] extension = analysis.getAnalysis_file().split("_");
+			
+			mv.addObject("analysis", analysis);
+			mv.addObject("path", extension[0]);
+		}
+		
 		mv.setViewName("lab/matrix");
 		
 		return mv;
@@ -52,7 +72,6 @@ public class LabController
 		
        	Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
        	
-       	/*
        	AnalysisFile analysis = new AnalysisFile();
        	analysis.setUser_id(user.getUser_id());
        	analysis.setAnalysis_type(1);
@@ -60,7 +79,6 @@ public class LabController
        	analysis.setAnalysis_origin_file(origin_name);
        	
        	int result = service.InsertAnalysisFile(analysis);
-       	 */
        	
        	RunEtcR runetcr = new RunEtcR();
        	runetcr.MakeRunEtcR(date_name, file_name);

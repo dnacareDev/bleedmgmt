@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalresource.Mapper.LabMapper">
+	<select id="SelectAnalysisFile" parameterType="int" resultType="AnalysisFile">
+		SELECT * FROM analysis_file
+		WHERE user_id = #{user_id} AND analysis_type = #{analysis_type} 
+		ORDER BY analysis_file_id DESC
+		LIMIT 1
+	</select>
+
+	<insert id="InsertAnalysisFile" parameterType="AnalysisFile">
+		INSERT INTO analysis_file
+		(user_id, analysis_type, analysis_file, analysis_origin_file, create_date, modify_date)
+		VALUES
+		(#{user_id}, #{analysis_type}, #{analysis_file}, #{analysis_origin_file}, NOW(), NOW())
+	</insert>
 </mapper>
