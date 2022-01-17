@@ -1507,7 +1507,7 @@
         }, 5);
     }
 
-    /* s : localstorage 저장 예제 */
+    /* s : sessionStorage 저장 예제 */
     function setSessionS(key, value) {
         sessionStorage.setItem(key, value);
     }
@@ -1530,20 +1530,9 @@
         sessionStorage.removeItem(key);
     }
 
-    /* e : localstorage 저장 예제 */
+    /* e : sessionStorage 저장 예제 */
 
     $(function () {
-        /*
-        $("#grid2 .detail_list .list-group li").click(function (e) {
-            $(this).toggleClass("checked");
-            console.log("click -------------");
-            if ($(this).hasClass("checked") == true) {
-                $(this).children().eq(0).prop("checked", true);
-            } else {
-                $(this).children().eq(0).prop("checked", false);
-            }
-        });
-        */
 
         $("#grid2 .top_box li").click(function () {
             $("#grid2 .content_1 li").each(function (i, e) {
@@ -1764,17 +1753,6 @@
 
         $("#grid2").modal("show");
 
-        /* li where */
-
-        /*
-        for(var i = 0; i < detailListEls.length; i++){
-        	detailListEls[i].addEventListener("click", function(e){
-        		console.log("click!!!!!");
-        	})
-        }
-        */
-        /*
-        */
     }
 
     // 특성상태 버튼
@@ -1882,8 +1860,6 @@
             var l = breedgrid.getCheckedRows().length;
 
             for (let i = 0; i < l; i++) {
-                console.log(breedgrid.getCheckedRows()[i].breed_id, "breed_id");
-                console.log(breedgrid.getCheckedRows()[i], "breed");
                 total_id.push(breedgrid.getCheckedRows()[i].breed_id);
                 breed_rows.push(breedgrid.getCheckedRows()[i].breed_row);
             }
@@ -1925,7 +1901,6 @@
     function onKeyWindow(e) {
         if (e.type === "keydown") {
             if (e.keyCode === 16 && selectorOnce) {
-                console.log(e.keyCode);
                 keyShiftBool = true;
                 selectorOnce = false;
             }
@@ -1945,10 +1920,8 @@
 
         var getList = document.querySelectorAll("#display_container" + (indexTab + 1) + " li");
         getList = Array.prototype.slice.call(getList);
-        console.log('onSection getList : ', getList)
         var target = e.currentTarget;
         var index = getList.indexOf(target);
-        console.log('onSection index : ', index)
 
         if (keyShiftBool) {
             getList[index].classList.add("active");
@@ -1980,11 +1953,9 @@
 
         var getList = document.querySelectorAll("#step_container" + (indexTab + 1) + " li");
         getList = Array.prototype.slice.call(getList);
-        console.log('offSection getList : ', getList)
 
         var target = e.currentTarget;
         var index = getList.indexOf(target);
-        console.log('offSection getList : ', getList)
 
         if (keyShiftBool) {
             getList[index].classList.add("active");
@@ -2431,11 +2402,11 @@
     let updateBreedData = [];
 
     function SearchBreedgrid(e) {
-        var crop_id = $("#CropSelect").val();
-        var resource_name = $(".manage")[0].innerText;
-        var limit = $("#limit").val();
+        let crop_id = $("#CropSelect").val();
+        let resource_name = $(".manage")[0].innerText;
+        let limit = $("#limit").val();
 
-        var data = {"crop_id": crop_id, "resource_name": resource_name};
+        let data = {"crop_id": crop_id, "resource_name": resource_name};
 
         $.ajax(
             {
@@ -2448,7 +2419,7 @@
                         el: document.getElementById('breedGrid'),
                         scrollX: true,
                         scrollY: false,
-                        data: [],
+                        data: result.breed,
                         rowHeaders: ['checkbox'],
                         editingEvent: 'click',
                         columns: [],
@@ -2471,32 +2442,33 @@
                         }
                     ];
 
-                    var headerName = [];
+                    let headerName = [];
+                    let colName = [];
 
                     for (let i = 0; i < result.detail.length; i++) {
-                        var colHeader = result.detail[i].detail_name;
-                        var colName = result.detail[i].detail_id;
+                        let colHeader = result.detail[i].detail_name;
+                        colName[i] = result.detail[i].detail_id;
 
-                        headerName[colName] = result.detail[i].detail_id;
+                        headerName[colName[i]] = result.detail[i].detail_id;
 
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
                         let arr = {}
 
                         if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
-                                arr = {'header': colHeader, 'name': 'img' + colName, 'width': 100, 'info': 'img'};
-                                headerName[colName] = 'img' + colName;
+                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
+                                headerName[colName[i]] = 'img' + colName[i];
                             } else if (result.detail[i].detail_type == 1) {
-                                arr = {'header': colHeader, 'name': 'doc' + colName, 'width': 100, 'info': 'doc'};
-                                headerName[colName] = 'doc' + colName;
+                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
+                                headerName[colName[i]] = 'doc' + colName[i];
                             }
                         } else if (result.detail[i].detail_info == 4) {
                             continue;
                         } else {
-                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
                         }
 
                         headerArr.push(arr);
@@ -2506,7 +2478,7 @@
 
                     const dataList = [];
 
-                    for (var i = 0; i < result.breed.length; i++) {
+                    for (let i = 0; i < result.breed.length; i++) {
                         let data = result.breed[i].standardList;
                         let tempArray = {};
 
@@ -2519,24 +2491,15 @@
                             tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                         }
 
-                        for (var j = 1; j < headerName.length; j++) {
-                            let rowData = data[j - 1].standard_data;
+                        for (let j = 1; j < headerName.length; j++) {
 
-                            if ((typeof headerName[j]) === 'string') {
-                                console.log(headerName[j]);
-                                console.log('string');
-                                console.log(rowData);
-                                if (headerName[j].includes('img')) {
-                                    tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                                } else if (headerName[j].includes('doc')) {
-                                    tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                                }
-                            } else if ((typeof headerName[j]) === 'number') {
-                                console.log(headerName[j]);
-                                console.log('number');
-                                console.log(rowData);
-                                if (headerName[j] == data[j].detail_id) {
-                                    tempArray[headerName[j]] = rowData;
+                            if ((typeof headerName[colName[j - 1]]) === 'string') {
+
+                                tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                            } else if ((typeof headerName[colName[j - 1]]) === 'number') {
+
+                                if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
+                                    tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
                                 }
                             }
                         }
@@ -2550,11 +2513,6 @@
                         if ($(".plus_btn_submit1")[0].style.display != 'block') {
                             $(".plus_btn_submit2").css("display", "block");
                         }
-                    })
-
-                    breedgrid.on('click', (ev) => {
-                        console.log(ev);
-                        console.log(breedgrid.getRow(ev.rowKey));
                     })
 
                     breedgrid.on('click', (ev) => {
@@ -2621,12 +2579,10 @@
 
             var cnt = breedgrid.getRowCount();
 
-            const newRow = {'breed_id': null, '1': $("#CropSelect").val()};
+            const newRow = {'breed_id': null};
 
             breedgrid.prependRow(newRow);
             breedgrid.check(cnt);
-
-            // breedData.push({'detail_id': 1, 'standard': $("#CropSelect").val()})
 
             breedgrid.on('afterChange', (ev) => {
                 for (let i = 0; i < ev.changes.length; i++) {
@@ -2659,7 +2615,6 @@
                     if (result == 0) {
                         return Alert("저장에 실패하였습니다.");
                     } else {
-
                         window.location.href = "/breed?type=[[${type}]]&id=[[${resource_id}]]&crop_id=" + crop_id;
                         // location.reload();
                     }
@@ -2763,18 +2718,9 @@
                     $.each(rowdata[i], function (idx, value) {
                         // 공백처리
                         if (idx == tmp[j]) {
-                            // if (idx === "__EMPTY_6" || idx === "__EMPTY_8" || idx === "__EMPTY_10") {
-                            //     if (value == "-") {
-                            //         html += "<td class='excel'><span>" + value + "</span></td>";
-                            //         j++;
-                            //     } else {
-                            //         html += "<td class='excel'><span>" + excelDateToJSDate(value) + "</span></td>";
-                            //         j++
-                            //     }
-                            // } else {
+
                             html += "<td class='excel'><span>" + value + "</span></td>";
                             j++;
-                            // }
 
                         } else {
                             var idx_str = idx.replace(/[^0-9]/g, '');
@@ -2787,18 +2733,8 @@
                                 html += "<td><span> </span></td>";
                             }
 
-                            // if (idx === "__EMPTY_6" || idx === "__EMPTY_8" || idx === "__EMPTY_10") {
-                            //     if (value == "-") {
-                            //         html += "<td class='excel'><span>" + value + "</span></td>";
-                            //         j++;
-                            //     } else {
-                            //         html += "<td class='excel'><span>" + excelDateToJSDate(value) + "</span></td>";
-                            //         j++
-                            //     }
-                            // } else {
                             html += "<td class='excel'><span>" + value + "</span></td>";
                             j++;
-                            // }
 
                             j = idx_str;
                             j++;
@@ -2847,9 +2783,11 @@
             return Alert("등록 권한이 없습니다.");
         } else {
             $("#data_upload2").modal();
-            var resource_name = $(".manage")[0].innerText;
 
-            let data = {"resource_name": resource_name};
+            let resource_id = $('#resource_id').val();
+            let resource_name = $(".manage")[0].innerText;
+
+            let data = {"resource_id": resource_id, "resource_name": resource_name};
 
             $.ajax(
                 {
@@ -2905,8 +2843,6 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                    console.log("result : ", result);
-
                     if (result != null) {
 
                         var header_list = $("#breedHead");
