@@ -2472,31 +2472,32 @@
                     ];
 
                     var headerName = [];
+                    let colName = [];
 
                     for (let i = 0; i < result.detail.length; i++) {
                         var colHeader = result.detail[i].detail_name;
-                        var colName = result.detail[i].detail_id;
+                        colName[i] = result.detail[i].detail_id;
 
-                        headerName[colName] = result.detail[i].detail_id;
+                        headerName[colName[i]] = result.detail[i].detail_id;
 
                         let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
 
                         let arr = {}
 
                         if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
-                                arr = {'header': colHeader, 'name': 'img' + colName, 'width': 100, 'info': 'img'};
-                                headerName[colName] = 'img' + colName;
+                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
+                                headerName[colName[i]] = 'img' + colName[i];
                             } else if (result.detail[i].detail_type == 1) {
-                                arr = {'header': colHeader, 'name': 'doc' + colName, 'width': 100, 'info': 'doc'};
-                                headerName[colName] = 'doc' + colName;
+                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
+                                headerName[colName[i]] = 'doc' + colName[i];
                             }
                         } else if (result.detail[i].detail_info == 4) {
                             continue;
                         } else {
-                            arr = {'header': colHeader, 'name': colName, 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
                         }
 
                         headerArr.push(arr);
@@ -2522,21 +2523,19 @@
                         for (var j = 1; j < headerName.length; j++) {
                             let rowData = data[j - 1].standard_data;
 
+                            console.log('colName : ', colName[j - 1]);
+                            console.log('headerName : ', headerName[colName[j - 1]]);
+                            console.log('rowData : ', rowData);
+
                             if ((typeof headerName[j]) === 'string') {
-                                console.log(headerName[j]);
-                                console.log('string');
-                                console.log(rowData);
                                 if (headerName[j].includes('img')) {
                                     tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                                 } else if (headerName[j].includes('doc')) {
                                     tempArray[headerName[j]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                                 }
-                            } else if ((typeof headerName[j]) === 'number') {
-                                console.log(headerName[j]);
-                                console.log('number');
-                                console.log(rowData);
-                                if (headerName[j] == data[j].detail_id) {
-                                    tempArray[headerName[j]] = rowData;
+                            } else if ((typeof headerName[colName[j - 1]]) === 'number') {
+                                if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
+                                    tempArray[headerName[colName[j - 1]]] = rowData;
                                 }
                             }
                         }
