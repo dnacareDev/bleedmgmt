@@ -304,6 +304,8 @@ public class BreedController {
     int crop_id = Integer.parseInt(obj.getString("crop_id"));
     String variety_name = breedService.SearchCropName(crop_id);
 
+    System.out.println(variety_name);
+
     List<Breed> breed = breedService.SearchBreed(variety_name);
 
     for (int i = 0; i < breed.size(); i++) {
