@@ -104,10 +104,10 @@ public class BreedController {
 
   @ResponseBody
   @RequestMapping("insertBreed2")
-  public int insertBreed(@RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name) {
+  public int insertBreed(@RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name, @RequestParam(value = "type_check") int type_check) {
     int result = 0;
 
-    result = breedService.insertBreed(resource_id, data, crop_id, resource_name);
+    result = breedService.insertBreed(resource_id, data, crop_id, resource_name, type_check);
 
     return result;
   }

@@ -13,7 +13,7 @@ public interface BreedService {
 	
 	public int insertStandard();
 
-	int insertBreed(int resource_id, String data, int crop_id, String resource_name);
+	int insertBreed(int resource_id, String data, int crop_id, String resource_name, int type_check);
 	
 	List<Map<String, Object>> selectStandard (int resourceId);
 

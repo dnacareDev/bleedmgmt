@@ -20,7 +20,7 @@ public class BreedServiceImpl implements BreedService {
   private BreedMapper breedMapper;
 
   @Override
-  public int insertBreed(int resource_id, String data, int crop_id, String resource_name) {
+  public int insertBreed(int resource_id, String data, int crop_id, String resource_name, int type_check) {
     Map<String, Object> param = new HashMap<String, Object>();
     Map<String, Object> map = new HashMap<String, Object>();
     int result = 0;
@@ -28,6 +28,7 @@ public class BreedServiceImpl implements BreedService {
     param.put("resource_name", resource_name);
     resource_id = breedMapper.selectResourceId(param);
     Breed breed = new Breed();
+    breed.setRow_file(type_check);
     breed.setResource_id(resource_id);
     // insert breed
     int test = breedMapper.insertBreed(breed);

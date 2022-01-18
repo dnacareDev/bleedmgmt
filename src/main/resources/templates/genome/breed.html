@@ -2601,6 +2601,7 @@
         var resource_name = $(".manage")[0].innerText;
 
         let resource_id = $('#resource_id').val();
+        let type_check = 0;
 
         $.ajax(
             {
@@ -2611,7 +2612,8 @@
                     "data": JSON.stringify(sortBreed),
                     "resource_id": resource_id,
                     "crop_id": crop_id,
-                    "resource_name": resource_name
+                    "resource_name": resource_name,
+                    "type_check": type_check
                 },
                 success: function (result) {
                     if (result == 0) {
