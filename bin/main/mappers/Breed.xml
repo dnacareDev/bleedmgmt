@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalresource.Mapper.BreedMapper">
     <insert id="insertBreed" useGeneratedKeys="true" keyProperty="breed_id">
-        insert into breed (resource_id, create_date, variety_name, breed_row)
+        insert into breed (resource_id, create_date, row_file, variety_name, breed_row)
         select #{resource_id},
                now(),
+               #{row_file},
                (select crop_name
                 from crop c
                          inner join resource r on c.crop_id = r.crop_id
@@ -14,9 +15,9 @@
 
     <insert id="InsertBreed" parameterType="Breed">
         INSERT INTO breed
-        (resource_id, create_date, variety_name, breed_row)
+        (resource_id, create_date, row_file, variety_name, breed_row)
         select
-        #{resource_id}, NOW(), #{variety_name},
+        #{resource_id}, NOW(), #{row_file}, #{variety_name},
         (select ifnull((select max(breed_row)+1 from breed), 1) from dual)
         <selectKey resultType="int" keyProperty="breed_id" order="AFTER">
             SELECT LAST_INSERT_ID()
