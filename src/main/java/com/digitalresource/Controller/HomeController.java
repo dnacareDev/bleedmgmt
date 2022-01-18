@@ -34,8 +34,11 @@ public class HomeController {
   public ModelAndView gethome(ModelAndView mv) {
 
     List<Crop> crops = cropService.selectCropList();
+    List<ResourceName> resourceList = RService.resourceList();
 
     mv.addObject("cropList", crops);
+    mv.addObject("resourceList", resourceList);
+
     mv.setViewName("home/resource_home");
 
     return mv;

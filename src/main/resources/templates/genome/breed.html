@@ -1494,7 +1494,7 @@
     var rightList_three = [];
 
     function testbtn() {
-        location.href = '/excelTemplate/' + $("#CropSelect").val() + '_품종관리.xlsx'
+        location.href = '/excelTemplate/' +  + '.xlsx';
     }
 
     let c = 0;
@@ -2495,12 +2495,9 @@
                         }
 
                         for (let j = 1; j < headerName.length; j++) {
-                            console.log('colName : ', colName[j - 1])
-                            console.log('headerName : ', headerName[colName[j - 1]])
                             if ((typeof headerName[colName[j - 1]]) === 'string') {
                                 tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                             } else if ((typeof headerName[colName[j - 1]]) === 'number') {
-                                console.log('detail_id : ', data[j - 1].detail_id)
                                 if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
                                     tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
                                 }

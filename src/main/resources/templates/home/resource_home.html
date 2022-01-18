@@ -258,10 +258,13 @@
                                     <div class="data_relative">
                                         <div class="doughnut_cover">
                                             <div class="labels right_content_la">
-                                                <ul>
-                                                    <li onclick="checked('check1')"><input type="checkbox" id="check1"><span class="dought_blue"></span>품종관리</li>
-                                                    <li onclick="checked('check2')"><input type="checkbox" id="check2"><span class="dought_green"></span>원종관리</li>
-                                                    <li onclick="checked('check3')"><input type="checkbox" id="check3"><span class="dought_orange"></span>도입자원관리</li>
+                                                <ul class="selector">
+                                                    <th:block th:each="list : ${resourceList}">
+                                                        <li><input type="checkbox" th:id="${list.resource_name}"><span th:text="${list.resource_name}"></span></li>
+                                                    </th:block>
+                                                    <!--<li onclick="checked('check1')"><input type="checkbox" id="check1"><span class="dought_blue"></span>품종관리</li>-->
+                                                    <!--<li onclick="checked('check2')"><input type="checkbox" id="check2"><span class="dought_green"></span>원종관리</li>-->
+                                                    <!--<li onclick="checked('check3')"><input type="checkbox" id="check3"><span class="dought_orange"></span>도입자원관리</li>-->
                                                 </ul>
                                             </div>
                                             <canvas id="bar1" style="height: 210px; width: 100%;"></canvas>
@@ -282,10 +285,13 @@
                         <p class="color-primary fa-lg mb-3 mt-5 ml-3">작목별 관리 현황</p>
                         <div class="card-body">
                             <div class="labels">
-                                <ul>
-                                    <li onclick="checked('check4')"><input type="checkbox" id="check4"><span class="dought_blue"></span>고추</li>
-                                    <li onclick="checked('check5')"><input type="checkbox" id="check5"><span class="dought_green"></span>무</li>
-                                    <li onclick="checked('check6')"><input type="checkbox" id="check6"><span class="dought_orange"></span>배추</li>
+                                <ul class="selector">
+                                    <th:block th:each="list : ${cropList}">
+                                        <li><input type="checkbox" th:id="${list.crop_name}"><span th:text="${list.crop_name}"></span></li>
+                                    </th:block>
+                                    <!--<li onclick="checked('check4')"><input type="checkbox" id="check4"><span class="dought_blue"></span>고추</li>-->
+                                    <!--<li onclick="checked('check5')"><input type="checkbox" id="check5"><span class="dought_green"></span>무</li>-->
+                                    <!--<li onclick="checked('check6')"><input type="checkbox" id="check6"><span class="dought_orange"></span>배추</li>-->
                                 </ul>
                             </div>
                             <div>
@@ -304,7 +310,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -317,6 +322,15 @@
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $(".selector li").click(function (e) {
+            let id = this.innerText;
+            let el = document.getElementById(id);
+
+            (el.checked == true) ? el.checked = false : el.checked = true;
+        });
+    });
+
     $(document).ready(function () {
         SelectMonth();
         SelectCrop();
@@ -350,7 +364,7 @@
 
                 var data = []
 
-                for(let i = 0; i < result.count.length; i++) {
+                for (let i = 0; i < result.count.length; i++) {
                     data.push(result.count[i]);
                 }
 
@@ -513,13 +527,6 @@
                 var bar3 = new Chart(ctx3, config3);
             }
         })
-    }
-
-    function checked(e) { // 체크박스 텍스트 눌렀을때 체크박스 클릭
-        const element = document.getElementById(e);
-
-        (element.checked == true) ? element.checked = false : element.checked = true;
-
     }
 </script>
 
