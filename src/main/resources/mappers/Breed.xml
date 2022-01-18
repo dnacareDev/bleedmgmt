@@ -53,6 +53,15 @@
         WHERE breed_id = #{breed_id}
     </select>
 
+    <select id="SelectStandard2" resultType="StandardList">
+        SELECT *
+        FROM standard
+        WHERE breed_id = #{breed_id} AND detail_id in (
+            SELECT detail_id
+            FROM detail
+            WHERE detail_display = 1)
+    </select>
+
     <select id="selectDetailCount" resultType="CountSelect">
         select max(detail_id) as max, min(detail_id) as min, count(detail_id) as count
         from detail

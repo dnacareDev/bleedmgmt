@@ -136,6 +136,11 @@ public class BreedServiceImpl implements BreedService {
   }
 
   @Override
+  public List<StandardList> SelectStandard2(int breed_id) {
+    return breedMapper.SelectStandard2(breed_id);
+  }
+
+  @Override
   public int deleteBreed(String breed_id) {
 
     int deleteResult = breedMapper.deleteStandard(breed_id);

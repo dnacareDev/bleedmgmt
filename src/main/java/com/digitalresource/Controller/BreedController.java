@@ -85,7 +85,7 @@ public class BreedController {
     List<StandardList> standardLists = new ArrayList<StandardList>();
 
     for(int i = 0; i < breed.size(); i++) {
-      standardLists = breedService.SelectStandard(breed.get(i).getBreed_id());
+      standardLists = breedService.SelectStandard2(breed.get(i).getBreed_id());
 
       breed.get(i).setStandardList(standardLists);
     }
@@ -244,7 +244,7 @@ public class BreedController {
 
   @ResponseBody
   @RequestMapping("excelBreed")
-  public int excelUpload(@RequestParam("excel_list") String excel_list, @RequestParam("resource_id") int resource_id) {
+  public int excelUpload(@RequestParam("excel_list") String excel_list, @RequestParam("resource_id") int resource_id, @RequestParam("type_check") int type_check) {
     JSONArray arr = new JSONArray(excel_list);
 
     List<StandardList> standards = new ArrayList<StandardList>();
@@ -259,6 +259,7 @@ public class BreedController {
       Breed breed = new Breed();
       breed.setVariety_name(variety_name);
       breed.setResource_id(resource_id);
+      breed.setRow_file(type_check);
 
       int breed_result = breedService.InsertBreed(breed);
 

@@ -65,7 +65,7 @@ public class FileController {
   @ResponseBody
   @RequestMapping("downloadFile")
   public ResponseEntity<Object> DownloadFile(@RequestParam("uploads_file") String uploads_file) {
-    String path = "upload/" + uploads_file;
+    String path = "/upload/" + uploads_file;
 
     try {
       Path filePath = Paths.get(path);

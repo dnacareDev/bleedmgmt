@@ -19,6 +19,8 @@ public interface BreedMapper {
 
 	List<StandardList> SelectStandard (@Param("breed_id") int breed_id);
 
+	List<StandardList> SelectStandard2 (@Param("breed_id") int breed_id);
+
 	CountSelect selectDetailCount(@Param("resource_id") int resource_id);
 
 	public int updateStandardCell(StandardList data);
