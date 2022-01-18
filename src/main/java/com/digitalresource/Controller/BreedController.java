@@ -85,7 +85,7 @@ public class BreedController {
     List<StandardList> standardLists = new ArrayList<StandardList>();
 
     for(int i = 0; i < breed.size(); i++) {
-      standardLists = breedService.SelectStandard(breed.get(i).getBreed_id());
+      standardLists = breedService.SelectStandard2(breed.get(i).getBreed_id());
 
       breed.get(i).setStandardList(standardLists);
     }
