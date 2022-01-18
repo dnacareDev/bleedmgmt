@@ -2912,6 +2912,7 @@
         }
 
         let resource_id = $('#resource_id').val();
+        let type_check = 1;
 
         $("#excel_list").val(JSON.stringify(total_arr));
 
@@ -2922,7 +2923,8 @@
                 dataType: 'json',
                 data: {
                     "excel_list": JSON.stringify(total_arr),
-                    "resource_id": resource_id
+                    "resource_id": resource_id,
+                    "type_check": type_check
                 },
                 success: function (result) {
 
