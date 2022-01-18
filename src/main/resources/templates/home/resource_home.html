@@ -249,8 +249,7 @@
                             <div id="doughnut" class="slick-slider slick-dots-bottom" data-dots-slick='true'>
                                 <div class="slick-slider__single d-flex">
                                     <p class="color-primary" style="color: black;  width: 100%; padding-bottom: 10px;">관리대장 상황</p>
-                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: right;" name="selectCrop" id="CropSelect"
-                                            onChange="changeSelect(this)">
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: right;" name="selectCrop" id="CropSelect">
                                         <th:block th:each="list : ${cropList}">
                                             <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                         </th:block>
