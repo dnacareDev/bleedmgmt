@@ -2282,7 +2282,8 @@
         $("#breed_file_contents").val(files.breed_file_contents);
         $("#uploads_origin_file").text(files.uploads_origin_file);
         $("#uploads_file").val(files.uploads_file);
-        $("#file_download").attr("href", "downloadFile?uploads_file=" + files.uploads_file);
+        $("#file_download").attr("href", "/upload/" + files.uploads_file);
+        $("#file_download").attr("download", "");
 
         let ele = $("#uploads_file").val(files.uploads_file)[0].defaultValue;
 
@@ -2601,6 +2602,7 @@
         var resource_name = $(".manage")[0].innerText;
 
         let resource_id = $('#resource_id').val();
+        let type_check = 0;
 
         $.ajax(
             {
@@ -2611,7 +2613,8 @@
                     "data": JSON.stringify(sortBreed),
                     "resource_id": resource_id,
                     "crop_id": crop_id,
-                    "resource_name": resource_name
+                    "resource_name": resource_name,
+                    "type_check": type_check
                 },
                 success: function (result) {
                     if (result == 0) {
