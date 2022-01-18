@@ -60,7 +60,6 @@ public class FileController {
     return result;
   }
 
-
   // 파일 다운로드
   @ResponseBody
   @RequestMapping("downloadFile")
