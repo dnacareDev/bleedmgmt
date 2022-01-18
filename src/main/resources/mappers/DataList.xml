@@ -24,7 +24,7 @@
 
     <select id="SelectTarget" resultType="int">
         SELECT breed_id FROM dataList
-        WHERE datalist_date = #{datalist_date} AND resource_name = #{resource_name} AND resource_id = #{resource_id}
+        WHERE datalist_date = #{datalist_date} AND resource_name = #{resource_name} AND resource_id = #{resource_id} AND breed_id in (SELECT breed_id FROM breed WHERE row_file = 1)
     </select>
 
     <select id="SelectTargetCount" parameterType="String" resultType="int">
