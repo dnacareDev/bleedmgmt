@@ -2187,12 +2187,12 @@
                     dataType: 'json',
                     data: data,
                     success: function (result) {
-                        var file_list = $("#file_list");
-                        var file_add = "";
+                        let file_list = $("#file_list");
+                        let file_add = "";
 
-                        for (var i = 0; i < result.breed_file.length; i++) {
-                            var file = JSON.stringify(result.breed_file[i]);
-                            var file_json = file.replace(/\"/g, "&quot;");
+                        for (let i = 0; i < result.breed_file.length; i++) {
+                            let file = JSON.stringify(result.breed_file[i]);
+                            let file_json = file.replace(/\"/g, "&quot;");
 
                             file_add += '<tr>';
                             file_add += '<td>' + (i + 1) + '</td>';
@@ -2220,12 +2220,12 @@
                     dataType: 'json',
                     data: data,
                     success: function (result) {
-                        var file_list = $("#file_list");
-                        var file_add = "";
+                        let file_list = $("#file_list");
+                        let file_add = "";
 
-                        for (var i = 0; i < result.breed_file.length; i++) {
-                            var file = JSON.stringify(result.breed_file[i]);
-                            var file_json = file.replace(/\"/g, "&quot;");
+                        for (let i = 0; i < result.breed_file.length; i++) {
+                            let file = JSON.stringify(result.breed_file[i]);
+                            let file_json = file.replace(/\"/g, "&quot;");
 
                             file_add += '<tr>';
                             file_add += '<td>' + (i + 1) + '</td>';
@@ -2253,12 +2253,12 @@
                     dataType: 'json',
                     data: data,
                     success: function (result) {
-                        var file_list = $("#file_list");
-                        var file_add = "";
+                        let file_list = $("#file_list");
+                        let file_add = "";
 
-                        for (var i = 0; i < result.breed_file.length; i++) {
-                            var file = JSON.stringify(result.breed_file[i]);
-                            var file_json = file.replace(/\"/g, "&quot;");
+                        for (let i = 0; i < result.breed_file.length; i++) {
+                            let file = JSON.stringify(result.breed_file[i]);
+                            let file_json = file.replace(/\"/g, "&quot;");
 
                             file_add += '<tr>';
                             file_add += '<td>' + (i + 1) + '</td>';
