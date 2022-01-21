@@ -2333,43 +2333,88 @@
     }
 
     /* s : 파종번호 모달창 */
+    let selectgrid = null;
+
     function Search(e) {
         $("#pop_data1").modal();
 
         let breed_id = e;
+        let crop_id = $("#CropSelect").val();
+        let resource_name = $(".manage")[0].innerText;
+        let limit = $("#limit").val();
 
-        let data = {"breed_id": breed_id};
+        let data = {"breed_id": breed_id, "crop_id": crop_id, "resource_name": resource_name};
 
-        console.log(data);
+        $.ajax(
+            {
+                url: 'searchHeader',
+                method: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    selectgrid = new tui.Grid({
+                        el: document.getElementById('selectGrid'),
+                        scrollX: true,
+                        scrollY: false,
+                        data: [],
+                        editingEvent: 'click',
+                        columns: [],
+                        pageOptions: {
+                            useClient: true,
+                            perPage: limit
+                        }
+                    });
 
-        // $.ajax(
-        //     {
-        //         url: '',
-        //         method: 'POST',
-        //         dataType: 'json',
-        //         data: data,
-        //         success: function (result) {
-        //             selectgrid = new tui.Grid({
-        //                 el: document.getElementById('selectGrid'),
-        //                 scrollX: true,
-        //                 scrollY: false,
-        //                 data: [],
-        //                 rowHeaders: ['checkbox'],
-        //                 editingEvent: 'click',
-        //                 columns: [],
-        //                 pageOptions: {
-        //                     useClient: true,
-        //                     perPage: limit
-        //                 }
-        //             });
-        //
-        //
-        //         }
-        //     });
+                    const headerArr = [];
+
+                    let headerName = [];
+                    let colName = [];
+
+                    for (let i = 0; i < result.detail.length; i++) {
+                        let colHeader = result.detail[i].detail_name;
+                        colName[i] = result.detail[i].detail_id;
+
+                        headerName[colName[i]] = result.detail[i].detail_id;
+
+                        let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
+
+                        let arr = {}
+
+                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+                        } else if (result.detail[i].detail_info == 3) {
+                            if (result.detail[i].detail_type == 0) {
+                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
+                                headerName[colName[i]] = 'img' + colName[i];
+                            } else if (result.detail[i].detail_type == 1) {
+                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
+                                headerName[colName[i]] = 'doc' + colName[i];
+                            }
+                        } else if (result.detail[i].detail_info == 4) {
+                            continue;
+                        } else {
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
+                        }
+
+                        headerArr.push(arr);
+                    }
+
+                    selectgrid.setColumns(headerArr);
+
+                }
+            });
     }
     /* e : 파종번호 모달창 */
 
-    var breedgrid = null;
+    /* s : 모달창 닫힐 때 이벤트 발생 */
+    $(document).ready(function(){
+        $('#pop_data1').on('hidden.bs.modal', function () {
+            selectgrid.destroy();
+        });
+    });
+    /* e : 모달창 닫힐 때 이벤트 발생 */
+
+    let breedgrid = null;
     let updateBreedData = [];
 
     function SearchBreedgrid(e) {
@@ -2579,8 +2624,8 @@
     function saveRow() {
         const sortBreed = [...breedData].sort((a, b) => a?.detail_id - b?.detail_id)
 
-        var crop_id = $("#CropSelect").val();
-        var resource_name = $(".manage")[0].innerText;
+        let crop_id = $("#CropSelect").val();
+        let resource_name = $(".manage")[0].innerText;
 
         let resource_id = $('#resource_id').val();
         let type_check = 0;
