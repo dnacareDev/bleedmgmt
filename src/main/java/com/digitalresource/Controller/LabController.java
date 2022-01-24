@@ -54,6 +54,27 @@ public class LabController
 		return mv;
 	}
 
+	@RequestMapping("/mabc")
+	public ModelAndView getDataManage(ModelAndView mv, Authentication auth)
+	{
+		User user = (User)auth.getPrincipal();
+
+		int analysis_type = 0;
+
+		AnalysisFile analysis = service.SelectAnalysisFile(user.getUser_id(), analysis_type);
+
+		if(analysis != null)
+		{
+			analysis.setAnalysis_file("/common/r/result/" + analysis.getAnalysis_file());
+		}
+
+		mv.addObject("analysis", analysis);
+
+		mv.setViewName("lab/mabc");
+
+		return mv;
+	}
+
 	@RequestMapping("/matrix")
 	public ModelAndView Analysis(ModelAndView mv, Authentication auth)
 	{
