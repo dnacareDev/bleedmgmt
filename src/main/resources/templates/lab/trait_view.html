@@ -1,0 +1,1584 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user = ${#authentication.principal}">
+<head>
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <!-- js -->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body, h1, h2, h3, h4, h5, h6, p, ul, ol {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, ol {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        img {
+            vertical-align: top;
+            border: 0;
+        }
+
+        /*
+        body {
+            overflow-y: hidden;
+        }*/
+        .clearfix::before {
+            content: "";
+            display: block;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .contents {
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .box {
+            width: 47%;
+            float: left;
+        }
+
+        .breadcrumb-main {
+            margin: 0 !important;
+            padding: 30px 24.960px 20px !important;
+        }
+
+        h6.title {
+            display: block;
+            font-size: 16px;
+            padding: 20px 0 15px 0;
+            font-weight: 500;
+        }
+
+        .main-content .contents .container-fluid {
+            /* max-width: 1280px; */
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 50px;
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 100%;
+                padding: 0 50px;
+            }
+        }
+
+        select {
+            height: 40px !important;
+        }
+
+        .top-menu .main-content .contents:first-child {
+            padding-top: 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            height: 45px;
+            font-size: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 0 15px;
+            color: #222;
+        }
+
+        .text_box {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: auto;
+            background-color: #fff;
+            min-height: 300px;
+            max-height: 300px;
+            margin-top: 8px;
+        }
+
+        .text_box.text_box3 {
+            min-height: auto;
+        }
+
+        .text_box.text_box2,
+        .text_box.text_box6 {
+            min-height: 300px;
+            max-height: 300px;
+            margin-top: 53px;
+        }
+
+        .text_box.text_box4 {
+            min-height: 68px;
+        }
+
+        .text_box li {
+            display: block;
+            width: 100%;
+            cursor: pointer;
+            line-height: 2;
+            border-bottom: 1px solid #E2E3E5;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        .text_box li:hover {
+            background-color: #EDF6F1;
+        }
+
+        .text_box li.clicked {
+            background-color: #217566;
+            color: #fff;
+        }
+
+        .text_box li span {
+            width: 100%;
+            text-align: left;
+            padding: 0 10px;
+        }
+
+        /*
+        li span.bg{
+            background-color:
+        }
+        */
+        .button {
+            width: 6%;
+            float: left;
+            padding-top: 0;
+            display: table;
+        }
+
+        .button ul {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .button li {
+            width: 100%;
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        .button li:first-child {
+            padding-top: 0;
+        }
+
+        .button li button {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #217566;
+            background-color: transparent;
+            border-radius: 50%;
+        }
+
+        .button li button span {
+            position: relative;
+        }
+
+        .button li button span::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: -6px;
+            left: 0;
+            width: 2px;
+            height: 8px;
+            background-color: #217566;
+            transform: rotate(-45deg);
+        }
+
+        .button li button span::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 2px;
+            height: 8px;
+            background-color: #217566;
+            transform: rotate(45deg);
+        }
+
+        .button li button span.left_btn::after {
+            left: -2px;
+            transform: rotate(45deg);
+        }
+
+        .button li button span.left_btn::before {
+            left: -2px;
+            transform: rotate(-45deg);
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        /*button{
+            width:100px;
+            height: 20px;
+            text-align: center;
+            border-radius: 5px;
+            float:right;
+            margin-top:5px;
+        }*/
+        .top-menu .main-content .contents {
+            padding-top: 30px;
+            padding-left: 0;
+            background-color: #fff;
+        }
+
+        .submit_btn {
+            padding: 20px 0 30px 0;
+            float: right;
+        }
+
+        .main-content {
+            padding: 77px 0 0 0
+        }
+
+        /* alert 팝업 */
+        .dim {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 9;
+        }
+
+        #alert {
+            width: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 9999999999999999999999999;
+        }
+
+        #alert .alert_table {
+            display: table;
+            width: 100%;
+            height: 100%;
+
+        }
+
+        #alert .alert_table .alert_inner {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        #alert .alert_table .alert_inner .alert_cover {
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 50px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        #alert .alert_table .alert_inner .alert_cover .title_text {
+            color: #222222;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        #alert .alert_table .alert_inner .alert_cover button[type="button"] {
+            padding: 10px 30px;
+            color: #fff;
+            background-color: #217566;
+            border-radius: 5px;
+            margin-top: 30px;
+            border: none;
+        }
+
+        .select {
+            margin-top: 40px;
+        }
+
+        .select dl {
+            display: inline-block;
+            position: relative;
+            line-height: 27px;
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        .select dl dt a {
+            display: block;
+            position: relative;
+            padding-left: 20px;
+            width: 100%;
+            padding: 10px 0;
+            font-size: 0.75em;
+            color: #000;
+            border: 1px solid #dedede;
+            border-radius: 40px;
+            text-align: center;
+        }
+
+        .select dl dt a.open {
+            padding-bottom: 50px;
+        }
+
+        .select dl dt a span {
+            display: inline-block;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            margin-top: -3px;
+            width: 10px;
+            height: 6px;
+        }
+
+        .select dl dd {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 40px;
+            z-index: 10;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #dedede;
+            border-top: none;
+            padding-top: 30px;
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        .select dl dd li {
+            border-top: 1px solid #eaefe3;
+        }
+
+        .select dl dd li:first-child {
+            border-top: none;
+        }
+
+        .select dl dd li a {
+            display: block;
+            position: relative;
+            padding-left: 31px;
+            line-height: 32px;
+            text-decoration: none;
+            font-size: 0.75em;
+            background-color: #fff;
+            color: #888;
+            transition: background-color 0.3s;
+        }
+
+        .select dl dd li a.active {
+            background-color: #f1f1f1;
+        }
+
+        .select dl dd li:hover a {
+            background-color: #EDF6F1;
+        }
+
+        .select dl dd li a::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 5px;
+            top: 6px;
+            width: 21px;
+            height: 21px;
+            background: url(images/spr_btns.png) no-repeat 0 0;
+        }
+
+        .select dl dd li .kr::after {
+            background-position: -392px -326px;
+        }
+
+        .select dl dd li .eng::after {
+            background-position: -392px -360px;
+        }
+
+        .select dl dd li .cn::after,
+        .select dl dd ul li .glo:after {
+            background-position: -392px -395px;
+        }
+
+        .select select {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #dedede;
+            border-radius: 40px;
+            padding: 0 20px;
+            margin: 0;
+        }
+
+        .selectType {
+            float: left;
+
+        }
+
+        select {
+            display: block;
+            width: 100%;
+            height: 40px;
+            border-radius: 5px;
+            padding: 0 12px;
+            border-color: #ddd;
+            font-size: 14px;
+
+        }
+
+        .checkbox_top {
+            float: left;
+            margin-left: 10px;
+        }
+
+        .checkbox_top li {
+            display: inline-block;
+            padding-top: 10px;
+        }
+
+
+        .selectBox {
+            width: 200px;
+        }
+
+        .selectBox dl {
+            position: relative;
+        }
+
+        .selectBox dt {
+            width: 100%;
+            cursor: pointer;
+            color: #222;
+            border: 1px solid #D9D9D9;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        .selectBox dt span.ar {
+            float: right;
+            position: relative;
+        }
+
+        .selectBox dt span.ar::before {
+            display: block;
+            position: absolute;
+            content: "";
+            width: 10px;
+            height: 2px;
+            right: 11px;
+            top: 11px;
+            transform: rotate(45deg);
+            transition: transform 0.3s;
+            background-color: #B2B2B2;
+            border-radius: 5px;
+        }
+
+        .selectBox dt span.ar::after {
+            display: block;
+            position: absolute;
+            content: "";
+            width: 10px;
+            height: 2px;
+            right: 5px;
+            top: 11px;
+            transform: rotate(-45deg);
+            transition: transform 0.3s;
+            background-color: #B2B2B2;
+            border-radius: 5px;
+        }
+
+        .selectBox dt.active span.ar::before {
+            transform: rotate(-45deg);
+        }
+
+        .selectBox dt.active span.ar::after {
+            transform: rotate(45deg);
+        }
+
+        .selectBox dd {
+            display: none;
+            position: absolute;
+            width: 100%;
+            top: 50px;
+            background-color: #fff;
+            max-height: 300px;
+            overflow: auto;
+            z-index: 99999;
+            border: 1px solid #D9D9D9;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .selectBox dt.active dd {
+            border-bottom: none;
+        }
+
+        .selectBox dt.active {
+            border-radius: 5px 5px 0 0;
+        }
+
+        .selectBox dd ul li {
+            width: 100%;
+            cursor: pointer;
+            padding: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .selectBox dd ul li:last-child {
+            border-bottom: none;
+        }
+
+        .selectBox dd ul li:hover {
+            background-color: #A4C2E3;
+            color: #fff;
+        }
+
+        .selectBox dd ul li.active {
+            background-color: #163692;
+            color: #fff;
+        }
+
+        .selectBox dt span.choi {
+            display: inline-block;
+            width: 150px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .dim {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 9990;
+        }
+
+        #pop {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 9999;
+        }
+
+        #pop .pop_image_inner {
+            width: 100%;
+            height: 100vh;
+            display: table;
+        }
+
+        #pop .pop_image_cover {
+            display: table-cell;
+            vertical-align: middle;
+
+        }
+
+        #pop .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+
+        }
+
+        #pop .container .title {
+            width: 100%;
+        }
+
+        #pop .container .title .download {
+            float: left;
+            border: 1px solid #eaeaea;
+            border-radius: 5px;
+        }
+
+        #pop .container .title .download img {
+            vertical-align: middle;
+            margin-right: 10px;
+            width: 13px;
+            margin-bottom: 1px;
+        }
+
+        #pop .container .title .download a {
+            display: block;
+            padding: 5px 15px;
+            color: #B2B2B2;
+        }
+
+        #pop .container .title .close {
+            float: right;
+            width: 30px;
+            height: 30px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        #pop .container .title .close::after {
+            content: '';
+            position: absolute;
+            display: block;
+            right: 7px;
+            top: 15px;
+            width: 15px;
+            height: 2px;
+            background-color: #222;
+            transform: rotate(45deg);
+        }
+
+        #pop .container .title .close::before {
+            content: '';
+            position: absolute;
+            display: block;
+            right: 7px;
+            top: 15px;
+            width: 15px;
+            height: 2px;
+            background-color: #222;
+            transform: rotate(-45deg);
+        }
+
+        #pop .container .content {
+            margin-top: 20px;
+            width: 100%;
+            overflow: auto;
+            max-height: 600px;
+        }
+
+        .load_wrap {
+            display: none;
+        }
+
+        .load_wrap.on {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999999999;
+            background-color: rgba(0, 0, 0, 0.3);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .load_wrap .load {
+            background-color: #fff;
+            width: 220px;
+            height: 90px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .load_wrap .load > h2 {
+            font-size: 17px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .loader,
+        .loader:before,
+        .loader:after {
+            border-radius: 50%;
+            width: 1.3em;
+            height: 1.3em;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+            -webkit-animation: load7 1.8s infinite ease-in-out;
+            animation: load7 1.8s infinite ease-in-out;
+        }
+
+        .loader {
+            color: #397FF4;
+            font-size: 10px;
+            margin: -10px auto 0;
+            position: relative;
+            text-indent: -9999em;
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
+
+        .loader:before,
+        .loader:after {
+            content: '';
+            position: absolute;
+            top: 0;
+        }
+
+        .loader:before {
+            left: -2.2em;
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+
+        .loader:after {
+            left: 2.2em;
+        }
+
+        @-webkit-keyframes load7 {
+            0%,
+            80%,
+            100% {
+                box-shadow: 0 2.5em 0 -1.3em;
+            }
+            40% {
+                box-shadow: 0 2.5em 0 0;
+            }
+        }
+
+        @keyframes load7 {
+            0%,
+            80%,
+            100% {
+                box-shadow: 0 2.5em 0 -1.3em;
+            }
+            40% {
+                box-shadow: 0 2.5em 0 0;
+            }
+        }
+
+
+        .contents .button {
+            height: 300px;
+            margin-top: 53px;
+        }
+
+        .contentsNot .button {
+            height: 68px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+<div class="mobile-author-actions"></div>
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+<main class="main-content">
+    <div class="contents" style="background-color:#FCFCFC;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mb-30">
+                    <div class="card" style="background-color: #fff !important; box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%)">
+                        <div class="breadcrumb-main" style="float: left; padding: 1.56rem;">
+                            <h4 class="text-capitalize breadcrumb-title">Trait View</h4>
+                        </div>
+                        <div class="container clearfix">
+                            <form action="" method="post">
+                                <div class="cover_top">
+                                    <div class="selectType">
+                                        <select id="select_crop">
+                                            <option value="고추" th:selected="${crop == '고추'}">고추</option>
+                                            <option value="대파" th:selected="${crop == '대파'}">대파</option>
+                                            <option value="멜론" th:selected="${crop == '멜론'}">멜론</option>
+                                            <option value="무" th:selected="${crop == '무'}">무</option>
+                                            <option value="배추" th:selected="${crop == '배추'}">배추</option>
+                                            <option value="수박" th:selected="${crop == '수박'}">수박</option>
+                                            <option value="양배추" th:selected="${crop == '양배추'}">양배추</option>
+                                            <option value="양파" th:selected="${crop == '양파'}">양파</option>
+                                            <option value="참외" th:selected="${crop == '참외'}">참외</option>
+                                            <option value="토마토" th:selected="${crop == '토마토'}">토마토</option>
+                                        </select>
+                                    </div>
+                                    <div class="checkbox_top selectBox">
+                                        <select class="manage">
+                                            <option th:selected="${type == 1}">품종관리</option>
+                                            <option th:selected="${type == 2}">원종관리</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="contents clearfix" style="clear:both; padding-top:10px;">
+                                    <h6 class="title">분석대상선택</h6>
+                                    <div class="box box1">
+                                        <input type="text" id="search_target" onchange="SearchTarget();" placeholder="품종-시교명ID, 원종-계통명ID 검색">
+                                        <div class="text_box text_box1" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
+                                            <ul id="target_list">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="button clearfix">
+                                        <ul>
+                                            <li>
+                                                <button type="button" class="right_plus" onclick="PlusBtn(0)"><span class="right_btn"></span></button>
+                                            </li>
+                                            <li>
+                                                <button type="button" onclick="MinusBtn(0)"><span class="left_btn"></span></button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="box box2">
+                                        <div class="text_box text_box2" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
+                                            <ul id="plus_target">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="contents contentsNot clearfix">
+                                    <h6 class="title" style="padding: 20px 0 7px 0">분석방법</h6>
+                                    <div class="box box3">
+                                        <input type="hidden">
+                                        <div class="text_box text_box3">
+                                            <ul>
+                                                <li><input type="checkbox" class="plus_method" value="Correlation"><span>Correlation</span></li>
+                                                <li><input type="checkbox" class="plus_method" value="Trait View"><span>Trait View</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="button clearfix">
+                                        <ul>
+                                            <li>
+                                                <button type="button" class="right_plus" onclick="PlusBtn(1)"><span class="right_btn"></span></button>
+                                            </li>
+                                            <li>
+                                                <button type="button" onclick="MinusBtn(1)"><span class="left_btn"></span></button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="box box4">
+                                        <input type="hidden">
+                                        <div class="text_box text_box4">
+                                            <ul id="method_ul">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="contents clearfix">
+                                    <h6 class="title">분석형질</h6>
+                                    <div class="box box1">
+                                        <input type="text" id="search_trait" onchange="SearchTrait();" placeholder="품종-시교명ID, 원종-계통명ID 검색">
+                                        <div class="text_box text_box5" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
+                                            <ul id="trait_list">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="button clearfix">
+                                        <ul>
+                                            <li>
+                                                <button type="button" class="right_plus" onclick="PlusBtn(2)"><span class="right_btn"></span></button>
+                                            </li>
+                                            <li>
+                                                <button type="button" onclick="MinusBtn(2)"><span class="left_btn"></span></button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="box box2">
+                                        <div class="text_box text_box6" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
+                                            <ul id="analysis_list">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="submit_btn">
+                                    <input type="button" class="btn btn-primary btn-sm" onclick="RunAnalysis();" value="분석실행">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="pop_image" id="pop">
+    <div class="pop_image_inner">
+        <div class="pop_image_cover">
+            <div class="container clearfix">
+                <div class="title clearfix">
+                    <div class="download">
+                        <a href="" download="" id="result_file"><img src="../assets/vendor_assets/img/arrow_bottom.png">DownLoad</a>
+                    </div>
+                    <div class="close" onclick="closeModal();"><span></span></div>
+                </div>
+                <div class="content">
+                    <!-- <img src="../assets/vendor_assets/img/2021112222148_traitplot.png" alt="view"> -->
+                    <img src="" alt="view" id="result_view">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="load_wrap">
+    <div class="load">
+        <h2>잠시만 기다려주세요</h2>
+        <div class="loader"></div>
+    </div>
+</div>
+
+<div class="dim"></div>
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+<script th:inline="javascript">
+    let inner_html = "";
+    let text_box;
+    let array1 = [];
+    let array2 = [];
+    let textLi;
+
+    $(document).ready(function () {
+        SearchTarget();
+        CheckFunction();
+        autoHeight();
+    });
+
+    // 작물 선택
+    $("#select_crop").change(function () {
+        SearchTarget();
+
+        $("#plus_target").empty();
+        $("#trait_list").empty();
+    });
+
+    // 품종/원종 선택
+    $(".manage").change(function () {
+        SearchTarget();
+
+        $("#plus_target").empty();
+        $("#trait_list").empty();
+    })
+
+    // 품종/원종 조회
+    function SearchTarget() {
+        var name = $("#select_crop").val();
+        var url = new URL(window.location).searchParams;
+        var total_id = url.get("total_id");
+        var selected = $(".manage").val();
+        var type = 0;
+
+        if (selected == '품종관리') {
+            type = 1;
+        } else {
+            type = 2;
+        }
+
+        var data = {"name": name, "total_id": total_id, "type": type};
+
+        $.ajax(
+            {
+                url: "selectTarget",
+                method: "POST",
+                dataType: "JSON",
+                data: data,
+                success: function (result) {
+                    var target_list = $("#target_list");
+                    var add_list = "";
+
+                    if (result.breed != null) {
+                        for (var i = 0; i < result.breed.length; i++) {
+                            add_list += '<li>';
+                            add_list += '<input type="checkbox" class="plus_target" name="' + result.breed[i].breed_name + '" value="' + result.breed[i].breed_id + '">';
+                            add_list += '<span class="target_list">' + result.breed[i].standard + '</span>';
+                            add_list += '</li>';
+                        }
+                    }
+                    if (result.basic != null) {
+                        for (var i = 0; i < result.basic.length; i++) {
+                            add_list += '<li>';
+                            add_list += '<input type="checkbox" class="plus_target" name="' + result.basic[i].basic_name + '" value="' + result.basic[i].basic_id + '">';
+                            add_list += '<span class="target_list">' + result.basic[i].standard + '</span>';
+                            add_list += '</li>';
+                        }
+                    }
+
+                    target_list.empty();
+                    target_list.append(add_list);
+
+                    // 붙여줌
+                    selectorCheck = document.querySelectorAll("#target_list li");
+                    selectorCheck = Array.prototype.slice.call(selectorCheck);
+
+                    selectorCheck2 = document.querySelectorAll("#plus_target li");
+                    selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
+
+                    window.addEventListener("keydown", onKeyWindow);
+                    window.addEventListener("keyup", onKeyWindow);
+
+                    for (var t = 0; t < selectorCheck.length; t++) {
+                        selectorCheck[t].addEventListener("click", onSectionSelector);
+                    }
+
+                    for (var g = 0; g < selectorCheck2.length; g++) {
+                        selectorCheck2[g].addEventListener("click", offSectionSelector);
+                    }
+
+                    CheckFunction();
+                }
+            });
+    }
+
+    function CheckFunction() {
+        $('.text_box li').off('click').on('click', function (e) {
+            if (!keyShiftBool) {
+                e.preventDefault();
+
+                $(this).toggleClass("clicked");
+
+                if ($(this).hasClass("clicked") == true) {
+                    $(this).children().eq(0).prop("checked", true);
+                } else {
+                    $(this).children().eq(0).prop("checked", false);
+                }
+            }
+        });
+    }
+
+    // 높이 조절
+    /*function autoHeight()
+    {
+        $(".box1 .text_box").each(function(idx, elem)
+        {
+            let box_height = $(elem).height();
+            $(elem).parent().next().css({"height" : $(elem).parent().height(), "padding-top": 0});
+        });
+    }*/
+
+    /* s : 구간 체크박스 선택 */
+    var keyShiftBool = false;
+    var selectorOnce = true;
+    selectorCheck = "";
+    selectorCheck = "";
+    selectorCheck2 = "";
+    selectorCheck2 = "";
+    selectorCheck3 = "";
+    selectorCheck3 = "";
+    selectorCheck4 = "";
+    selectorCheck4 = "";
+
+    function onKeyWindow(e) {
+        if (e.type === "keydown") {
+            if (e.keyCode === 16 && selectorOnce) {
+                console.log("keydown : ", e.keyCode)
+                keyShiftBool = true;
+                selectorOnce = false;
+            }
+        } else if (e.type === "keyup") {
+            keyShiftBool = false;
+            selectorOnce = true;
+        }
+    }
+
+    function onSectionSelector(e) {
+        var getList = document.querySelectorAll("#target_list li");
+        getList = Array.prototype.slice.call(getList);
+        var target = e.currentTarget;
+        var index = getList.indexOf(target);
+
+        if (keyShiftBool) {
+            getList[index].classList.add("clicked");
+            var checkedEls = document.querySelectorAll("#target_list li.clicked");
+            checkedEls = Array.prototype.slice.call(checkedEls);
+
+            var firstIndex = getList.indexOf(checkedEls[0]);
+
+            var lastIndex = getList.indexOf(checkedEls[checkedEls.length - 1]);
+
+            let num = firstIndex;
+            for (var i = 0; i < (Math.abs(lastIndex - firstIndex) + 1); i++) {
+                if (getList[num].children[0] !== undefined) {
+                    getList[num].children[0].checked = true;
+                    getList[num].classList.add("clicked");
+                }
+                num++;
+            }
+        }
+    }
+
+    function offSectionSelector(e) {
+        var getList = document.querySelectorAll("#plus_target li");
+        getList = Array.prototype.slice.call(getList);
+        var target = e.currentTarget;
+        var index = getList.indexOf(target);
+
+        if (keyShiftBool) {
+            getList[index].classList.add("clicked");
+            var checkedEls = document.querySelectorAll("#plus_target li.clicked");
+            checkedEls = Array.prototype.slice.call(checkedEls);
+
+            var firstIndex = getList.indexOf(checkedEls[0]);
+
+            var lastIndex = getList.indexOf(checkedEls[checkedEls.length - 1]);
+
+            let num = firstIndex;
+            for (var i = 0; i < (Math.abs(lastIndex - firstIndex) + 1); i++) {
+                if (getList[num].children[0] !== undefined) {
+                    getList[num].children[0].checked = true;
+                    getList[num].classList.add("clicked");
+                }
+                num++;
+            }
+        }
+    }
+
+    function setSectionSelector(e) {
+        var getList = document.querySelectorAll("#trait_list li");
+        getList = Array.prototype.slice.call(getList);
+        console.log('set : ', getList)
+        var target = e.currentTarget;
+        var index = getList.indexOf(target);
+
+        if (keyShiftBool) {
+            getList[index].classList.add("clicked");
+            var checkedEls = document.querySelectorAll("#trait_list li.clicked");
+            checkedEls = Array.prototype.slice.call(checkedEls);
+
+            var firstIndex = getList.indexOf(checkedEls[0]);
+
+            var lastIndex = getList.indexOf(checkedEls[checkedEls.length - 1]);
+
+            let num = firstIndex;
+            for (var i = 0; i < (Math.abs(lastIndex - firstIndex) + 1); i++) {
+                if (getList[num].children[0] !== undefined) {
+                    getList[num].children[0].checked = true;
+                    getList[num].classList.add("clicked");
+                }
+                num++;
+            }
+        }
+    }
+
+    function delSectionSelector(e) {
+        var getList = document.querySelectorAll("#analysis_list li");
+        getList = Array.prototype.slice.call(getList);
+        console.log('del : ', getList)
+        var target = e.currentTarget;
+        var index = getList.indexOf(target);
+
+        if (keyShiftBool) {
+            getList[index].classList.add("clicked");
+            var checkedEls = document.querySelectorAll("#analysis_list li.clicked");
+            checkedEls = Array.prototype.slice.call(checkedEls);
+
+            var firstIndex = getList.indexOf(checkedEls[0]);
+
+            var lastIndex = getList.indexOf(checkedEls[checkedEls.length - 1]);
+
+            let num = firstIndex;
+            for (var i = 0; i < (Math.abs(lastIndex - firstIndex) + 1); i++) {
+                if (getList[num].children[0] !== undefined) {
+                    getList[num].children[0].checked = true;
+                    getList[num].classList.add("clicked");
+                }
+                num++;
+            }
+        }
+    }
+
+    /* e : 구간 체크박스 선택 */
+
+    // 선택 이벤트
+    function PlusBtn(e) {
+        if (e == 0) {
+            $(document).find("input:checkbox[class=plus_target]:checked").each(function () {
+                var selected = $(".manage").val();
+                var detail_type = 0;
+
+                var target_add = "";
+
+                if (selected == '품종관리') {
+                    detail_type = 0;
+                } else {
+                    detail_type = 1;
+                }
+
+                target_add += '<li>';
+                target_add += '<input type="checkbox" class="minus_target" value="' + $(this).val() + '">';
+                target_add += '<span>' + $(this).next().text() + '</span>';
+                target_add += '</li>';
+
+                $(this).parent().remove();
+                $("#plus_target").append(target_add);
+
+                var data = {"deatil_name": $(this).attr("name"), "detail_type": detail_type};
+
+                $.ajax(
+                    {
+                        url: "selectTrait",
+                        method: "POST",
+                        dataType: "JSON",
+                        data: data,
+                        success: function (result) {
+                            var trait_list = $("#trait_list");
+                            var add_list = "";
+
+                            for (var i = 0; i < result.length; i++) {
+                                if (result[i].detail_type == 0) {
+                                    add_list += '<li>';
+                                    add_list += '<input type="checkbox" class="plus_trait" name="' + result[i].detail_name + '" value="' + result[i].detail_id + '">';
+                                    add_list += '<span class="trait_list" name="' + (i + 1) + '">품종-' + result[i].detail_title + '</span>';
+                                    add_list += '</li>';
+                                } else {
+                                    add_list += '<li>';
+                                    add_list += '<input type="checkbox" class="plus_trait" name="' + result[i].detail_name + '" value="' + result[i].detail_id + '">';
+                                    add_list += '<span class="trait_list" name="' + (i + 1) + '">원종-' + result[i].detail_title + '</span>';
+                                    add_list += '</li>';
+                                }
+                            }
+
+                            trait_list.empty();
+                            trait_list.append(add_list);
+
+                            CheckFunction();
+
+                            selectorCheck = document.querySelectorAll("#target_list li");
+                            selectorCheck = Array.prototype.slice.call(selectorCheck);
+
+                            selectorCheck2 = document.querySelectorAll("#plus_target li");
+                            selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
+
+                            selectorCheck3 = document.querySelectorAll("#trait_list li");
+                            selectorCheck3 = Array.prototype.slice.call(selectorCheck3);
+
+                            selectorCheck4 = document.querySelectorAll("#analysis_list li");
+                            selectorCheck4 = Array.prototype.slice.call(selectorCheck4);
+
+                            window.addEventListener("keydown", onKeyWindow);
+                            window.addEventListener("keyup", onKeyWindow);
+
+                            for (var t = 0; t < selectorCheck.length; t++) {
+                                selectorCheck[t].addEventListener("click", onSectionSelector);
+                            }
+
+                            for (var g = 0; g < selectorCheck2.length; g++) {
+                                selectorCheck2[g].addEventListener("click", offSectionSelector);
+                            }
+
+                            for (var f = 0; f < selectorCheck3.length; f++) {
+                                selectorCheck3[f].addEventListener("click", setSectionSelector);
+                            }
+
+                            for (var h = 0; h < selectorCheck4.length; h++) {
+                                selectorCheck4[h].addEventListener("click", delSectionSelector);
+                            }
+                        }
+                    });
+            })
+        } else if (e == 1) {
+            if ($("input:checkbox[class=plus_method]:checked").length == 2) {
+                return Alert1("분석방법은 단일 선택만 가능합니다.");
+            }
+
+            if ($(".minus_method").length == 0) {
+                $(document).find("input:checkbox[class=plus_method]:checked").each(function () {
+                    var target_add = "";
+
+                    target_add += '<li><input type="checkbox" class="minus_method" value="' + $(this).val() + '"><span>' + $(this).next().text() + '</span></li>';
+
+                    $(this).parent().remove();
+                    $(".text_box4").append(target_add);
+                })
+            } else {
+                return Alert1("분석방법은 단일 선택만 가능합니다.");
+            }
+        } else if (e == 2) {
+            if ($(".minus_method").val() == "Trait View" && $(".minus_trait").length > 1) {
+                return Alert1("하나의 분석 형질만 선택 가능합니다.");
+            } else {
+                $(document).find("input:checkbox[class=plus_trait]:checked").each(function () {
+                    var target_add = "";
+
+                    target_add += '<li>';
+                    target_add += '<input type="checkbox" class="minus_trait" name="' + $(this)[0].getAttribute("name") + '" value="' + $(this).val() + '">';
+                    target_add += '<span name="' + $(this)[0].nextElementSibling.getAttribute("name") + '">' + $(this).next().text() + '</span>';
+                    target_add += '</li>';
+
+                    $(this).parent().remove();
+                    $("#analysis_list").append(target_add);
+                });
+
+                selectorCheck = document.querySelectorAll("#target_list li");
+                selectorCheck = Array.prototype.slice.call(selectorCheck);
+
+                selectorCheck2 = document.querySelectorAll("#plus_target li");
+                selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
+
+                selectorCheck3 = document.querySelectorAll("#trait_list li");
+                selectorCheck3 = Array.prototype.slice.call(selectorCheck3);
+
+                selectorCheck4 = document.querySelectorAll("#analysis_list li");
+                selectorCheck4 = Array.prototype.slice.call(selectorCheck4);
+
+                window.addEventListener("keydown", onKeyWindow);
+                window.addEventListener("keyup", onKeyWindow);
+
+                for (var t = 0; t < selectorCheck.length; t++) {
+                    selectorCheck[t].addEventListener("click", onSectionSelector);
+                }
+
+                for (var g = 0; g < selectorCheck2.length; g++) {
+                    selectorCheck2[g].addEventListener("click", offSectionSelector);
+                }
+
+                for (var f = 0; f < selectorCheck3.length; f++) {
+                    selectorCheck3[f].addEventListener("click", setSectionSelector);
+                }
+
+                for (var h = 0; h < selectorCheck4.length; h++) {
+                    selectorCheck4[h].addEventListener("click", delSectionSelector);
+                }
+            }
+        }
+
+        CheckFunction();
+    }
+
+    function MinusBtn(e) {
+        if (e == 0) {
+            $(document).find("input:checkbox[class=minus_target]:checked").each(function () {
+                var add_list = "";
+
+                add_list += '<li><input type="checkbox" class="plus_target"><span class="target_list">' + $(this).next().text() + '</span></li>';
+
+                $(this).parent().remove();
+                $(".text_box1").append(add_list);
+            })
+
+            selectorCheck = document.querySelectorAll("#target_list li");
+            selectorCheck = Array.prototype.slice.call(selectorCheck);
+
+            selectorCheck2 = document.querySelectorAll("#plus_target li");
+            selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
+
+            selectorCheck3 = document.querySelectorAll("#trait_list li");
+            selectorCheck3 = Array.prototype.slice.call(selectorCheck3);
+
+            selectorCheck4 = document.querySelectorAll("#analysis_list li");
+            selectorCheck4 = Array.prototype.slice.call(selectorCheck4);
+
+            window.addEventListener("keydown", onKeyWindow);
+            window.addEventListener("keyup", onKeyWindow);
+
+            for (var t = 0; t < selectorCheck.length; t++) {
+                selectorCheck[t].addEventListener("click", onSectionSelector);
+            }
+
+            for (var g = 0; g < selectorCheck2.length; g++) {
+                selectorCheck2[g].addEventListener("click", offSectionSelector);
+            }
+
+            for (var f = 0; f < selectorCheck3.length; f++) {
+                selectorCheck3[f].addEventListener("click", setSectionSelector);
+            }
+
+            for (var h = 0; h < selectorCheck4.length; h++) {
+                selectorCheck4[h].addEventListener("click", delSectionSelector);
+            }
+        } else if (e == 1) {
+            $(document).find("input:checkbox[class=minus_method]:checked").each(function () {
+                var add_list = "";
+
+                add_list += '<li><input type="checkbox" class="plus_method"><span>' + $(this).next().text() + '</span></li>';
+
+                $(this).parent().remove();
+                $(".text_box3").append(add_list);
+            })
+        } else if (e == 2) {
+            $(document).find("input:checkbox[class=minus_trait]:checked").each(function () {
+                var add_list = "";
+
+                add_list += '<li>';
+                add_list += '<input type="checkbox" class="plus_trait" name="' + $(this).attr("name") + '" value="' + $(this).val() + '">';
+                add_list += '<span class="trait_list" name="' + $(this).next().attr("name") + '">' + $(this).next().text() + '</span>';
+                add_list += '</li>';
+
+                $(this).parent().remove();
+                $(".text_box5").append(add_list);
+            })
+
+            selectorCheck = document.querySelectorAll("#target_list li");
+            selectorCheck = Array.prototype.slice.call(selectorCheck);
+
+            selectorCheck2 = document.querySelectorAll("#plus_target li");
+            selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
+
+            selectorCheck3 = document.querySelectorAll("#trait_list li");
+            selectorCheck3 = Array.prototype.slice.call(selectorCheck3);
+
+            selectorCheck4 = document.querySelectorAll("#analysis_list li");
+            selectorCheck4 = Array.prototype.slice.call(selectorCheck4);
+
+            window.addEventListener("keydown", onKeyWindow);
+            window.addEventListener("keyup", onKeyWindow);
+
+            for (var t = 0; t < selectorCheck.length; t++) {
+                selectorCheck[t].addEventListener("click", onSectionSelector);
+            }
+
+            for (var g = 0; g < selectorCheck2.length; g++) {
+                selectorCheck2[g].addEventListener("click", offSectionSelector);
+            }
+
+            for (var f = 0; f < selectorCheck3.length; f++) {
+                selectorCheck3[f].addEventListener("click", setSectionSelector);
+            }
+
+            for (var h = 0; h < selectorCheck4.length; h++) {
+                selectorCheck4[h].addEventListener("click", delSectionSelector);
+            }
+        }
+
+        CheckFunction();
+    }
+
+    $("#search_target").keyup(function () {
+        var keyword = $("#search_target").val();
+        var target_list = $(".target_list");
+
+        for (var i = 0; i < target_list.length; i++) {
+            if (target_list[i].innerHTML.includes(keyword)) {
+                target_list[i].parentNode.style.display = "";
+            } else {
+                target_list[i].parentNode.style.display = "none";
+            }
+        }
+    });
+
+    $("#search_trait").keyup(function () {
+        var keyword = $("#search_trait").val();
+        var trait_list = $(".trait_list");
+
+        for (var i = 0; i < trait_list.length; i++) {
+            if (trait_list[i].innerHTML.includes(keyword)) {
+                trait_list[i].parentNode.style.display = "";
+            } else {
+                trait_list[i].parentNode.style.display = "none";
+            }
+        }
+    });
+
+    function RunAnalysis()
+    {
+        if ($(".minus_target").length == 0) {
+            return Alert1("분석대상을 선택하세요.");
+        }
+        if ($(".minus_method").length == 0) {
+            return Alert1("분석방법을 선택하세요.");
+        }
+        if ($(".minus_method").val() == "Correlation" && $(".minus_trait").length < 1) {
+            return Alert1("하나 이상의 분석 형질을 선택하세요.");
+        }
+        if ($(".minus_method").val() == "Trait View" && $(".minus_trait").length > 1) {
+            return Alert1("하나의 분석 형질만 선택 가능합니다.");
+        }
+
+        var target_id = [];
+        var target_name = [];
+        var method = 0;
+        var trait_id = [];
+        var selected = $(".manage").val();
+        var detail_type = 0;
+
+        if (selected == '품종관리') {
+            detail_type = 0;
+        } else {
+            detail_type = 1;
+        }
+
+        $(".minus_target").each(function () {
+            target_id.push($(this).val());
+            target_name.push(this.nextElementSibling.innerHTML);
+        });
+
+        $(".minus_method").each(function () {
+            if (this.nextElementSibling.innerHTML == "Trait View") {
+                method = 1;
+            }
+        });
+
+        $(".minus_trait").each(function () {
+            trait_id.push(this.nextElementSibling.getAttribute("name"));
+        });
+
+        var data = {
+            "detail_name": $("#select_crop").val(),
+            "detail_type": detail_type,
+            "target_id": target_id,
+            "target_name": target_name,
+            "method": method,
+            "trait_id": JSON.stringify(trait_id)
+        };
+
+        const loading = document.querySelector('.load_wrap');
+
+        $.ajax(
+        {
+        	url: "runAnalysis",
+        	method: "POST",
+        	dataType: "text",
+        	data: data,
+        	success: function (result)
+        	{
+        		loading.classList.remove('on');
+        		
+        		if (result == "")
+        		{
+        			return Alert1("분석에 실패하였습니다.")
+        		}
+        		else
+        		{
+        			$("#result_view").attr("src", result);
+        			$("#result_file").attr("href", result);
+        			
+        			showModal();
+        		}
+        	}
+       });
+    }
+
+    $(".selectBox dt").off().on("click", function () {
+        $(".selectBox dd").stop().slideToggle(300);
+        $(this).toggleClass("active");
+    });
+
+    let str = "";
+
+    $(".selectBox dd li").click(function (e) {
+        $(".selectBox dd li input[type='checkbox']");
+        $(".selectBox dt").removeClass("active");
+        $(".selectBox dd li").removeClass("active");
+
+        $(this).addClass("active");
+        $(this).children().eq(0).prop("checked", true);
+        $(this).children().eq(0).attr('onclick', "CheckManage(this);");
+
+        str = $(this).children().text();
+        $(".selectBox dt span.choi").text(str);
+        $(".selectBox dd").slideUp(300);
+    });
+
+    function showModal() {
+        $("#pop, .dim").show();
+    }
+
+    function closeModal() {
+        $("#pop, .dim").hide();
+    }
+</script>
+</body>
+</html>

@@ -1,18 +1,21 @@
 package com.digitalresource.Controller;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Date;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,7 +29,52 @@ public class LabController
 {
 	@Autowired
 	private LabService service;
-	
+
+	@RequestMapping("/correlation")
+	public ModelAndView Correlation(ModelAndView mv, @RequestParam(required = false, value = "crop") String crop, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam(defaultValue = "0", value = "type") int type)
+	{
+		mv.addObject("crop", crop);
+		mv.addObject("total_id", total_id);
+		mv.addObject("type", type);
+
+		mv.setViewName("lab/correlation");
+
+		return mv;
+	}
+
+	@RequestMapping("/traitView")
+	public ModelAndView TraitView(ModelAndView mv, @RequestParam(required = false, value = "crop") String crop, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam(defaultValue = "0", value = "type") int type)
+	{
+		mv.addObject("crop", crop);
+		mv.addObject("total_id", total_id);
+		mv.addObject("type", type);
+
+		mv.setViewName("lab/trait_view");
+
+		return mv;
+	}
+
+	@RequestMapping("/mabc")
+	public ModelAndView getDataManage(ModelAndView mv, Authentication auth)
+	{
+		User user = (User)auth.getPrincipal();
+
+		int analysis_type = 0;
+
+		AnalysisFile analysis = service.SelectAnalysisFile(user.getUser_id(), analysis_type);
+
+		if(analysis != null)
+		{
+			analysis.setAnalysis_file("/common/r/result/" + analysis.getAnalysis_file());
+		}
+
+		mv.addObject("analysis", analysis);
+
+		mv.setViewName("lab/mabc");
+
+		return mv;
+	}
+
 	@RequestMapping("/matrix")
 	public ModelAndView Analysis(ModelAndView mv, Authentication auth)
 	{
