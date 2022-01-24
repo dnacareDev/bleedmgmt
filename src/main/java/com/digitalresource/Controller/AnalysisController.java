@@ -1,30 +1,45 @@
 package com.digitalresource.Controller;
 
+import com.digitalresource.Entity.Breed;
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.Detail;
 import com.digitalresource.Service.AnalysisService;
+import com.digitalresource.Service.CropService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class AnalysisController {
+
+  @Autowired
+  private CropService cropService;
 
   @Autowired
   private AnalysisService service;
 
   // 통합 분석 페이지
   @RequestMapping("/analysis")
-  public ModelAndView Analysis(ModelAndView mv, @RequestParam(required = false, value = "crop") String crop, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam(defaultValue = "0", value = "type") int type) {
-    mv.addObject("crop", crop);
-    mv.addObject("total_id", total_id);
-    mv.addObject("type", type);
+  public ModelAndView Analysis(ModelAndView mv) {
+
+    String type = "파종대장";
+
+    List<Crop> crops = cropService.SearchCropList(type);
+
+    mv.addObject("cropList", crops);
 
     mv.setViewName("lab/analysis");
 
     return mv;
   }
-/*
 
   // 작목 조회
   @ResponseBody
@@ -41,7 +56,7 @@ public class AnalysisController {
     return result;
   }
 
-  // 분석형질 조회(품종, 원종)
+  // 분석형질 조회
   @ResponseBody
   @RequestMapping("selectTrait")
   public List<Detail> SelectTrait(@RequestParam("deatil_name") String deatil_name, @RequestParam("detail_type") int detail_type) {
@@ -50,7 +65,7 @@ public class AnalysisController {
     return result;
   }
 
-  // 형질 분석
+/*  // 형질 분석
   @ResponseBody
   @RequestMapping("runAnalysis")
   public String RunAnalysis(@RequestParam("detail_name") String detail_name, @RequestParam("detail_type") int detail_type, @RequestParam("target_id[]") int[] target_id, @RequestParam("target_name[]") String[] target_name, @RequestParam("method") int method, @RequestParam("trait_id") String trait_id) {
@@ -164,6 +179,5 @@ public class AnalysisController {
     }
 
     return result;
-  }
-*/
+  }*/
 }

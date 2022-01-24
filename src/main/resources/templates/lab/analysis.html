@@ -791,7 +791,7 @@
                             <form action="" method="post">
                                 <div class="cover_top">
                                     <div class="selectType">
-                                        <select id="select_crop">
+                                        <!--<select id="select_crop">
                                             <option value="고추" th:selected="${crop == '고추'}">고추</option>
                                             <option value="대파" th:selected="${crop == '대파'}">대파</option>
                                             <option value="멜론" th:selected="${crop == '멜론'}">멜론</option>
@@ -802,6 +802,12 @@
                                             <option value="양파" th:selected="${crop == '양파'}">양파</option>
                                             <option value="참외" th:selected="${crop == '참외'}">참외</option>
                                             <option value="토마토" th:selected="${crop == '토마토'}">토마토</option>
+                                        </select>-->
+                                        <select id="select_crop">
+                                            <th:block th:each="list : ${cropList}">
+                                                <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_name}" th:text="${list.crop_name}"></option>
+                                                <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_name}" th:text="${list.crop_name}" selected></option>
+                                            </th:block>
                                         </select>
                                     </div>
                                 </div>
@@ -936,6 +942,30 @@
     let array2 = [];
     let textLi;
 
+    /* s : sessionStorage 저장 예제 */
+    function setSessionS(key, value) {
+        sessionStorage.setItem(key, value);
+    }
+
+    function getSessionS(key, useRemove) {
+        let result = "";
+        if (sessionStorage.getItem(key) !== null) {
+            result = sessionStorage.getItem(key);
+            if (useRemove) {
+                removeSessionS(key);
+            }
+            return result;
+        } else {
+            result = '2';
+            return result;
+        }
+    }
+
+    function removeSessionS(key) {
+        sessionStorage.removeItem(key);
+    }
+    /* e : sessionStorage 저장 예제 */
+
     $(document).ready(function () {
         SearchTarget();
         CheckFunction();
@@ -958,21 +988,15 @@
         $("#trait_list").empty();
     })
 
-    // 품종/원종 조회
+    // 파종 조회
     function SearchTarget() {
-        var name = $("#select_crop").val();
-        var url = new URL(window.location).searchParams;
-        var total_id = url.get("total_id");
-        var selected = $(".manage").val();
-        var type = 0;
+        let name = $("#select_crop").val();
+        let url = new URL(window.location).searchParams;
+        let total_id = url.get("total_id");
+        let selected = $(".manage").val();
+        let type = 0;
 
-        if (selected == '품종관리') {
-            type = 1;
-        } else {
-            type = 2;
-        }
-
-        var data = {"name": name, "total_id": total_id, "type": type};
+        let data = {"name": name, "total_id": total_id, "type": type};
 
         $.ajax(
             {
@@ -984,21 +1008,11 @@
                     var target_list = $("#target_list");
                     var add_list = "";
 
-                    if (result.breed != null) {
-                        for (var i = 0; i < result.breed.length; i++) {
-                            add_list += '<li>';
-                            add_list += '<input type="checkbox" class="plus_target" name="' + result.breed[i].breed_name + '" value="' + result.breed[i].breed_id + '">';
-                            add_list += '<span class="target_list">' + result.breed[i].standard + '</span>';
-                            add_list += '</li>';
-                        }
-                    }
-                    if (result.basic != null) {
-                        for (var i = 0; i < result.basic.length; i++) {
-                            add_list += '<li>';
-                            add_list += '<input type="checkbox" class="plus_target" name="' + result.basic[i].basic_name + '" value="' + result.basic[i].basic_id + '">';
-                            add_list += '<span class="target_list">' + result.basic[i].standard + '</span>';
-                            add_list += '</li>';
-                        }
+                    for (var i = 0; i < result.breed.length; i++) {
+                        add_list += '<li>';
+                        add_list += '<input type="checkbox" class="plus_target" name="' + result.breed[i].breed_name + '" value="' + result.breed[i].breed_id + '">';
+                        add_list += '<span class="target_list">' + result.breed[i].standard_data + '</span>';
+                        add_list += '</li>';
                     }
 
                     target_list.empty();
@@ -1044,14 +1058,14 @@
     }
 
     // 높이 조절
-    /*function autoHeight()
+    function autoHeight()
     {
         $(".box1 .text_box").each(function(idx, elem)
         {
             let box_height = $(elem).height();
             $(elem).parent().next().css({"height" : $(elem).parent().height(), "padding-top": 0});
         });
-    }*/
+    }
 
     /* s : 구간 체크박스 선택 */
     var keyShiftBool = false;
@@ -1466,8 +1480,7 @@
         }
     });
 
-    function RunAnalysis()
-    {
+    function RunAnalysis() {
         if ($(".minus_target").length == 0) {
             return Alert1("분석대상을 선택하세요.");
         }
@@ -1521,28 +1534,24 @@
         const loading = document.querySelector('.load_wrap');
 
         $.ajax(
-        {
-        	url: "runAnalysis",
-        	method: "POST",
-        	dataType: "text",
-        	data: data,
-        	success: function (result)
-        	{
-        		loading.classList.remove('on');
-        		
-        		if (result == "")
-        		{
-        			return Alert1("분석에 실패하였습니다.")
-        		}
-        		else
-        		{
-        			$("#result_view").attr("src", result);
-        			$("#result_file").attr("href", result);
-        			
-        			showModal();
-        		}
-        	}
-       });
+            {
+                url: "runAnalysis",
+                method: "POST",
+                dataType: "text",
+                data: data,
+                success: function (result) {
+                    loading.classList.remove('on');
+
+                    if (result == "") {
+                        return Alert1("분석에 실패하였습니다.")
+                    } else {
+                        $("#result_view").attr("src", result);
+                        $("#result_file").attr("href", result);
+
+                        showModal();
+                    }
+                }
+            });
     }
 
     $(".selectBox dt").off().on("click", function () {
