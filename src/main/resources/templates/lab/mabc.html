@@ -1,0 +1,1651 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user = ${#authentication.principal}">
+<head>
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+    <style>
+        .clearfix::after{clear:both; content: ""; display: block;}
+
+        .title{
+            font-size:20px;
+            padding-bottom:50px;
+            font-weight: 600;
+		    line-height: 1.2;
+		    color: #272b41;
+        }
+        .container{
+            width: 100%;
+            margin:50px auto;
+        }
+        .contents{
+            width:100%;
+            padding: 50px;
+        }
+        .card{
+            padding: 30px;
+        }
+        .text{
+        	margin-left: 10px;
+        	float:left;
+            border: 1px solid #222222;
+            width:30%;
+            height:45px;
+            border-radius: 5px;
+            background-color: #FFFFFF;
+        }
+        .text:first-child{
+        	margin-left:0;
+        }
+        .submit{
+        	float:left;
+            border: 1px solid #217566;
+            border-radius: 5px;
+            height:45px;
+            font-size: 13px;
+            color:#fff;
+            width: calc((20% - 20px)/2);
+            margin-left: 10px;
+            background-color: #217566;
+        }
+        #filed{
+            display:none;
+        }
+        .top-menu .contents, .top-menu a{
+        	padding-left: 0;
+        }
+        .container a{
+        	color: #217566;
+        	text-decoration: underline;
+        }
+        .data_file{
+        	clear: both;
+        	border: 1px solid #ddd;
+        	margin-top: 30px;
+        	padding: 10px;
+        	
+        }
+        *{
+		    margin: 0;
+		    padding: 0;
+		    box-sizing: border-box;
+		}
+#wrap {height: auto;}
+::-webkit-scrollbar {width:8px; height: 8px;}
+::-webkit-scrollbar-track {background:#efefef;}
+::-webkit-scrollbar-thumb {background-color:#9999;}
+::-webkit-scrollbar-thumb:hover {background-color:#666;}
+#main .data_table_section .data_table_title {font-weight: bold; margin-bottom: 15px;}
+
+
+.tb_menu_btn, .tb_blank {display: none;}
+
+/* mab_top_bar 공통 */
+
+.mab_bar {display: flex; align-items: center;}
+.mab_bar label {display: inline-block; height: 40px; line-height: 40px; font-size: 14px; font-weight: bold; color: #fff; border-radius: 3px; border: 1px solid #5796FF; background: #397FF4; cursor: pointer; padding: 0 20px; margin: 0 0 0 5px;}
+.input_file_wrap {display: flex; position: relative;}
+.file_text {width: 260px; height: 40px; border: 1px solid #E6EBEE; text-align: center; border-radius: 4px; background: #fff; overflow-x: hidden; text-overflow: ellipsis; white-space:nowrap; padding: 5px; font-size: 13px; text-align: left;}
+.input_file_wrap .flie_btn_box {display: flex;}
+.mab_bar > .input_file_wrap > .file_ex {position: absolute; top: -22px; left: 2px; font-size: 14px; color: #397FF4; text-decoration: underline; font-weight: bold;}
+    
+/* mab_top_bar */
+.mab_top_bar input.addMabcFile {display: none;}
+.mab_top_bar {position: relative; display: flex; align-items: center; padding-bottom: 40px; border-bottom: 1px solid #03A6FF; margin-bottom: 50px;}
+.mab_bar_left {position: relative; display: flex; align-items: center; margin-right: 15px; padding-right: 15px;}
+.mab_bar_left:after {content: ''; position: absolute; right: 0; display: block; width: 1px; height: 22px; background: #D8D8D8;}
+.mab_bar_left select {width: 112px; height: 40px; border: 1px solid #E6EBEE; border-radius: 4px; background: #fff url('../../images/select_arrow.png') no-repeat center right 12px/8px; padding: 0 16px;}
+.mab_bar_left select.type_select_info {width: 200px; height: 40px; border: 1px solid #E6EBEE; border-radius: 4px; margin: 0px 0px 0 5px; overflow-x: hidden; text-overflow: ellipsis; white-space:nowrap;}
+.mab_top_bar .give_info {position: absolute; bottom: 10px; left: 5px; font-size: 14px; color: #707070;}
+
+/* 버튼 공통 */
+.mab_bar_right button {margin-left: 5px;}
+
+.mab_bar_right button.save {display: block; height: 40px; line-height: 40px; font-size: 14px; font-weight: bold; color: #397FF4; background: #ECF2F5; border-radius: 4px; padding: 0 20px;}
+
+/* 다운로드 버튼 - 파란색 */
+/* .mab_bar_right button.dawnload {height: 40px; line-height: 40px; font-size: 14px; font-weight: bold; color: #fff; border-radius: 3px; border: 1px solid #5796FF; background: #397FF4; cursor: pointer; padding: 0 15px;}  */
+
+/* 다운로드 버튼 - 회색 */
+.mab_bar_right button.dawnload {display: block; height: 40px; line-height: 18px; font-size: 14px; font-weight: bold; color: #397FF4; background: #ECF2F5; border-radius: 4px; padding: 0 10px; letter-spacing: -0.05em;}
+
+.mab_top_bar button.view {position: absolute; right: 0; bottom: 0; width: 168px; height: 48px; font-size: 14px; font-weight: bold; text-align: center; background: #397FF4; color: #fff; border-radius: 4px 4px 0 0;}
+
+/* mab_chr_wrap */
+.mab_chr_wrap {display: flex; justify-content: space-between; width: 100%;}
+.mab_chr_wrap_left {width: 50%; padding: 0 20px; border: 1px solid #E6EBEE; margin-right: 10px; height: 730px; border-radius: 8px; -webkit-border-radius: 8px; padding: 24px ; background-color:#fff;}
+.mab_chr_wrap_right {width: 50%; display: flex; justify-content: flex-end; border: 1px solid #E6EBEE; height: 730px; border-radius: 8px; -webkit-border-radius: 8px; padding: 24px; background-color:#fff;}
+
+.mab_chr_wrap_left .btn_all_box {margin-bottom: 20px; padding-right: 5px;}
+
+.chr_btn_wrap {display: flex; align-items: center; justify-content: space-between; width: 100%;}
+.chr_select_wrap {display: flex; align-items: center; justify-content: center; margin-top: 12px;}
+.chr_btn_wrap > div {display: flex; align-items: center;}
+.chr_btn_wrap p {font-size: 20px; color: #000;}
+.commonBtn {width: 120px; height: 40px; font-size: 14px; line-height: 40px; text-align: center; border: 1px solid #000; background: #fff; color: #4E4E4E; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 0 0px 0 6px;  position: relative; z-index: 1;}
+.commonBtn.active {width: 96px; background: #4E4E4E; color: #fff; border: none;}
+.chr_select_wrap p {width: 120px; height: 40px; font-size: 14px; line-height: 38px; border: 1px solid #E6EBEE;
+    margin-right: 10px; text-align: center; border-radius: 4px;}
+.chr_select_wrap select {width: 140px; height: 40px; border: 1px solid #E6EBEE; border-radius: 4px; font-weight: bold;
+    background: #fff url('../../images/select_arrow.png') no-repeat center right 12px/8px; padding: 0 16px; font-size: 14px}
+.chr_select_wrap .commonBtn {width: 200px; border: none; margin: 0 0 0 10px; background: #fff; color: #4E4E4E; border: 1px solid #4E4E4E;}
+.chr_select_wrap .commonBtn.active {width: 200px; border: none; margin: 0 0 0 10px; background: #4E4E4E; color: #fff; border: 1px solid #4E4E4E;}
+
+
+.table_page_wrap {position: relative; top: -600px;}
+.visualWrapPosition {height: 0;}
+.tableWrap {position: relative; user-select:none; width: calc(48% - 35px); height: 480px; overflow: auto; margin: 0px; left: -40px;}
+/* .visualWrapPosition::before {pointer-events: none; content: ''; display: block; position: absolute; left: 0; top: -120px; width: 48%; height: 640px; border: 1px solid #E6EBEE; border-radius: 8px;}
+.visualWrapPosition::after {pointer-events: none; content: ''; display: block; position: absolute; right: -30px; top: -120px; width: 53%; height: 640px; border: 1px solid #E6EBEE; border-radius: 8px;} */
+.tableShadow {width: 100%; height: 20px;}
+.tableWrap table {width: 1260px; height: 100%;}
+.tableWrap th {display: block; width: 90px; text-align: center; margin-right: 1px; border-left: 1px solid #E3E3E3; font-size: 15px;}
+.tableWrap tr {display: flex; align-items: center; background-color: #fff; height: 25px;
+    /* margin-bottom: 12px; */
+}
+.tableWrap thead tr:first-child {border: 1px solid #E3E3E3; background: #F7F7F7; padding: 15px 0;}
+.tableWrap td {display: block; width: 90px; height: 25px; text-align: center; margin-right: 1px; line-height: 25px; font-size: 15px; padding:0;}
+
+.chrOption{
+}
+.activeAllChr{
+    background: #4E4E4E;
+    color: #E6EBEE;
+}
+
+
+.visualWrapPosition {position: relative; width: 100%;}
+.visualWrap{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+/* ------------------------------------ */
+/*                그래프                 */
+/* ------------------------------------ */
+.graphContainer{
+    width: calc(52% - 90px);
+    height: 480px;
+    position: relative;
+    top: -25px;
+    left: 15px;
+}
+.graphContainer .dotline:first-child {display: none;}
+.graphContainer .dotline:nth-last-child(2) {display: none;}
+.dotline{
+    width: 98%;
+    border-bottom: 1px dotted #000;
+    position: absolute;
+    pointer-events: none;
+    left: 5%;
+}
+.dotline:last-child{
+    border-top: 1px dotted #000;
+    border-bottom: 0;
+}
+.dotline::after{
+    width: 30px;
+}
+.graphWrap{
+    position: relative;
+    width: 100%;
+    height: 480px;
+    display: flex;
+    overflow: auto;
+    overflow-y: hidden;
+    padding: 30px 20px 20px;
+    margin: 20px;
+}
+
+.mother{
+    background-color: #ff6982;
+    overflow: hidden;
+    min-width: 16px;
+    max-width: 16px;
+    height: 400px;
+    margin: 0 8px;
+    border-radius: 8px;
+    transform-origin: 0;
+}
+.father{
+    background-color: #6982ff;
+    overflow: hidden;
+    min-width: 16px;
+    max-width: 16px;
+    height: 400px;
+    margin: 0 8px;
+    border-radius: 8px;
+    transform-origin: 0;
+}
+.graphShadow{
+    min-width: 16px;
+    max-width: 16px;
+    height: 440px;
+    margin: 0 8px;
+    border-radius: 8px;
+    box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgb(252, 252, 252) -3px -3px 6px 1px inset;
+}
+.graphElName{
+}
+.graphChrEl{
+    height: 440px;
+    margin: 0 8px;
+    border-radius: 8px;
+    transform-origin: 0;
+}
+.graphEl{
+    overflow: hidden;
+    min-width: 16px;
+    max-width: 16px;
+    height: 400px;
+    margin: 0 8px;
+    border-radius: 8px;
+    transform-origin: 0;
+}
+.graphName{
+    min-width: 37px;
+    font-size: 8px;
+    user-select:none;
+    pointer-events: none;
+    transform: translate(0, -15px) rotate(-45deg);
+    height: 13px;
+}
+.chrStack{
+    width: 100%;
+}
+.graphElStackName{
+    height: 400px;
+    margin: 0 8px;
+    border-radius: 8px;
+    transform-origin: 0;
+}
+.chrStackName{
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+.chrStackSmall{
+    width: 100%;
+}
+
+
+
+/* ------------------------------------ */
+/*                테이블                 */
+/* ------------------------------------ */
+
+
+
+/* ------------------------------------ */
+/*                 모달                 */
+/* ------------------------------------ */
+.modal{
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0; left: 0;
+    z-index: 99999999;
+}
+.modalBg{
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+}
+.modalContent{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 910px;
+    height: 814px;
+    background: #EEF2F5;
+    border-radius: 4px;
+    padding: 20px 40px 40px;
+}
+
+.modal_close {display: none;}
+.modal_title {display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;}
+.modal_title p {font-size: 20px; color: #397FF4; font-weight: bold;}
+.modal_title button {width: 100px; height: 40px; font-size: 15px; color: #4E4E4E; font-weight: bold;
+    border: 1px solid #000; border-radius: 4px; background: #fff;}
+.mabcModalSelect {width: 165px; height: 40px; border: 1px solid #E6EBEE; border-radius: 4px; font-weight: bold;
+    background: #fff url('../../images/select_arrow.png') no-repeat center right 12px/8px; padding: 0 16px;}
+.modalGraph_Container{
+    width: 830px;
+    height: 650px;
+    background: #fff;
+    border-radius: 30px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 36px 30px;
+    margin-top: 15px;
+}
+.modalGraph_control {display: block; width: 80px;}
+.modalGraph_control button {display: block; width: 24px; height: 24px; background: #fff; border: 1px solid #E6EBEE;
+    border-radius: 6px; font-size: 20px; font-weight: bold; color: #397FF4; line-height: 20px; margin-bottom: 3px;}
+.modalGraph_control button:nth-child(2):after {content: ''; display: block; width: 14px; height: 1px; background: #D9D9D9; margin: 16px auto 0;}
+.modalGraph_control input {display: block; transform: rotate(90deg) translate(108px, 75px);}
+.modalGraph_Wrap{
+    width: 90%;
+    height: 650px;
+    overflow: auto;
+    padding-bottom: 30px;
+}
+.modalGraph_scale{
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transform-origin: 0 0;
+    transform: scale(1);
+}
+.modalGraphElWrap{
+    position: relative;
+}
+.modalGraphName{
+    transform: translateY(-10px);
+    display: inline-block;
+}
+.modalStackDesc{
+    position: absolute;
+    font-size: 10px;
+    left: 50px;
+}
+.modalGraphEl{
+    min-width: 16px;
+    /* height: 527px; */
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.modalGraphSection{
+    position: relative;
+}
+.modalGraphElStack{
+    width: 100%;
+}
+.modalStackDescLine{
+    position: absolute;
+    width: 10px;
+    height: 1px;
+    border-top: 1px solid #000;
+    left: 20px;
+    transform-origin: 0;
+}
+.modalZoomBtn{
+    width: 50px;
+    height: 50px;
+}
+.modalSlider {
+    -webkit-appearance: none;
+    width: 174px;
+    height: 10px;
+    border-radius: 5px;  
+    background: #fff;
+    border: 1px solid #E6EBEE;
+    outline: none;
+}
+
+.modalSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%; 
+    background: #fff;
+    border: 3px solid #397FF4;;
+    cursor: pointer;
+}
+.activeClickAni{
+    animation: opacityAni 1500ms infinite linear;
+}
+@keyframes opacityAni {
+    0%{opacity: 0;}
+    50%{opacity: 1;}
+    100%{opacity: 0;}
+}
+
+.cloneParent{
+    padding-top: 1000px;
+    display: flex;
+    align-items: flex-end;
+}
+
+@media (min-width: 1200px){
+	
+}
+.main-content .container-fluid {
+    max-width: 100%;
+    padding: 50px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+        .load_wrap {display: none;}
+        .load_wrap.on {display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999999999; background-color: rgba(0, 0, 0, 0.3); justify-content: center; align-items: center;}
+
+        .load_wrap .load {background-color: #fff; width: 220px; height: 90px; text-align: center; padding: 15px; border-radius: 6px;}
+        .load_wrap .load > h2 {font-size: 17px; font-weight: bold; color: #666;}
+
+        .loader,
+        .loader:before,
+        .loader:after {
+        border-radius: 50%;
+        width: 1.3em;
+        height: 1.3em;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        -webkit-animation: load7 1.8s infinite ease-in-out;
+        animation: load7 1.8s infinite ease-in-out;
+        }
+        .loader {
+        color: #397FF4;
+        font-size: 10px;
+        margin: -10px auto 0;
+        position: relative;
+        text-indent: -9999em;
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+        }
+        .loader:before,
+        .loader:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        }
+        .loader:before {
+        left: -2.2em;
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+        }
+        .loader:after {
+        left: 2.2em;
+        }
+        @-webkit-keyframes load7 {
+        0%,
+        80%,
+        100% {
+            box-shadow: 0 2.5em 0 -1.3em;
+        }
+        40% {
+            box-shadow: 0 2.5em 0 0;
+        }
+        }
+        @keyframes load7 {
+        0%,
+        80%,
+        100% {
+            box-shadow: 0 2.5em 0 -1.3em;
+        }
+        40% {
+            box-shadow: 0 2.5em 0 0;
+        }
+        }
+    </style>
+</head>
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+<div class="mobile-author-actions"></div>
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+<main class="main-content">
+
+
+	<!-- 여기다가 len 경로 넣어주세요 -->
+	<th:block th:if="${analysis != null}">
+		<div style="display:none;" class="serverLen" th:text="|http://112.169.63.197:8863${analysis.analysis_file}|"></div>
+	</th:block>
+	<th:block th:if="${analysis == null}">
+		<div style="display:none;" class="serverLen"></div>
+	</th:block>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12 mb-30">
+				<div class="card">
+					<div class="breadcrumb-main" style="float: left;">
+						<h4 class="text-capitalize breadcrumb-title">Data 관리</h4>
+					</div>
+					<div class="contents clearfix" style="max-width: 1300px; background-color:#fff; padding: 15px 0 0 0">
+							<div style="display:flex; flex-direction:column;">
+								<div style="margin-bottom:20px;">
+									<form action="" method="POST" id="insert_form">
+										<th:block th:if="${analysis != null}">
+											<input type="text" class="text pcText" readonly th:value="${analysis.analysis_origin_file}">
+										</th:block>
+										<th:block th:if="${analysis == null}">
+											<input type="text" class="text pcText" readonly>
+										</th:block>
+										<input type="file" class="addMabcFile submitLen" id="len_file" name="file" onchange="onChangeLen()" style="display:none;">
+										<button type="button" class="submit" onclick="document.querySelector('.submitLen').click()">fasta 첨부</button>
+										<button type="button" class="submit" onclick="InsertMarker()" >파일 변환</button>
+										<input type="file" id="filed1" name="filed1" style="display: none;">
+									</form>
+								</div>
+								<div>
+									<input type="text" class="text pcText" readonly>
+									<input id="input-file" type="file"  class="addMabcFile submitMABC" onchange="readExcel()" style="display:none;">
+									<button type="button" class="submit" onclick="document.querySelector('.submitMABC').click()">marker 첨부</button>
+									<button type="button" class="submit" onclick="onClickRun()" >분석 실행</button>
+									<input type="file" id="filed2" style="display: none;">
+								</div>
+							</div>
+					</div>
+					<div class="data_file" style="overflow: auto; height: 750px;">
+						<section class="data_table_section">
+							<div class="mab_chr_wrap">
+								<div class="mab_chr_wrap_left">
+									<div class="btn_all_box">
+										<div class="chr_btn_wrap"></div>
+										<div class="chr_select_wrap">
+											<p>개체명순</p>
+											<select class="chrSelectBox" onchange="onChangeChrSort()">
+												<option disabled selected>정렬선택</option>
+											</select>
+											<div class="commonBtn allchr" onclick="onClickAllChr(this)">All chromosome</div>
+										</div>
+									</div>
+								</div>
+								<div class="mab_chr_wrap_right"></div>
+							</div>
+							
+							<!-- 그래프 -->
+							<div class="table_page_wrap">
+								<div class="visualWrapPosition">
+									<div class="visualWrap">
+										<div class="tableWrap">
+											<div class="tableContent">
+												<table id="table" class="table"></table>
+											</div>
+										</div>
+										<div class="graphContainer">
+											<div class="graphWrap"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="load_wrap">
+	    <div class="load">
+	        <h2>잠시만 기다려주세요</h2>
+	        <div class="loader"></div>
+	    </div>
+	</div>
+</main>
+<script type="text/javascript">
+	function InsertMarker()
+	{
+		var data = new FormData($("#insert_form")[0]);
+		
+		var loading = document.querySelector('.load_wrap');
+		
+		loading.classList.add('on');
+		
+		$.ajax(
+		{
+			url : "insertMarker",
+			type : "POST",
+			data : data,
+			cache : false,
+			contentType : false,
+			processData : false,
+			success : function(result)
+			{
+				loading.classList.remove('on');
+				
+				document.querySelector(".serverLen").innerText = result;
+				
+				setTimeout(function(){
+					readLenFile();					
+				}, 10)
+			},
+			error : function(e)
+			{
+				console.log(e);
+				
+				loading.classList.remove('on');
+			}
+		})
+	}
+
+
+
+
+
+//------------------------------------------------------
+//그래프
+//------------------------------------------------------
+var xlsxData = {};
+var graphWrap = document.querySelector(".graphWrap");
+var chartDataArr = {};
+var chrTotalData = {};
+var chrTotalIndex = 0; 
+var chrPercent = {};
+var clickX = 0;
+var clickY = 0;
+var isFirst = true;
+var lengthData = [];
+
+//# . 0 Len 파일 읽기
+function onChangeLen(e){
+	var input = event.target;
+	
+	var fileForm = input.files[0].name.split(".")[1];
+	
+	document.querySelectorAll(".pcText")[0].value = input.files[0].name
+	
+	
+	/*
+	if(fileForm !== "len"){
+	alert(".len 파일이 아닙니다.");
+	event.target.value = null;
+	return
+	};
+	*/
+	
+	var reader = new FileReader();
+	reader.onload = function () {
+	var data = reader.result;
+	
+	var newLengthData = data.replace(/(\r\n|\n|\r)/gm, "-");
+	newLengthData = newLengthData.split("-");
+	lengthData = [];
+	for(var i = 0 ; i < newLengthData.length ; i++){
+		if(!newLengthData[i]){continue}
+			var lengthEl = newLengthData[i].split(" ");
+			if(lengthEl[0].substr(0, 3) == "Chr"){
+				lengthData.push(lengthEl[1]);
+			}
+		}
+	};
+	reader.readAsBinaryString(input.files[0]);
+
+}
+
+//# . 1 엑셀 data 가져오기
+function readExcel() {
+	
+	if(lengthData.length == 0){
+		alert("파일변환을 먼저 해주세요");
+		return;
+	}
+	
+var input = event.target;
+var reader = new FileReader();
+reader.onload = function () {
+document.querySelectorAll(".pcText")[1].value = input.files[0].name
+var fileForm = input.files[0].name.split(".")[1];
+if(fileForm !== "xlsx"){
+document.querySelector(".file_text").placeholder = "MABC xlsx파일을 넣어주세요.";
+alert(".xlsx 파일이 아닙니다.");
+event.target.value = null;
+return
+};
+
+var data = reader.result;
+var workBook = XLSX.read(data, { type: 'binary' });
+workBook.SheetNames.forEach(function (sheetName) {
+var rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
+xlsxData = JSON.parse(JSON.stringify(rows));
+parsingData(xlsxData);
+})
+};
+reader.readAsBinaryString(input.files[0]);
+}
+
+//# . 2 data 원하는 형태로 변환
+function parsingData(xlsxData){
+for(var i = 0 ; i <  xlsxData.length ; i++){
+for(var key in xlsxData[i]){
+if(typeof(xlsxData[i].pos)!=="number"){continue;}
+if(key == "f" || key == "m" || key == "id" || key == "pos" || key == "chr"){continue;}
+
+chartDataArr[key] = chartDataArr[key] ? chartDataArr[key] : [];
+chrPercent[key] = {};
+chartDataArr[key].push({
+type : xlsxData[i][key],
+pos : xlsxData[i]["pos"],
+chr : xlsxData[i]["chr"],
+name: xlsxData[i]["id"]
+});
+}
+if(typeof(xlsxData[i].pos)=="number"){
+chrTotalData[xlsxData[i]["chr"]] = xlsxData[i]["pos"];
+}
+}
+var chrSelectBox = document.querySelector(".chrSelectBox");
+
+
+var newLengthData = {};
+for(var i = 0 ; i < lengthData.length ; i++){
+chrTotalIndex += Number(lengthData[i]);
+var chrSelectOption = document.createElement("option");
+chrSelectOption.innerText = Object.keys( chrTotalData )[i];
+chrSelectOption.classList.add("chrOption");
+chrSelectBox.appendChild(chrSelectOption);
+
+newLengthData[Object.keys( chrTotalData )[i]] = Number(lengthData[i]);
+}
+lengthData = newLengthData;
+} 
+
+//# . 3 그래프 생성
+function buildGraph(){
+// 초기화
+var visualWrap = document.querySelector(".visualWrap");
+var visualWrapPosition = document.querySelector(".visualWrapPosition");
+visualWrap.remove();
+visualWrapPosition.innerHTML = "<div class='visualWrap'><div class='tableWrap' ><div class='tableContent'><table id='table' class='table'></table></div></div><div class='graphContainer'><div class='dotline'></div><div class='graphWrap'></div></div></div>"
+
+graphWrap = document.querySelector(".graphWrap");
+for(var key in chrPercent){
+chrPercent[key] = {}
+}
+
+// 부모 생성
+function makeParent(className){
+var graphElName = document.createElement('div');
+graphElName.classList.add("graphElName");
+var divEl = document.createElement('div');
+divEl.classList.add(className);
+
+var graphName = document.createElement('div');
+var text = "";
+if(className == "father"){
+text = "F";
+}else{
+text = "M";
+}
+graphName.innerText = text;
+graphName.classList.add("graphName");
+
+graphElName.appendChild( graphName ); 
+graphElName.appendChild( divEl ); 
+graphWrap.appendChild( graphElName ); 
+}
+
+
+var count = 0;
+
+// 클 틀 생성
+for(var key in chartDataArr){
+// 좌측 컬럼 이름, 엄마 아빠 
+if(count == 0){
+var chrNameBar = document.createElement('div');
+var chrNameDefault = document.createElement('div');
+var chrNameEl = document.createElement('div');
+chrNameDefault.classList.add("graphName");
+chrNameBar.appendChild( chrNameDefault ); 
+chrNameBar.classList.add("graphElName");
+chrNameEl.classList.add("graphElStackName");
+
+for(var keyChr in chrTotalData){
+if(typeof(chrTotalData[keyChr])=="number"){
+var chrName = document.createElement('div');
+chrName.innerText = keyChr;
+chrName.classList.add("chrStackName");
+chrName.style.height = (100/chrTotalIndex) * lengthData[keyChr] + "%";
+chrNameEl.appendChild( chrName ); 
+}
+}
+
+chrNameBar.appendChild( chrNameEl ); 
+graphWrap.appendChild( chrNameBar ); 
+makeParent("father");
+makeParent("mother");
+count++;
+}
+
+var graphElName = document.createElement('div');
+graphElName.classList.add("graphElName");
+
+var divEl = document.createElement('div');
+divEl.setAttribute("data-column", key);
+divEl.classList.add("graphEl");
+
+var graphName = document.createElement('div');
+graphName.innerText = key;
+graphName.classList.add("graphName");
+
+graphElName.appendChild( graphName ); 
+graphElName.appendChild( divEl ); 
+graphWrap.appendChild( graphElName ); 
+
+
+for(var keySmall in lengthData){
+// if(typeof(chrTotalData[keySmall])!=="number"){continue;}
+var divElSmall = document.createElement('div');
+divElSmall.setAttribute("data-column", keySmall);
+divElSmall.classList.add("chrStack");
+divElSmall.style.height = (100/chrTotalIndex) * lengthData[keySmall] + "%";
+divEl.appendChild( divElSmall );
+}
+
+
+// 작은거 안에 작은거 생성 
+for(var i = 0 ; i < chartDataArr[key].length ; i++){
+var chrPos = chartDataArr[key][i]["pos"];
+
+var divElSmallStack = document.createElement('div');
+divElSmallStack.setAttribute("data-pos", chrPos);
+divElSmallStack.setAttribute("data-chr", chartDataArr[key][i]["chr"]);
+divElSmallStack.setAttribute("data-type", chartDataArr[key][i]["type"]);
+divElSmallStack.classList.add("chrStackSmall");
+
+// 높이값
+var gap = 0;
+if(i==0){
+// 제일 처음
+gap = chrPos + ( (chartDataArr[key][i+1]["pos"] - chrPos) / 2 );
+}else{
+// 제일 끝
+if(i == chartDataArr[key].length-1){
+gap = (lengthData[chartDataArr[key][i]["chr"]] - chrPos) + ((chrPos - chartDataArr[key][i-1]["pos"]) / 2 )
+}else{
+// 다음과 동일할때 
+if(chartDataArr[key][i]["chr"] == chartDataArr[key][i+1]["chr"]){
+// 이전과 동일할때
+if(chartDataArr[key][i]["chr"] == chartDataArr[key][i-1]["chr"]){
+ gap = (( chrPos - chartDataArr[key][i-1]["pos"] ) / 2)+(( chartDataArr[key][i+1]["pos"] - chrPos ) / 2) 
+}else{
+ gap = chrPos + (chartDataArr[key][i+1]["pos"] - chrPos) / 2 ;
+}
+}else{
+gap = (lengthData[chartDataArr[key][i]["chr"]] - chrPos) + ( (chrPos - chartDataArr[key][i-1]["pos"]) / 2 );
+}
+}
+}
+
+var currentChr = chartDataArr[key][i]["chr"];
+var divElSmall = divEl.querySelector("[data-column=" +currentChr+ "]");
+
+chrPercent[key][currentChr] = chrPercent[key][currentChr] ? chrPercent[key][currentChr] : 0;
+divElSmallStack.style.height = (  100/lengthData[currentChr]  ) * gap + "%";
+
+
+// 배경색
+if(chartDataArr[key][i]["type"] == "A"){
+chrPercent[key][currentChr] += (100/lengthData[chartDataArr[key][i]["chr"]]) * gap;
+// divElSmallStack.style.backgroundColor= "#FF9BBD"
+divElSmallStack.style.backgroundColor= "#ff6982"
+}else if(chartDataArr[key][i]["type"] == "B"){
+// divElSmallStack.style.backgroundColor= "#95CAFF"
+divElSmallStack.style.backgroundColor= "#6982ff"
+}else{
+// divElSmallStack.style.backgroundColor= "#FFE395"
+divElSmallStack.style.backgroundColor= "#ffc369"
+}
+divElSmall.appendChild( divElSmallStack );
+}
+}    
+// 점선 추가
+var graphContainer = document.querySelector(".graphContainer");
+for(var key in lengthData){
+if(typeof(lengthData[key])=="number"){
+var dotEl = document.createElement('div');
+var currentChr = document.querySelector("[data-column="+key+"]");
+var chtHeight = currentChr.getBoundingClientRect().bottom;
+
+dotEl.classList.add("dotline");
+dotEl.style.top = (chtHeight - graphContainer.getBoundingClientRect().top) + "px";
+dotEl.style.height = currentChr.offsetHeight + "px";
+dotEl.style.transform = "translateY(-"+ currentChr.offsetHeight +"px)";
+graphContainer.appendChild( dotEl );
+}
+}
+
+var newChrPercent = chrPercent; 
+for(var key in chrPercent){
+var totalA = 0;
+for(var keySmall in chrPercent[key]){
+totalA += (chrPercent[key][keySmall] * lengthData[keySmall])/100;
+}
+newChrPercent[key]["total"] = totalA / chrTotalIndex * 100
+}
+
+chrPercent = newChrPercent;
+
+addGraphEvent();
+buildTable();
+}
+
+//드래그&드롭, 더블클릭 이벤트 추가
+function addGraphEvent(){
+if(window.innerWidth > 1000){
+var isMouseMove = false;
+var clickColumn = "";
+graphWrap.addEventListener("mousedown", function(e){
+if(e.path[0].classList.contains("chrStackSmall")){
+isMouseMove = true;
+clickColumn = e.path[2].dataset.column;
+
+var clickEl = document.querySelector("[data-column=" +clickColumn+ "]");
+clickY = e.clientY - clickEl.offsetTop;
+clickX = e.clientX - clickEl.offsetLeft;
+
+
+var clickElTable = document.querySelector("[data-column=" +clickColumn+ "_table]");
+var currentSelect = document.querySelectorAll(".activeClickAni");
+for(var i = 0 ; i < currentSelect.length ; i++){
+currentSelect[i].classList.remove("activeClickAni");
+}
+
+$('.tableWrap').animate({scrollTop : clickElTable.offsetTop}, 500); 
+clickElTable.classList.add("activeClickAni");
+
+}
+});
+
+graphWrap.addEventListener("mousemove", function(e){
+if(!isMouseMove){return};
+var clickEl = document.querySelector("[data-column=" +clickColumn+ "]").parentNode;
+clickEl.style.position = "absolute";
+clickEl.style.top = `${e.clientY - clickY}px`;
+clickEl.style.left = `${e.clientX - clickX}px`;
+clickEl.style.pointerEvents = "none";
+
+
+// 그림자
+if(!e.path[2].dataset.column){return;}
+var currentEl = document.querySelector("[data-column=" +e.path[2].dataset.column+ "]").parentNode;
+var currentShadow = document.querySelector(".graphShadow");
+if(currentShadow){
+currentShadow.remove();
+}
+
+var shadowGraph = document.createElement('div');
+shadowGraph.classList.add("graphShadow");
+
+clickEl.parentNode.insertBefore(shadowGraph, currentEl)
+
+});
+
+graphWrap.addEventListener("mouseup", function(e){
+isMouseMove = false;
+if(!clickColumn){return;}
+var clickEl = document.querySelector("[data-column=" +clickColumn+ "]").parentNode;
+var currentShadow = document.querySelector(".graphShadow");
+if(!currentShadow){return}
+
+clickEl.style.position = "unset";
+clickEl.style.top = 0;
+clickEl.style.left = 0;
+clickEl.style.pointerEvents = "all";
+
+clickEl.parentNode.replaceChild(clickEl, currentShadow);
+sortGraphData();
+});
+
+graphWrap.addEventListener("dblclick", function(e){
+if(e.path[0].classList.contains("chrStackSmall")){
+var modalSelectOption = document.querySelectorAll(".modalSelectOption");
+if(modalSelectOption){
+for(var i = 0 ; i < modalSelectOption.length ; i++){
+modalSelectOption[i].remove();
+}
+}
+
+var modal = document.querySelector(".modal");
+modal.style.display = "unset";
+drawModalGraph(e.path[2].dataset.column);
+}
+});
+}else{
+graphWrap.addEventListener("click", function(e){
+if(e.path[0].classList.contains("chrStackSmall")){
+var modalSelectOption = document.querySelectorAll(".modalSelectOption");
+if(modalSelectOption){
+for(var i = 0 ; i < modalSelectOption.length ; i++){
+modalSelectOption[i].remove();
+}
+}
+
+var modal = document.querySelector(".modal");
+modal.style.display = "unset";
+drawModalGraph(e.path[2].dataset.column);
+}
+});
+}
+}
+
+//그래프 정렬
+function sortGraphData(){
+var newChrArr = [];
+var graphEls = document.querySelectorAll(".graphEl");
+
+for(var i = 0 ; i < graphEls.length ; i++){
+newChrArr.push(graphEls[i].dataset.column)
+}
+var newChrObj = {};
+
+for(var i = 0 ; i < newChrArr.length ; i++){
+newChrObj[newChrArr[i]] = chartDataArr[newChrArr[i]];
+}
+chartDataArr = newChrObj;
+buildTable();
+}
+
+
+
+
+//------------------------------------------------------
+//테이블
+//------------------------------------------------------
+var isTable = false;
+function buildTable(){
+var table = document.querySelector('.table');
+isTable = true;
+// 초기화
+var tableContent = document.querySelector('.tableContent');
+table.remove();
+
+var newTable = document.createElement('table');
+newTable.classList.add("table");
+
+
+// 머리
+var thead = document.createElement('thead');
+var theadTr = document.createElement('tr');
+var theadTh = document.createElement('th');
+theadTr.appendChild(theadTh);
+for(var key in chrTotalData){
+var theadTh = document.createElement('th');
+theadTh.innerText = key;
+theadTr.appendChild(theadTh);
+}
+var theadThTotla = document.createElement('th');
+theadThTotla.innerText = "Total";
+theadTr.appendChild(theadThTotla);
+
+thead.appendChild(theadTr);
+
+// 몸통
+var tbody = document.createElement('tbody');
+for(var key in chartDataArr){
+var tbodyTr = document.createElement('tr');
+var tbodyTdName = document.createElement('td');
+tbodyTdName.innerText = key;
+tbodyTr.setAttribute("data-column", key + "_table");
+tbodyTr.appendChild(tbodyTdName);
+tbody.appendChild(tbodyTr);
+
+for(var keySmall in chrPercent[key]){
+var tbodyTd = document.createElement('td');
+var percentText = chrPercent[key][keySmall].toFixed(2);
+tbodyTd.innerText = percentText + "%";
+
+if(percentText >= 50){
+tbodyTd.style.backgroundColor = "hsl(355, 100%, " + (150 - percentText) + "%)";
+}else{
+tbodyTd.style.backgroundColor = "hsl(230, 100%, " + (50 + Number(percentText)) + "%)";
+}
+tbodyTr.appendChild(tbodyTd);
+}
+}
+
+
+newTable.appendChild(thead);
+newTable.appendChild(tbody);
+
+
+tableContent.appendChild(newTable);
+addTableEvent();
+}
+var tableWrap = document.querySelector('.tableWrap');
+var clickTableColumn = "";
+var hoverTableColumn = "";
+
+//테이블 정렬
+function sortTableData(){
+var newChrArr = [];
+var tbodyChildren = document.querySelector("tbody").children;
+
+for(var i = 0 ; i < tbodyChildren.length ; i++){
+newChrArr.push(tbodyChildren[i].dataset.column.replace("_table", ""));
+}
+var newChrObj = {};
+for(var i = 0 ; i < newChrArr.length ; i++){
+newChrObj[newChrArr[i]] = chartDataArr[newChrArr[i]];
+}
+chartDataArr = newChrObj;
+
+buildGraph();
+}
+
+//드래그&드롭 이벤트 추가
+function addTableEvent(){
+var isMouseMove = false;
+var tableWrap = document.querySelector('.tableWrap');
+tableWrap.addEventListener("mousedown", function(e){
+if(!e.path[1].dataset.column){return};
+isMouseMove = true;
+clickTableColumn = e.path[1].dataset.column;
+var clickEl = document.querySelector("[data-column=" + clickTableColumn + "]");
+clickEl.style.opacity = "0.5";
+clickEl.style.border = "5px solid #000";
+
+var clickElGraph = document.querySelector("[data-column=" +clickTableColumn.replace("_table", "")+ "]");
+$('.graphWrap').animate({scrollLeft : clickElGraph.offsetLeft}, 500); 
+
+
+var currentSelect = document.querySelectorAll(".activeClickAni");
+for(var i = 0 ; i < currentSelect.length ; i++){
+currentSelect[i].classList.remove("activeClickAni");
+}
+
+clickElGraph.classList.add("activeClickAni");
+
+
+})
+tableWrap.addEventListener("mousemove", function(e){
+if(!isMouseMove){return;}
+if(!e.path[1].dataset.column){return};
+
+var currentShadow = document.querySelector(".tableShadow");
+if(currentShadow){
+currentShadow.remove();
+}
+
+hoverTableColumn = e.path[1].dataset.column;
+var hoverEl = document.querySelector("[data-column=" + hoverTableColumn + "]");
+
+var shadowGraph = document.createElement('div');
+shadowGraph.classList.add("tableShadow");
+
+hoverEl.parentNode.insertBefore(shadowGraph, hoverEl);
+})
+tableWrap.addEventListener("mouseup", function(e){
+if(!isMouseMove){return}
+isMouseMove = false;
+
+var clickEl = document.querySelector("[data-column=" + clickTableColumn + "]");
+clickEl.style.opacity = "1";
+clickEl.style.border = "0";
+
+var currentShadow = document.querySelector(".tableShadow");
+if(!currentShadow){return}
+clickEl.parentNode.replaceChild(clickEl, currentShadow);
+sortTableData();
+})
+
+}
+
+
+//------------------------------------------------------
+//사진찍기
+//------------------------------------------------------
+//그래프
+function downloadGraphImg(e){
+initAnimation();
+window.scrollTo(0,0);
+
+var cloneParent = document.createElement('div');
+cloneParent.classList.add("cloneParent")
+var cloneEl = graphWrap.cloneNode(true);
+cloneEl.style.overflow = "unset";
+cloneEl.style.height = "unset";
+var graphElNameEls = document.querySelectorAll(".graphElName");
+cloneEl.style.width =((graphElNameEls.length * 37) + 50) + "px";
+
+cloneParent.appendChild(cloneEl);
+document.querySelector("body").appendChild(cloneParent);
+
+html2canvas(cloneEl).then(function(canvas){
+var myImage = canvas.toDataURL();
+downloadURI(myImage, "MAB그래프.png") 
+});
+
+}
+//테이블
+function downloadTableImg(e){
+initAnimation();
+window.scrollTo(0,0);
+
+var cloneParent = document.createElement('div');
+cloneParent.classList.add("cloneParent")
+var originEl = document.querySelector(".table");
+var cloneEl = originEl.cloneNode(true);
+cloneParent.appendChild(cloneEl);
+document.querySelector("body").appendChild(cloneParent);
+
+html2canvas(cloneEl).then(function(canvas){
+var myImage = canvas.toDataURL();
+downloadURI(myImage, "MAB표.png") 
+});
+}
+//모달
+function downloadModalImg(){
+initAnimation();
+window.scrollTo(0,0);
+var modalGraph_scale = document.querySelector(".modalGraph_scale");
+modalGraph_scale.style.transform = "scale(1)";
+
+var cloneParent = document.createElement('div');
+cloneParent.classList.add("cloneParent")
+var originEl = document.querySelector(".modalGraph_Wrap");
+var cloneEl = originEl.cloneNode(true);
+var modalGraphEl = cloneEl.querySelectorAll(".modalGraphEl");
+for(var i = 0 ; i < modalGraphEl.length ; i++){
+modalGraphEl[i].style.overflow = "unset";
+}
+cloneEl.style.overflow = "unset";
+cloneEl.style.width = "unset";
+
+cloneParent.appendChild(cloneEl);
+document.querySelector("body").appendChild(cloneParent);
+
+
+html2canvas(cloneEl).then(function(canvas){
+var myImage = canvas.toDataURL();
+downloadURI(myImage, "MAB 상세그래프.png") 
+});
+}
+function downloadURI(uri, name){
+var link = document.createElement("a")
+link.download = name;
+link.href = uri;
+document.body.appendChild(link);
+link.click();
+document.querySelector(".cloneParent").remove();
+}
+
+
+
+//------------------------------------------------------
+//초기화
+//------------------------------------------------------
+function onClickInit(){
+document.querySelector(".addMabcFile").value = "";
+document.querySelector(".file_text").placeholder = "MABC xlsx파일을 넣어주세요.";
+var visualWrap = document.querySelector(".visualWrap");
+var visualWrapPosition = document.querySelector(".visualWrapPosition");
+visualWrap.remove();
+visualWrapPosition.innerHTML = "<div class='visualWrap'><div class='tableWrap' ><div class='tableContent'><table id='table' class='table'></table></div></div><div class='graphContainer'><div class='dotline'></div><div class='graphWrap'></div></div></div>"
+
+var chrOptionBox = document.querySelectorAll(".chrOption");
+for(var i = 0 ; i < chrOptionBox.length; i++){
+chrOptionBox[i].remove();
+}
+
+xlsxData = {};
+chartDataArr = {};
+chrTotalData = {};
+chrTotalIndex = 0; 
+chrPercent = {};
+clickX = 0;
+clickY = 0;
+isFirst = true;
+lengthData = [];
+clickTableColumn = "";
+hoverTableColumn = "";
+isTable = false;
+}
+function initAnimation(){
+var activeClickAniEls = document.querySelectorAll(".activeClickAni");
+for(var i = 0 ; i < activeClickAniEls.length ; i++){
+activeClickAniEls[i].classList.remove("activeClickAni");
+}
+}
+
+
+
+
+//------------------------------------------------------
+//모달
+//------------------------------------------------------
+function drawModalGraph(_graphName){
+
+// 데이터 변환 작업
+var graphName = chartDataArr[_graphName];
+var modalGraph_scale = document.querySelector(".modalGraph_scale");
+modalGraph_scale.innerHTML = "";
+let modalGraphData = {};
+for(var i = 0 ; i < graphName.length ; i++){
+modalGraphData[graphName[i].chr] = modalGraphData[graphName[i].chr]?modalGraphData[graphName[i].chr]:[];
+modalGraphData[graphName[i].chr].push({
+pos:graphName[i].pos,
+name:graphName[i].name,
+type:graphName[i].type,
+chr:graphName[i].chr
+})
+}
+
+var bigLength = 0;
+
+for(var key in lengthData){
+if(bigLength < lengthData[key]){
+bigLength = lengthData[key];
+}
+}
+
+
+// 그래프 그리기 
+for(var key in modalGraphData){
+
+var modalGraphSection = document.createElement('div');
+modalGraphSection.classList.add("modalGraphSection");
+
+
+var modalGraph = document.createElement('div');
+var bigPercent = 100 / bigLength;
+modalGraph.classList.add("modalGraphEl");
+
+modalGraph.style.height = (lengthData[key] * bigPercent) + "%";
+
+
+
+var modalGraphElWrap = document.createElement('div');
+modalGraphElWrap.classList.add("modalGraphElWrap");
+
+var modalGraphName = document.createElement('div');
+modalGraphName.classList.add("modalGraphName");
+modalGraphName.innerText = key;
+
+
+for(var i = 0 ; i <  modalGraphData[key].length; i++){
+// 스택
+var modalGraphStack = document.createElement('div');
+modalGraphStack.classList.add("modalGraphElStack");
+modalGraphStack.setAttribute("data-column", key+"_modal");
+
+// 스택 이름
+var modalStackDesc = document.createElement('div');
+modalStackDesc.classList.add("modalStackDesc");
+modalStackDesc.setAttribute("data-column", key+"_modalDesc");
+modalStackDesc.innerHTML = modalGraphData[key][i]["name"];
+
+// 스택 이름
+var modalStackDescLine = document.createElement('div');
+modalStackDescLine.classList.add("modalStackDescLine");
+modalStackDescLine.setAttribute("data-column", key+"_modalDescLine");
+
+// 높이값
+var gap = 0;
+if(i==0){
+// 제일 처음
+gap = modalGraphData[key][i]["pos"] + ( (  modalGraphData[key][i+1]["pos"] - modalGraphData[key][i]["pos"]) / 2 );
+}else{
+// 제일 끝
+if(i == modalGraphData[key].length-1){
+gap = (lengthData[modalGraphData[key][i]["chr"]] - modalGraphData[key][i]["pos"]) + ((modalGraphData[key][i]["pos"] - modalGraphData[key][i-1]["pos"]) / 2 );
+}else{
+gap = (( modalGraphData[key][i]["pos"] - modalGraphData[key][i-1]["pos"] ) / 2)+(( modalGraphData[key][i+1]["pos"] - modalGraphData[key][i]["pos"] ) / 2);
+}
+}
+
+modalGraphStack.style.height = (  100/lengthData[key]  ) * gap + "%";
+
+// // 배경색
+if(modalGraphData[key][i]["type"] == "A"){
+modalGraphStack.style.backgroundColor= "#ff6982"
+}else if(modalGraphData[key][i]["type"] == "B"){
+modalGraphStack.style.backgroundColor= "#6982ff"
+}else{
+modalGraphStack.style.backgroundColor= "#ffc369"
+}
+
+modalGraph.appendChild( modalStackDesc );
+modalGraph.appendChild( modalStackDescLine );
+modalGraph.appendChild( modalGraphStack );
+}
+
+modalGraphSection.appendChild(modalGraphName);
+modalGraphSection.appendChild(modalGraph);
+modalGraph_scale.appendChild( modalGraphSection );
+
+var stacEls = modalGraph.querySelectorAll("[data-column=" +key+"_modal"+ "]");
+var stackDescEls = modalGraph.querySelectorAll("[data-column=" +key+"_modalDesc"+ "]");
+var stackDescLineEls = modalGraph.querySelectorAll("[data-column=" +key+"_modalDescLine"+ "]");
+var marinLeft = 0;
+
+for(var i = 0 ; i < stackDescEls.length ; i++){
+// 탑
+// stackDescEls[i].style.top = stacEls[i].offsetTop + (stacEls[i].clientHeight/2) + "px";
+stackDescEls[i].style.top = stacEls[i].offsetTop + "px";
+stackDescLineEls[i].style.top = stacEls[i].offsetTop + "px"
+
+// 높이값 조정
+if(i !== 0){
+var offsetBottom = stackDescEls[i-1].offsetTop + stackDescEls[i-1].offsetHeight;
+if(offsetBottom > stackDescEls[i].offsetTop){
+stackDescEls[i].style.top = offsetBottom + "px";
+}
+}
+
+// 마진
+if(marinLeft < stackDescEls[i].clientWidth){
+marinLeft = stackDescEls[i].clientWidth;
+}
+
+var lineX = stackDescLineEls[i].offsetLeft; 
+var lineY = stackDescLineEls[i].offsetTop; 
+
+var descX = stackDescEls[i].offsetLeft;
+var descY = stackDescEls[i].offsetTop + (stackDescEls[i].clientHeight/2);
+
+var x = descX - lineX;
+var y = descY - lineY;
+var radian = Math.atan2(y, x);
+var degree = radian * 180 / Math.PI // 라디안 -> 디그리 변환
+
+stackDescLineEls[i].style.transform = "rotate(" + degree + "deg)";
+stackDescLineEls[i].style.width = 
+Math.sqrt(
+Math.pow((descY - lineY), 2) + Math.pow((Math.abs(descX - lineX)), 2)
+) - 4 + "px";
+
+}
+modalGraph.style.marginRight = marinLeft + 60 + "px";
+}
+
+var mabcModalSelect = document.querySelector(".mabcModalSelect");
+for(var key in chartDataArr){
+var selectOption = document.createElement('option');
+selectOption.innerText = key;
+selectOption.classList.add("modalSelectOption");
+if(_graphName == key){
+selectOption.setAttribute("selected", true);
+}
+mabcModalSelect.appendChild(selectOption);
+}
+
+}
+function closeMOdal(){
+var modal = document.querySelector(".modal");
+modal.style.display = "none";
+}
+function onChangeModalSelect(){
+var mabcModalSelect = document.querySelector(".mabcModalSelect");  
+
+
+drawModalGraph(mabcModalSelect.options[mabcModalSelect.selectedIndex].innerText)
+}
+function onClickZoom(isZoomIn){
+var modalGraph_scale = document.querySelector(".modalGraph_scale");
+var style = window.getComputedStyle(modalGraph_scale);
+var matrix = new WebKitCSSMatrix(style.transform);
+if(!isZoomIn && matrix.m11==0.4){return;}
+if(isZoomIn && matrix.m11==2.5){return;}
+var changeValue = matrix.m11 + (isZoomIn?0.3:-0.3)
+modalGraph_scale.style.transform = "scale(" + changeValue + ")"
+var modalSlider = document.querySelector(".modalSlider");
+modalSlider.value = Number(modalSlider.value) + (isZoomIn?1:-1)
+}
+
+
+
+
+
+
+
+//------------------------------------------------------
+//정렬
+//------------------------------------------------------
+function onChangeChrSort(){
+var chrSelectBox = document.querySelector(".chrSelectBox");  
+var selectText = chrSelectBox.options[chrSelectBox.selectedIndex].innerText;
+var sortData = [];
+for(var key in chrPercent){
+sortData.push({name:key, percent: chrPercent[key][selectText]});
+};
+
+sortData.sort(function(a, b){
+return b.percent - a.percent;
+});
+
+var newChartDataArr = {}
+
+for(var i = 0 ; i < sortData.length ; i++){
+newChartDataArr[sortData[i].name] = chartDataArr[sortData[i].name];
+}
+
+chartDataArr = newChartDataArr;
+var allChrBtn = document.querySelector(".allchr");
+if(allChrBtn.classList.contains("active")){
+onClickAllChr(false);
+}else{
+buildGraph();
+}
+}
+function onClickAllChr(isClick){
+if(Object.keys( chartDataArr ).length == 0){
+alert("데이터를 넣어주세요.")
+return;
+}
+var allChrBtn = document.querySelector(".allchr");
+
+if(isClick){
+if(allChrBtn.classList.contains("active")){
+allChrBtn.classList.remove("active");
+return;
+}else{
+allChrBtn.classList.add("active");
+}
+}
+
+var chrSelectBox = document.querySelector(".chrSelectBox");  
+var selectText = chrSelectBox.options[chrSelectBox.selectedIndex];
+if(!selectText){return;}
+selectText = selectText.innerText;
+
+var sortData = [];
+
+for(var key in chrPercent){
+sortData.push({name:key, percent: chrPercent[key][selectText], totalPercent : chrPercent[key]["total"]});
+};
+
+sortData.sort(function(a, b){
+if(b.percent < a.percent) return -1; 
+if(b.percent > a.percent) return 1;
+if(b.totalPercent < a.totalPercent) return -1;
+if(b.totalPercent > a.totalPercent) return 1;
+return 0;        
+});
+
+var newChartDataArr = {}
+
+for(var i = 0 ; i < sortData.length ; i++){
+newChartDataArr[sortData[i].name] = chartDataArr[sortData[i].name];
+}
+
+chartDataArr = newChartDataArr;
+buildGraph();
+}
+
+
+
+
+//------------------------------------------------------
+//모달 슬라이드
+//------------------------------------------------------
+function onChangeModalSlider(e){
+var modalGraph_scale = document.querySelector(".modalGraph_scale");
+var changeValue = 1;
+if(e.value == 1){
+changeValue = 0.4;
+}else if (e.value == 2){
+changeValue = 0.7;
+}else if (e.value == 3){
+changeValue = 1;
+}else if (e.value == 4){
+changeValue = 1.3;
+}else if (e.value == 5){
+changeValue = 1.6;
+}else if (e.value == 6){
+changeValue = 1.9;
+}else if (e.value == 7){
+changeValue = 2.2;
+}else if (e.value == 8){
+changeValue = 2.5;
+}else{
+changeValue = 1;
+}
+modalGraph_scale.style.transform = "scale(" + changeValue + ")"
+}
+
+
+function onClickRun(){
+	buildGraph();
+}
+
+function fileds(e){
+    $(e).trigger("click");
+}
+
+function readLenFile()
+{
+    var file = document.querySelector(".serverLen").innerText;
+    if(!file){return};
+
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+
+                
+            	var newLengthData = allText.replace(/(\r\n|\n|\r)/gm, "-");
+            	newLengthData = newLengthData.split("-");
+            	lengthData = [];
+            	for(var i = 0 ; i < newLengthData.length ; i++){
+            		if(!newLengthData[i]){continue}
+            			var lengthEl = newLengthData[i].split(" ");
+            			if(lengthEl[0].substr(0, 3) == "Chr"){
+            				lengthData.push(lengthEl[1]);
+           				}
+            		};
+            	}
+        }
+    }
+    rawFile.send(null);
+}
+readLenFile();
+
+</script>
+<!-- 공통 하단 -->
+ <th:block th:include="/../fragments/footer.html"></th:block> 
+<!-- 공통 js -->
+ <th:block th:include="/../fragments/commonjs.html"></th:block> 
+</body>
+</html>
