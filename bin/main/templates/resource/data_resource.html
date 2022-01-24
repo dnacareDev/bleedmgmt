@@ -1294,8 +1294,15 @@
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
                                 a.href = '/upload?filename=' + value.dataset.value;
-                                document.body.appendChild(a);
-                                a.click();
+                                // document.body.appendChild(a);
+                                // a.click();
+                                $.get(a.href)
+                                    .done(function () {
+                                        document.body.appendChild(a);
+                                        a.click();
+                                    }).fail(function () {
+                                    return Alert1("파일이 존재하지 않습니다!")
+                                })
                             	
                             }
                         } else if (ev.targetType === 'cell' && ev.columnName === 'resource_character_template_file') {
@@ -1309,8 +1316,15 @@
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
                                 a.href = '/upload?filename=' + value.dataset.value;
-                                document.body.appendChild(a);
-                                a.click();
+                                // document.body.appendChild(a);
+                                // a.click();
+                                $.get(a.href)
+                                    .done(function () {
+                                        document.body.appendChild(a);
+                                        a.click();
+                                    }).fail(function () {
+                                    return Alert1("파일이 존재하지 않습니다!")
+                                })
                             }
                         }
                     });
