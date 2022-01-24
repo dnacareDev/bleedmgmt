@@ -785,7 +785,7 @@
                 <div class="col-lg-12 mb-30">
                     <div class="card" style="background-color: #fff !important; box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%)">
                         <div class="breadcrumb-main" style="float: left; padding: 1.56rem;">
-                            <h4 class="text-capitalize breadcrumb-title">Correlation</h4>
+                            <h4 class="text-capitalize breadcrumb-title">통합분석</h4>
                         </div>
                         <div class="container clearfix">
                             <form action="" method="post">
@@ -804,17 +804,11 @@
                                             <option value="토마토" th:selected="${crop == '토마토'}">토마토</option>
                                         </select>
                                     </div>
-                                    <div class="checkbox_top selectBox">
-                                        <select class="manage">
-                                            <option th:selected="${type == 1}">품종관리</option>
-                                            <option th:selected="${type == 2}">원종관리</option>
-                                        </select>
-                                    </div>
                                 </div>
                                 <div class="contents clearfix" style="clear:both; padding-top:10px;">
                                     <h6 class="title">분석대상선택</h6>
                                     <div class="box box1">
-                                        <input type="text" id="search_target" onchange="SearchTarget();" placeholder="품종-시교명ID, 원종-계통명ID 검색">
+                                        <input type="text" id="search_target" onchange="SearchTarget();" placeholder="파종번호 검색">
                                         <div class="text_box text_box1" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
                                             <ul id="target_list">
                                             </ul>
@@ -869,7 +863,7 @@
                                 <div class="contents clearfix">
                                     <h6 class="title">분석형질</h6>
                                     <div class="box box1">
-                                        <input type="text" id="search_trait" onchange="SearchTrait();" placeholder="품종-시교명ID, 원종-계통명ID 검색">
+                                        <input type="text" id="search_trait" onchange="SearchTrait();" placeholder="파종번호 검색">
                                         <div class="text_box text_box5" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
                                             <ul id="trait_list">
                                             </ul>

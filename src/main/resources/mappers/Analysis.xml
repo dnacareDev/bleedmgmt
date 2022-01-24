@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalresource.Mapper.AnalysisMapper">
+	<!-- 품종 조회 -->
+	<select id="SelectBreed" resultType="Breed">
+		SELECT * FROM breed b
+		LEFT JOIN detail d ON b.breed_name = d.detail_name
+		LEFT JOIN standard s ON d.detail_id = s.detail_id
+		WHERE b.breed_name = #{name} AND d.detail_title = '시교명 (ID)' AND s.breed_id = b.breed_id AND s.standard IS NOT NULL
+		<choose>
+			<when test="type != '0' and total_id != null">
+				<foreach collection="total_id" item="item" open="AND (" close=")" separator="OR">
+					b.breed_id = #{item}
+				</foreach>
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 분석 형질 조회 -->
+	<select id="SelectTrait" resultType="Detail">
+		SELECT * FROM detail
+		WHERE detail_name = #{detail_name} AND detail_title != '작물' AND detail_title != '시교명 (ID)' AND detail_type = #{detail_type} AND detail_origin = 1
+	</select>
+	
+	<!--  -->
+	<select id="SelectDetail" resultType="Detail">
+		SELECT * FROM detail
+		WHERE detail_name = #{detail_name} AND detail_type = #{detail_type} AND detail_origin = 1 AND detail_spec != '마커 정보'
+	</select>
+	
+	<!--  -->
+	<select id="SelectStandard" resultType="StandardList">
+		SELECT * FROM standard s
+		LEFT JOIN detail d ON s.detail_id = d.detail_id
+		WHERE d.detail_origin = 1  AND detail_spec != '마커 정보' AND
+    	<foreach collection="target_id" item="item" open="(" close=")" separator="OR">
+    		<choose>
+    			<when test="detail_type == 0">
+		            breed_id = ${item}
+    			</when>
+    			<when test="detail_type == 1">
+		            basic_id = ${item}
+    			</when>
+    		</choose>
+        </foreach>
+	</select>
+</mapper>

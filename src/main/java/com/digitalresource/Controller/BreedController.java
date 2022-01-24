@@ -401,7 +401,6 @@ public class BreedController {
       } else {
         result = breedService.UpdateBreed(breed_id, detail_id, standard);
       }
-
     }
 
     return result;

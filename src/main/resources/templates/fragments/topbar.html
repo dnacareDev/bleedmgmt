@@ -72,10 +72,7 @@
                             </a>
                             <ul class="subMenu">
                                 <li>
-                                    <a onclick="research(0);">Correlation</a>
-                                </li>
-                                <li>
-                                    <a onclick="research(1);">Trait Viewer</a>
+                                    <a onclick="research(0);">통합분석</a>
                                 </li>
                                 <li>
                                     <a onclick="research(2);">MABC - data</a>
@@ -216,9 +213,7 @@
             return Alert("접근 권한이 없습니다.");
         } else {
             if (e == 0) {
-                location.href = "/correlation";
-            } else if (e == 1) {
-                location.href = "/traitView";
+                location.href = "/analysis";
             } else if (e == 2) {
                 location.href = "/mabc";
             } else if (e == 3) {

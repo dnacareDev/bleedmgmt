@@ -1,8 +1,6 @@
 package com.digitalresource.Controller;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,30 +26,6 @@ public class LabController
 {
 	@Autowired
 	private LabService service;
-
-	@RequestMapping("/correlation")
-	public ModelAndView Correlation(ModelAndView mv, @RequestParam(required = false, value = "crop") String crop, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam(defaultValue = "0", value = "type") int type)
-	{
-		mv.addObject("crop", crop);
-		mv.addObject("total_id", total_id);
-		mv.addObject("type", type);
-
-		mv.setViewName("lab/correlation");
-
-		return mv;
-	}
-
-	@RequestMapping("/traitView")
-	public ModelAndView TraitView(ModelAndView mv, @RequestParam(required = false, value = "crop") String crop, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam(defaultValue = "0", value = "type") int type)
-	{
-		mv.addObject("crop", crop);
-		mv.addObject("total_id", total_id);
-		mv.addObject("type", type);
-
-		mv.setViewName("lab/trait_view");
-
-		return mv;
-	}
 
 	@RequestMapping("/mabc")
 	public ModelAndView getDataManage(ModelAndView mv, Authentication auth)
