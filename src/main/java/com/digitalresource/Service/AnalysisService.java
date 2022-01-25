@@ -13,7 +13,7 @@ public interface AnalysisService
 	List<Breed> SelectBreed(String name, int[] total_id, int type);
 
 	// 분석 형질 조회
-//	List<Detail> SelectTrait(String deatil_name, int detail_type);
+	List<Detail> selectTrait(String detail_name, int detail_type);
 
 	List<Detail> SelectTrait(int resource_id);
 

@@ -964,10 +964,12 @@
     function removeSessionS(key) {
         sessionStorage.removeItem(key);
     }
+
     /* e : sessionStorage 저장 예제 */
 
     $(document).ready(function () {
         SearchTarget();
+        SearchTrait();
         CheckFunction();
         autoHeight();
     });
@@ -975,18 +977,11 @@
     // 작물 선택
     $("#select_crop").change(function () {
         SearchTarget();
+        SearchTrait();
 
         $("#plus_target").empty();
         $("#trait_list").empty();
     });
-
-    // 품종/원종 선택
-    $(".manage").change(function () {
-        SearchTarget();
-
-        $("#plus_target").empty();
-        $("#trait_list").empty();
-    })
 
     // 파종 조회
     function SearchTarget() {
@@ -1041,6 +1036,71 @@
             });
     }
 
+    function SearchTrait() {
+        let crop_id = $("#select_crop").val();
+
+        console.log(crop_id);
+
+        let data = {"crop_id": crop_id};
+
+        $.ajax(
+            {
+                url: "selectTrait1",
+                method: "POST",
+                dataType: "JSON",
+                data: data,
+                success: function (result) {
+                    console.log(result)
+
+                    let trait_list = $("#trait_list");
+                    let add_list = "";
+
+                    for (let i = 0; i < result.length; i++) {
+                        add_list += '<li>';
+                        add_list += '<input type="checkbox" class="plus_trait" name="' + result[i].detail_name + '" value="' + result[i].detail_id + '">';
+                        add_list += '<span class="trait_list" name="' + (i + 1) + '">' + result[i].detail_name + '</span>';
+                        add_list += '</li>';
+                    }
+
+                    trait_list.empty();
+                    trait_list.append(add_list);
+
+                    CheckFunction();
+
+                    selectorCheck = document.querySelectorAll("#target_list li");
+                    selectorCheck = Array.prototype.slice.call(selectorCheck);
+
+                    selectorCheck2 = document.querySelectorAll("#plus_target li");
+                    selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
+
+                    selectorCheck3 = document.querySelectorAll("#trait_list li");
+                    selectorCheck3 = Array.prototype.slice.call(selectorCheck3);
+
+                    selectorCheck4 = document.querySelectorAll("#analysis_list li");
+                    selectorCheck4 = Array.prototype.slice.call(selectorCheck4);
+
+                    window.addEventListener("keydown", onKeyWindow);
+                    window.addEventListener("keyup", onKeyWindow);
+
+                    for (var t = 0; t < selectorCheck.length; t++) {
+                        selectorCheck[t].addEventListener("click", onSectionSelector);
+                    }
+
+                    for (var g = 0; g < selectorCheck2.length; g++) {
+                        selectorCheck2[g].addEventListener("click", offSectionSelector);
+                    }
+
+                    for (var f = 0; f < selectorCheck3.length; f++) {
+                        selectorCheck3[f].addEventListener("click", setSectionSelector);
+                    }
+
+                    for (var h = 0; h < selectorCheck4.length; h++) {
+                        selectorCheck4[h].addEventListener("click", delSectionSelector);
+                    }
+                }
+            });
+    }
+
     function CheckFunction() {
         $('.text_box li').off('click').on('click', function (e) {
             if (!keyShiftBool) {
@@ -1058,12 +1118,10 @@
     }
 
     // 높이 조절
-    function autoHeight()
-    {
-        $(".box1 .text_box").each(function(idx, elem)
-        {
+    function autoHeight() {
+        $(".box1 .text_box").each(function (idx, elem) {
             let box_height = $(elem).height();
-            $(elem).parent().next().css({"height" : $(elem).parent().height(), "padding-top": 0});
+            $(elem).parent().next().css({"height": $(elem).parent().height(), "padding-top": 0});
         });
     }
 
@@ -1223,11 +1281,7 @@
                 $(this).parent().remove();
                 $("#plus_target").append(target_add);
 
-                // var data = {"deatil_name": $(this).attr("name"), "detail_type": detail_type};
-
-                let crop_id = $("#select_crop").val();
-
-                let data = {"crop_id": crop_id};
+                var data = {"deatil_name": $(this).attr("name"), "detail_type": detail_type};
 
                 $.ajax(
                     {
@@ -1236,8 +1290,6 @@
                         dataType: "JSON",
                         data: data,
                         success: function (result) {
-                            console.log(result)
-
                             var trait_list = $("#trait_list");
                             var add_list = "";
 

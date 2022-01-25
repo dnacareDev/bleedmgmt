@@ -1860,7 +1860,7 @@
 
         SearchBreed(1);
         SearchBreedgrid(1);
-        setSessionS(type, $("#CropSelect").val());
+        setSessionS(type, $("#CropSelect option:selected").text());
     })
 
     // 갯수 선택
@@ -2153,7 +2153,7 @@
     function AnalysisBtn() {
         let regExp = /<\/?[^>]+>/gi;
 
-        let crop = $("#CropSelect").val();
+        let crop = $("#CropSelect option:selected").text();
 
         let total_id = [];
 

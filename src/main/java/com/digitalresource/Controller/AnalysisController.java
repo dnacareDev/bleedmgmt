@@ -62,17 +62,17 @@ public class AnalysisController {
   }
 
   // 분석형질 조회
-//  @ResponseBody
-//  @RequestMapping("selectTrait")
-//  public List<Detail> SelectTrait(@RequestParam("deatil_name") String deatil_name, @RequestParam("detail_type") int detail_type) {
-//    List<Detail> result = service.SelectTrait(deatil_name, detail_type);
-//
-//    return result;
-//  }
-
   @ResponseBody
   @RequestMapping("selectTrait")
-  public List<Detail> SelectTrait(@RequestParam("crop_id") int crop_id) {
+  public List<Detail> SelectTrait(@RequestParam("detail_name") String detail_name, @RequestParam("detail_type") int detail_type) {
+    List<Detail> result = service.selectTrait(detail_name, detail_type);
+
+    return result;
+  }
+
+  @ResponseBody
+  @RequestMapping("selectTrait1")
+  public List<Detail> SelectTrait1(@RequestParam("crop_id") int crop_id) {
     List<Detail> result = new ArrayList<>();
 
     String resourceName = "파종대장";
@@ -80,14 +80,18 @@ public class AnalysisController {
     int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName);
 
     for(int i = 0; i < resource_name_id.length; i++) {
-      int resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i]);
+      int resource_id = 0;
 
-      System.out.println(resource_id);
+      if(resourceService.SearchResourceId(crop_id, resource_name_id[i]) != null) {
+        resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i]);
+      }
 
       if(resource_id != 0) {
         result = service.SelectTrait(resource_id);
+        break;
       }
     }
+
 
     return result;
   }

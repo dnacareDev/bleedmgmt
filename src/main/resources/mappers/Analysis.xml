@@ -22,7 +22,7 @@
 		WHERE detail_name = #{detail_name} AND detail_title != '작물' AND detail_title != '시교명 (ID)' AND detail_type = #{detail_type} AND detail_check = 1
 	</select>
 
-	<!-- 분석 형질 조회 -->
+	<!-- 분석형질 초기 조회 -->
 	<select id="SelectTrait" resultType="Detail">
 		SELECT * FROM detail
 		WHERE resource_id = #{resource_id} AND detail_info = 2 AND detail_check = 1

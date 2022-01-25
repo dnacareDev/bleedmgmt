@@ -23,12 +23,12 @@ public class AnalysisServiceImpl implements AnalysisService
 		return mapper.SelectBreed(name, total_id, type);
 	}
 
-	// 분석 형질 조회
-//	@Override
-//	public List<Detail> SelectTrait(String deatil_name, int detail_type)
-//	{
-//		return mapper.SelectTrait(deatil_name, detail_type);
-//	}
+//	 분석 형질 조회
+	@Override
+	public List<Detail> selectTrait(String detail_name, int detail_type)
+	{
+		return mapper.selectTrait(detail_name, detail_type);
+	}
 
 
 	@Override
