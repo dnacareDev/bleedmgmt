@@ -3,6 +3,9 @@ package com.digitalresource.Controller;
 import com.digitalresource.Entity.Breed;
 import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Detail;
+import com.digitalresource.Entity.StandardList;
+import com.digitalresource.RModule.RunCorrlation;
+import com.digitalresource.RModule.RunTrait;
 import com.digitalresource.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Controller
 public class AnalysisController {
@@ -79,31 +85,30 @@ public class AnalysisController {
 
     int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName);
 
-    for(int i = 0; i < resource_name_id.length; i++) {
+    for (int i = 0; i < resource_name_id.length; i++) {
       int resource_id = 0;
 
-      if(resourceService.SearchResourceId(crop_id, resource_name_id[i]) != null) {
+      if (resourceService.SearchResourceId(crop_id, resource_name_id[i]) != null) {
         resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i]);
       }
 
-      if(resource_id != 0) {
+      if (resource_id != 0) {
         result = service.SelectTrait(resource_id);
         break;
       }
     }
 
-
     return result;
   }
 
-/*  // 형질 분석
+  // 형질 분석
   @ResponseBody
   @RequestMapping("runAnalysis")
   public String RunAnalysis(@RequestParam("detail_name") String detail_name, @RequestParam("detail_type") int detail_type, @RequestParam("target_id[]") int[] target_id, @RequestParam("target_name[]") String[] target_name, @RequestParam("method") int method, @RequestParam("trait_id") String trait_id) {
     String result = null;
 
-    List<Detail> detail = service.SelectDetail(detail_name, detail_type);
-    List<Standard> standard = service.SelectStandard(target_id, detail_type);
+    List<Detail> detail = service.SelectDetail(detail_name);
+    List<StandardList> standard = service.SelectStandard(target_id, detail_type);
 
     Date date = new Date();
 
@@ -115,12 +120,14 @@ public class AnalysisController {
     File file = null;
 
     if (method == 0) {
-      root = "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/r_plot/corrplot/" + date_name;
+//      root = "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/r_plot/corrplot/" + date_name;
+      root = "C:\\upload\\" + date_name;
 
       path = new File(root);
       file = new File(root + "/" + file_name);
     } else {
-      root = "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/r_plot/trait/" + date_name;
+//      root = "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/r_plot/trait/" + date_name;
+      root = "C:\\upload\\" + date_name;
 
       path = new File(root);
       file = new File(root + "/" + file_name);
@@ -147,14 +154,18 @@ public class AnalysisController {
           writer.newLine();
           writer.write(target_name[i / detail.size()]);
           writer.write("\t");
-          writer.write(standard.get(i).getStandard());
-          System.out.println("standard_" + i + " : " + standard.get(i).getStandard());
+          if (standard.get(i).getStandard_data() == null) {
+            writer.write("");
+          } else {
+            writer.write(standard.get(i).getStandard_data());
+          }
+          System.out.println("standard_" + i + " : " + standard.get(i).getStandard_data());
         } else {
           writer.write("\t");
 
-          if (standard.get(i).getStandard() != (null)) {
-            if (!standard.get(i).getStandard().equals("")) {
-              writer.write(standard.get(i).getStandard());
+          if (standard.get(i).getStandard_data() != (null)) {
+            if (!standard.get(i).getStandard_data().equals("")) {
+              writer.write(standard.get(i).getStandard_data());
             } else {
               writer.write("NaN");
             }
@@ -177,10 +188,12 @@ public class AnalysisController {
 
       if (method == 0) {
         RunCorrlation runcorrlation = new RunCorrlation();
-        runcorrlation.MakeCorrplot("c\\(" + trait + "\\)", "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/", date_name);
+//        runcorrlation.MakeCorrplot("c\\(" + trait + "\\)", "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/", date_name);
+        runcorrlation.MakeCorrplot("c\\(" + trait + "\\)", "\"C:\\\\upload\\\\\"", date_name);
       } else {
         RunTrait runtrait = new RunTrait();
-        runtrait.MakeTraitplot(trait, "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/", date_name);
+//        runtrait.MakeTraitplot(trait, "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/", date_name);
+        runtrait.MakeTraitplot(trait, "\"C:\\\\upload\\\\\"", date_name);
       }
     } catch
     (IOException e) {
@@ -210,5 +223,5 @@ public class AnalysisController {
     }
 
     return result;
-  }*/
+  }
 }

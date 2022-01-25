@@ -896,7 +896,7 @@
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect"
                                             onChange="changeSelect(this)">
                                         <th:block th:each="list : ${cropList}">
-                                            <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
+                                            <option th:if="${crop_id != list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                             <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
                                         </th:block>
                                     </select>
@@ -1845,10 +1845,11 @@
     /* e : input text 변경 이벤트 */
 
     let type = $("#title").text();
+    let type_id = $("#title").text() + '_id';
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        $("#CropSelect").val(getSessionS(type));
+        $("#CropSelect").val(getSessionS(type_id));
 
         SearchBreed(1);
         SearchBreedgrid(1);
@@ -1861,6 +1862,7 @@
         SearchBreed(1);
         SearchBreedgrid(1);
         setSessionS(type, $("#CropSelect option:selected").text());
+        setSessionS(type_id, $("#CropSelect option:selected").val());
     })
 
     // 갯수 선택
@@ -2430,6 +2432,9 @@
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
         let limit = $("#limit").val();
+
+        console.log($("#CropSelect").val())
+        console.log(crop_id);
 
         let data = {"crop_id": crop_id, "resource_name": resource_name};
 

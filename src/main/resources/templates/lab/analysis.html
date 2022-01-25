@@ -964,10 +964,13 @@
     function removeSessionS(key) {
         sessionStorage.removeItem(key);
     }
-
     /* e : sessionStorage 저장 예제 */
 
+    let type_id = '파종대장_id';
+
     $(document).ready(function () {
+        $("#select_crop").val(getSessionS(type_id));
+
         SearchTarget();
         SearchTrait();
         CheckFunction();
@@ -1039,8 +1042,6 @@
     function SearchTrait() {
         let crop_id = $("#select_crop").val();
 
-        console.log(crop_id);
-
         let data = {"crop_id": crop_id};
 
         $.ajax(
@@ -1050,8 +1051,6 @@
                 dataType: "JSON",
                 data: data,
                 success: function (result) {
-                    console.log(result)
-
                     let trait_list = $("#trait_list");
                     let add_list = "";
 
@@ -1205,7 +1204,6 @@
     function setSectionSelector(e) {
         var getList = document.querySelectorAll("#trait_list li");
         getList = Array.prototype.slice.call(getList);
-        console.log('set : ', getList)
         var target = e.currentTarget;
         var index = getList.indexOf(target);
 
@@ -1232,7 +1230,6 @@
     function delSectionSelector(e) {
         var getList = document.querySelectorAll("#analysis_list li");
         getList = Array.prototype.slice.call(getList);
-        console.log('del : ', getList)
         let target = e.currentTarget;
         let index = getList.indexOf(target);
 
@@ -1262,16 +1259,9 @@
     function PlusBtn(e) {
         if (e == 0) {
             $(document).find("input:checkbox[class=plus_target]:checked").each(function () {
-                let selected = $(".manage").val();
-                let detail_type = 0;
+                let detail_info = 2;
 
                 let target_add = "";
-
-                if (selected == '품종관리') {
-                    detail_type = 0;
-                } else {
-                    detail_type = 1;
-                }
 
                 target_add += '<li>';
                 target_add += '<input type="checkbox" class="minus_target" value="' + $(this).val() + '">';
@@ -1281,69 +1271,69 @@
                 $(this).parent().remove();
                 $("#plus_target").append(target_add);
 
-                var data = {"deatil_name": $(this).attr("name"), "detail_type": detail_type};
-
-                $.ajax(
-                    {
-                        url: "selectTrait",
-                        method: "POST",
-                        dataType: "JSON",
-                        data: data,
-                        success: function (result) {
-                            var trait_list = $("#trait_list");
-                            var add_list = "";
-
-                            for (var i = 0; i < result.length; i++) {
-                                if (result[i].detail_type == 0) {
-                                    add_list += '<li>';
-                                    add_list += '<input type="checkbox" class="plus_trait" name="' + result[i].detail_name + '" value="' + result[i].detail_id + '">';
-                                    add_list += '<span class="trait_list" name="' + (i + 1) + '">품종-' + result[i].detail_title + '</span>';
-                                    add_list += '</li>';
-                                } else {
-                                    add_list += '<li>';
-                                    add_list += '<input type="checkbox" class="plus_trait" name="' + result[i].detail_name + '" value="' + result[i].detail_id + '">';
-                                    add_list += '<span class="trait_list" name="' + (i + 1) + '">원종-' + result[i].detail_title + '</span>';
-                                    add_list += '</li>';
-                                }
-                            }
-
-                            trait_list.empty();
-                            trait_list.append(add_list);
-
-                            CheckFunction();
-
-                            selectorCheck = document.querySelectorAll("#target_list li");
-                            selectorCheck = Array.prototype.slice.call(selectorCheck);
-
-                            selectorCheck2 = document.querySelectorAll("#plus_target li");
-                            selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
-
-                            selectorCheck3 = document.querySelectorAll("#trait_list li");
-                            selectorCheck3 = Array.prototype.slice.call(selectorCheck3);
-
-                            selectorCheck4 = document.querySelectorAll("#analysis_list li");
-                            selectorCheck4 = Array.prototype.slice.call(selectorCheck4);
-
-                            window.addEventListener("keydown", onKeyWindow);
-                            window.addEventListener("keyup", onKeyWindow);
-
-                            for (var t = 0; t < selectorCheck.length; t++) {
-                                selectorCheck[t].addEventListener("click", onSectionSelector);
-                            }
-
-                            for (var g = 0; g < selectorCheck2.length; g++) {
-                                selectorCheck2[g].addEventListener("click", offSectionSelector);
-                            }
-
-                            for (var f = 0; f < selectorCheck3.length; f++) {
-                                selectorCheck3[f].addEventListener("click", setSectionSelector);
-                            }
-
-                            for (var h = 0; h < selectorCheck4.length; h++) {
-                                selectorCheck4[h].addEventListener("click", delSectionSelector);
-                            }
-                        }
-                    });
+                // var data = {"detail_name": $(this).attr("name"), "detail_info": detail_info};
+                //
+                // $.ajax(
+                //     {
+                //         url: "selectTrait",
+                //         method: "POST",
+                //         dataType: "JSON",
+                //         data: data,
+                //         success: function (result) {
+                //             var trait_list = $("#trait_list");
+                //             var add_list = "";
+                //
+                //             for (var i = 0; i < result.length; i++) {
+                //                 if (result[i].detail_type == 0) {
+                //                     add_list += '<li>';
+                //                     add_list += '<input type="checkbox" class="plus_trait" name="' + result[i].detail_name + '" value="' + result[i].detail_id + '">';
+                //                     add_list += '<span class="trait_list" name="' + (i + 1) + '">품종-' + result[i].detail_title + '</span>';
+                //                     add_list += '</li>';
+                //                 } else {
+                //                     add_list += '<li>';
+                //                     add_list += '<input type="checkbox" class="plus_trait" name="' + result[i].detail_name + '" value="' + result[i].detail_id + '">';
+                //                     add_list += '<span class="trait_list" name="' + (i + 1) + '">원종-' + result[i].detail_title + '</span>';
+                //                     add_list += '</li>';
+                //                 }
+                //             }
+                //
+                //             trait_list.empty();
+                //             trait_list.append(add_list);
+                //
+                //             CheckFunction();
+                //
+                //             selectorCheck = document.querySelectorAll("#target_list li");
+                //             selectorCheck = Array.prototype.slice.call(selectorCheck);
+                //
+                //             selectorCheck2 = document.querySelectorAll("#plus_target li");
+                //             selectorCheck2 = Array.prototype.slice.call(selectorCheck2);
+                //
+                //             selectorCheck3 = document.querySelectorAll("#trait_list li");
+                //             selectorCheck3 = Array.prototype.slice.call(selectorCheck3);
+                //
+                //             selectorCheck4 = document.querySelectorAll("#analysis_list li");
+                //             selectorCheck4 = Array.prototype.slice.call(selectorCheck4);
+                //
+                //             window.addEventListener("keydown", onKeyWindow);
+                //             window.addEventListener("keyup", onKeyWindow);
+                //
+                //             for (var t = 0; t < selectorCheck.length; t++) {
+                //                 selectorCheck[t].addEventListener("click", onSectionSelector);
+                //             }
+                //
+                //             for (var g = 0; g < selectorCheck2.length; g++) {
+                //                 selectorCheck2[g].addEventListener("click", offSectionSelector);
+                //             }
+                //
+                //             for (var f = 0; f < selectorCheck3.length; f++) {
+                //                 selectorCheck3[f].addEventListener("click", setSectionSelector);
+                //             }
+                //
+                //             for (var h = 0; h < selectorCheck4.length; h++) {
+                //                 selectorCheck4[h].addEventListener("click", delSectionSelector);
+                //             }
+                //         }
+                //     });
             })
         } else if (e == 1) {
             if ($("input:checkbox[class=plus_method]:checked").length == 2) {
@@ -1558,12 +1548,6 @@
         var trait_id = [];
         var selected = $(".manage").val();
         var detail_type = 0;
-
-        if (selected == '품종관리') {
-            detail_type = 0;
-        } else {
-            detail_type = 1;
-        }
 
         $(".minus_target").each(function () {
             target_id.push($(this).val());

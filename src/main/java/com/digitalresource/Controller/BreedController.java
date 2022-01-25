@@ -66,6 +66,10 @@ public class BreedController {
   @RequestMapping("searchHeader")
   public Map<String, Object> SearchBreed(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
     Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+    System.out.println("crop_id = " + crop_id);
+    System.out.println("resource_name = " + resource_name);
+
     int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name);
     int resourceId = 0;
 

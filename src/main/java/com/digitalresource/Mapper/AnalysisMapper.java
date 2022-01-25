@@ -19,7 +19,7 @@ public interface AnalysisMapper
 
 	List<Detail> SelectTrait(@Param("resource_id") int resource_id);
 
-	List<Detail> SelectDetail(@Param("detail_name") String detail_name, @Param("detail_type") int detail_type);
+	List<Detail> SelectDetail(@Param("detail_name") String detail_name);
 
 	List<StandardList> SelectStandard(@Param("target_id") int[] target_id, @Param("detail_type") int detail_type);
 }

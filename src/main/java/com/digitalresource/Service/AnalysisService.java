@@ -17,7 +17,7 @@ public interface AnalysisService
 
 	List<Detail> SelectTrait(int resource_id);
 
-	List<Detail> SelectDetail(String detail_name, int detail_type);
+	List<Detail> SelectDetail(String detail_name);
 
 	List<StandardList> SelectStandard(int[] target_id, int detail_type);
 }

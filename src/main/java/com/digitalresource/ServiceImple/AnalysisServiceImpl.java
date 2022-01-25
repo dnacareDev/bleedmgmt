@@ -37,9 +37,9 @@ public class AnalysisServiceImpl implements AnalysisService
 	}
 
 	@Override
-	public List<Detail> SelectDetail(String detail_name, int detail_type)
+	public List<Detail> SelectDetail(String detail_name)
 	{
-		return mapper.SelectDetail(detail_name, detail_type);
+		return mapper.SelectDetail(detail_name);
 	}
 
 	@Override
