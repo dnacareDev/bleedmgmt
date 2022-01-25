@@ -805,8 +805,8 @@
                                         </select>-->
                                         <select id="select_crop">
                                             <th:block th:each="list : ${cropList}">
-                                                <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_name}" th:text="${list.crop_name}"></option>
-                                                <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_name}" th:text="${list.crop_name}" selected></option>
+                                                <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
+                                                <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
                                             </th:block>
                                         </select>
                                     </div>
@@ -990,7 +990,7 @@
 
     // 파종 조회
     function SearchTarget() {
-        let name = $("#select_crop").val();
+        let name = $("#select_crop option:selected").text();
         let url = new URL(window.location).searchParams;
         let total_id = url.get("total_id");
         let selected = $(".manage").val();
@@ -1175,17 +1175,17 @@
         var getList = document.querySelectorAll("#analysis_list li");
         getList = Array.prototype.slice.call(getList);
         console.log('del : ', getList)
-        var target = e.currentTarget;
-        var index = getList.indexOf(target);
+        let target = e.currentTarget;
+        let index = getList.indexOf(target);
 
         if (keyShiftBool) {
             getList[index].classList.add("clicked");
-            var checkedEls = document.querySelectorAll("#analysis_list li.clicked");
+            let checkedEls = document.querySelectorAll("#analysis_list li.clicked");
             checkedEls = Array.prototype.slice.call(checkedEls);
 
-            var firstIndex = getList.indexOf(checkedEls[0]);
+            let firstIndex = getList.indexOf(checkedEls[0]);
 
-            var lastIndex = getList.indexOf(checkedEls[checkedEls.length - 1]);
+            let lastIndex = getList.indexOf(checkedEls[checkedEls.length - 1]);
 
             let num = firstIndex;
             for (var i = 0; i < (Math.abs(lastIndex - firstIndex) + 1); i++) {
@@ -1204,10 +1204,10 @@
     function PlusBtn(e) {
         if (e == 0) {
             $(document).find("input:checkbox[class=plus_target]:checked").each(function () {
-                var selected = $(".manage").val();
-                var detail_type = 0;
+                let selected = $(".manage").val();
+                let detail_type = 0;
 
-                var target_add = "";
+                let target_add = "";
 
                 if (selected == '품종관리') {
                     detail_type = 0;
@@ -1223,7 +1223,11 @@
                 $(this).parent().remove();
                 $("#plus_target").append(target_add);
 
-                var data = {"deatil_name": $(this).attr("name"), "detail_type": detail_type};
+                // var data = {"deatil_name": $(this).attr("name"), "detail_type": detail_type};
+
+                let crop_id = $("#select_crop").val();
+
+                let data = {"crop_id": crop_id};
 
                 $.ajax(
                     {
@@ -1232,6 +1236,8 @@
                         dataType: "JSON",
                         data: data,
                         success: function (result) {
+                            console.log(result)
+
                             var trait_list = $("#trait_list");
                             var add_list = "";
 
