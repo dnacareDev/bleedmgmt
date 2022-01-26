@@ -1518,7 +1518,17 @@
     var rightList_three = [];
 
     function testbtn() {
-        location.href = '/excelTemplate/' +  + '.xlsx';
+        let title = $(".manage")[0].innerText;
+
+        console.log(title);
+
+        if(title == '파종대장') {
+            location.href = '/excelTemplate/sowingSample.xlsx';
+        } else if(title == '종자대장') {
+            location.href = '/excelTemplate/seedSample.xlsx';
+        } else if(title == '교배대장') {
+            location.href = '/excelTemplate/matingSample.xlsx';
+        }
     }
 
     let c = 0;
@@ -2432,9 +2442,6 @@
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
         let limit = $("#limit").val();
-
-        console.log($("#CropSelect").val())
-        console.log(crop_id);
 
         let data = {"crop_id": crop_id, "resource_name": resource_name};
 
