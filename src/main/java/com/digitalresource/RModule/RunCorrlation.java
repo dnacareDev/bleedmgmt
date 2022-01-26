@@ -10,8 +10,8 @@ public class RunCorrlation {
 
   public void MakeCorrplot(String pheno_list, String path, String pfilename) {
 
-//    String r_path = "/data/apache-tomcat-9.0.8/webapps/ROOT/common/r/";
-    String r_path = "/data/";
+    String r_path = "/data/apache-tomcat-9.0.8/webapps/ROOT/common/r/";
+//    String r_path = "/data/";
     String phenotype_file = path + "r_plot/corrplot/" + pfilename + "/" + pfilename + "_phenotype_list.txt";
     String corrplotfile = path + "r_plot/corrplot/" + pfilename + "/" + pfilename + "_corrplot_whitespace.png";
 
