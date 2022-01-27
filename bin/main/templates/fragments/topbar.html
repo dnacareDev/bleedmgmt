@@ -72,10 +72,7 @@
                             </a>
                             <ul class="subMenu">
                                 <li>
-                                    <a onclick="research(0);">Correlation</a>
-                                </li>
-                                <li>
-                                    <a onclick="research(1);">Trait Viewer</a>
+                                    <a onclick="research(0);">통합분석</a>
                                 </li>
                                 <li>
                                     <a onclick="research(2);">MABC - data</a>
@@ -216,16 +213,10 @@
             return Alert("접근 권한이 없습니다.");
         } else {
             if (e == 0) {
-                return Alert1("준비 중입니다.");
-                location.href = "";
-            } else if (e == 1) {
-                return Alert1("준비 중입니다.");
-                location.href = "";
+                location.href = "/analysis";
             } else if (e == 2) {
-                return Alert1("준비 중입니다.");
-                location.href = "";
+                location.href = "/mabc";
             } else if (e == 3) {
-                // return Alert1("준비 중입니다.");
                 location.href = "/matrix";
             }
         }

@@ -634,6 +634,10 @@
             cursor: pointer;
         }
 
+        #breedGrid .tui-grid-body-area td[] {
+            cursor: pointer;
+        }
+
         #saveRow, #updateRow {
             float: right;
             color: #fff;
@@ -892,7 +896,7 @@
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect"
                                             onChange="changeSelect(this)">
                                         <th:block th:each="list : ${cropList}">
-                                            <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
+                                            <option th:if="${crop_id != list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                             <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
                                         </th:block>
                                     </select>
@@ -1472,6 +1476,26 @@
         </div>
     </div>
 
+    <!-- 연계 데이터 -->
+    <div class="modal-basic modal fade show pop7" id="pop_data1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title"><span class="titleType" th:text="${type}"></span></h6>
+                    <span class="breed_title"></span>
+                </div>
+                <div class="modal-body">
+                    <div class="bg-white">
+                        <div id="selectGrid"></div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="load_wrap">
         <div class="load">
             <h2>잠시만 기다려주세요</h2>
@@ -1494,7 +1518,17 @@
     var rightList_three = [];
 
     function testbtn() {
-        location.href = '/excelTemplate/' + $("#CropSelect").val() + '_품종관리.xlsx'
+        let title = $(".manage")[0].innerText;
+
+        console.log(title);
+
+        if(title == '파종대장') {
+            location.href = '/excelTemplate/sowingSample.xlsx';
+        } else if(title == '종자대장') {
+            location.href = '/excelTemplate/seedSample.xlsx';
+        } else if(title == '교배대장') {
+            location.href = '/excelTemplate/matingSample.xlsx';
+        }
     }
 
     let c = 0;
@@ -1821,10 +1855,11 @@
     /* e : input text 변경 이벤트 */
 
     let type = $("#title").text();
+    let type_id = $("#title").text() + '_id';
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        $("#CropSelect").val(getSessionS(type));
+        $("#CropSelect").val(getSessionS(type_id));
 
         SearchBreed(1);
         SearchBreedgrid(1);
@@ -1836,7 +1871,8 @@
 
         SearchBreed(1);
         SearchBreedgrid(1);
-        setSessionS(type, $("#CropSelect").val());
+        setSessionS(type, $("#CropSelect option:selected").text());
+        setSessionS(type_id, $("#CropSelect option:selected").val());
     })
 
     // 갯수 선택
@@ -2127,25 +2163,34 @@
 
     // 통합 분석
     function AnalysisBtn() {
+        let regExp = /<\/?[^>]+>/gi;
 
-        return Alert("준비 중입니다.");
+        let crop = $("#CropSelect option:selected").text();
 
-        /*
+        let total_id = [];
 
-        var crop = $("#CropSelect").val();
-        return Alert("준비 중입니다.")
+        let l = breedgrid.getCheckedRows().length;
 
-        var total_id = [];
-
-        var l = breedgrid.getCheckedRows().length;
+        let chk = 0;
 
         for (let i = 0; i < l; i++) {
+            let status = breedgrid.getCheckedRows()[i].status;
+            let text = status.replace(regExp, "");
+
+            if(text === "EMPTY") {
+                chk = 1;
+            }
+
             total_id.push(breedgrid.getCheckedRows()[i].breed_id)
         }
 
         if (total_id.length != 0) {
-            location.href = "/analysis?crop=" + crop + "&total_id=" + total_id + "&type=" + 1;
-        }*/
+            if (chk === 1) {
+                Alert1("형질 값이 존재하지 않습니다.")
+            } else {
+                window.open("/analysis?crop=" + crop + "&total_id=" + total_id + "&type=" + 1);
+            }
+        }
     }
 
     function FileBtn(e, type) {
@@ -2163,12 +2208,12 @@
                     dataType: 'json',
                     data: data,
                     success: function (result) {
-                        var file_list = $("#file_list");
-                        var file_add = "";
+                        let file_list = $("#file_list");
+                        let file_add = "";
 
-                        for (var i = 0; i < result.breed_file.length; i++) {
-                            var file = JSON.stringify(result.breed_file[i]);
-                            var file_json = file.replace(/\"/g, "&quot;");
+                        for (let i = 0; i < result.breed_file.length; i++) {
+                            let file = JSON.stringify(result.breed_file[i]);
+                            let file_json = file.replace(/\"/g, "&quot;");
 
                             file_add += '<tr>';
                             file_add += '<td>' + (i + 1) + '</td>';
@@ -2196,12 +2241,12 @@
                     dataType: 'json',
                     data: data,
                     success: function (result) {
-                        var file_list = $("#file_list");
-                        var file_add = "";
+                        let file_list = $("#file_list");
+                        let file_add = "";
 
-                        for (var i = 0; i < result.breed_file.length; i++) {
-                            var file = JSON.stringify(result.breed_file[i]);
-                            var file_json = file.replace(/\"/g, "&quot;");
+                        for (let i = 0; i < result.breed_file.length; i++) {
+                            let file = JSON.stringify(result.breed_file[i]);
+                            let file_json = file.replace(/\"/g, "&quot;");
 
                             file_add += '<tr>';
                             file_add += '<td>' + (i + 1) + '</td>';
@@ -2229,12 +2274,12 @@
                     dataType: 'json',
                     data: data,
                     success: function (result) {
-                        var file_list = $("#file_list");
-                        var file_add = "";
+                        let file_list = $("#file_list");
+                        let file_add = "";
 
-                        for (var i = 0; i < result.breed_file.length; i++) {
-                            var file = JSON.stringify(result.breed_file[i]);
-                            var file_json = file.replace(/\"/g, "&quot;");
+                        for (let i = 0; i < result.breed_file.length; i++) {
+                            let file = JSON.stringify(result.breed_file[i]);
+                            let file_json = file.replace(/\"/g, "&quot;");
 
                             file_add += '<tr>';
                             file_add += '<td>' + (i + 1) + '</td>';
@@ -2308,98 +2353,89 @@
         });
     }
 
-    // 시교명 팝업
-    function SearchSample(e) {
+    /* s : 파종번호 모달창 */
+    let selectgrid = null;
+
+    function Search(e) {
         $("#pop_data1").modal();
 
-        var sample_name = $("#CropSelect").val();
+        let breed_id = e;
+        let crop_id = $("#CropSelect").val();
+        let resource_name = $(".manage")[0].innerText;
+        let limit = $("#limit").val();
 
-        var data = {"sample_name": sample_name};
+        let data = {"breed_id": breed_id, "crop_id": crop_id, "resource_name": resource_name};
 
         $.ajax(
             {
-                url: 'searchSampleList',
+                url: 'searchHeader',
                 method: 'POST',
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                    $(".sample_title").text("시교명 (ID) : " + e.innerText);
-
-                    var sample_list = $(".sample-list");
-
-                    var add_list = "";
-
-                    for (var i = 0; i < result.sample.length; i++) {
-                        if (result.sample[i].sample_code === e.innerText) {
-                            add_list += '<tr>';
-                            add_list += '<td>' + result.sample[i].sample_name + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_code + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_country + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_type + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_mate + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_seed + '</a></td>';
-                            add_list += '<td>' + result.sample[i].sample_amount + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_sprout + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_purity + '</td>';
-                            add_list += '<td>' + result.sample[i].sample_comment + '</td>';
-                            add_list += '</tr>';
+                    selectgrid = new tui.Grid({
+                        el: document.getElementById('selectGrid'),
+                        scrollX: true,
+                        scrollY: false,
+                        data: [],
+                        editingEvent: 'click',
+                        columns: [],
+                        pageOptions: {
+                            useClient: true,
+                            perPage: limit
                         }
+                    });
+
+                    const headerArr = [];
+
+                    let headerName = [];
+                    let colName = [];
+
+                    for (let i = 0; i < result.detail.length; i++) {
+                        let colHeader = result.detail[i].detail_name;
+                        colName[i] = result.detail[i].detail_id;
+
+                        headerName[colName[i]] = result.detail[i].detail_id;
+
+                        let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
+
+                        let arr = {}
+
+                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+                        } else if (result.detail[i].detail_info == 3) {
+                            if (result.detail[i].detail_type == 0) {
+                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
+                                headerName[colName[i]] = 'img' + colName[i];
+                            } else if (result.detail[i].detail_type == 1) {
+                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
+                                headerName[colName[i]] = 'doc' + colName[i];
+                            }
+                        } else if (result.detail[i].detail_info == 4) {
+                            continue;
+                        } else {
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
+                        }
+
+                        headerArr.push(arr);
                     }
 
-                    sample_list.empty();
-                    sample_list.append(add_list);
+                    selectgrid.setColumns(headerArr);
+
                 }
             });
     }
+    /* e : 파종번호 모달창 */
 
-    function SearchBasic(e1, e2) {
-        $("#pop_data1").modal();
+    /* s : 모달창 닫힐 때 이벤트 발생 */
+    $(document).ready(function(){
+        $('#pop_data1').on('hidden.bs.modal', function () {
+            selectgrid.destroy();
+        });
+    });
+    /* e : 모달창 닫힐 때 이벤트 발생 */
 
-        var basic_name = $("#CropSelect").val();
-
-        var data = {"basic_name": basic_name};
-
-        $.ajax(
-            {
-                url: 'searchBasic1',
-                method: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    var basic_list = $("#basic_list");
-                    var basicD_list = $("#basicD_list");
-
-                    var add_list = "";
-                    var add_listD = "";
-
-                    for (var i = 0; i < result.basic.length; i++) {
-                        add_list += '<tr>';
-                        add_listD += '<tr>';
-
-                        for (var j = 0; j < result.basic[i].basic_standard.length; j++) {
-                            if (result.basic[i].basic_standard[1].standard === e1) {
-                                add_list += '<td>' + result.basic[i].basic_standard[j].standard + '</td>';
-                            }
-
-                            if (result.basic[i].basic_standard[1].standard === e2) {
-                                add_listD += '<td>' + result.basic[i].basic_standard[j].standard + '</td>';
-                            }
-                        }
-
-                        add_list += '</tr>';
-                        add_listD += '</tr>';
-                    }
-
-                    basic_list.empty();
-                    basic_list.append(add_list);
-
-                    basicD_list.empty();
-                    basicD_list.append(add_listD);
-                }
-            });
-    }
-
-    var breedgrid = null;
+    let breedgrid = null;
     let updateBreedData = [];
 
     function SearchBreedgrid(e) {
@@ -2495,12 +2531,9 @@
                         }
 
                         for (let j = 1; j < headerName.length; j++) {
-                            console.log('colName : ', colName[j - 1])
-                            console.log('headerName : ', headerName[colName[j - 1]])
                             if ((typeof headerName[colName[j - 1]]) === 'string') {
                                 tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                             } else if ((typeof headerName[colName[j - 1]]) === 'number') {
-                                console.log('detail_id : ', data[j - 1].detail_id)
                                 if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
                                     tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
                                 }
@@ -2519,6 +2552,16 @@
                     })
 
                     breedgrid.on('click', (ev) => {
+                        let header;
+                        let allCol = ev.instance.store.column.allColumns;
+
+                        for(let i = 0; allCol.length; i++) {
+                            if(allCol[i].name == ev.columnName) {
+                                header = allCol[i].header
+                                break;
+                            }
+                        }
+
                         if (ev.targetType === 'cell' && ev.columnName === 'file') {
                             let id = breedgrid.getRow(ev.rowKey).breed_id;
 
@@ -2535,6 +2578,10 @@
                             let e_id = breedgrid.getRow(ev.rowKey).breed_id;
 
                             EmptyBtn(e_id);
+                        } else if (ev.targetType === 'cell' && header === '파종번호') {
+                            let breed_id = breedgrid.getRow(ev.rowKey).breed_id;
+
+                            Search(breed_id);
                         }
                     });
 
@@ -2598,8 +2645,8 @@
     function saveRow() {
         const sortBreed = [...breedData].sort((a, b) => a?.detail_id - b?.detail_id)
 
-        var crop_id = $("#CropSelect").val();
-        var resource_name = $(".manage")[0].innerText;
+        let crop_id = $("#CropSelect").val();
+        let resource_name = $(".manage")[0].innerText;
 
         let resource_id = $('#resource_id').val();
         let type_check = 0;

@@ -120,13 +120,13 @@ public class AnalysisController {
     File file = null;
 
     if (method == 0) {
-      root = "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/r_plot/corrplot/" + date_name;
+      root = "/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/r_plot/corrplot/" + date_name;
 //      root = "C:\\upload\\" + date_name;
 
       path = new File(root);
       file = new File(root + "/" + file_name);
     } else {
-      root = "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/r_plot/trait/" + date_name;
+      root = "/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/r_plot/trait/" + date_name;
 //      root = "C:\\upload\\" + date_name;
 
       path = new File(root);
@@ -188,11 +188,11 @@ public class AnalysisController {
 
       if (method == 0) {
         RunCorrlation runcorrlation = new RunCorrlation();
-        runcorrlation.MakeCorrplot("c\\(" + trait + "\\)", "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/", date_name);
+        runcorrlation.MakeCorrplot("c\\(" + trait + "\\)", "/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/", date_name);
 //        runcorrlation.MakeCorrplot("c\\(" + trait + "\\)", "\"C:\\\\upload\\\\\"", date_name);
       } else {
         RunTrait runtrait = new RunTrait();
-        runtrait.MakeTraitplot(trait, "/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/", date_name);
+        runtrait.MakeTraitplot(trait, "/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/", date_name);
 //        runtrait.MakeTraitplot(trait, "\"C:\\\\upload\\\\\"", date_name);
       }
     } catch
@@ -205,7 +205,7 @@ public class AnalysisController {
     boolean check = false;
 
     if (method == 0) {
-      File chk_file = new File("/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/r_plot/corrplot/" + date_name + "/" + date_name + "_corrplot.png");
+      File chk_file = new File("/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/r_plot/corrplot/" + date_name + "/" + date_name + "_corrplot.png");
 
       check = chk_file.exists();
 
@@ -213,7 +213,7 @@ public class AnalysisController {
         result = "/kiban/resultfiles/r_plot/corrplot/" + date_name + "/" + date_name + "_corrplot.png";
       }
     } else {
-      File chk_file = new File("/data/apache-tomcat-9.0.8/webapps/ROOT/kiban/resultfiles/r_plot/trait/" + date_name + "/" + date_name + "_traitplot.png");
+      File chk_file = new File("/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/r_plot/trait/" + date_name + "/" + date_name + "_traitplot.png");
 
       check = chk_file.exists();
 
