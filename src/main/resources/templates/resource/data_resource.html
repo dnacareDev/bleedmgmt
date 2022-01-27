@@ -993,9 +993,7 @@
                     "resource_id": JSON.stringify(total_id)
                 },
                 success: function (result) {
-                    samplegrid.destroy();
-
-                    SearchSample(1);
+                    location.reload();
                 }
             });
     }
