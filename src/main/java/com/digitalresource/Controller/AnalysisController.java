@@ -210,7 +210,7 @@ public class AnalysisController {
       check = chk_file.exists();
 
       if (check) {
-        result = "/kiban/resultfiles/r_plot/corrplot/" + date_name + "/" + date_name + "_corrplot.png";
+        result = "/common/resultfiles/r_plot/corrplot/" + date_name + "/" + date_name + "_corrplot.png";
       }
     } else {
       File chk_file = new File("/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/r_plot/trait/" + date_name + "/" + date_name + "_traitplot.png");
@@ -218,7 +218,7 @@ public class AnalysisController {
       check = chk_file.exists();
 
       if (check) {
-        result = "/kiban/resultfiles/r_plot/trait/" + date_name + "/" + date_name + "_traitplot.png";
+        result = "/common/resultfiles/r_plot/trait/" + date_name + "/" + date_name + "_traitplot.png";
       }
     }
 

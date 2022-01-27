@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/tui-time-picker/-/tui-time-picker-2.1.4.tgz",
   "_shasum": "17fe6f2f7619bc331c5a4c155d7728e6c97ff453",
   "_spec": "tui-time-picker@^2.1.3",
-  "_where": "C:\\Users\\UserK\\Documents\\Workspace\\digitalKiban\\node_modules\\tui-date-picker",
+  "_where": "C:\\Users\\UserK\\Documents\\Workspace\\digitalResource\\node_modules\\tui-date-picker",
   "author": {
     "name": "NHN FE Development Lab",
     "email": "dl_javascript@nhn.com"
