@@ -27,6 +27,7 @@
         FROM resource
         WHERE crop_id = #{crop_id}
     </delete>
+
     <delete id="deleteResource" parameterType="int">
         update resource
         set resource_use = 0
@@ -37,7 +38,6 @@
                      from resource
                      where resource_id in (${resource_name})) a)
     </delete>
-
 
     <insert id="insertResource" useGeneratedKeys="true" keyProperty="resource_id">
         insert into resource(resource_name_id, crop_id,
@@ -50,7 +50,7 @@
         <if test="resource_character_template_file != ''">
             resource_character_template_file,
         </if>
-        resource_use, create_date,detail_count)
+        resource_use, create_date, detail_count)
         values(#{resource_name_id}, #{crop_id},
         <if test="trait_id != ''">
             #{trait_id},
@@ -76,7 +76,7 @@
                  left join trait t on r.trait_id = t.trait_id
                  inner join crop c on c.crop_id = r.crop_id
                  inner join resource_name rn on rn.resource_name_id = r.resource_name_id
-        where r.resource_use != 0
+--         where r.resource_use != 0
         ORDER BY r.resource_id DESC
     </select>
 
@@ -154,4 +154,16 @@
         FROM detail
         WHERE detail_id = #{item.detail_id}
     </select>
+
+    <select id="SelectResourceUse" resultType="int">
+        SELECT resource_use
+        FROM resource
+        WHERE resource_id = #{resource_id}
+    </select>
+
+    <update id="UpdateResourceUse">
+        UPDATE resource
+        SET resource_use = #{resource_use}
+        WHERE resource_id = #{resource_id}
+    </update>
 </mapper>
