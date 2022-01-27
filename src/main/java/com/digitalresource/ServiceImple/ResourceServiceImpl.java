@@ -176,4 +176,14 @@ public int detailDisplayAction(Map<String, Object> param) {
   public Map<String, Object> SelectDetailInfo(String detail_id) {
     return resourceMapper.SelectDetailInfo(detail_id);
   }
+
+  @Override
+  public int SelectResourceUse(int resource_id) {
+    return resourceMapper.SelectResourceUse(resource_id);
+  }
+
+  @Override
+  public int UpdateResourceUse(int resource_use, int resource_id) {
+    return resourceMapper.UpdateResourceUse(resource_use, resource_id);
+  }
 }

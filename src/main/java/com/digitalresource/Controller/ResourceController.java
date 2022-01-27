@@ -11,6 +11,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ContentDisposition;
@@ -84,8 +85,6 @@ public class ResourceController {
   @ResponseBody
   @RequestMapping("nameOverlapCheck")
   public int NameOverlapCheck(@RequestParam("resource_name") String resource_name) {
-
-    System.out.println(resource_name);
 
     int result = RNService.getCountResourceNameByCrop(resource_name);
 
@@ -177,7 +176,6 @@ public class ResourceController {
     return result;
   }
 
-
   @ResponseBody
   @RequestMapping("resourceDownloadFile")
   public ResponseEntity<Object> resourceDownloadFile(@RequestParam(value = "file_name") String file_name) {
@@ -199,26 +197,24 @@ public class ResourceController {
   }
 
   @ResponseBody
-  @RequestMapping("change-resource-use")
-  public int changeResourceUse(@RequestParam("use_name") String use_name, @RequestParam("limit") int limit) {
+  @RequestMapping("changeResourceUse")
+  public int changeResourceUse(@RequestParam("resource_id") String resource_id) {
     int result = 0;
-    int toggle = 0;
-    Map<String, Object> map = new HashMap<String, Object>();
-    if (use_name.equals("사용")) {
-      use_name = "1";
-      toggle = 1;
-    } else if (use_name.equals("비사용")) {
-      use_name = "0";
-      toggle = 1;
+
+    JSONArray arr = new JSONArray(resource_id);
+
+    for(int i = 0; i < arr.length(); i++) {
+      int resourceId = arr.getInt(i);
+
+      int using = RService.SelectResourceUse(resourceId);
+
+      if(using == 1) {
+        result = RService.UpdateResourceUse(0, resourceId);
+      } else if(using == 0){
+        result = RService.UpdateResourceUse(1, resourceId);
+      }
     }
 
-    if (toggle == 1) {
-      map.put("use_name", use_name);
-      map.put("limit", limit);
-      result = RService.changeResourceUse(map);
-    } else {
-      result = 0;
-    }
     return result;
   }
 

@@ -847,8 +847,16 @@
         .tui-grid-cell {
             background-color: white;
         }
-        .btn_box {display: flex; align-items: center; justify-content: flex-start;}
-        .btn_box button {margin-right: 4px;}
+
+        .btn_box {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .btn_box button {
+            margin-right: 4px;
+        }
     </style>
 </head>
 
@@ -880,18 +888,6 @@
                                             <option value="20">20개</option>
                                             <option value="30">30개</option>
                                         </select>
-                                        <!--<select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" id="CropSelect">-->
-                                        <!--    <option value="고추">고추</option>-->
-                                        <!--    <option value="대파">대파</option>-->
-                                        <!--    <option value="멜론">멜론</option>-->
-                                        <!--    <option value="무">무</option>-->
-                                        <!--    <option value="배추">배추</option>-->
-                                        <!--    <option value="수박">수박</option>-->
-                                        <!--    <option value="양배추">양배추</option>-->
-                                        <!--    <option value="양파">양파</option>-->
-                                        <!--    <option value="참외">참외</option>-->
-                                        <!--    <option value="토마토">토마토</option>-->
-                                        <!--</select>-->
                                     </form>
                                 </div>
                             </div>
@@ -905,8 +901,8 @@
                                 <div id="sampleGrid"></div>
                                 <div class="row">
                                     <div class="col-4 btn_box">
-                                        <button class="btn btn-lg btn-primary bottom_btn" onclick="DeleteSample(0)">
-                                            <span>비사용</span>
+                                        <button class="btn btn-lg btn-primary bottom_btn" onclick="UpdateResource()">
+                                            <span>사용 여부 전환</span>
                                         </button>
                                     </div>
                                     <div class="col-4">
@@ -978,50 +974,31 @@
 
     var emptyEls;
 
-    // 시교자원 삭제
-    function DeleteSample(type) {
-        var user_type = $("#user_type").val();
+    // 사용 전환
+    function UpdateResource() {
+        var total_id = [];
 
-        if (user_type != 0) {
-            return Alert("삭제 권한이 없습니다.");
-        } else {
-                var total_id = [];
+        var l = samplegrid.getCheckedRows().length;
 
-                var l = samplegrid.getCheckedRows().length;
-
-                for (let i = 0; i < l; i++) {
-                    total_id.push(samplegrid.getCheckedRows()[i].resource_id)
-                }
-                var formData = new FormData();
-    			formData.append("resource_name",total_id);
-    			formData.append("resource_use",type);
-    			
-                var data = {'resource_id': total_id};
-				
-                if (confirm("삭제하시겠습니까?") == true) {
-                    $.ajax(
-                        {
-                            url: 'deleteResource',
-                            method: 'POST',
-                            processData : false,
-            				contentType : false,
-                            data: formData,
-                            success: function (result) {
-                                if (result == 0) {
-                                    return Alert("삭제에 실패하였습니다.");
-                                } else {
-                                    location.reload()
-                                }
-                            }
-                        });
-                } else {
-                    return false;
-                }
+        for (let i = 0; i < l; i++) {
+            total_id.push(samplegrid.getCheckedRows()[i].resource_id)
         }
-            
-    }
 
-    // 시교자원 삭제
+        $.ajax(
+            {
+                url: 'changeResourceUse',
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    "resource_id": JSON.stringify(total_id)
+                },
+                success: function (result) {
+                    samplegrid.destroy();
+
+                    SearchSample(1);
+                }
+            });
+    }
 
     /* 엑셀 다운로드 */
     function s2ab(s) {
@@ -1183,7 +1160,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
-                	
+
                     samplegrid = new tui.Grid({
                         el: document.getElementById('sampleGrid'),
                         scrollX: false,
@@ -1220,14 +1197,12 @@
                                 sortable: true,
                                 sortingType: 'asc'
                             },
-                            /*
                             {
                                 header: '사용여부',
                                 name: 'use_name',
-                                editor: 'text',
                                 sortable: true,
                                 sortingType: 'asc'
-                            },*/
+                            },
                             {
                                 header: '생성날짜',
                                 name: 'create_date',
@@ -1241,30 +1216,6 @@
                         }
                     });
 
-                    samplegrid.on('afterChange', (ev) => {
-                        var after = ev.changes[0].value;
-                        var before = ev.changes[0].prevValue;
-                        var rowKey = ev.changes[0].rowKey;
-
-                        var data = {"limit": rowKey, "use_name": after}
-
-                        if (after != before) {
-                            $.ajax(
-                                {
-                                    url: 'change-resource-use',
-                                    method: 'POST',
-                                    dataType: 'json',
-                                    data: data,
-                                    success: function (result) {
-                                        if (result == 0) {
-                                            Alert('"사용", "비사용"만 입력 가능합니다.')
-                                        }
-                                    }
-                                }
-                            )
-                        }
-                    });
-
                     const dataArr = [];
 
                     for (let i = 0; i < result.resourceList.length; i++) {
@@ -1273,9 +1224,14 @@
                             'crop_name': result.resourceList[i].crop_name,
                             'resource_name': result.resourceList[i].resource_name,
                             'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">download</div>',
-                            'resource_character_template_file' : result.resourceList[i].resource_character_template_file ? '<div></div>' : '<div data-value="' + result.resourceList[i].resource_character_template_file + '">download</div>',
-                            'use_name': result.resourceList[i].use_name,
+                            'resource_character_template_file': result.resourceList[i].resource_character_template_file ? '<div></div>' : '<div data-value="' + result.resourceList[i].resource_character_template_file + '">download</div>',
                             'create_date': result.resourceList[i].create_date
+                        }
+
+                        if (result.resourceList[i].resource_use == 1) {
+                            rowArr['use_name'] = '사용'
+                        } else if (result.resourceList[i].resource_use == 0) {
+                            rowArr['use_name'] = '미사용'
                         }
 
                         dataArr.push(rowArr);
@@ -1290,7 +1246,7 @@
                             if (fileName == 'null' || fileName == undefined) {
                                 return Alert1("파일이 존재하지 않습니다.")
                             } else {
-                            	
+
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
                                 a.href = '/upload?filename=' + value.dataset.value;
@@ -1303,7 +1259,7 @@
                                     }).fail(function () {
                                     return Alert1("파일이 존재하지 않습니다!")
                                 })
-                            	
+
                             }
                         } else if (ev.targetType === 'cell' && ev.columnName === 'resource_character_template_file') {
                             let value = ev.nativeEvent.srcElement;

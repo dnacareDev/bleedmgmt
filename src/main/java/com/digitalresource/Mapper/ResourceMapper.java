@@ -50,4 +50,8 @@ public interface ResourceMapper {
   MonthCount SelectCropMonth(@Param("crop_name") String crop_name, @Param("month") String month, @Param("resource_name") String resource_name);
 
   Map<String, Object> SelectDetailInfo(String detail_id);
+
+  int SelectResourceUse(@Param("resource_id") int resource_id);
+
+  int UpdateResourceUse(@Param("resource_use") int resource_use, @Param("resource_id") int resource_id);
 }

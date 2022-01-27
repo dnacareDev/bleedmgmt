@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.digitalresource.Entity.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface ResourceService {
@@ -41,4 +42,7 @@ public interface ResourceService {
 
 	Map<String, Object> SelectDetailInfo(String detail_id);
 
+	int SelectResourceUse(int resource_id);
+
+	int UpdateResourceUse(int resource_use, int resource_id);
 }

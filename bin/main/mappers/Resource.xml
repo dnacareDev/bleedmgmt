@@ -71,7 +71,7 @@
     </insert>
 
     <select id="searchResource" resultType="ResourceList">
-        select r.*, rn.*, t.trait_description, c.crop_name, (if(resource_use = 1, '사용', '비사용')) as use_name
+        select r.*, rn.*, t.trait_description, c.crop_name, (if(resource_use = 1, '사용', '미사용')) as use_name
         from resource r
                  left join trait t on r.trait_id = t.trait_id
                  inner join crop c on c.crop_id = r.crop_id
