@@ -43,7 +43,9 @@ public class FileController {
 
       System.out.println("files : /upload/" + originFileName);
       Resource file = new FileSystemResource("/upload/" + originFileName);
+//      Resource file = new FileSystemResource("/data/apache-tomcat-9.0.8/webapps/ROOT/upload/" + originFileName);
 
+      System.out.println("file = " + file);
       if (!file.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
       String onlyFileName = originFileName.substring(originFileName.lastIndexOf("_") + 1);

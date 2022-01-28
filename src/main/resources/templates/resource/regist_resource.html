@@ -691,6 +691,8 @@
         })
     });
 
+    let featureFileName = null;
+
     function saveResource() {
         if (checkName == 1) {
             let checkBox = document.getElementsByClassName("anaCheck");
@@ -711,7 +713,12 @@
             var formData = new FormData();
 
             formData.append("inputFile", $("#excelFile")[0].files[0]);
-            formData.append("charFile", $("#data_file2")[0].files[0]);
+
+            if($("#data_file2")[0].files[0] != undefined) {
+                formData.append("charFile1", $("#data_file2")[0].files[0]);
+            } else {
+                formData.append("charFile2", featureFileName);
+            }
             formData.append("crop_id", crop_id);
             formData.append("resource_name", input_val);
             formData.append("detail_list", dataList);
@@ -753,6 +760,8 @@
             dataTyp: "json",
             data: data,
             success: function (result) {
+                console.log(result);
+
                 headerGrid = new tui.Grid({
                     el: document.getElementById('headerGrid'),
                     scrollX: true,
@@ -791,6 +800,8 @@
 
                 dataSet.push(bodyArr);
                 headerGrid.resetData(dataSet);
+
+                featureFileName = result[0].feature_file;
             }
         })
     }

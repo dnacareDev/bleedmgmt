@@ -111,7 +111,7 @@ public class ResourceController {
 
   @ResponseBody
   @RequestMapping("registerResource")
-  public int registerResource(MultipartFile inputFile, MultipartFile charFile,
+  public int registerResource(MultipartFile inputFile, MultipartFile charFile1, @RequestParam(value = "charFile2", required = false) String charFile2,
                               @RequestParam(value = "crop_id", required = false) String crop_id, @RequestParam("resource_name") String resource_name,
                               @RequestParam(value = "detail_list") String detail_list,
                               @RequestParam(value = "feature_group", required = false) String feature_group,
@@ -144,11 +144,11 @@ public class ResourceController {
       Files.copy(inputFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    if (charFile != null) {
-      String[] extension = charFile.getOriginalFilename().split("\\.");
+    if (charFile1 != null) {
+      String[] extension = charFile1.getOriginalFilename().split("\\.");
 
       charFile_name = fileController.ChangeFileName(extension[1]);
-      String origin_charFile_name = charFile.getOriginalFilename();
+      String origin_charFile_name = charFile1.getOriginalFilename();
       String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/";
 
       File filePath = new File(path);
@@ -157,12 +157,17 @@ public class ResourceController {
       Path fileLocation = Paths.get(path).toAbsolutePath().normalize();
       Path targetLocation = fileLocation.resolve(charFile_name);
 
-      Files.copy(charFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(charFile1.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
     }
+
 
     Resource resource = new Resource();
     resource.setResource_template(inputFile_name);
-    resource.setResource_character_template_file(charFile_name);
+    if(charFile2 != null) {
+      resource.setResource_character_template_file(charFile2);
+    } else {
+      resource.setResource_character_template_file(charFile_name);
+    }
     resource.setCrop_id(Integer.parseInt(crop_id));
     resource.setResource_id(resource_id);
     resource.setDetailCount(detail_count);

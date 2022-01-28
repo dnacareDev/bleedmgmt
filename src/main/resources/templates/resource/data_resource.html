@@ -1221,8 +1221,8 @@
                             'resource_id': result.resourceList[i].resource_id,
                             'crop_name': result.resourceList[i].crop_name,
                             'resource_name': result.resourceList[i].resource_name,
-                            'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">download</div>',
-                            'resource_character_template_file': result.resourceList[i].resource_character_template_file ? '<div></div>' : '<div data-value="' + result.resourceList[i].resource_character_template_file + '">download</div>',
+                            'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">Download</div>',
+                            'resource_character_template_file': result.resourceList[i].resource_character_template_file ? '<div data-value="' + result.resourceList[i].resource_character_template_file + '">Download</div>' : '<div></div>',
                             'create_date': result.resourceList[i].create_date
                         }
 
@@ -1265,6 +1265,8 @@
                         } else if (ev.targetType === 'cell' && ev.columnName === 'resource_character_template_file') {
                             let value = ev.nativeEvent.srcElement;
                             let fileName = value.dataset.value;
+
+                            console.log('fileName : ',fileName);
 
                             if (fileName == 'null' || fileName == undefined) {
                                 return Alert1("파일이 존재하지 않습니다.")
