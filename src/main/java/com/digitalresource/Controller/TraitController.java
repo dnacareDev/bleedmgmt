@@ -110,7 +110,7 @@ public class TraitController {
     @ResponseBody
     @RequestMapping("traitDownloadFile")
     public ResponseEntity<Object> traitDownloadFile(@RequestParam(value = "file_name") String file_name) {
-        String path = "/upload/" + file_name;
+        String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/trait" + file_name;
 
         try {
             Path filePath = Paths.get(path);
