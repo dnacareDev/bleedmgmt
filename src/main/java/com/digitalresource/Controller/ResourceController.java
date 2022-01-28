@@ -133,7 +133,7 @@ public class ResourceController {
 
       inputFile_name = fileController.ChangeFileName(extension[1]);
       String origin_inputFile_name = inputFile.getOriginalFilename();
-      String path = "/upload";
+      String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/register";
 
       File filePath = new File(path);
       if (!filePath.exists())
@@ -149,7 +149,7 @@ public class ResourceController {
 
       charFile_name = fileController.ChangeFileName(extension[1]);
       String origin_charFile_name = charFile.getOriginalFilename();
-      String path = "/upload";
+      String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/register";
 
       File filePath = new File(path);
       if (!filePath.exists())
@@ -179,7 +179,7 @@ public class ResourceController {
   @ResponseBody
   @RequestMapping("resourceDownloadFile")
   public ResponseEntity<Object> resourceDownloadFile(@RequestParam(value = "file_name") String file_name) {
-    String path = "/upload/" + file_name;
+    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/register" + file_name;
 
     try {
       Path filePath = Paths.get(path);

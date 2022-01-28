@@ -1861,6 +1861,10 @@
     $(document).ready(function () {
         $("#CropSelect").val(getSessionS(type_id));
 
+        if(type != '파종대장') {
+            $("#data_check_submit").css('display', 'none');
+        }
+
         SearchBreed(1);
         SearchBreedgrid(1);
     });
