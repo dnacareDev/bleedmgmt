@@ -1859,7 +1859,9 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        $("#CropSelect").val(getSessionS(type_id));
+        if(getSessionS(type_id) != null) {
+            $("#CropSelect").val(getSessionS(type_id));
+        }
 
         if(type != '파종대장') {
             $("#data_check_submit").css('display', 'none');
@@ -2448,6 +2450,8 @@
         let limit = $("#limit").val();
 
         let data = {"crop_id": crop_id, "resource_name": resource_name};
+
+        console.log('data : ', data);
 
         $.ajax(
             {

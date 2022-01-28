@@ -53,6 +53,13 @@ public class BreedController {
 
     List<Crop> crops = cropService.SearchCropList(type);
 
+    System.out.println("=================================");
+    System.out.println("crop_id = " + crop_id);
+    System.out.println("crops = " + crops);
+    System.out.println("type = " + type);
+    System.out.println("resource_id = " + resource_id);
+    System.out.println("=================================");
+
     mv.addObject("crop_id", crop_id);
     mv.addObject("cropList", crops);
     mv.addObject("type", type);
