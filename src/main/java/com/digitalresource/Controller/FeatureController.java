@@ -43,7 +43,7 @@ public class FeatureController {
 
     String file_name = fileController.ChangeFileName(extension[1]);
     String origin_file_name = file.getOriginalFilename();
-    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/trait";
+    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/";
 
     File filePath = new File(path);
     if (!filePath.exists())

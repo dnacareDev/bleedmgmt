@@ -1241,6 +1241,9 @@
                         if (ev.targetType === 'cell' && ev.columnName === 'resource_template') {
                             let value = ev.nativeEvent.srcElement;
                             let fileName = value.dataset.value;
+
+                            console.log('fileName : ',fileName);
+
                             if (fileName == 'null' || fileName == undefined) {
                                 return Alert1("파일이 존재하지 않습니다.")
                             } else {

@@ -41,7 +41,7 @@ public class FileController {
     try {
       String originFileName = URLDecoder.decode(filename, "UTF-8");
 
-      System.out.println("/upload/" + originFileName);
+      System.out.println("files : /upload/" + originFileName);
       Resource file = new FileSystemResource("/upload/" + originFileName);
 
       if (!file.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -51,7 +51,7 @@ public class FileController {
       header.add("Content-Disposition", "attachment; filename=" + onlyFileName);
 
       result = new ResponseEntity<>(file, header, HttpStatus.OK);
-      System.out.println(result);
+      System.out.println("result = " + result);
     } catch (IOException e) {
       System.out.println(e.getMessage());
       e.printStackTrace();
