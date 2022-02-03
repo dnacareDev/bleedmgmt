@@ -1522,11 +1522,11 @@
 
         console.log(title);
 
-        if(title == '파종대장') {
+        if (title == '파종대장') {
             location.href = '/excelTemplate/sowingSample.xlsx';
-        } else if(title == '종자대장') {
+        } else if (title == '종자대장') {
             location.href = '/excelTemplate/seedSample.xlsx';
-        } else if(title == '교배대장') {
+        } else if (title == '교배대장') {
             location.href = '/excelTemplate/matingSample.xlsx';
         }
     }
@@ -1548,6 +1548,7 @@
 
     function getSessionS(key, useRemove) {
         let result = "";
+
         if (sessionStorage.getItem(key) !== null) {
             result = sessionStorage.getItem(key);
             if (useRemove) {
@@ -1555,7 +1556,7 @@
             }
             return result;
         } else {
-            result = '2';
+            result = $("#crop_id").val();
             return result;
         }
     }
@@ -1859,11 +1860,9 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        if(getSessionS(type_id) != null) {
-            $("#CropSelect").val(getSessionS(type_id));
-        }
+        $("#CropSelect").val(getSessionS(type_id));
 
-        if(type != '파종대장') {
+        if (type != '파종대장') {
             $("#data_check_submit").css('display', 'none');
         }
 
@@ -2183,7 +2182,7 @@
             let status = breedgrid.getCheckedRows()[i].status;
             let text = status.replace(regExp, "");
 
-            if(text === "EMPTY") {
+            if (text === "EMPTY") {
                 chk = 1;
             }
 
@@ -2431,10 +2430,11 @@
                 }
             });
     }
+
     /* e : 파종번호 모달창 */
 
     /* s : 모달창 닫힐 때 이벤트 발생 */
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('#pop_data1').on('hidden.bs.modal', function () {
             selectgrid.destroy();
         });
@@ -2563,8 +2563,8 @@
                         let header;
                         let allCol = ev.instance.store.column.allColumns;
 
-                        for(let i = 0; allCol.length; i++) {
-                            if(allCol[i].name == ev.columnName) {
+                        for (let i = 0; allCol.length; i++) {
+                            if (allCol[i].name == ev.columnName) {
                                 header = allCol[i].header
                                 break;
                             }

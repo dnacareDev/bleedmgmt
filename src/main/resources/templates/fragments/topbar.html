@@ -194,9 +194,11 @@
                 var data_list = $("#subMenuList");
                 var data_add = "";
 
+                console.log('result', result);
+
                 for (var i = 0; i < result.resourceList.length; i++) {
                     data_add += '<li>';
-                    data_add += ' <a href="/breed?type=' + result.resourceList[i].resource_name + '&id=' + result.resourceList[i].resource_name_id + '&crop_id=' + result.resourceList[i].resource_name_id + '">' + result.resourceList[i].resource_name + '</a>'
+                    data_add += ' <a href="/breed?type=' + result.resourceList[i].resource_name + '&id=' + result.resourceList[i].resource_name_id + '&crop_id=' + result.resourceList[i].crop_id + '">' + result.resourceList[i].resource_name + '</a>'
                     data_add += '</li>';
                 }
 

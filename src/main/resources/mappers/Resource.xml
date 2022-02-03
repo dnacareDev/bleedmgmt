@@ -94,7 +94,7 @@
     </update>
 
     <select id="resourceList" resultType="resourceName">
-        select rn.*
+        select rn.*, r.crop_id
         from resource_name rn
                  LEFT JOIN resource r ON r.resource_name_id = rn.resource_name_id
         WHERE r.resource_use != 0

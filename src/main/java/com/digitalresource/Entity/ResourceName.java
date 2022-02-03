@@ -15,4 +15,5 @@ public class ResourceName {
     public ResourceName(String resource_name){
         this.resource_name = resource_name;
     }
+    private int crop_id;
 }
