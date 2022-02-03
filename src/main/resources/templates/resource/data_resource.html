@@ -1250,7 +1250,9 @@
 
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
-                                a.href = '/upload?filename=' + value.dataset.value;
+                                // a.href = '/upload?filename=' + value.dataset.value;
+                                a.href = '/upload/' + value.dataset.value;
+                                a.download;
                                 // document.body.appendChild(a);
                                 // a.click();
                                 $.get(a.href)
@@ -1274,7 +1276,9 @@
 
                                 let a = document.createElement('a');
                                 a.style.display = 'none';
-                                a.href = '/upload?filename=' + value.dataset.value;
+                                // a.href = '/upload?filename=' + value.dataset.value;
+                                a.href = '/upload/' + value.dataset.value;
+                                a.download;
                                 // document.body.appendChild(a);
                                 // a.click();
                                 $.get(a.href)
