@@ -18,9 +18,9 @@ public class AnalysisServiceImpl implements AnalysisService
 	
 	// 품종 조회
 	@Override
-	public List<Breed> SelectBreed(String name, int[] total_id, int type)
+	public List<Breed> SelectBreed(String name, int[] resource_id, int type)
 	{
-		return mapper.SelectBreed(name, total_id, type);
+		return mapper.SelectBreed(name, resource_id, type);
 	}
 
 //	 분석 형질 조회
@@ -29,7 +29,6 @@ public class AnalysisServiceImpl implements AnalysisService
 	{
 		return mapper.selectTrait(detail_name, detail_type);
 	}
-
 
 	@Override
 	public List<Detail> SelectTrait(int resource_id) {
@@ -46,5 +45,10 @@ public class AnalysisServiceImpl implements AnalysisService
 	public List<StandardList> SelectStandard(int[] target_id, int detail_type)
 	{
 		return mapper.SelectStandard(target_id, detail_type);
+	}
+
+	@Override
+	public int SelectCropIdByName(String crop_name) {
+		return mapper.SelectCropIdByName(crop_name);
 	}
 }

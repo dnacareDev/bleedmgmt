@@ -8,9 +8,9 @@
         LEFT JOIN standard s ON d.detail_id = s.detail_id
         WHERE b.variety_name = #{name} AND d.detail_name = '파종번호' AND s.breed_id = b.breed_id AND s.standard_data IS NOT NULL
         <choose>
-            <when test="type != '0' and total_id != null">
-                <foreach collection="total_id" item="item" open="AND (" close=")" separator="OR">
-                    b.breed_id = #{item}
+            <when test="type != '0' and resource_id != null">
+                <foreach collection="resource_id" item="item" open="AND (" close=")" separator="OR">
+                    b.resource_id = #{item}
                 </foreach>
             </when>
         </choose>
@@ -49,5 +49,11 @@
         <foreach collection="target_id" item="item" open="(" close=")" separator="OR">
             breed_id = ${item}
         </foreach>
+    </select>
+
+    <select id="SelectCropIdByName" parameterType="String" resultType="int">
+        SELECT crop_id
+        from crop
+        WHERE crop_name = #{crop_name}
     </select>
 </mapper>

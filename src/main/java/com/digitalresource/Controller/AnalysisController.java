@@ -26,6 +26,9 @@ import java.util.*;
 public class AnalysisController {
 
   @Autowired
+  private BreedService breedService;
+
+  @Autowired
   private CropService cropService;
 
   @Autowired
@@ -60,7 +63,21 @@ public class AnalysisController {
 
     List<Breed> breed = new ArrayList<Breed>();
 
-    breed = service.SelectBreed(name, total_id, type);
+    int crop_id = service.SelectCropIdByName(name);
+
+    String resourceName = "파종대장";
+
+    int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName);
+
+    int[] resource_id = new int[resource_name_id.length];
+
+    for (int i = 0; i < resource_name_id.length; i++) {
+      if (resourceService.SearchResourceId(crop_id, resource_name_id[i]) != null) {
+        resource_id[i] = resourceService.SearchResourceId(crop_id, resource_name_id[i]);
+      }
+    }
+
+    breed = service.SelectBreed(name, resource_id, type);
 
     result.put("breed", breed);
 
