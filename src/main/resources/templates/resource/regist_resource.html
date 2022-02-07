@@ -536,11 +536,12 @@
     var headerGrid = null;
 
     /* s : 특성파일 추가 */
-    function excelExportFile(evne, callback) {
+    function excelExportFile(event, callback) {
         var input = event.target;
         var reader = new FileReader();
 
         charArr = [];
+        dataArr = [];
 
         if (headerGrid != null) {
             headerGrid.destroy();
@@ -582,7 +583,7 @@
                 }
 
                 if (!idx.startsWith('!')) {
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0, "check": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 1, "check": 0};
 
                     charArr.push(headerArr);
                 }
@@ -595,7 +596,7 @@
             let dataSet = [];
 
             for(let i = 0; i < dataArr.length; i++) {
-                bodyArr[headerName[i]] = '<input type=checkbox class="anaCheck" name="' + headerName[i] + '">';
+                bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
             }
 
             dataSet.push(bodyArr);
@@ -760,8 +761,6 @@
             dataTyp: "json",
             data: data,
             success: function (result) {
-                console.log(result);
-
                 headerGrid = new tui.Grid({
                     el: document.getElementById('headerGrid'),
                     scrollX: true,
