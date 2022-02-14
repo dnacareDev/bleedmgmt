@@ -975,7 +975,6 @@
         $("#trait_list").empty();
     });
 
-    // 파종 조회
     function SearchTarget() {
         let name = $("#select_crop option:selected").text();
         let url = new URL(window.location).searchParams;
@@ -996,10 +995,12 @@
                     var add_list = "";
 
                     for (var i = 0; i < result.breed.length; i++) {
-                        add_list += '<li>';
-                        add_list += '<input type="checkbox" class="plus_target" name="' + result.breed[i].breed_name + '" value="' + result.breed[i].breed_id + '">';
-                        add_list += '<span class="target_list">' + result.breed[i].standard_data + '</span>';
-                        add_list += '</li>';
+                        if (result.breed[i].standard_count != 0) {
+                            add_list += '<li>';
+                            add_list += '<input type="checkbox" class="plus_target" name="' + result.breed[i].breed_name + '" value="' + result.breed[i].breed_id + '">';
+                            add_list += '<span class="target_list">' + result.breed[i].standard_data + '</span>';
+                            add_list += '</li>';
+                        }
                     }
 
                     target_list.empty();

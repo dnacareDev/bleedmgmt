@@ -15,4 +15,5 @@ public class Breed {
 	private String standard_data;
 	private int detail_count;						// 세부정보 수
 	private List<StandardList> standardList;
+	private int standard_count;
 }

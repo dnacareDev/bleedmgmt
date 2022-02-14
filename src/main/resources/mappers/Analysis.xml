@@ -3,7 +3,9 @@
 <mapper namespace="com.digitalresource.Mapper.AnalysisMapper">
     <!-- 품종 조회 -->
     <select id="SelectBreed" resultType="Breed">
-        SELECT * FROM breed b
+        SELECT *,
+        (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND d.detail_info = 2 AND s.standard_data IS NOT NULL) AS standard_count
+        FROM breed b
         LEFT JOIN detail d ON b.resource_id = d.resource_id
         LEFT JOIN standard s ON d.detail_id = s.detail_id
         WHERE b.variety_name = #{name} AND d.detail_name = '파종번호' AND s.breed_id = b.breed_id AND s.standard_data IS NOT NULL
