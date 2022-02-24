@@ -11,6 +11,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.digitalresource.Entity.*;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -18,6 +19,7 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.digitalresource.Entity.Crop;
-import com.digitalresource.Entity.Detail;
-import com.digitalresource.Entity.Feature;
-import com.digitalresource.Entity.Resource;
-import com.digitalresource.Entity.ResourceList;
-import com.digitalresource.Entity.ResourceName;
 import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.ResourceNameService;
 import com.digitalresource.Service.ResourceService;
@@ -58,9 +54,11 @@ public class ResourceController {
   }
 
   @RequestMapping("regist-resource")
-  public ModelAndView registResourcePage(ModelAndView mv) {
+  public ModelAndView registResourcePage(ModelAndView mv, Authentication auth) {
     List<Crop> cropList = cropService.selectCropList();
+    User user = (User)auth.getPrincipal();
 
+    mv.addObject("user", user);
     mv.addObject("cropList", cropList);
 
     mv.setViewName("resource/regist_resource");
@@ -93,10 +91,11 @@ public class ResourceController {
 
   @ResponseBody
   @RequestMapping("confirmResourceName")
-  public int confirmResourceName(@RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
+  public int confirmResourceName(@RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name, @RequestParam("group") int group) {
     Map<String, Object> param = new HashMap<String, Object>();
     param.put("crop_id", crop_id);
     param.put("resource_name", resource_name);
+    param.put("user_group", group);
     int result = RNService.confirmResourceName(param);
     System.out.println(result);
     return result;
@@ -115,10 +114,12 @@ public class ResourceController {
                               @RequestParam(value = "crop_id", required = false) String crop_id, @RequestParam("resource_name") String resource_name,
                               @RequestParam(value = "detail_list") String detail_list,
                               @RequestParam(value = "feature_group", required = false) String feature_group,
-                              @RequestParam(value = "detail_count") int detail_count) throws IOException {
+                              @RequestParam(value = "detail_count") int detail_count,
+                              @RequestParam("user_group") int group) throws IOException {
     Map<String, Object> param = new HashMap<String, Object>();
     ResourceName resourceName = new ResourceName();
     resourceName.setResource_name(resource_name);
+    resourceName.setUser_group(group);
     // insert resource_name
     int resource_id = RNService.insertResource_name(resourceName);
     // 파일 업로드 및 파일 이름 저장
@@ -175,6 +176,7 @@ public class ResourceController {
     resource.setDetail_count(detail_count);
     resource.setResource_name_id(resourceName.getResource_name_id());
     resource.setDetailList(detail_list);
+    resource.setUser_group(group);
 
     int result = RService.insertResource(resource);
 
@@ -233,9 +235,13 @@ public class ResourceController {
 
   @ResponseBody
   @RequestMapping("resource-list")
-  public ResponseEntity<?> resourceList() {
+  public ResponseEntity<?> resourceList(Authentication auth) {
     Map<String, Object> map = new HashMap<String, Object>();
-    List<ResourceName> resourceList = RService.resourceList();
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
+
+    List<ResourceName> resourceList = RService.resourceList(group);
+
     map.put("resourceList", resourceList);
     return ResponseEntity.ok(map);
   }

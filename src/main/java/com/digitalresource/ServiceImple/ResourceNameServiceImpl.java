@@ -25,10 +25,10 @@ public class ResourceNameServiceImpl implements ResourceNameService {
     return result;
   }
 
-  public int registResourceName(String resource_name) {
+  public int registResourceName(String resource_name, int group) {
     int result = -1;
 
-    ResourceName name = selectResourceName(resource_name);
+    ResourceName name = selectResourceName(resource_name, group);
     if (name != null) {
       return name.getResource_name_id();
     } else {
@@ -56,9 +56,9 @@ public class ResourceNameServiceImpl implements ResourceNameService {
   }
 
   @Override
-  public ResourceName selectResourceName(String resource_name) {
+  public ResourceName selectResourceName(String resource_name, int group) {
     ResourceName name = null;
-    name = mapper.selectResourceName(resource_name);
+    name = mapper.selectResourceName(resource_name, group);
 
     return name;
   }

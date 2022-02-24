@@ -14,5 +14,6 @@ public class DataList {
   private String resource_name;
   private String datalist_date;
   private int breed_id;
+  private int user_group;
 
 }

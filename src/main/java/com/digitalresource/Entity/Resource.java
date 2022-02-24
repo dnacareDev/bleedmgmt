@@ -30,4 +30,6 @@ public class Resource {
     private int detail_count;
     private int resource_name_count;
     private int detail_id;
+
+    private int user_group;
 }

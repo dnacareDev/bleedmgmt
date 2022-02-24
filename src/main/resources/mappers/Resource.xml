@@ -50,7 +50,7 @@
         <if test="resource_character_template_file != ''">
             resource_character_template_file,
         </if>
-        resource_use, create_date, detail_count)
+        resource_use, create_date, detail_count, user_group)
         values(#{resource_name_id}, #{crop_id},
         <if test="trait_id != ''">
             #{trait_id},
@@ -62,12 +62,12 @@
             #{resource_character_template_file},
         </if>
         1,
-        now(), #{detail_count});
+        now(), #{detail_count}, #{user_group});
     </insert>
 
     <insert id="registerDetail">
-        insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info, detail_check)
-        values (#{resource_id}, #{detail_type}, #{detail_name}, #{detail_index}, #{detail_info}, #{detail_check});
+        insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info, detail_check, user_group)
+        values (#{resource_id}, #{detail_type}, #{detail_name}, #{detail_index}, #{detail_info}, #{detail_check}, #{user_group});
     </insert>
 
     <select id="searchResource" resultType="ResourceList">
@@ -96,8 +96,8 @@
     <select id="resourceList" resultType="resourceName">
         select rn.*, r.crop_id
         from resource_name rn
-                 LEFT JOIN resource r ON r.resource_name_id = rn.resource_name_id
-        WHERE r.resource_use != 0
+        LEFT JOIN resource r ON r.resource_name_id = rn.resource_name_id
+        WHERE r.resource_use != 0 AND r.user_group = #{group}
         group by rn.resource_name
     </select>
 

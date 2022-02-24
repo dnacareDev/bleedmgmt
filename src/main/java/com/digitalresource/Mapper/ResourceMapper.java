@@ -33,7 +33,7 @@ public interface ResourceMapper {
 
   public int changeResourceUse(Map<String, Object> map);
 
-  public List<ResourceName> resourceList();
+  public List<ResourceName> resourceList(@Param("group") int group);
 
   public Integer SearchResourceId(@Param("crop_id") int crop_id, @Param("resource_name_id") int resource_name_id);
 

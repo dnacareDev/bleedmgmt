@@ -875,6 +875,7 @@
                             <div class="breadcrumb-main" style="float: left;">
                                 <h4 class="text-capitalize breadcrumb-title">관리 자원</h4>
                                 <input type="hidden" id="user_type" th:value="${user.user_type}">
+                                <input type="hidden" id="user_group" th:value="${user.user_group}">
                             </div>
                             <div class="action-btn d-flex justify-content-end">
                                 <div class="atbd-button-list d-flex flex-wrap">
@@ -1145,11 +1146,12 @@
 
     // grid
     var samplegrid = null;
+    let group = $("#user_group").val();
 
     function SearchSample(e) {
-        var limit = $("#limit").val();
+        let limit = $("#limit").val();
 
-        var data = {"page_num": e, "limit": limit};
+        let data = {"page_num": e, "limit": limit};
 
         $.ajax(
             {
@@ -1217,22 +1219,27 @@
                     const dataArr = [];
 
                     for (let i = 0; i < result.resourceList.length; i++) {
-                        let rowArr = {
-                            'resource_id': result.resourceList[i].resource_id,
-                            'crop_name': result.resourceList[i].crop_name,
-                            'resource_name': result.resourceList[i].resource_name,
-                            'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">Download</div>',
-                            'resource_character_template_file': result.resourceList[i].resource_character_template_file ? '<div data-value="' + result.resourceList[i].resource_character_template_file + '">Download</div>' : '<div></div>',
-                            'create_date': result.resourceList[i].create_date
-                        }
+                        console.log('user_group', result.resourceList[i].user_group)
+                        console.log('group', group);
 
-                        if (result.resourceList[i].resource_use == 1) {
-                            rowArr['use_name'] = '사용'
-                        } else if (result.resourceList[i].resource_use == 0) {
-                            rowArr['use_name'] = '미사용'
-                        }
+                        if (result.resourceList[i].user_group == group) {
+                            let rowArr = {
+                                'resource_id': result.resourceList[i].resource_id,
+                                'crop_name': result.resourceList[i].crop_name,
+                                'resource_name': result.resourceList[i].resource_name,
+                                'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">Download</div>',
+                                'resource_character_template_file': result.resourceList[i].resource_character_template_file ? '<div data-value="' + result.resourceList[i].resource_character_template_file + '">Download</div>' : '<div></div>',
+                                'create_date': result.resourceList[i].create_date
+                            }
 
-                        dataArr.push(rowArr);
+                            if (result.resourceList[i].resource_use == 1) {
+                                rowArr['use_name'] = '사용'
+                            } else if (result.resourceList[i].resource_use == 0) {
+                                rowArr['use_name'] = '미사용'
+                            }
+
+                            dataArr.push(rowArr);
+                        }
                     }
 
                     samplegrid.resetData(dataArr);

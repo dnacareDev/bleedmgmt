@@ -26,7 +26,7 @@ public interface ResourceService {
 
 	public int deleteResource(String resource_id);
 
-	public List<ResourceName> resourceList();
+	public List<ResourceName> resourceList(int group);
 
 	Integer SearchResourceId(int crop_id, int resource_name_id);
 

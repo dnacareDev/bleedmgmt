@@ -7,6 +7,7 @@ import com.digitalresource.Service.DetailService;
 import com.digitalresource.Service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,10 +32,12 @@ public class HomeController {
   private BreedService breedService;
 
   @RequestMapping("/home")
-  public ModelAndView gethome(ModelAndView mv) {
+  public ModelAndView gethome(ModelAndView mv, Authentication auth) {
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
 
     List<Crop> crops = cropService.selectCropList();
-    List<ResourceName> resourceList = RService.resourceList();
+    List<ResourceName> resourceList = RService.resourceList(group);
 
     mv.addObject("cropList", crops);
     mv.addObject("resourceList", resourceList);
@@ -58,9 +61,12 @@ public class HomeController {
 
   @ResponseBody
   @RequestMapping("selectCrop")
-  public Map<String, Object> SelectCrop() {
+  public Map<String, Object> SelectCrop(Authentication auth) {
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
+
     Map<String, Object> result = new LinkedHashMap<String, Object>();
-    List<ResourceName> resourceList = RService.resourceList();
+    List<ResourceName> resourceList = RService.resourceList(group);
     List<Crop> crops = cropService.selectCropList();
     int[][] count = new int[crops.size()][resourceList.size()];
 
@@ -83,11 +89,14 @@ public class HomeController {
 
   @ResponseBody
   @RequestMapping("selectMonth")
-  public Map<String, Object> SelectMonth(@RequestParam("crop_id") int crop_id) {
+  public Map<String, Object> SelectMonth(Authentication auth, @RequestParam("crop_id") int crop_id) {
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
+
     Map<String, Object> result = new LinkedHashMap<String, Object>();
     MonthCount monthCounts = new MonthCount();
 
-    List<ResourceName> resourceList = RService.resourceList();
+    List<ResourceName> resourceList = RService.resourceList(group);
 
     String crop_name = breedService.SearchCropName(crop_id);
 

@@ -11,6 +11,7 @@ public class ResourceName {
     private int resource_name_id;
     private String resource_name;
     private int resource_group;
+    private int user_group;
 
     public ResourceName(String resource_name){
         this.resource_name = resource_name;

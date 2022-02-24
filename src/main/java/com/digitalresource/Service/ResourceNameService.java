@@ -9,7 +9,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 public interface ResourceNameService {
-  int registResourceName(String resource_name);
+  int registResourceName(String resource_name, int group);
 
   int CountResourceNameByCrop(String resource_name);
 
@@ -17,7 +17,7 @@ public interface ResourceNameService {
 
   int registResourceCrop(int crop_id, int resource_name_id);
 
-  ResourceName selectResourceName(String resource_name);
+  ResourceName selectResourceName(String resource_name, int group);
 
   int getCountResourceNameByCrop(String resource_name);
 

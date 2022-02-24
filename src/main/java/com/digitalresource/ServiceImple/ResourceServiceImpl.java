@@ -41,7 +41,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
     resource.setResource_template_id(resource.getResource_template_id());
 
-    int resource_name_id = nameService.registResourceName(resource.getResource_name());
+    int resource_name_id = nameService.registResourceName(resource.getResource_name(), resource.getUser_group());
     if (resource_name_id < 0)
       return result;
 
@@ -93,9 +93,10 @@ public class ResourceServiceImpl implements ResourceService {
     // insert detail
     String jsonArr = resource.getDetailList();
     JSONArray arr = new JSONArray(jsonArr);
+    int group = resource.getUser_group();
 
     map.put("resource_id", resource.getResource_id());
-
+    
     int result = 0;
 
     for (int i = 0; i < arr.length(); i++) {
@@ -106,6 +107,7 @@ public class ResourceServiceImpl implements ResourceService {
       map.put("detail_info", jsonObject.get("info"));
       map.put("detail_check", jsonObject.get("check"));
       map.put("detail_index", i + 1);
+      map.put("user_group", group);
 
       result = resourceMapper.registerDetail(map);
 
@@ -133,8 +135,8 @@ public class ResourceServiceImpl implements ResourceService {
   }
 
   @Override
-  public List<ResourceName> resourceList() {
-    return resourceMapper.resourceList();
+  public List<ResourceName> resourceList(int group) {
+    return resourceMapper.resourceList(group);
   }
 
   @Override

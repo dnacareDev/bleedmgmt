@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 @Mapper
 public interface ResourceNameMapper {
@@ -17,7 +18,7 @@ public interface ResourceNameMapper {
 
   public int CountResourceNameByCrop(@Param("resource_name") String resource_name);
 
-  public ResourceName selectResourceName(@Param("resource_name") String resource_name);
+  public ResourceName selectResourceName(@Param("resource_name") String resource_name, @Param("user_group") int user_group);
 
   public int registResourceName(ResourceName registParam);
 

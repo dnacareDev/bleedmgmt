@@ -18,4 +18,5 @@ public class ResourceList {
 	private String trait_description;
 	private String crop_name;
 	private String use_name;
+	private int user_group;
 }

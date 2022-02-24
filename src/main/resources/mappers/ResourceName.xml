@@ -16,7 +16,7 @@
 
 <!--    이름으로 자원 관리 이름 찾기-->
     <select id="selectResourceName" parameterType="String" resultType="ResourceName">
-        SELECT * FROM resource_name WHERE resource_name = #{resource_name}
+        SELECT * FROM resource_name WHERE resource_name = #{resource_name} AND user_group = #{group}
     </select>
 
 <!--    자원 관리 이름 생성-->
@@ -66,7 +66,7 @@
     
     <select id="confirmResourceName" resultType="int">
     	select count(*) from resource_name rn inner join resource r on r.resource_name_id = rn.resource_name_id inner join crop c on c.crop_id= r.crop_id
-		where c.crop_id = #{crop_id} and rn.resource_name = #{resource_name}
+		where c.crop_id = #{crop_id} and rn.resource_name = #{resource_name} and rn.user_group = #{user_group}
     </select>
     
     <select id="featureHeadList" resultType="feature">
@@ -74,9 +74,9 @@
     </select>
     
     <insert id="insertResource_name" useGeneratedKeys="true" keyProperty="resource_name_id">
-    	insert into resource_name(resource_name, resource_group) 
+    	insert into resource_name(resource_name, resource_group, user_group)
     	values(#{resource_name},
-    	(select * from (select ifnull ((select distinct resource_group from resource_name right join (select '') a on resource_name = #{resource_name} ) , (select max(resource_group)+1 from resource_name ))from dual) a)
+    	(select * from (select ifnull ((select distinct resource_group from resource_name right join (select '') a on resource_name = #{resource_name} ) , (select max(resource_group)+1 from resource_name ))from dual) a), #{user_group}
     	);
     </insert>
 
