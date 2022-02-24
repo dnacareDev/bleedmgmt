@@ -18,9 +18,9 @@ public interface ResourceService {
 
 	public int insertResource(Resource resource);
 
-	public int selectResourceCount();
+	public int selectResourceCount(int user_group);
 
-	public List<ResourceList> searchResource();
+	public List<ResourceList> searchResource(int user_group);
 
 	public int changeResourceUse(Map<String, Object> map);
 
@@ -28,7 +28,7 @@ public interface ResourceService {
 
 	public List<ResourceName> resourceList(int group);
 
-	Integer SearchResourceId(int crop_id, int resource_name_id);
+	Integer SearchResourceId(int crop_id, int resource_name_id, int user_group);
 
 	Integer SelectCropId(int resource_name_id);
 

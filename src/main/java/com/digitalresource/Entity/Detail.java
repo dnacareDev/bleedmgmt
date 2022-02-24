@@ -11,5 +11,6 @@ public class Detail {
     private int detail_index;
     private int detail_info;
     private int detail_display;
+    private int user_group;
 }
  

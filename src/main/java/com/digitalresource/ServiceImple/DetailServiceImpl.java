@@ -33,7 +33,7 @@ public class DetailServiceImpl implements DetailService {
   }
 
   @Override
-  public ChartCount SelectFileCount() {
-    return mapper.SelectFileCount();
+  public ChartCount SelectFileCount(int user_group) {
+    return mapper.SelectFileCount(user_group);
   }
 }

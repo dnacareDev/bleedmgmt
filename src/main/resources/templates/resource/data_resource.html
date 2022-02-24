@@ -1151,7 +1151,7 @@
     function SearchSample(e) {
         let limit = $("#limit").val();
 
-        let data = {"page_num": e, "limit": limit};
+        let data = {"page_num": e, "limit": limit, "user_group": group};
 
         $.ajax(
             {
@@ -1219,27 +1219,22 @@
                     const dataArr = [];
 
                     for (let i = 0; i < result.resourceList.length; i++) {
-                        console.log('user_group', result.resourceList[i].user_group)
-                        console.log('group', group);
-
-                        if (result.resourceList[i].user_group == group) {
-                            let rowArr = {
-                                'resource_id': result.resourceList[i].resource_id,
-                                'crop_name': result.resourceList[i].crop_name,
-                                'resource_name': result.resourceList[i].resource_name,
-                                'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">Download</div>',
-                                'resource_character_template_file': result.resourceList[i].resource_character_template_file ? '<div data-value="' + result.resourceList[i].resource_character_template_file + '">Download</div>' : '<div></div>',
-                                'create_date': result.resourceList[i].create_date
-                            }
-
-                            if (result.resourceList[i].resource_use == 1) {
-                                rowArr['use_name'] = '사용'
-                            } else if (result.resourceList[i].resource_use == 0) {
-                                rowArr['use_name'] = '미사용'
-                            }
-
-                            dataArr.push(rowArr);
+                        let rowArr = {
+                            'resource_id': i + 1,
+                            'crop_name': result.resourceList[i].crop_name,
+                            'resource_name': result.resourceList[i].resource_name,
+                            'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">Download</div>',
+                            'resource_character_template_file': result.resourceList[i].resource_character_template_file ? '<div data-value="' + result.resourceList[i].resource_character_template_file + '">Download</div>' : '<div></div>',
+                            'create_date': result.resourceList[i].create_date
                         }
+
+                        if (result.resourceList[i].resource_use == 1) {
+                            rowArr['use_name'] = '사용'
+                        } else if (result.resourceList[i].resource_use == 0) {
+                            rowArr['use_name'] = '미사용'
+                        }
+
+                        dataArr.push(rowArr);
                     }
 
                     samplegrid.resetData(dataArr);

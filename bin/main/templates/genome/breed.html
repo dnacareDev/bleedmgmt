@@ -885,6 +885,7 @@
                             <div class="breadcrumb-main" style="float: left;">
                                 <h4 class="text-capitalize breadcrumb-title manage" id="title" th:text="${type}"></h4>
                                 <input type="hidden" id="user_type" th:value="${user.user_type}">
+                                <input type="hidden" id="user_group" th:value="${user.user_group}">
                             </div>
                             <div class="action-btn d-flex justify-content-end">
                                 <div class="atbd-button-list d-flex flex-wrap">
@@ -2990,7 +2991,9 @@
 
                     let crop_id = $("#CropSelect").val();
 
-                    let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id};
+                    let group = $("#user_group").val();
+
+                    let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id, "user_group": group};
 
                     listData.push(lData);
 

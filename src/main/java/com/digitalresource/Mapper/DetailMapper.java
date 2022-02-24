@@ -14,5 +14,5 @@ public interface DetailMapper {
 
     public List<Detail> SelectDetailListByResource(@Param("resource_id") int resource_id);
 
-  ChartCount SelectFileCount();
+  ChartCount SelectFileCount(@Param("user_group") int user_group);
 }

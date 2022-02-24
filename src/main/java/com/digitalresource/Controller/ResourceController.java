@@ -67,10 +67,10 @@ public class ResourceController {
 
   @PostMapping("search-resource")
   @ResponseBody
-  public Map<String, Object> searchResource(@RequestParam("page_num") int page_num, @RequestParam("limit") int limit) {
+  public Map<String, Object> searchResource(@RequestParam("page_num") int page_num, @RequestParam("limit") int limit, @RequestParam("user_group") int user_group) {
     Map<String, Object> map = new HashMap<>();
-    List<ResourceList> resourceList = RService.searchResource();
-    int count = RService.selectResourceCount();
+    List<ResourceList> resourceList = RService.searchResource(user_group);
+    int count = RService.selectResourceCount(user_group);
     int offset = (page_num - 1) * limit;
     int end_page = (count + limit - 1) / limit;
     map.put("resourceList", resourceList);

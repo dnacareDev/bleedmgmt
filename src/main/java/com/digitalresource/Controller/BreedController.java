@@ -65,14 +65,16 @@ public class BreedController {
   @ResponseBody
   @RequestMapping("searchHeader")
   public Map<String, Object> SearchBreed(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
     int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name);
     int resourceId = 0;
 
     for (int i = 0; i < resourceNameId.length; i++) {
-      if (resourceService.SearchResourceId(crop_id, resourceNameId[i]) != null) {
-        resourceId = resourceService.SearchResourceId(crop_id, resourceNameId[i]);
+      if (resourceService.SearchResourceId(crop_id, resourceNameId[i], group) != null) {
+        resourceId = resourceService.SearchResourceId(crop_id, resourceNameId[i], group);
         break;
       }
     }
@@ -320,13 +322,14 @@ public class BreedController {
     JSONObject obj = arr.getJSONObject(0);
 
     int crop_id = obj.getInt("crop_id");
+    int group = obj.getInt("user_group");
     int[] resource_name_id = resourceNameService.SelectResourceNameId(obj.getString("resource_name"));
 
     int resource_id = 0;
 
     for(int i = 0; i < resource_name_id.length; i++) {
-      if(resourceService.SearchResourceId(crop_id, resource_name_id[i]) != null) {
-        resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i]);
+      if(resourceService.SearchResourceId(crop_id, resource_name_id[i], group) != null) {
+        resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i], group);
       } else {
         continue;
       }

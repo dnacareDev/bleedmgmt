@@ -49,10 +49,13 @@ public class HomeController {
 
   @ResponseBody
   @RequestMapping("selectFile")
-  public Map<String, Object> SelectFile() {
+  public Map<String, Object> SelectFile(Authentication auth) {
+    User user = (User)auth.getPrincipal();
+    int user_group = user.getUser_group();
+
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-    ChartCount file = detailService.SelectFileCount();
+    ChartCount file = detailService.SelectFileCount(user_group);
 
     result.put("file", file);
 

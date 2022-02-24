@@ -11,5 +11,5 @@ public interface DetailService {
 
   public List<Detail> SelectDetailListByResource(int resource_id);
 
-  ChartCount SelectFileCount();
+  ChartCount SelectFileCount(int user_group);
 }

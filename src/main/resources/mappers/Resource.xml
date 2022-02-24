@@ -76,7 +76,7 @@
                  left join trait t on r.trait_id = t.trait_id
                  inner join crop c on c.crop_id = r.crop_id
                  inner join resource_name rn on rn.resource_name_id = r.resource_name_id
---         where r.resource_use != 0
+        where r.user_group = #{user_group}
         ORDER BY r.resource_id DESC
     </select>
 
@@ -84,7 +84,8 @@
         select count(*)
         from resource r
                  inner join trait t on r.trait_id = t.trait_id
-                 inner join crop c on c.crop_id = r.crop_id;
+                 inner join crop c on c.crop_id = r.crop_id
+        where r.user_group = #{user_group}
     </select>
 
     <update id="changeResourceUse">
@@ -105,7 +106,8 @@
         SELECT resource_id
         FROM resource
         WHERE crop_id = #{crop_id}
-          AND resource_name_id = #{resource_name_id}
+        AND resource_name_id = #{resource_name_id}
+        AND user_group = #{user_group}
     </select>
 
     <select id="SelectCropId" resultType="int">

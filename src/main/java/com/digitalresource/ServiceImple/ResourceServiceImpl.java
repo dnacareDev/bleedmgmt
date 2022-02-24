@@ -120,13 +120,13 @@ public class ResourceServiceImpl implements ResourceService {
   }
 
   @Override
-  public int selectResourceCount() {
-    return resourceMapper.selectResourceCount();
+  public int selectResourceCount(int user_group) {
+    return resourceMapper.selectResourceCount(user_group);
   }
 
   @Override
-  public List<ResourceList> searchResource() {
-    return resourceMapper.searchResource();
+  public List<ResourceList> searchResource(int user_group) {
+    return resourceMapper.searchResource(user_group);
   }
 
   @Override
@@ -140,8 +140,8 @@ public class ResourceServiceImpl implements ResourceService {
   }
 
   @Override
-  public Integer SearchResourceId(int crop_id, int resource_name_id) {
-    return resourceMapper.SearchResourceId(crop_id, resource_name_id);
+  public Integer SearchResourceId(int crop_id, int resource_name_id, int user_group) {
+    return resourceMapper.SearchResourceId(crop_id, resource_name_id, user_group);
   }
 
   @Override

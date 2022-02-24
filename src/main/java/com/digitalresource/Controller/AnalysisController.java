@@ -1,13 +1,11 @@
 package com.digitalresource.Controller;
 
-import com.digitalresource.Entity.Breed;
-import com.digitalresource.Entity.Crop;
-import com.digitalresource.Entity.Detail;
-import com.digitalresource.Entity.StandardList;
+import com.digitalresource.Entity.*;
 import com.digitalresource.RModule.RunCorrlation;
 import com.digitalresource.RModule.RunTrait;
 import com.digitalresource.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,10 +56,12 @@ public class AnalysisController {
   // 작목 조회
   @ResponseBody
   @RequestMapping("/selectTarget")
-  public Map<String, Object> SelectTarget(@RequestParam("name") String name, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam("type") int type) {
+  public Map<String, Object> SelectTarget(Authentication auth, @RequestParam("name") String name, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam("type") int type) {
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
     List<Breed> breed = new ArrayList<Breed>();
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
 
     int crop_id = service.SelectCropIdByName(name);
 
@@ -72,8 +72,8 @@ public class AnalysisController {
     int[] resource_id = new int[resource_name_id.length];
 
     for (int i = 0; i < resource_name_id.length; i++) {
-      if (resourceService.SearchResourceId(crop_id, resource_name_id[i]) != null) {
-        resource_id[i] = resourceService.SearchResourceId(crop_id, resource_name_id[i]);
+      if (resourceService.SearchResourceId(crop_id, resource_name_id[i], group) != null) {
+        resource_id[i] = resourceService.SearchResourceId(crop_id, resource_name_id[i], group);
       }
     }
 
@@ -95,8 +95,10 @@ public class AnalysisController {
 
   @ResponseBody
   @RequestMapping("selectTrait1")
-  public List<Detail> SelectTrait1(@RequestParam("crop_id") int crop_id) {
+  public List<Detail> SelectTrait1(Authentication auth, @RequestParam("crop_id") int crop_id) {
     List<Detail> result = new ArrayList<>();
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
 
     String resourceName = "파종대장";
 
@@ -105,8 +107,8 @@ public class AnalysisController {
     for (int i = 0; i < resource_name_id.length; i++) {
       int resource_id = 0;
 
-      if (resourceService.SearchResourceId(crop_id, resource_name_id[i]) != null) {
-        resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i]);
+      if (resourceService.SearchResourceId(crop_id, resource_name_id[i], group) != null) {
+        resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i], group);
       }
 
       if (resource_id != 0) {

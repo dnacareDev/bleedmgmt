@@ -27,15 +27,15 @@ public interface ResourceMapper {
 
   public int registerDetail(Map<String, Object> map);
 
-  public List<ResourceList> searchResource();
+  public List<ResourceList> searchResource(@Param("user_group") int user_group);
 
-  public int selectResourceCount();
+  public int selectResourceCount(@Param("user_group") int user_group);
 
   public int changeResourceUse(Map<String, Object> map);
 
   public List<ResourceName> resourceList(@Param("group") int group);
 
-  public Integer SearchResourceId(@Param("crop_id") int crop_id, @Param("resource_name_id") int resource_name_id);
+  public Integer SearchResourceId(@Param("crop_id") int crop_id, @Param("resource_name_id") int resource_name_id, @Param("user_group") int user_group);
 
   public Integer SelectCropId(@Param("resource_name_id") int resource_name_id);
 
