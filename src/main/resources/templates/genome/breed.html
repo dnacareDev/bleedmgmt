@@ -885,6 +885,7 @@
                             <div class="breadcrumb-main" style="float: left;">
                                 <h4 class="text-capitalize breadcrumb-title manage" id="title" th:text="${type}"></h4>
                                 <input type="hidden" id="user_type" th:value="${user.user_type}">
+                                <input type="hidden" id="user_group" th:value="${user.user_group}">
                             </div>
                             <div class="action-btn d-flex justify-content-end">
                                 <div class="atbd-button-list d-flex flex-wrap">
@@ -2658,6 +2659,7 @@
 
         let resource_id = $('#resource_id').val();
         let type_check = 0;
+        let group = $('#user_group').val();
 
         $.ajax(
             {
@@ -2669,7 +2671,8 @@
                     "resource_id": resource_id,
                     "crop_id": crop_id,
                     "resource_name": resource_name,
-                    "type_check": type_check
+                    "type_check": type_check,
+                    "user_group": group
                 },
                 success: function (result) {
                     if (result == 0) {
@@ -2971,6 +2974,7 @@
 
         let resource_id = $('#resource_id').val();
         let type_check = 1;
+        let group = $('#user_group').val();
 
         $("#excel_list").val(JSON.stringify(total_arr));
 
@@ -2982,7 +2986,8 @@
                 data: {
                     "excel_list": JSON.stringify(total_arr),
                     "resource_id": resource_id,
-                    "type_check": type_check
+                    "type_check": type_check,
+                    "user_group": group
                 },
                 success: function (result) {
 

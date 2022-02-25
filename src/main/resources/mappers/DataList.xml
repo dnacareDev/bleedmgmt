@@ -5,13 +5,14 @@
     <select id="SelectDataList" resultType="DataList">
         SELECT *
         FROM dataList
+        WHERE user_group = #{user_group}
     </select>
 
     <insert id="InsertDataList" parameterType="DataList">
         INSERT INTO dataList
-        (datalist_id, resource_id, resource_name, datalist_date, breed_id)
+        (datalist_id, resource_id, resource_name, datalist_date, breed_id, user_group)
         VALUES
-        (#{datalist_id}, #{resource_id}, #{resource_name}, #{datalist_date}, #{breed_id})
+        (#{datalist_id}, #{resource_id}, #{resource_name}, #{datalist_date}, #{breed_id}, #{user_group})
     </insert>
 
     <!-- 날짜 별로 그룹화 해서 가져오기 -->

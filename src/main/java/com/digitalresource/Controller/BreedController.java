@@ -107,10 +107,15 @@ public class BreedController {
 
   @ResponseBody
   @RequestMapping("insertBreed2")
-  public int insertBreed(@RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name, @RequestParam(value = "type_check") int type_check) {
+  public int insertBreed(Authentication auth, @RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name, @RequestParam(value = "type_check") int type_check) {
     int result = 0;
 
-    result = breedService.insertBreed(resource_id, data, crop_id, resource_name, type_check);
+    User user = (User) auth.getPrincipal();
+    int group = user.getUser_group();
+
+    System.out.println("data = " + data);
+
+    result = breedService.insertBreed(resource_id, data, crop_id, resource_name, type_check, group);
 
     return result;
   }
@@ -247,9 +252,8 @@ public class BreedController {
 
   @ResponseBody
   @RequestMapping("excelBreed")
-  public int excelUpload(@RequestParam("excel_list") String excel_list, @RequestParam("resource_id") int resource_id, @RequestParam("type_check") int type_check) {
+  public int excelUpload(@RequestParam("excel_list") String excel_list, @RequestParam("resource_id") int resource_id, @RequestParam("type_check") int type_check, @RequestParam("user_group") int user_group) {
     JSONArray arr = new JSONArray(excel_list);
-
     List<StandardList> standards = new ArrayList<StandardList>();
 
     for (int i = 0; i < arr.length(); i++) {
@@ -263,6 +267,7 @@ public class BreedController {
       breed.setVariety_name(variety_name);
       breed.setResource_id(resource_id);
       breed.setRow_file(type_check);
+      breed.setUser_group(user_group);
 
       int breed_result = breedService.InsertBreed(breed);
 
@@ -344,6 +349,7 @@ public class BreedController {
         dataList.setResource_name(obj.getString("resource_name"));
         dataList.setDatalist_date(obj.getString("datalist_date"));
         dataList.setBreed_id(breed.get(i).getBreed_id());
+        dataList.setUser_group(group);
       } else {
         continue;
       }

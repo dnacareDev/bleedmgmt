@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface DataListService {
 
-  List<DataList> SelectDataList(String datalist_type);
+  List<DataList> SelectDataList(int user_group);
 
   int InsertDataList(DataList dataList);
 

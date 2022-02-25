@@ -16,8 +16,8 @@ public class DataListServiceImpl implements DataListService {
   private DataListMapper mapper;
 
   @Override
-  public List<DataList> SelectDataList(String datalist_type) {
-    return mapper.SelectDataList(datalist_type);
+  public List<DataList> SelectDataList(int user_group) {
+    return mapper.SelectDataList(user_group);
   }
 
   @Override

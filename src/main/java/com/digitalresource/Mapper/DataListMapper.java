@@ -11,7 +11,7 @@ import java.util.Map;
 @Mapper
 public interface DataListMapper {
 
-  List<DataList> SelectDataList(@Param("datalist_type") String datalist_type);
+  List<DataList> SelectDataList(@Param("user_group") int user_group);
 
   int InsertDataList(DataList dataList);
 

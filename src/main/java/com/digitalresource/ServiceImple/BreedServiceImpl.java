@@ -20,16 +20,19 @@ public class BreedServiceImpl implements BreedService {
   private BreedMapper breedMapper;
 
   @Override
-  public int insertBreed(int resource_id, String data, int crop_id, String resource_name, int type_check) {
+  public int insertBreed(int resource_id, String data, int crop_id, String resource_name, int type_check, int group) {
     Map<String, Object> param = new HashMap<String, Object>();
     Map<String, Object> map = new HashMap<String, Object>();
     int result = 0;
     param.put("crop_id", crop_id);
     param.put("resource_name", resource_name);
+    param.put("user_group", group);
     resource_id = breedMapper.selectResourceId(param);
     Breed breed = new Breed();
     breed.setRow_file(type_check);
     breed.setResource_id(resource_id);
+    breed.setUser_group(group);
+
     // insert breed
     int test = breedMapper.insertBreed(breed);
     map.put("breed_id", breed.getBreed_id());
@@ -45,6 +48,9 @@ public class BreedServiceImpl implements BreedService {
       if (arrMin != arrLength) {
         JSONObject jsonObject = arr.getJSONObject(arrMin);
         changeI = Integer.toString(i);
+        System.out.println("i = " + i);
+        System.out.println("changeI = " + changeI);
+        System.out.println("jsonObject.get(\"detail_id\") = " + jsonObject.get("detail_id"));
         if (changeI.equals(String.valueOf(jsonObject.get("detail_id")))) {
           map.put("resource_id", resource_id);
           map.put("limit", cnt);
@@ -54,6 +60,7 @@ public class BreedServiceImpl implements BreedService {
           map.put("resource_id", resource_id);
           map.put("limit", cnt);
           map.put("standard_data", null);
+          arrMin++;
         }
       } else {
         map.put("resource_id", resource_id);
@@ -63,6 +70,7 @@ public class BreedServiceImpl implements BreedService {
       result = breedMapper.insertStandard(map);
       cnt++;
     }
+
     return result;
   }
 
