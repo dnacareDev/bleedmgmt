@@ -449,7 +449,14 @@
                     options: {
                         indexAxis: 'y',
                         responsive: true,
-
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1,
+                                }
+                            }]
+                        },
                         legend: {
                             display: false,
                             position: "top",

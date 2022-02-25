@@ -79,7 +79,7 @@ public class HomeController {
       for (int j = 0; j < resourceList.size(); j++) {
         String resource_name = resourceList.get(j).getResource_name();
 
-        count[i][j] = RService.SelectCropCount(resource_name, crop_name);
+        count[i][j] = RService.SelectCropCount(resource_name, crop_name, group);
       }
     }
 
@@ -111,7 +111,7 @@ public class HomeController {
       for (int j = 1; j <= 12; j++) {
         String month = String.format("%02d", j);
 
-        monthCounts = RService.SelectCropMonth(crop_name, month, resource_name);
+        monthCounts = RService.SelectCropMonth(crop_name, month, resource_name, group);
 
         if(monthCounts != null) {
           count[i][j - 1] = monthCounts.getResource_count();

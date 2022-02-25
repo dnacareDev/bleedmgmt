@@ -136,18 +136,20 @@
     <select id="SelectCropCount" resultType="integer">
         SELECT SUM(rn.resource_name = #{resource_name} AND c.crop_name = #{crop_name}) AS count_crop
         FROM resource r
-                 INNER JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
-                 INNER JOIN crop c ON r.crop_id = c.crop_id
-                 INNER JOIN breed b ON b.resource_id = r.resource_id;
+        INNER JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
+        INNER JOIN crop c ON r.crop_id = c.crop_id
+        INNER JOIN breed b ON b.resource_id = r.resource_id
+        WHERE b.user_group = #{user_group}
     </select>
 
     <select id="SelectCropMonth" resultType="monthcount">
         SELECT resource_name, count(resource_name) AS resource_count, DATE_FORMAT(create_date, '%m') AS mon
         FROM resource_name rn
-                 INNER JOIN breed b on rn.resource_name_id = b.resource_id
+        INNER JOIN breed b on rn.resource_name_id = b.resource_id
         WHERE b.variety_name = #{crop_name}
           AND DATE_FORMAT(create_date, '%m') = #{month}
           AND resource_name = #{resource_name}
+          AND b.user_group = #{user_group}
         group by resource_name;
     </select>
 

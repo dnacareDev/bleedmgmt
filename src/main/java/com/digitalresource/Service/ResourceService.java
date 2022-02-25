@@ -36,9 +36,9 @@ public interface ResourceService {
 
 	public int detailDisplayAction(Map<String, Object> param);
 
-	int SelectCropCount(String resource_name, String crop_name);
+	int SelectCropCount(String resource_name, String crop_name, int user_group);
 
-	MonthCount SelectCropMonth(String crop_name, String month, String resource_name);
+	MonthCount SelectCropMonth(String crop_name, String month, String resource_name, int user_group);
 
 	Map<String, Object> SelectDetailInfo(String detail_id);
 

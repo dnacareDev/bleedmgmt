@@ -45,9 +45,9 @@ public interface ResourceMapper {
 
   public int detailDisplayAction(Map<String, Object> param);
 
-  int SelectCropCount(@Param("resource_name") String resource_name, @Param("crop_name") String crop_name);
+  int SelectCropCount(@Param("resource_name") String resource_name, @Param("crop_name") String crop_name, @Param("user_group") int user_group);
 
-  MonthCount SelectCropMonth(@Param("crop_name") String crop_name, @Param("month") String month, @Param("resource_name") String resource_name);
+  MonthCount SelectCropMonth(@Param("crop_name") String crop_name, @Param("month") String month, @Param("resource_name") String resource_name, @Param("user_group") int user_group);
 
   Map<String, Object> SelectDetailInfo(String detail_id);
 

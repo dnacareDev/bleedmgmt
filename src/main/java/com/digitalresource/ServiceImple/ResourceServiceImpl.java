@@ -165,13 +165,13 @@ public int detailDisplayAction(Map<String, Object> param) {
 }
 
   @Override
-  public int SelectCropCount(String resource_name, String crop_name) {
-    return resourceMapper.SelectCropCount(resource_name, crop_name);
+  public int SelectCropCount(String resource_name, String crop_name, int user_group) {
+    return resourceMapper.SelectCropCount(resource_name, crop_name, user_group);
   }
 
   @Override
-  public MonthCount SelectCropMonth(String crop_name, String month, String resource_name) {
-    return resourceMapper.SelectCropMonth(crop_name, month, resource_name);
+  public MonthCount SelectCropMonth(String crop_name, String month, String resource_name, int user_group) {
+    return resourceMapper.SelectCropMonth(crop_name, month, resource_name, user_group);
   }
 
   @Override
