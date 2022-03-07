@@ -44,29 +44,34 @@ public class BreedServiceImpl implements BreedService {
     int arrMin = 0;
     String changeI = "";
     int cnt = 0;
+
     for (int i = countDetail.getMin(); i <= countDetail.getMax(); i++) {
       if (arrMin != arrLength) {
         JSONObject jsonObject = arr.getJSONObject(arrMin);
         changeI = Integer.toString(i);
+
         System.out.println("i = " + i);
         System.out.println("changeI = " + changeI);
         System.out.println("jsonObject.get(\"detail_id\") = " + jsonObject.get("detail_id"));
+
         if (changeI.equals(String.valueOf(jsonObject.get("detail_id")))) {
+          System.out.println("equals");
           map.put("resource_id", resource_id);
           map.put("limit", cnt);
           map.put("standard_data", jsonObject.get("standard"));
           arrMin++;
         } else {
+          System.out.println("not equals");
           map.put("resource_id", resource_id);
           map.put("limit", cnt);
           map.put("standard_data", null);
-          arrMin++;
         }
       } else {
         map.put("resource_id", resource_id);
         map.put("limit", cnt);
         map.put("standard_data", null);
       }
+
       result = breedMapper.insertStandard(map);
       cnt++;
     }
