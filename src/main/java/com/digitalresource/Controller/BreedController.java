@@ -48,10 +48,12 @@ public class BreedController {
   private FileController fileController;
 
   @RequestMapping("/breed")
-  public ModelAndView breed(ModelAndView mv, @RequestParam(value = "type") String type, @RequestParam(value = "id") int resource_id, @RequestParam(value = "crop_id", required = false) int crop_id) {
+  public ModelAndView breed(Authentication auth, ModelAndView mv, @RequestParam(value = "type") String type, @RequestParam(value = "id") int resource_id, @RequestParam(value = "crop_id", required = false) int crop_id) {
     Map<String, Object> result = new LinkedHashMap<String, Object>();
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
 
-    List<Crop> crops = cropService.SearchCropList(type);
+    List<Crop> crops = cropService.SearchCropList(type, group);
 
     mv.addObject("crop_id", crop_id);
     mv.addObject("cropList", crops);

@@ -44,6 +44,8 @@ public interface BreedService {
 
 	List<Breed> SearchBreed3(int resource_id);
 
+	Breed SearchBreedById(int target_id);
+
 	String SearchCropName(int breed_name);
 
 	int InsertBreed(Breed breed);

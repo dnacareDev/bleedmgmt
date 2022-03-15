@@ -1863,7 +1863,7 @@
     $(document).ready(function () {
         $("#CropSelect").val(getSessionS(type_id));
 
-        if (type != '파종대장') {
+        if (!type.indexOf('파종대장')) {
             $("#data_check_submit").css('display', 'none');
         }
 
@@ -3014,8 +3014,9 @@
                     let resource_name = $(".manage")[0].innerText;
 
                     let crop_id = $("#CropSelect").val();
+                    let group = $('#user_group').val();
 
-                    let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id};
+                    let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id, "user_group": group};
 
                     listData.push(lData);
 

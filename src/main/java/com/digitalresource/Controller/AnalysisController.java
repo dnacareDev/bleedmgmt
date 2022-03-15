@@ -40,11 +40,13 @@ public class AnalysisController {
 
   // 통합 분석 페이지
   @RequestMapping("/analysis")
-  public ModelAndView Analysis(ModelAndView mv) {
+  public ModelAndView Analysis(Authentication auth, ModelAndView mv) {
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
 
     String type = "파종대장";
 
-    List<Crop> crops = cropService.SearchCropList(type);
+    List<Crop> crops = cropService.SearchCropList(type, group);
 
     mv.addObject("cropList", crops);
 
@@ -84,6 +86,28 @@ public class AnalysisController {
     return result;
   }
 
+  // 작목 조회
+  @ResponseBody
+  @RequestMapping("/selectTarget1")
+  public Map<String, Object> SelectTarget1(Authentication auth, @RequestParam("name") String name, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam("type") int type) {
+    Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+    List<Breed> breed = new ArrayList<Breed>();
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
+
+    int crop_id = service.SelectCropIdByName(name);
+
+    Breed breedById = breedService.SearchBreedById(total_id[0]);
+    int resource_id = breedById.getResource_id();
+
+    breed = service.SelectBreed2(name, resource_id, type);
+
+    result.put("breed", breed);
+
+    return result;
+  }
+
   // 분석형질 조회
   @ResponseBody
   @RequestMapping("selectTrait")
@@ -95,7 +119,7 @@ public class AnalysisController {
 
   @ResponseBody
   @RequestMapping("selectTrait1")
-  public List<Detail> SelectTrait1(Authentication auth, @RequestParam("crop_id") int crop_id) {
+  public List<Detail> SelectTrait1(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam(required = false, value = "total_id") int[] total_id) {
     List<Detail> result = new ArrayList<>();
     User user = (User)auth.getPrincipal();
     int group = user.getUser_group();
@@ -105,6 +129,7 @@ public class AnalysisController {
     int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName);
 
     for (int i = 0; i < resource_name_id.length; i++) {
+
       int resource_id = 0;
 
       if (resourceService.SearchResourceId(crop_id, resource_name_id[i], group) != null) {

@@ -4,11 +4,11 @@
     <!-- 품종 조회 -->
     <select id="SelectBreed" resultType="Breed">
         SELECT *,
-        (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND d.detail_info = 2 AND s.standard_data IS NOT NULL) AS standard_count
+        (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND (d.detail_info = 1 OR d.detail_info = 2) AND s.standard_data IS NOT NULL) AS standard_count
         FROM breed b
         LEFT JOIN detail d ON b.resource_id = d.resource_id
         LEFT JOIN standard s ON d.detail_id = s.detail_id
-        WHERE b.variety_name = #{name} AND d.detail_name = '파종번호' AND s.breed_id = b.breed_id AND s.standard_data IS NOT NULL
+        WHERE b.variety_name = #{name} AND (d.detail_name LIKE CONCAT('%', '파종번호' ,'%')) AND s.breed_id = b.breed_id AND s.standard_data IS NOT NULL
         <choose>
             <when test="type != '0' and resource_id != null">
                 <foreach collection="resource_id" item="item" open="AND (" close=")" separator="OR">
@@ -16,6 +16,15 @@
                 </foreach>
             </when>
         </choose>
+    </select>
+
+    <select id="SelectBreed2" resultType="Breed">
+        SELECT *,
+        (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND (d.detail_info = 1 OR d.detail_info = 2) AND s.standard_data IS NOT NULL) AS standard_count
+        FROM breed b
+        LEFT JOIN detail d ON b.resource_id = d.resource_id
+        LEFT JOIN standard s ON d.detail_id = s.detail_id
+        WHERE b.variety_name = #{name} AND (d.detail_name LIKE CONCAT('%', '파종번호' ,'%')) AND s.breed_id = b.breed_id AND s.standard_data IS NOT NULL AND b.resource_id = #{resource_id}
     </select>
 
     <!-- 분석 형질 조회 -->
@@ -32,7 +41,7 @@
         SELECT *
         FROM detail
         WHERE resource_id = #{resource_id}
-          AND detail_info = 2
+          AND (detail_info = 2 OR detail_info = 1)
           AND detail_check = 1
     </select>
 
@@ -40,14 +49,14 @@
     <select id="SelectDetail" resultType="Detail">
         SELECT *
         FROM detail
-        WHERE detail_info = 2
+        WHERE detail_info = 2 OR detail_info = 1
     </select>
 
     <!--  -->
     <select id="SelectStandard" resultType="StandardList">
         SELECT * FROM standard s
         LEFT JOIN detail d ON s.detail_id = d.detail_id
-        WHERE d.detail_info = 2 AND
+        WHERE (d.detail_info = 2 OR d.detail_info = 1) AND
         <foreach collection="target_id" item="item" open="(" close=")" separator="OR">
             breed_id = ${item}
         </foreach>

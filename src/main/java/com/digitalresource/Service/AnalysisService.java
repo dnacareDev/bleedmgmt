@@ -12,6 +12,8 @@ public interface AnalysisService
 	// 파종 조회
 	List<Breed> SelectBreed(String name, int[] resource_id, int type);
 
+	List<Breed> SelectBreed2(String name, int resource_id, int type);
+
 	// 분석 형질 조회
 	List<Detail> selectTrait(String detail_name, int detail_type);
 

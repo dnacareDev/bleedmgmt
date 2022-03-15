@@ -207,6 +207,12 @@
         WHERE b.resource_id = #{resource_id}
     </select>
 
+    <select id="SearchBreedById" resultType="Breed">
+        SELECT *
+        FROM breed
+        WHERE breed_id = #{target_id}
+    </select>
+
     <select id="SearchBreedExcel" resultType="Breed">
         SELECT *,
         (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND d.detail_info = 2 AND s.standard_data IS NOT NULL) AS

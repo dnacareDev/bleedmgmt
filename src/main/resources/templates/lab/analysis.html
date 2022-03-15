@@ -986,7 +986,7 @@
 
         $.ajax(
             {
-                url: "selectTarget",
+                url: "selectTarget1",
                 method: "POST",
                 dataType: "JSON",
                 data: data,
@@ -1031,8 +1031,10 @@
 
     function SearchTrait() {
         let crop_id = $("#select_crop").val();
+        let url = new URL(window.location).searchParams;
+        let total_id = url.get("total_id");
 
-        let data = {"crop_id": crop_id};
+        let data = {"crop_id": crop_id, "total_id": total_id};
 
         $.ajax(
             {

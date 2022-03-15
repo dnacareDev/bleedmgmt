@@ -3,6 +3,7 @@ package com.digitalresource.Mapper;
 import com.digitalresource.Entity.Crop;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -24,6 +25,6 @@ public interface CropMapper {
 
     public String SelectCropById(@Param("crop_id") int crop_id);
  
-    public List<Crop> SearchCropList(@Param("type") String type);
+    public List<Crop> SearchCropList(@Param("type") String type, @Param("group") int group);
 
 }

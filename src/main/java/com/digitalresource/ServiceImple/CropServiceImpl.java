@@ -89,8 +89,8 @@ public class CropServiceImpl implements CropService {
     }
 
     @Override
-    public List<Crop> SearchCropList(String type) {
-        return mapper.SearchCropList(type);
+    public List<Crop> SearchCropList(String type, int group) {
+        return mapper.SearchCropList(type, group);
     }
 
 }
