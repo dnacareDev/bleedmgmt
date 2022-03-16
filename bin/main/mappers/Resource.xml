@@ -50,7 +50,7 @@
         <if test="resource_character_template_file != ''">
             resource_character_template_file,
         </if>
-        resource_use, create_date, detail_count)
+        resource_use, create_date, detail_count, user_group)
         values(#{resource_name_id}, #{crop_id},
         <if test="trait_id != ''">
             #{trait_id},
@@ -62,12 +62,12 @@
             #{resource_character_template_file},
         </if>
         1,
-        now(), #{detail_count});
+        now(), #{detail_count}, #{user_group});
     </insert>
 
     <insert id="registerDetail">
-        insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info, detail_check)
-        values (#{resource_id}, #{detail_type}, #{detail_name}, #{detail_index}, #{detail_info}, #{detail_check});
+        insert into detail(resource_id, detail_type, detail_name, detail_index, detail_info, detail_check, user_group)
+        values (#{resource_id}, #{detail_type}, #{detail_name}, #{detail_index}, #{detail_info}, #{detail_check}, #{user_group});
     </insert>
 
     <select id="searchResource" resultType="ResourceList">
@@ -76,7 +76,7 @@
                  left join trait t on r.trait_id = t.trait_id
                  inner join crop c on c.crop_id = r.crop_id
                  inner join resource_name rn on rn.resource_name_id = r.resource_name_id
---         where r.resource_use != 0
+        where r.user_group = #{user_group}
         ORDER BY r.resource_id DESC
     </select>
 
@@ -84,7 +84,8 @@
         select count(*)
         from resource r
                  inner join trait t on r.trait_id = t.trait_id
-                 inner join crop c on c.crop_id = r.crop_id;
+                 inner join crop c on c.crop_id = r.crop_id
+        where r.user_group = #{user_group}
     </select>
 
     <update id="changeResourceUse">
@@ -94,10 +95,10 @@
     </update>
 
     <select id="resourceList" resultType="resourceName">
-        select rn.*
+        select rn.*, r.crop_id
         from resource_name rn
-                 LEFT JOIN resource r ON r.resource_name_id = rn.resource_name_id
-        WHERE r.resource_use != 0
+        LEFT JOIN resource r ON r.resource_name_id = rn.resource_name_id
+        WHERE r.resource_use != 0 AND r.user_group = #{group}
         group by rn.resource_name
     </select>
 
@@ -105,7 +106,8 @@
         SELECT resource_id
         FROM resource
         WHERE crop_id = #{crop_id}
-          AND resource_name_id = #{resource_name_id}
+        AND resource_name_id = #{resource_name_id}
+        AND user_group = #{user_group}
     </select>
 
     <select id="SelectCropId" resultType="int">
@@ -134,18 +136,20 @@
     <select id="SelectCropCount" resultType="integer">
         SELECT SUM(rn.resource_name = #{resource_name} AND c.crop_name = #{crop_name}) AS count_crop
         FROM resource r
-                 INNER JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
-                 INNER JOIN crop c ON r.crop_id = c.crop_id
-                 INNER JOIN breed b ON b.resource_id = r.resource_id;
+        INNER JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
+        INNER JOIN crop c ON r.crop_id = c.crop_id
+        INNER JOIN breed b ON b.resource_id = r.resource_id
+        WHERE b.user_group = #{user_group}
     </select>
 
     <select id="SelectCropMonth" resultType="monthcount">
         SELECT resource_name, count(resource_name) AS resource_count, DATE_FORMAT(create_date, '%m') AS mon
         FROM resource_name rn
-                 INNER JOIN breed b on rn.resource_name_id = b.resource_id
+        INNER JOIN breed b on rn.resource_name_id = b.resource_id
         WHERE b.variety_name = #{crop_name}
           AND DATE_FORMAT(create_date, '%m') = #{month}
           AND resource_name = #{resource_name}
+          AND b.user_group = #{user_group}
         group by resource_name;
     </select>
 

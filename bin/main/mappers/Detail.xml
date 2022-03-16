@@ -28,8 +28,8 @@
 
     <select id="SelectFileCount" resultType="ChartCount">
         SELECT
-        (SELECT COUNT(*) FROM detail WHERE detail_info = 3 AND detail_type = 0) AS img_count,
-        (SELECT COUNT(*) FROM detail WHERE detail_info = 3 AND detail_type = 1) AS doc_count
+        (SELECT COUNT(*) FROM detail WHERE detail_info = 3 AND detail_type = 0 AND user_group = #{user_group}) AS img_count,
+        (SELECT COUNT(*) FROM detail WHERE detail_info = 3 AND detail_type = 1 AND user_group = #{user_group}) AS doc_count
     </select>
 
 </mapper>
