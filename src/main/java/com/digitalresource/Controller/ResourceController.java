@@ -212,13 +212,19 @@ public class ResourceController {
 
     for(int i = 0; i < arr.length(); i++) {
       int resourceId = arr.getInt(i);
-
+      System.out.println("resourceId = " + resourceId);
       int using = RService.SelectResourceUse(resourceId);
-
+      System.out.println("before using = " + using);
       if(using == 1) {
         result = RService.UpdateResourceUse(0, resourceId);
+        System.out.println("result = " + result);
+        System.out.println("미사용");
+        System.out.println("after using = " + RService.SelectResourceUse(resourceId));
       } else if(using == 0){
         result = RService.UpdateResourceUse(1, resourceId);
+        System.out.println("result = " + result);
+        System.out.println("사용");
+        System.out.println("after using = " + RService.SelectResourceUse(resourceId));
       }
     }
 

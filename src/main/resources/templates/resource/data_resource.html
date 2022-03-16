@@ -1220,7 +1220,7 @@
 
                     for (let i = 0; i < result.resourceList.length; i++) {
                         let rowArr = {
-                            'resource_id': i + 1,
+                            'resource_id': result.resourceList[i].resource_id,
                             'crop_name': result.resourceList[i].crop_name,
                             'resource_name': result.resourceList[i].resource_name,
                             'resource_template': '<div data-value="' + result.resourceList[i].resource_template + '">Download</div>',
