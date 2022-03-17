@@ -69,7 +69,7 @@ public class AnalysisController {
 
     String resourceName = "파종대장";
 
-    int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName);
+    int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName, group);
 
     int[] resource_id = new int[resource_name_id.length];
 
@@ -126,7 +126,9 @@ public class AnalysisController {
 
     String resourceName = "파종대장";
 
-    int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName);
+    int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName, group);
+
+    System.out.println("resource_name_id = " + Arrays.toString(resource_name_id));
 
     for (int i = 0; i < resource_name_id.length; i++) {
 
@@ -141,6 +143,8 @@ public class AnalysisController {
         break;
       }
     }
+
+    result.forEach(System.out::println);
 
     return result;
   }

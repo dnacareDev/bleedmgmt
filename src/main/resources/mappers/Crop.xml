@@ -53,7 +53,7 @@
     </select>
 
     <select id="SearchCropList" resultType="Crop">
-        select c.*
+        select DISTINCT c.*
         from resource r
                  inner join resource_name rn on r.resource_name_id = rn.resource_name_id
                  inner join crop c on c.crop_id = r.crop_id

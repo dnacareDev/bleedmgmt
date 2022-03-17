@@ -71,7 +71,7 @@ public class BreedController {
     int group = user.getUser_group();
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-    int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name);
+    int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name, group);
     int resourceId = 0;
 
     for (int i = 0; i < resourceNameId.length; i++) {
@@ -342,12 +342,11 @@ public class BreedController {
   @RequestMapping("insertBreedDataList")
   public DataList InsertDataList(@ModelAttribute DataList dataList, @RequestParam("listData") String listData) {
     JSONArray arr = new JSONArray(listData);
-
     JSONObject obj = arr.getJSONObject(0);
 
     int crop_id = obj.getInt("crop_id");
     int group = obj.getInt("user_group");
-    int[] resource_name_id = resourceNameService.SelectResourceNameId(obj.getString("resource_name"));
+    int[] resource_name_id = resourceNameService.SelectResourceNameId(obj.getString("resource_name"), group);
 
     int resource_id = 0;
 

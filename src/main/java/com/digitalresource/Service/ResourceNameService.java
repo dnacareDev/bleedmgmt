@@ -29,6 +29,6 @@ public interface ResourceNameService {
 
   int registerResource(Map<String, Object> param);
 
-  int[] SelectResourceNameId(String resourceName);
+  int[] SelectResourceNameId(String resourceName, int user_group);
 
 }

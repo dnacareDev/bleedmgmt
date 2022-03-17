@@ -36,6 +36,6 @@ public interface ResourceNameMapper {
 
   public int changeResourceUse(Map<String, Object> map);
 
-  public int[] SelectResourceNameId(@Param("resource_name") String resource_name);
+  public int[] SelectResourceNameId(@Param("resource_name") String resource_name, @Param("user_group") int user_group);
 
 }
