@@ -138,6 +138,8 @@ public class AnalysisController {
         resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i], group);
       }
 
+      System.out.println("resource_id = " + resource_id);
+
       if (resource_id != 0) {
         result = service.SelectTrait(resource_id);
         break;
