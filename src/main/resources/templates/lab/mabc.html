@@ -1052,6 +1052,12 @@
 </main>
 <script type="text/javascript">
     function InsertMarker() {
+    	
+    	//수정 필요 아래 len 파일 변환 부분 테스트 완료시 return 해당 주석 부터 return까지 삭제 처리 필요.
+    	document.querySelector(".serverLen").innerText = 'http://112.169.63.197:8893/digit/common/r/result/2022110163458/lengh.len'
+        readLenFile();
+    	return;
+    	
         var data = new FormData($("#insert_form")[0]);
 
         var loading = document.querySelector('.load_wrap');
@@ -1092,6 +1098,10 @@
     var chartDataArr = {};
     var chrTotalData = {};
     var chrTotalIndex = 0;
+    
+    var chrTotalCount = {};
+    var chrTotalAllCount = {};
+    
     var chrPercent = {};
     var clickX = 0;
     var clickY = 0;
@@ -1138,35 +1148,371 @@
 
     //# . 1 엑셀 data 가져오기
     function readExcel() {
-
-        if (lengthData.length == 0) {
-            alert("파일변환을 먼저 해주세요");
-            return;
-        }
-
-        var input = event.target;
-        var reader = new FileReader();
-        reader.onload = function () {
-            document.querySelectorAll(".pcText")[1].value = input.files[0].name
-            var fileForm = input.files[0].name.split(".")[1];
-            if (fileForm !== "xlsx") {
-                document.querySelector(".file_text").placeholder = "MABC xlsx파일을 넣어주세요.";
-                alert(".xlsx 파일이 아닙니다.");
-                event.target.value = null;
-                return
-            }
-            ;
-
-            var data = reader.result;
-            var workBook = XLSX.read(data, {type: 'binary'});
-            workBook.SheetNames.forEach(function (sheetName) {
-                var rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
-                xlsxData = JSON.parse(JSON.stringify(rows));
-                parsingData(xlsxData);
-            })
-        };
-        reader.readAsBinaryString(input.files[0]);
+	    var input = event.target;
+	    
+	    var reader = new FileReader();
+	    reader.onload = function () {
+	        var fileForm = input.files[0].name.split(".")[1];
+	        if(fileForm !== "xlsx"){
+	            document.querySelector(".file_text").placeholder = "MABC xlsx파일을 넣어주세요.";
+	            alert(".xlsx 파일이 아닙니다.");
+	            event.target.value = null;
+	            return
+	        };
+	        
+	        document.getElementsByClassName("pcText")[1].value = input.files[0].name;
+	        var data = reader.result;
+	        var workBook = XLSX.read(data, { type: 'binary' });
+	        
+	        for(var i = 0;i<workBook.SheetNames.length;i++){
+	            if(i != 0)
+	                continue;
+	
+	            onClickInit(false)
+	            var rows = XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[i]]);
+	            xlsxData = JSON.parse(JSON.stringify(rows));
+	            orginMABCXlsx = input.files[0];
+	            parsingMabcData(xlsxData);
+	
+	        }
+	    };
+	    reader.readAsBinaryString(input.files[0]);
+	}
+    
+    
+    function getExcelTitleFromData(data,search){
+    	for(var key in data){
+    		if(key.toLowerCase().includes(search)){
+    			return key;
+    		}
+    	}
+    	return search;
     }
+    
+    //mabc 그리기
+    function parsingMabcData(xlsxData, isRun){
+
+        var checkMap = {};
+
+        console.log(xlsxData);
+        console.log(xlsxData);
+        try{
+            for(var i = 0 ; i <  xlsxData.length ; i++){
+
+                var keyArr = Object.keys(xlsxData[i]);
+				
+				let gene = xlsxData[i][getExcelTitleFromData( xlsxData[i] , "염색체")];
+              	 if(gene == null)
+              		 continue;
+              	 
+                for(var key in xlsxData[i]){
+                    
+                    var currentIndex = keyArr.indexOf(key);
+                    
+                    try{ 
+                    	
+                        if(!key.includes("MAB") )
+                            continue;
+                       
+                        var type = "A";
+                        
+                        chartDataArr[key] = chartDataArr[key] ? chartDataArr[key] : [];
+                        chrPercent[key] = {};
+                        
+                        if(xlsxData[i][key] == xlsxData[i]["모본"]){
+                            type = "B";
+                            chrTotalCount[key + "_" + gene] = chrTotalCount[key + "_" + gene] ? chrTotalCount[key + "_" + gene] + 2 : 2;
+                        }else if(xlsxData[i][key] == xlsxData[i]["부본"]){
+                            type = "A";
+                            chrTotalCount[key + "_" + gene] = chrTotalCount[key + "_" + gene] ? chrTotalCount[key + "_" + gene] : 0;
+                        }else if(xlsxData[i][key] == "H"){
+                            type = "H";
+                            chrTotalCount[key + "_" + gene] = chrTotalCount[key + "_" + gene] ? chrTotalCount[key + "_" + gene] + 1 : 1;
+                        }else{
+                            type = "-";
+                            chrTotalCount[key + "_" + gene] = chrTotalCount[key + "_" + gene] ? chrTotalCount[key + "_" + gene] : 0;
+                        }
+
+                        chrTotalAllCount[key + "_" + gene] = chrTotalAllCount[key + "_" + gene] ? chrTotalAllCount[key + "_" + gene] + 1 : 1;
+                        
+
+                        if(!chartDataArr[key]){
+                        	chartDataArr[key] = [];
+                        }
+                        
+                        chartDataArr[key].push({
+                            type : type,
+                            pos : xlsxData[i][getExcelTitleFromData( xlsxData[i] , "위치")],
+                            chr : xlsxData[i][getExcelTitleFromData( xlsxData[i] , "염색체")],
+                            name: xlsxData[i][getExcelTitleFromData( xlsxData[i] , "분자표지명")]
+                        });
+                        
+                       
+               
+
+                    }catch{
+                        console.error(i + "_index mabc parse Error")
+                    }
+        
+                }
+
+
+                chrTotalData[xlsxData[i][getExcelTitleFromData(xlsxData[i],"염색체")]] = xlsxData[i][getExcelTitleFromData(xlsxData[i],"위치")];
+       
+            }
+
+            var chrSelectBox = document.querySelector(".chrSelectBox");
+            chrSelectBox.innerHTML =  "<option disabled selected>회복율정렬 선택</option><option>정렬 해제</option>"
+            if(lengthDataOrgin.length == 0){
+                alert("잘못된 버전의 Len파일입니다.")
+                console.error("lengthDataOrgin is empty");
+                return;
+            }
+
+            try{
+                var newLengthData = {};
+                for(var i = 0 ; i < lengthDataOrgin.length ; i++){
+                    for(var key in chrTotalData){
+                        if(key.toLowerCase() == lengthDataOrgin[i].id.toLowerCase()){
+                            chrTotalIndex = (chrTotalIndex ? chrTotalIndex : 0 ) + Number(lengthDataOrgin[i].pos);
+                            var chrSelectOption = document.createElement("option");
+                            // chrSelectOption.innerText = Object.keys( chrTotalData )[i];
+                            chrSelectOption.innerText = key;
+                            chrSelectOption.classList.add("chrOption");
+                            chrSelectBox.appendChild(chrSelectOption);
+                            // newLengthData[  Object.keys( chrTotalData )[i] ] = Number(lengthDataOrgin[i].pos);
+                            newLengthData[  key ] = Number(lengthDataOrgin[i].pos);
+                        
+                        }
+                    }
+                }
+
+            }catch{
+                alert("잘못된 Len파일입니다.")
+                console.error("newLengthData parse Error")
+                return;
+            }
+
+            lengthData = newLengthData;
+            if(Object.keys(chartDataArr).length==0){
+                alert("잘못된 MABC파일입니다.");
+                console.error("chartDataArr empty")
+                return;
+            }
+
+            
+            if(Object.keys(newLengthData).length==0){
+                var errorChr = Object.keys(chrTotalData)[0].replace(/[0-9]/g, "");
+                //alert("잘못된 버전의 MABC파일입니다. " +errorChr+"이(가) len파일에 없습니다.");
+    			alert("시스템에 등록 된 염색체 이름과 업로드 화일의 염색체 이름이 일치하지 않습니다.");
+                console.error("newLengthData empty")
+                return;
+            }
+
+            if(isRun){
+                buildGraph();
+            }
+            return;
+        }catch{
+            alert("잘못된 MABC파일입니다.")
+            console.error("MABC parsingData Error Catch");
+        };
+
+
+    } 
+    
+ // # . 2 data 원하는 형태로 변환
+    function parsingData(xlsxData, isRun){
+
+        var checkMap = {};
+
+        console.log(xlsxData);
+        console.log(xlsxData);
+        try{
+            for(var i = 0 ; i <  xlsxData.length ; i++){
+
+                var keyArr = Object.keys(xlsxData[i]);
+
+
+                for(var key in xlsxData[i]){
+                    var currentIndex = keyArr.indexOf(key);
+                    
+                    try{
+
+                        var _pos = Number(xlsxData[i][keyArr[1]]);
+                        //if(xlsxData[i][keyArr[1]].length == 1){continue;}
+
+                                _pos = 0;
+                        /*
+                        if(curLoadedData[xlsxData[i]["분자표지명"]] && curLoadedData[xlsxData[i]["분자표지명"]]["염색체"]){
+              
+                            let posPivotTitle = getExcelTitleFromData(curLoadedData[xlsxData[i]["분자표지명"]], "실제");
+                            let geneTitle = getExcelTitleFromData(curLoadedData[xlsxData[i]["분자표지명"]], "염색체");
+
+                         
+                           // keyArr[2] = "분자표지명";
+                            try{
+                                xlsxData[i]["염색체"] = curLoadedData[xlsxData[i]["분자표지명"]][geneTitle];
+                               // xlsxData[i][keyArr[0]] = curLoadedData[xlsxData[i]["분자표지명"]][geneTitle];
+                               // xlsxData[i][keyArr[2]] = curLoadedData[xlsxData[i]["분자표지명"]][mabTitle];
+                        
+                            }
+                            catch(e){
+                                console.log(e);
+                            }
+
+                         
+                           _pos = curLoadedData[xlsxData[i]["분자표지명"]][posPivotTitle];
+
+                        }
+                        else{
+
+                            //if(parseData[xlsxData[i][keyArr[2]]]){
+                            //    _pos = parseData[xlsxData[i][keyArr[2]]];
+                            //}
+                           // else
+                                _pos = 0;
+                        }*/
+
+                        if(!key.includes("MAB") )
+                         continue;
+
+                         let gene = xlsxData[i][getExcelTitleFromData( xlsxData[i] , "염색체")];
+                         console.log(gene);
+                        //if(currentIndex === 0){
+
+
+                        if(!checkMap[xlsxData[i]["분자표지명"] + "_" + gene]){
+                            // chrTotalCount[gene] = chrTotalCount[gene] ? chrTotalCount[gene] + 2 :2;
+                            checkMap[xlsxData[i]["분자표지명"] + "_" + gene] = true;
+                        }
+
+                            
+                        //if(currentIndex < 5){continue;}
+                        // if(key == "f" || key == "m" || key == "id" || key == "pos" || key == " "){continue;}
+            
+
+                        chartDataArr[key] = chartDataArr[key] ? chartDataArr[key] : [];
+                        chrPercent[key] = {};
+                        var type = "";
+
+                        if(xlsxData[i][key] == xlsxData[i]["모본"]){
+                            type = "B";
+                            chrTotalCount[key + "_" + gene] = chrTotalCount[key + "_" + gene] ? chrTotalCount[key + "_" + gene] + 2 : 2;
+                        }else if(xlsxData[i][key] == xlsxData[i]["부본"]){
+                            type = "A";
+                            chrTotalCount[key + "_" + gene] = chrTotalCount[key + "_" + gene] ? chrTotalCount[key + "_" + gene] : 0;
+                        }else if(xlsxData[i][key] == "H"){
+                            type = "H";
+                            chrTotalCount[key + "_" + gene] = chrTotalCount[key + "_" + gene] ? chrTotalCount[key + "_" + gene] + 1 : 1;
+                        }else{
+                            type = "-";
+                            chrTotalCount[key + "_" + gene] = chrTotalCount[key + "_" + gene] ? chrTotalCount[key + "_" + gene] : 0;
+                        }
+
+                        chrTotalAllCount[key + "_" + gene] = chrTotalAllCount[key + "_" + gene] ? chrTotalAllCount[key + "_" + gene] + 1 : 1;
+                        
+                       
+                       
+
+                        chartDataArr[key].push({
+                            // type : xlsxData[i][key],
+                            type : type,
+                            pos : _pos,
+                            chr : xlsxData[i][getExcelTitleFromData( xlsxData[i] , "염색체")],
+                            name: xlsxData[i][getExcelTitleFromData( xlsxData[i] , "분자표지명")]
+                            // pos : xlsxData[i]["pos"],
+                            // chr : xlsxData[i]["id"],
+                            // name: xlsxData[i][" "]
+                        });
+                        
+                       
+                        console.log(chartDataArr);
+               
+
+                    }catch{
+                        console.error(i + "_index mabc parse Error")
+                    }
+        
+                }
+
+
+                if(curLoadedData[xlsxData[i]["분자표지명"]] && curLoadedData[xlsxData[i]["분자표지명"]]["염색체"]){
+                            
+                    xlsxData[i][keyArr[0]] = curLoadedData[xlsxData[i]["분자표지명"]][keyArr[0]];
+                    xlsxData[i][keyArr[2]] = curLoadedData[xlsxData[i]["분자표지명"]][keyArr[2]];
+                    let posPivotTitle = getExcelTitleFromData(curLoadedData[xlsxData[i]["분자표지명"]], "염색체");
+                    let posTitle = getExcelTitleFromData(curLoadedData[xlsxData[i]["분자표지명"]], "실제");
+                 
+                    chrTotalData[curLoadedData[xlsxData[i]["분자표지명"]][posPivotTitle]] = curLoadedData[xlsxData[i]["분자표지명"]][posTitle];
+
+                }
+                else if(xlsxData[i][keyArr[1]].length !== 1){
+                   chrTotalData[xlsxData[i][keyArr[0]]] = xlsxData[i][keyArr[1]];
+                }
+            }
+
+            var chrSelectBox = document.querySelector(".chrSelectBox");
+            chrSelectBox.innerHTML =  "<option disabled selected>회복율정렬 선택</option><option>정렬 해제</option>"
+            if(lengthDataOrgin.length == 0){
+                alert("잘못된 버전의 Len파일입니다.")
+                console.error("lengthDataOrgin is empty");
+                return;
+            }
+
+            
+            try{
+                var newLengthData = {};
+                for(var i = 0 ; i < lengthDataOrgin.length ; i++){
+                    for(var key in chrTotalData){
+                        if(key.toLowerCase() == lengthDataOrgin[i].id.toLowerCase()){
+                            chrTotalIndex = (chrTotalIndex ? chrTotalIndex : 0 ) + Number(lengthDataOrgin[i].pos);
+                            var chrSelectOption = document.createElement("option");
+                            // chrSelectOption.innerText = Object.keys( chrTotalData )[i];
+                            chrSelectOption.innerText = key;
+                            chrSelectOption.classList.add("chrOption");
+                            chrSelectBox.appendChild(chrSelectOption);
+                            // newLengthData[  Object.keys( chrTotalData )[i] ] = Number(lengthDataOrgin[i].pos);
+                            newLengthData[  key ] = Number(lengthDataOrgin[i].pos);
+                        
+                        }
+                    }
+                }
+
+            }catch{
+                alert("잘못된 Len파일입니다.")
+                console.error("newLengthData parse Error")
+                return;
+            }
+
+            lengthData = newLengthData;
+            if(Object.keys(chartDataArr).length==0){
+                alert("잘못된 MABC파일입니다.");
+                console.error("chartDataArr empty")
+                return;
+            }
+
+            console.log(newLengthData);
+            
+            if(Object.keys(newLengthData).length==0){
+                var errorChr = Object.keys(chrTotalData)[0].replace(/[0-9]/g, "");
+                //alert("잘못된 버전의 MABC파일입니다. " +errorChr+"이(가) len파일에 없습니다.");
+    			alert("시스템에 등록 된 염색체 이름과 업로드 화일의 염색체 이름이 일치하지 않습니다.");
+                console.error("newLengthData empty")
+                return;
+            }
+
+            if(isRun){
+                buildGraph();
+            }
+            return;
+        }catch{
+            alert("잘못된 MABC파일입니다.")
+            console.error("MABC parsingData Error Catch");
+        };
+
+
+    } 
 
     //# . 2 data 원하는 형태로 변환
     function parsingData(xlsxData) {
@@ -1210,6 +1556,8 @@
 
     //# . 3 그래프 생성
     function buildGraph() {
+    	
+   		console.log(chartDataArr); 	
         // 초기화
         var visualWrap = document.querySelector(".visualWrap");
         var visualWrapPosition = document.querySelector(".visualWrapPosition");
@@ -1372,124 +1720,121 @@
                 graphContainer.appendChild(dotEl);
             }
         }
-
-        var newChrPercent = chrPercent;
-        for (var key in chrPercent) {
-            var totalA = 0;
-            for (var keySmall in chrPercent[key]) {
-                totalA += (chrPercent[key][keySmall] * lengthData[keySmall]) / 100;
+        
+        for(var key in chrPercent){
+            for(var keySmall in chrPercent[key]){
+                chrPercent[key][keySmall] = (chrTotalCount[key + "_" + keySmall] / (2 * chrTotalAllCount[key + "_" + keySmall]))  * 100;
             }
-            newChrPercent[key]["total"] = totalA / chrTotalIndex * 100
         }
-
-        chrPercent = newChrPercent;
+        
+        var chrTotalLength = Object.keys(chrTotalCount).length;
+        for(var key in chrPercent){
+            var totalA = 0;
+            for(var keySmall in chrPercent[key]){
+                totalA += chrPercent[key][keySmall];
+            }
+            chrPercent[key]["total"] = totalA / chrTotalLength;
+        }
 
         addGraphEvent();
         buildTable();
     }
 
     //드래그&드롭, 더블클릭 이벤트 추가
-    function addGraphEvent() {
-        if (window.innerWidth > 1000) {
+ // 드래그&드롭, 더블클릭 이벤트 추가
+    function addGraphEvent(){
+        if(window.innerWidth > 1000){
             var isMouseMove = false;
             var clickColumn = "";
-            graphWrap.addEventListener("mousedown", function (e) {
-                if (e.path[0].classList.contains("chrStackSmall")) {
+            graphWrap.addEventListener("mousedown", function(e){
+                if(e.path[0].classList.contains("chrStackSmall")){
                     isMouseMove = true;
                     clickColumn = e.path[2].dataset.column;
-
-                    var clickEl = document.querySelector("[data-column=" + clickColumn + "]");
+        
+                    var clickEl = document.querySelector("[data-column='" +clickColumn+ "']");
                     clickY = e.clientY - clickEl.offsetTop;
                     clickX = e.clientX - clickEl.offsetLeft;
-
-
-                    var clickElTable = document.querySelector("[data-column=" + clickColumn + "_table]");
+                    
+                    
+                    var clickElTable = document.querySelector("[data-column='" +clickColumn+ "_table']");
                     var currentSelect = document.querySelectorAll(".activeClickAni");
-                    for (var i = 0; i < currentSelect.length; i++) {
+                    for(var i = 0 ; i < currentSelect.length ; i++){
                         currentSelect[i].classList.remove("activeClickAni");
                     }
 
-                    $('.tableWrap').animate({scrollTop: clickElTable.offsetTop}, 500);
+                    $('.tableWrap').animate({scrollTop : clickElTable.offsetTop - $('.tableWrap')[0].offsetHeight/2 }, 500); 
                     clickElTable.classList.add("activeClickAni");
-
+        
                 }
             });
-
-            graphWrap.addEventListener("mousemove", function (e) {
-                if (!isMouseMove) {
-                    return
-                }
-                ;
-                var clickEl = document.querySelector("[data-column=" + clickColumn + "]").parentNode;
+        
+            graphWrap.addEventListener("mousemove", function(e){
+                if(!isMouseMove){return};
+                var clickEl = document.querySelector("[data-column='" +clickColumn+ "']").parentNode;
                 clickEl.style.position = "absolute";
                 clickEl.style.top = `${e.clientY - clickY}px`;
                 clickEl.style.left = `${e.clientX - clickX}px`;
                 clickEl.style.pointerEvents = "none";
-
-
+        
+        
                 // 그림자
-                if (!e.path[2].dataset.column) {
-                    return;
-                }
-                var currentEl = document.querySelector("[data-column=" + e.path[2].dataset.column + "]").parentNode;
+                if(!e.path[2].dataset.column){return;}
+                var currentEl = document.querySelector("[data-column='" +e.path[2].dataset.column+ "']").parentNode;
                 var currentShadow = document.querySelector(".graphShadow");
-                if (currentShadow) {
+                if(currentShadow){
                     currentShadow.remove();
                 }
-
+        
                 var shadowGraph = document.createElement('div');
                 shadowGraph.classList.add("graphShadow");
-
+        
                 clickEl.parentNode.insertBefore(shadowGraph, currentEl)
-
+        
             });
-
-            graphWrap.addEventListener("mouseup", function (e) {
+        
+            graphWrap.addEventListener("mouseup", function(e){
                 isMouseMove = false;
-                if (!clickColumn) {
-                    return;
-                }
-                var clickEl = document.querySelector("[data-column=" + clickColumn + "]").parentNode;
+                if(!clickColumn){return;}
+                var clickEl = document.querySelector("[data-column='" +clickColumn+ "']").parentNode;
                 var currentShadow = document.querySelector(".graphShadow");
-                if (!currentShadow) {
-                    return
-                }
-
+                if(!currentShadow){return}
+        
                 clickEl.style.position = "unset";
                 clickEl.style.top = 0;
                 clickEl.style.left = 0;
                 clickEl.style.pointerEvents = "all";
-
+        
                 clickEl.parentNode.replaceChild(clickEl, currentShadow);
+                console.log()
                 sortGraphData();
             });
-
-            graphWrap.addEventListener("dblclick", function (e) {
-                if (e.path[0].classList.contains("chrStackSmall")) {
+        
+            graphWrap.addEventListener("dblclick", function(e){
+                if(e.path[0].classList.contains("chrStackSmall")){
                     var modalSelectOption = document.querySelectorAll(".modalSelectOption");
-                    if (modalSelectOption) {
-                        for (var i = 0; i < modalSelectOption.length; i++) {
+                    if(modalSelectOption){
+                        for(var i = 0 ; i < modalSelectOption.length ; i++){
                             modalSelectOption[i].remove();
                         }
                     }
-
-                    var modal = document.querySelector(".modal");
-                    modal.style.display = "unset";
+        
+                   // var modal = document.querySelector(".modal");
+                   // modal.style.display = "unset";
                     drawModalGraph(e.path[2].dataset.column);
                 }
             });
-        } else {
-            graphWrap.addEventListener("click", function (e) {
-                if (e.path[0].classList.contains("chrStackSmall")) {
+        }else{
+            graphWrap.addEventListener("click", function(e){
+                if(e.path[0].classList.contains("chrStackSmall")){
                     var modalSelectOption = document.querySelectorAll(".modalSelectOption");
-                    if (modalSelectOption) {
-                        for (var i = 0; i < modalSelectOption.length; i++) {
+                    if(modalSelectOption){
+                        for(var i = 0 ; i < modalSelectOption.length ; i++){
                             modalSelectOption[i].remove();
                         }
                     }
-
-                    var modal = document.querySelector(".modal");
-                    modal.style.display = "unset";
+        
+                    //var modal = document.querySelector(".modal");
+                    //modal.style.display = "unset";
                     drawModalGraph(e.path[2].dataset.column);
                 }
             });
@@ -1535,17 +1880,21 @@
         var theadTr = document.createElement('tr');
         var theadTh = document.createElement('th');
         theadTr.appendChild(theadTh);
-        for (var key in chrTotalData) {
-            var theadTh = document.createElement('th');
-            theadTh.innerText = key;
-            theadTr.appendChild(theadTh);
-        }
         var theadThTotla = document.createElement('th');
         theadThTotla.innerText = "Total";
         theadTr.appendChild(theadThTotla);
 
+        for(var key in chrTotalData){
+            var theadTh = document.createElement('th');
+            theadTh.innerText = key;
+            theadTr.appendChild(theadTh);
+        }
+
         thead.appendChild(theadTr);
 
+        
+        
+        
         // 몸통
         var tbody = document.createElement('tbody');
         for (var key in chartDataArr) {
@@ -1600,74 +1949,60 @@
         buildGraph();
     }
 
-    //드래그&드롭 이벤트 추가
-    function addTableEvent() {
+ // 드래그&드롭 이벤트 추가
+    function addTableEvent(){
         var isMouseMove = false;
         var tableWrap = document.querySelector('.tableWrap');
-        tableWrap.addEventListener("mousedown", function (e) {
-            if (!e.path[1].dataset.column) {
-                return
-            }
-            ;
+        tableWrap.addEventListener("mousedown", function(e){
+            if(!e.path[1].dataset.column){return};
             isMouseMove = true;
             clickTableColumn = e.path[1].dataset.column;
-            var clickEl = document.querySelector("[data-column=" + clickTableColumn + "]");
+            var clickEl = document.querySelector("[data-column='" + clickTableColumn + "']");
             clickEl.style.opacity = "0.5";
             clickEl.style.border = "5px solid #000";
 
-            var clickElGraph = document.querySelector("[data-column=" + clickTableColumn.replace("_table", "") + "]");
-            $('.graphWrap').animate({scrollLeft: clickElGraph.offsetLeft}, 500);
+            var clickElGraph = document.querySelector("[data-column='" +clickTableColumn.replace("_table", "")+ "']");
+            $('.graphWrap').animate({scrollLeft : clickElGraph.offsetLeft - $('.graphWrap')[0].offsetWidth/2 }, 500); 
 
 
             var currentSelect = document.querySelectorAll(".activeClickAni");
-            for (var i = 0; i < currentSelect.length; i++) {
+            for(var i = 0 ; i < currentSelect.length ; i++){
                 currentSelect[i].classList.remove("activeClickAni");
             }
-
+            
             clickElGraph.classList.add("activeClickAni");
-
-
         })
-        tableWrap.addEventListener("mousemove", function (e) {
-            if (!isMouseMove) {
-                return;
-            }
-            if (!e.path[1].dataset.column) {
-                return
-            }
-            ;
-
+        tableWrap.addEventListener("mousemove", function(e){
+            if(!isMouseMove){return;}
+            if(!e.path[1].dataset.column){return};
+        
             var currentShadow = document.querySelector(".tableShadow");
-            if (currentShadow) {
+            if(currentShadow){
                 currentShadow.remove();
             }
-
+        
             hoverTableColumn = e.path[1].dataset.column;
-            var hoverEl = document.querySelector("[data-column=" + hoverTableColumn + "]");
-
+            var hoverEl = document.querySelector("[data-column='" + hoverTableColumn + "']");
+        
             var shadowGraph = document.createElement('div');
             shadowGraph.classList.add("tableShadow");
-
+        
             hoverEl.parentNode.insertBefore(shadowGraph, hoverEl);
         })
-        tableWrap.addEventListener("mouseup", function (e) {
-            if (!isMouseMove) {
-                return
-            }
+        tableWrap.addEventListener("mouseup", function(e){
+            if(!isMouseMove){return}
             isMouseMove = false;
-
-            var clickEl = document.querySelector("[data-column=" + clickTableColumn + "]");
+            
+            var clickEl = document.querySelector("[data-column='" + clickTableColumn + "']");
             clickEl.style.opacity = "1";
             clickEl.style.border = "0";
 
             var currentShadow = document.querySelector(".tableShadow");
-            if (!currentShadow) {
-                return
-            }
+            if(!currentShadow){return}
             clickEl.parentNode.replaceChild(clickEl, currentShadow);
             sortTableData();
         })
-
+        
     }
 
 
@@ -1756,31 +2091,42 @@
     //------------------------------------------------------
     //초기화
     //------------------------------------------------------
-    function onClickInit() {
+    function onClickInit(isRender) {
         document.querySelector(".addMabcFile").value = "";
-        document.querySelector(".file_text").placeholder = "MABC xlsx파일을 넣어주세요.";
+        //document.querySelector(".file_text").placeholder = "MABC xlsx파일을 넣어주세요.";
+   
         var visualWrap = document.querySelector(".visualWrap");
         var visualWrapPosition = document.querySelector(".visualWrapPosition");
+        
         visualWrap.remove();
         visualWrapPosition.innerHTML = "<div class='visualWrap'><div class='tableWrap' ><div class='tableContent'><table id='table' class='table'></table></div></div><div class='graphContainer'><div class='dotline'></div><div class='graphWrap'></div></div></div>"
-
+        
         var chrOptionBox = document.querySelectorAll(".chrOption");
-        for (var i = 0; i < chrOptionBox.length; i++) {
+        for(var i = 0 ; i < chrOptionBox.length; i++){
             chrOptionBox[i].remove();
         }
+        
 
-        xlsxData = {};
         chartDataArr = {};
         chrTotalData = {};
-        chrTotalIndex = 0;
+        chrTotalIndex = 0; 
         chrPercent = {};
         clickX = 0;
         clickY = 0;
-        isFirst = true;
-        lengthData = [];
+        // lengthData = [];
         clickTableColumn = "";
         hoverTableColumn = "";
         isTable = false;
+        graphWrap = document.querySelector(".graphWrap");
+        
+        if(isRender){
+            if(Object.keys(lengthData).length == 0){
+                document.querySelector(".file_text").value = "";
+                document.querySelector("#input-file").value = "";
+            }else{
+                parsingData(xlsxData, true);
+            }
+        }
     }
 
     function initAnimation() {
@@ -2108,24 +2454,31 @@
             if (rawFile.readyState === 4) {
                 if (rawFile.status === 200 || rawFile.status == 0) {
                     var allText = rawFile.responseText;
-
-
-                    var newLengthData = allText.replace(/(\r\n|\n|\r)/gm, "-");
-                    newLengthData = newLengthData.split("-");
-                    lengthData = [];
-                    for (var i = 0; i < newLengthData.length; i++) {
-                        if (!newLengthData[i]) {
-                            continue
-                        }
-                        var lengthEl = newLengthData[i].split(" ");
-                        if (lengthEl[0].substr(0, 3) == "Chr") {
-                            lengthData.push(lengthEl[1]);
-                        }
-                    }
+                    parseLenData(allText);
+                    //readMakerFile();
                 }
             }
         }
         rawFile.send(null);
+    }
+    
+    function parseLenData(data){
+        try{
+            var newLengthData = data.replace(/(\r\n|\n|\r)/gm, "-");
+            newLengthData = newLengthData.split("-");
+            lengthDataOrgin = [];
+            for(var i = 0 ; i < newLengthData.length ; i++){
+                if(!newLengthData[i]){continue}
+                var lengthEl = newLengthData[i].split(" ");
+                
+                let chr = lengthEl[0];
+                lengthDataOrgin.push({id:chr.toLowerCase(), pos:lengthEl[1]});
+            }
+        }catch{
+            alert("잘못된 Len파일입니다.")
+            console.error("parseLenData Error");
+        }
+        
     }
 
     readLenFile();

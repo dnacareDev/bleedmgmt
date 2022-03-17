@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org" th:with="user = ${#authentication.principal}">
 <head>
     <!-- 공통 헤더 -->
     <th:block th:include="/../fragments/header.html"></th:block>
@@ -285,6 +285,7 @@
                             <div class="breadcrumb-main" style="float: left;">
                                 <h4 class="text-capitalize breadcrumb-title">관리 자원</h4>
                             </div>
+                            <input type="hidden" id="user_group" th:value="${user.user_group}">
                             <div class="data_cover1 clearfix">
                                 <div class="data_type data_type1">
                                     <span class="sub_title">작목 선택</span>
@@ -485,8 +486,9 @@
     function overlap_check() { // 관리자원 이름 중복검사
         let input_val = $("#resource_name").val();
         let crop_id = $("#crop_id").val();
+        let group = $("#user_group").val();
 
-        var data = {"resource_name": input_val, "crop_id": crop_id}
+        var data = {"resource_name": input_val, "crop_id": crop_id, "group": group}
 
         $.ajax(
             {
@@ -536,11 +538,12 @@
     var headerGrid = null;
 
     /* s : 특성파일 추가 */
-    function excelExportFile(evne, callback) {
+    function excelExportFile(event, callback) {
         var input = event.target;
         var reader = new FileReader();
 
         charArr = [];
+        dataArr = [];
 
         if (headerGrid != null) {
             headerGrid.destroy();
@@ -582,7 +585,7 @@
                 }
 
                 if (!idx.startsWith('!')) {
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0, "check": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 1, "check": 0};
 
                     charArr.push(headerArr);
                 }
@@ -595,7 +598,7 @@
             let dataSet = [];
 
             for(let i = 0; i < dataArr.length; i++) {
-                bodyArr[headerName[i]] = '<input type=checkbox class="anaCheck" name="' + headerName[i] + '">';
+                bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
             }
 
             dataSet.push(bodyArr);
@@ -689,11 +692,17 @@
                 }
             }
         })
+
+        let group = $("#user_group").val();
+        console.log('user_group', group);
     });
+
+    let featureFileName = null;
 
     function saveResource() {
         if (checkName == 1) {
             let checkBox = document.getElementsByClassName("anaCheck");
+            let group = $("#user_group").val();
 
             for(let i = 0; i < checkBox.length; i++) {
                 if(checkBox[i].checked == true) {
@@ -711,12 +720,18 @@
             var formData = new FormData();
 
             formData.append("inputFile", $("#excelFile")[0].files[0]);
-            formData.append("charFile", $("#data_file2")[0].files[0]);
+
+            if($("#data_file2")[0].files[0] != undefined) {
+                formData.append("charFile1", $("#data_file2")[0].files[0]);
+            } else {
+                formData.append("charFile2", featureFileName);
+            }
             formData.append("crop_id", crop_id);
             formData.append("resource_name", input_val);
             formData.append("detail_list", dataList);
             formData.append("feature_group", feature_group);
             formData.append("detail_count", detail_count);
+            formData.append("user_group", group);
 
             $.ajax({
                 processData: false,
@@ -791,6 +806,8 @@
 
                 dataSet.push(bodyArr);
                 headerGrid.resetData(dataSet);
+
+                featureFileName = result[0].feature_file;
             }
         })
     }
@@ -804,19 +821,6 @@
             $('#digitalBox').css('display', 'none');
         }
     });
-    /*
-    $('.digitalCheck').on('change' ,  function(){
-    	console.log("digital");
-    	//let file_check = $(".digitalCheck").is(":checked");
-    	let fileCheck = document.querySelector(".digitalCheck").getAttribute("checked"); 
-		console.log("checked:",file_check);
-		if(file_check){
-			$('#digitalBox').css('display', '');
-		}else{
-			$('#digitalBox').css('display', 'none');
-		}
-    });
-    */
 
     let photo_num = 0;
     let docs_num = 0;

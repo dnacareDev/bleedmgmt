@@ -1523,11 +1523,11 @@
 
         console.log(title);
 
-        if(title == '파종대장') {
+        if (title == '파종대장') {
             location.href = '/excelTemplate/sowingSample.xlsx';
-        } else if(title == '종자대장') {
+        } else if (title == '종자대장') {
             location.href = '/excelTemplate/seedSample.xlsx';
-        } else if(title == '교배대장') {
+        } else if (title == '교배대장') {
             location.href = '/excelTemplate/matingSample.xlsx';
         }
     }
@@ -1549,6 +1549,7 @@
 
     function getSessionS(key, useRemove) {
         let result = "";
+
         if (sessionStorage.getItem(key) !== null) {
             result = sessionStorage.getItem(key);
             if (useRemove) {
@@ -1556,7 +1557,7 @@
             }
             return result;
         } else {
-            result = '2';
+            result = $("#crop_id").val();
             return result;
         }
     }
@@ -1862,7 +1863,7 @@
     $(document).ready(function () {
         $("#CropSelect").val(getSessionS(type_id));
 
-        if(type != '파종대장') {
+        if (!type.indexOf('파종대장')) {
             $("#data_check_submit").css('display', 'none');
         }
 
@@ -2182,7 +2183,7 @@
             let status = breedgrid.getCheckedRows()[i].status;
             let text = status.replace(regExp, "");
 
-            if(text === "EMPTY") {
+            if (text === "EMPTY") {
                 chk = 1;
             }
 
@@ -2430,10 +2431,11 @@
                 }
             });
     }
+
     /* e : 파종번호 모달창 */
 
     /* s : 모달창 닫힐 때 이벤트 발생 */
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('#pop_data1').on('hidden.bs.modal', function () {
             selectgrid.destroy();
         });
@@ -2449,6 +2451,8 @@
         let limit = $("#limit").val();
 
         let data = {"crop_id": crop_id, "resource_name": resource_name};
+
+        console.log('data : ', data);
 
         $.ajax(
             {
@@ -2560,8 +2564,8 @@
                         let header;
                         let allCol = ev.instance.store.column.allColumns;
 
-                        for(let i = 0; allCol.length; i++) {
-                            if(allCol[i].name == ev.columnName) {
+                        for (let i = 0; allCol.length; i++) {
+                            if (allCol[i].name == ev.columnName) {
                                 header = allCol[i].header
                                 break;
                             }
@@ -2641,7 +2645,23 @@
 
             breedgrid.on('afterChange', (ev) => {
                 for (let i = 0; i < ev.changes.length; i++) {
-                    breedData.push({"detail_id": ev.changes[i].columnName, "standard": ev.changes[i].value})
+                    if (breedData.length != 0) {
+                        let check = 0;
+
+                        for (let j = 0; j < breedData.length; j++) {
+                            if (breedData[j].detail_id == ev.changes[i].columnName) {
+                                breedData[j].standard = ev.changes[i].value
+                                check = 1;
+                                break;
+                            }
+                        }
+
+                        if (check == 0) {
+                            breedData.push({"detail_id": ev.changes[i].columnName, "standard": ev.changes[i].value})
+                        }
+                    } else {
+                        breedData.push({"detail_id": ev.changes[i].columnName, "standard": ev.changes[i].value})
+                    }
                 }
             });
         }
@@ -2655,28 +2675,30 @@
 
         let resource_id = $('#resource_id').val();
         let type_check = 0;
+        let group = $('#user_group').val();
 
-        $.ajax(
-            {
-                url: 'insertBreed2',
-                method: 'POST',
-                dataType: 'json',
-                data: {
-                    "data": JSON.stringify(sortBreed),
-                    "resource_id": resource_id,
-                    "crop_id": crop_id,
-                    "resource_name": resource_name,
-                    "type_check": type_check
-                },
-                success: function (result) {
-                    if (result == 0) {
-                        return Alert("저장에 실패하였습니다.");
-                    } else {
-                        window.location.href = "/breed?type=[[${type}]]&id=[[${resource_id}]]&crop_id=" + crop_id;
-                        // location.reload();
-                    }
-                }
-            });
+         $.ajax(
+             {
+                 url: 'insertBreed2',
+                 method: 'POST',
+                 dataType: 'json',
+                 data: {
+                     "data": JSON.stringify(sortBreed),
+                     "resource_id": resource_id,
+                     "crop_id": crop_id,
+                     "resource_name": resource_name,
+                     "type_check": type_check,
+                     "user_group": group
+                 },
+                 success: function (result) {
+                     if (result == 0) {
+                         return Alert("저장에 실패하였습니다.");
+                     } else {
+                         window.location.href = "/breed?type=[[${type}]]&id=[[${resource_id}]]&crop_id=" + crop_id;
+                         // location.reload();
+                     }
+                 }
+             });
     }
 
     function cancelRow() {
@@ -2968,6 +2990,7 @@
 
         let resource_id = $('#resource_id').val();
         let type_check = 1;
+        let group = $('#user_group').val();
 
         $("#excel_list").val(JSON.stringify(total_arr));
 
@@ -2979,7 +3002,8 @@
                 data: {
                     "excel_list": JSON.stringify(total_arr),
                     "resource_id": resource_id,
-                    "type_check": type_check
+                    "type_check": type_check,
+                    "user_group": group
                 },
                 success: function (result) {
 
@@ -2990,8 +3014,7 @@
                     let resource_name = $(".manage")[0].innerText;
 
                     let crop_id = $("#CropSelect").val();
-
-                    let group = $("#user_group").val();
+                    let group = $('#user_group').val();
 
                     let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id, "user_group": group};
 
