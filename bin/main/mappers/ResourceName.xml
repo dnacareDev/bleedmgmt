@@ -82,7 +82,7 @@
 
     <select id="SelectResourceNameId" resultType="int">
         SELECT resource_name_id FROM resource_name
-        WHERE resource_name LIKE CONCAT('%', #{resource_name}, '%')
+        WHERE resource_name LIKE CONCAT('%', #{resource_name}, '%') AND user_group = #{user_group}
     </select>
 
 </mapper>

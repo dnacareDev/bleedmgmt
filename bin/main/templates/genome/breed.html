@@ -1863,7 +1863,10 @@
     $(document).ready(function () {
         $("#CropSelect").val(getSessionS(type_id));
 
-        if (!type.indexOf('파종대장')) {
+        console.log(type);
+        console.log(type.indexOf('파종대장'));
+
+        if (type.indexOf('파종대장') == '-1') {
             $("#data_check_submit").css('display', 'none');
         }
 
