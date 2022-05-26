@@ -245,10 +245,13 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
+                    	<p class="color-primary fa-lg mb-3 mt-5 ml-3">관리대장 상황</p>
                         <div class="card-body" style="height: auto;">
                             <div id="doughnut" class="slick-slider slick-dots-bottom" data-dots-slick='true'>
                                 <div class="slick-slider__single d-flex">
+                                    <!--  
                                     <p class="color-primary" style="color: black;  width: 100%; padding-bottom: 10px;">관리대장 상황</p>
+                                    -->
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: right;" name="selectCrop" id="CropSelect">
                                         <th:block th:each="list : ${cropList}">
                                             <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
@@ -256,13 +259,15 @@
                                     </select>
                                     <div class="data_relative">
                                         <div class="doughnut_cover">
+                                            <!-- 
                                             <div class="labels right_content_la">
                                                 <ul class="selector">
                                                     <th:block th:each="list : ${resourceList}">
-                                                        <li><input type="checkbox" th:id="${list.resource_name}"><span th:text="${list.resource_name}"></span></li>
+                                                        <li><input type="checkbox" th:id="${list.resource_name}"><label th:for="${list.resource_name}" th:text="${list.resource_name}+'&nbsp'"></label></li>
                                                     </th:block>
                                                 </ul>
                                             </div>
+                                             -->
                                             <canvas id="bar1" style="height: 210px; width: 100%;"></canvas>
                                         </div>
                                     </div>
@@ -280,13 +285,15 @@
                     <div class="card">
                         <p class="color-primary fa-lg mb-3 mt-5 ml-3">작목별 관리 현황</p>
                         <div class="card-body">
+                            <!--  
                             <div class="labels">
                                 <ul class="selector">
                                     <th:block th:each="list : ${cropList}">
-                                        <li><input type="checkbox" th:id="${list.crop_name}"><span th:text="${list.crop_name}"></span></li>
+                                        <li><input type="checkbox" th:id="${list.crop_name}"><label th:for="${list.crop_name}" th:text="${list.crop_name}+'&nbsp'"></label></li>
                                     </th:block>
                                 </ul>
                             </div>
+                            -->
                             <div>
                                 <canvas id="bar2" style="height: 344px; width:100%"></canvas>
                             </div>
@@ -307,6 +314,8 @@
         </div>
     </div>
 
+	
+
 </main>
 
 <!-- 공통 하단 -->
@@ -314,7 +323,8 @@
 <!-- 공통 js -->
 <th:block th:include="/../fragments/commonjs.html"></th:block>
 
-<script type="text/javascript">
+<script type="text/javascript">  
+
     $(document).ready(function () {
         $(".selector li").click(function (e) {
             let id = this.innerText;
@@ -384,8 +394,8 @@
                             }],
                         },
                         legend: {
-                            display: false,
-                            position: "top",
+                            display: true,
+                            position: "left",
                             labels: {
                                 usePointStyle: true,
                             },
@@ -397,11 +407,13 @@
                     var color1 = Math.floor(Math.random() * 256);
                     var color2 = Math.floor(Math.random() * 256);
                     var color3 = Math.floor(Math.random() * 256);
+                    
 
                     var dataset = {
                         label: label[i],
                         data: data[i],
                         backgroundColor: 'rgb(' + color1 + ', ' + color2 + ', ' + color3 + ')',
+                        //backgroundColor: 'rgb(255, 155, 147)',
                         stack: 'Stack 0',
                         stackSeries: true
                     }
@@ -458,8 +470,8 @@
                             }]
                         },
                         legend: {
-                            display: false,
-                            position: "top",
+                            display: true,
+                            position: "left",
                             labels: {
                                 usePointStyle: true,
                             },
@@ -478,6 +490,7 @@
                         label: label[i],
                         data: count[i],
                         backgroundColor: 'rgb(' + color1 + ', ' + color2 + ', ' + color3 + ')',
+                        //backgroundColor: 'rgb(255, 155, 147)',
                     }
 
                     config2.data.datasets.push(dataset);
@@ -495,6 +508,7 @@
             dataType: 'json',
             data: data,
             success: function (result) {
+            	
                 var chartData = [result.file.img_count, result.file.doc_count];
 
                 var ctx3 = document.getElementById("bar3");
@@ -508,7 +522,7 @@
                                 data: chartData,
                                 backgroundColor: [
                                     'rgb(251, 173, 85)',
-                                    'rgb(106,183,255)'
+                                    'rgb(106, 183, 255)'
                                 ],
                                 borderWidth: 0, label: "Dataset 1"
                             }
@@ -528,6 +542,8 @@
             }
         })
     }
+    
+    
 </script>
 
 </body>
