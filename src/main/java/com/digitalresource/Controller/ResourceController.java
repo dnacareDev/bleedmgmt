@@ -336,4 +336,14 @@ public class ResourceController {
 
     return "redirect:/breed?type={type}&id={id}&crop_id={crop_id}";
   }
+  
+  // 2022-06-02 | resource_template 데이터 조회
+  @RequestMapping("select_resource_by_id")
+  @ResponseBody
+  public Resource selectResourceById(@RequestParam("resource_id") int resource_id) {
+	Resource result = new Resource();
+    result = RService.selectResourceById(resource_id);
+    return result;
+  }
+  
 }

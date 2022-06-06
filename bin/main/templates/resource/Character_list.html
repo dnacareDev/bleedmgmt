@@ -984,6 +984,8 @@
                 data: data,
                 success: function (result) {
 
+                	console.log("searchTrait result : ", result);
+                	
                     traitGrid = new tui.Grid({
                         el: document.getElementById('traitGrid'),
                         scrollX: false,
@@ -996,7 +998,7 @@
                                 name: 'category_name'
                             },
                             {
-                                header: '작목서설',
+                                header: '작목',
                                 name: 'crop_name',
                                 onchange: 'test()'
                             },
@@ -1011,7 +1013,7 @@
                                 editor: 'text',
                             },
                             {
-                                header: '조사기준화일',
+                                header: '종자원 특성조사 항목',
                                 name: 'trait_file'
                             },
                             {

@@ -45,4 +45,7 @@ public interface ResourceService {
 	int SelectResourceUse(int resource_id);
 
 	int UpdateResourceUse(int resource_use, int resource_id);
+	
+	//List<ResourceList> searchResourceTemplate(int resource_id);					// 2022-06-02 | resource_template 조회
+	Resource selectResourceById(int resource_id);
 }

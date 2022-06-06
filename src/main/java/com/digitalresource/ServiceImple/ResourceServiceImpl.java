@@ -188,4 +188,10 @@ public int detailDisplayAction(Map<String, Object> param) {
   public int UpdateResourceUse(int resource_use, int resource_id) {
     return resourceMapper.UpdateResourceUse(resource_use, resource_id);
   }
+  
+  // 2022-06-02
+  @Override
+  public Resource selectResourceById(int resource_id) {
+	  return resourceMapper.selectResourceById(resource_id);
+  }
 }

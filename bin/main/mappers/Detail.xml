@@ -32,4 +32,9 @@
         (SELECT COUNT(*) FROM detail WHERE detail_info = 3 AND detail_type = 1 AND user_group = #{user_group}) AS doc_count
     </select>
 
+	<select id="SearchDetailById" parameterType="int" resultType="Detail">
+		SELECT * FROM detail WHERE resource_id = #{resource_id}
+        ORDER BY detail_index
+	</select>
+
 </mapper>

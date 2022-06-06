@@ -76,7 +76,7 @@
                  left join trait t on r.trait_id = t.trait_id
                  inner join crop c on c.crop_id = r.crop_id
                  inner join resource_name rn on rn.resource_name_id = r.resource_name_id
-        where r.user_group = #{user_group}
+        where r.user_group = #{user_group} and r.delete_check is null
         ORDER BY r.resource_id DESC
     </select>
 

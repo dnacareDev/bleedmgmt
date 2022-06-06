@@ -36,4 +36,10 @@ public class DetailServiceImpl implements DetailService {
   public ChartCount SelectFileCount(int user_group) {
     return mapper.SelectFileCount(user_group);
   }
+  
+  //2022-06-03
+  @Override
+  public List<Detail> SearchDetailById(int resource_id) {
+	  return mapper.SearchDetailById(resource_id);
+  }
 }

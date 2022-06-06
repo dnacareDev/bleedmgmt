@@ -54,4 +54,6 @@ public interface ResourceMapper {
   int SelectResourceUse(@Param("resource_id") int resource_id);
 
   int UpdateResourceUse(@Param("resource_use") int resource_use, @Param("resource_id") int resource_id);
+  
+  //List<ResourceList> searchResourceTemplate(int resource_id); 						// 2022-06-02
 }

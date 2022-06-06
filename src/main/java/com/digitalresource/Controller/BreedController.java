@@ -466,4 +466,21 @@ public class BreedController {
 
     return mv;
   }
+  
+  // 2022-06-03 | 다운로드 양식에 필요한 column(detail) 조회
+  @ResponseBody
+  @RequestMapping("search_detail_by_id")
+  public Map<String, Object> SearchDetailById(@RequestParam("resource_id") int resource_id) {
+    Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+    List<Detail> details = detailService.SearchDetailById(resource_id);
+
+    //System.out.println(details.get(0).getDetail_name());
+    
+    result.put("detail", details); 
+
+
+    return result;
+  }
+  
 }

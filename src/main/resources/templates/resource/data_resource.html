@@ -1180,7 +1180,7 @@
                                 sortingType: 'asc'
                             },
                             {
-                                header: '자원관리종류',
+                                header: '항목명',
                                 name: 'resource_name',
                                 sortable: true,
                                 sortingType: 'asc'
@@ -1188,12 +1188,14 @@
                             {
                                 header: '관리자원양식',
                                 name: 'resource_template',
+                                hidden: true,
                                 sortable: true,
                                 sortingType: 'asc'
                             },
                             {
                                 header: '자체특성양식',
                                 name: 'resource_character_template_file',
+                                hidden: true,
                                 sortable: true,
                                 sortingType: 'asc'
                             },
@@ -1216,6 +1218,8 @@
                         }
                     });
 
+                    console.log(result);
+                    
                     const dataArr = [];
 
                     for (let i = 0; i < result.resourceList.length; i++) {

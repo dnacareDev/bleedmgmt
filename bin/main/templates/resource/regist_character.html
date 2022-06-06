@@ -310,6 +310,7 @@
                             <span class="sub_title" style="display: block; clear:both; padding: 10px 0;">작목 선택</span>
                             <div class="data_cover1 clearfix">
                                 <div class="data_type data_type1">
+                                    
                                     <select name="selectCategory" onchange="getCrop(this)" id="cropCategory">
                                         <option value="-1" selected disabled hidden>작물구분</option>
 
@@ -317,6 +318,7 @@
                                             <option th:value="${cat.category_id}" th:text="${cat.category_name}"></option>
                                         </th:block>
                                     </select>
+                                     
                                 </div>
                                 <div class="data_type data_type2">
                                     <select name="selectCrop"  onChange = "selectOptionEvent(value)" id="cropSubCategory">
@@ -328,6 +330,7 @@
                                 	<input type ="text" id="newCrop">
                                 </div>
                             </div>
+                            <!--  
                             <form action="character" id="insertFile" method="POST" enctype="multipart/form-data">
                                 <div class="data_cover2 clearfix">
                                     <div class="data_type data_type4" style="display: flex">
@@ -337,18 +340,40 @@
                                             <img src="../assets/vendor_assets/img/upload.png" alt="file업로드">
                                             <span>템플릿 엑셀 첨부</span>
                                         </div>
-                                        <input type="file" id="upload_file" name="file" style="display: none;"> <!-- file  -->
+                                        <input type="file" id="upload_file" name="file" style="display: none;"> <!-- file  --*>
                                     </div>
                                 </div>
                             </form>
-                            <div id="featureGrid"></div>
+                            --> 
+                        </div>
+                        <div class="card-body" style="padding-top: 0">
+                        	<div class="bg-white">
+	                        	<div id="featureGrid"></div>
+	                            <div class="row" style="padding-top: 0;">
+	                                 <div class="col-4">
+	                                     <button class="btn btn-icon btn-light btn-circle" onclick="insertRow();">
+	                                         <span data-feather="plus"></span>
+	                                     </button>
+	                                       
+	                                     <button class="btn btn-icon btn-light btn-circle" onclick="DeleteBreed();">
+	                                         <span data-feather="trash-2"></span>
+	                                     </button>
+	                                     <!--
+	                                     <button class="btn btn-icon btn-light btn-circle" id="data_check_submit" onclick="AnalysisBtn();" style="width:44.03px; height:42px;">
+	                                         <img src="../assets/vendor_assets/img/check_tab.png" alt="check" style="width: 17px;margin-left: 4px;">
+	                                     </button>
+	                                     <input type="hidden" id="offset">
+	                                     -->
+	                                 </div>
+	                             </div>
+	                         </div>	
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="btn_cover clearfix">
-            <button type="button" class="gray_btn" style="width:130px;height:45px;padding:0;" onclick="location.href='/character'">목록</button>
+            <button type="button" class="gray_btn" style="width:130px;height:45px;padding:0;" onclick="location.href='/character'">신규등록 취소</button>
             <button type="button" class="green_btn" style="width:130px;height:45px;padding:0;" onclick="saveTrait()">저장</button>
         </div>
     </div>
@@ -370,6 +395,7 @@
 
     let breedgrid = null;
 
+    /*
     function insertRow() {
 
         var cnt = characterGrid.getRowCount();
@@ -386,7 +412,9 @@
     }
 
     var characterGrid = null;
+    */
 
+    
     function file_handler(e) { //파일 클릭시 파일명 업로드
 
         var file_name = $(file_this_file).val(); //파일 이름;
@@ -399,17 +427,18 @@
             scrollX: true,
             scrollY: false,
             data: [],
+            rowHeaders: ['checkbox'],
             columns: [
                 {
                     header: '번호',
                     name: 'feature_num',
                     editor: 'text',
-                    width: 120
+                    width: 80
                 },
                 {
                     header: '형질/특성',
                     name: 'feature_name',
-                    editor: 'text'
+                    editor: 'text',
                 },
                 {
                     header: '표현형태',
@@ -432,7 +461,7 @@
             ],
             pageOptions: {
                 useClient: true,
-                perPage: 10
+                perPage: 100 							// 기본값 10인데 한번에 추가한다면 크게 잡는게 좋을듯. 문제있을경우 10으로 복구
             }
         });
     })
@@ -484,6 +513,7 @@
 
     var featureGrid = null;
 
+    // 2022-06-06 | 엑셀 템플릿 불러오기 이후 변경을 담당하는 함수. 현재 비활성화 
     function excelExportCommon(event, callback) {
         var input = event.target;
         var reader = new FileReader();
@@ -536,7 +566,7 @@
                 ],
                 pageOptions: {
                     useClient: true,
-                    perPage: 10
+                    perPage: 10				
                 }
             });
 
@@ -606,6 +636,23 @@
     function insertFile() {
         $("#insertFile").submit();
     }
+    
+    function insertRow() {
+    	// 2022-06-06 | row 추가버튼 구현
+
+        var cnt = featureGrid.getRowCount();
+
+        const newRow = {'feature_num' : featureGrid.getRowCount() + 1};				// No에 자동적으로 숫자입력. 필요없으면 null로 변경
+
+        featureGrid.appendRow(newRow);		// 아래쪽으로 행 추가 (위로 추가하려면 prependRow)
+        // featureGrid.check(cnt);			// 현재 grid에는 checkbox가 없음. 없어도 저장에 문제없으면 삭제
+    }
+    
+    function DeleteBreed() {
+    	
+    }
+    
+    
     
     /* 셀렉트 박스 선택시 이벤트 발생 */
     function selectOptionEvent(value){
