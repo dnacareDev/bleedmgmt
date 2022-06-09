@@ -905,6 +905,9 @@
                                         <button class="btn btn-lg btn-primary bottom_btn" onclick="UpdateResource()">
                                             <span>사용 여부 전환</span>
                                         </button>
+                                        <button class="btn btn-lg btn-primary bottom_btn" onclick="DeleteResource()">
+                                            <span>관리자원 삭제</span>
+                                        </button>
                                     </div>
                                     <div class="col-4">
                                         <div class="row" style="justify-content: center;">
@@ -997,6 +1000,31 @@
                     location.reload();
                 }
             });
+    }
+    
+    //삭제(delete_check 방식. 사용여부: 미사용으로 업데이트하면서 조회도 되지않도록)
+    function DeleteResource() {
+    	var total_id = [];
+
+        var l = samplegrid.getCheckedRows().length;
+
+        for (let i = 0; i < l; i++) {
+            total_id.push(samplegrid.getCheckedRows()[i].resource_id)
+        }
+        
+        $.ajax(
+                {
+                    url: 'deleteResource',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "resource_id": JSON.stringify(total_id)
+                    },
+                    success: function (result) {
+                    	sessionStorage.removeItem('type_id'); 
+                    	location.reload();
+                    }
+                });
     }
 
     /* 엑셀 다운로드 */
@@ -1183,7 +1211,8 @@
                                 header: '항목명',
                                 name: 'resource_name',
                                 sortable: true,
-                                sortingType: 'asc'
+                                sortingType: 'asc',
+                                filter: {type: 'text', showClearBtn: true}
                             },
                             {
                                 header: '관리자원양식',

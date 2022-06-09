@@ -265,9 +265,9 @@ public class BreedController {
       JSONArray item = arr.getJSONArray(i);
 
       System.out.println("item = " + item);
-      System.out.println("item.get(11) = " + item.get(11));
-      System.out.println("item.get(12) = " + item.get(12));
-      System.out.println("item.get(13) = " + item.get(13));
+      //System.out.println("item.get(11) = " + item.get(11));
+      //System.out.println("item.get(12) = " + item.get(12));
+      //System.out.println("item.get(13) = " + item.get(13));
 
       int crop_id = Integer.parseInt(item.getString(0));
 
@@ -286,34 +286,34 @@ public class BreedController {
       int cnt = 1;
 
       for (int j = 0; j < detail.size(); j++) {
-        System.out.println("j = " + j);
+        //System.out.println("j = " + j);
         StandardList standard = new StandardList();
 
         standard.setBreed_id(breed.getBreed_id());
         standard.setDetail_id(detail.get(j).getDetail_id());
 
-        System.out.println("standard = " + standard);
+        //System.out.println("standard = " + standard);
 
         if(detail.get(j).getDetail_type() == 2) {
-          System.out.println("cnt = " + cnt);
+          //System.out.println("cnt = " + cnt);
 
           if (cnt <= item.length()) {
             if(!item.isNull(cnt)) {
-              System.out.println("item.get(" + cnt + ") = " + item.get(cnt));
+              //System.out.println("item.get(" + cnt + ") = " + item.get(cnt));
               standard.setStandard_data((String) item.get(cnt));
             } else {
               standard.setStandard_data(null);
             }
           } else {
-            System.out.println("check");
+            //System.out.println("check");
             standard.setStandard_data(null);
           }
 
           cnt++;
-          System.out.println("cnt++ = " + cnt);
+          //System.out.println("cnt++ = " + cnt);
         } else {
           standard.setStandard_data(null);
-          System.out.println("not cnt++ = " + cnt);
+          //System.out.println("not cnt++ = " + cnt);
         }
 
         standards.add(standard);
@@ -483,4 +483,37 @@ public class BreedController {
     return result;
   }
   
+  // 2022-06-08 | 등록서식 다운로드
+  /*
+  @ResponseBody
+  @RequestMapping("formattingDownload")
+  public Map<String, Object> formattingDownload(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
+    Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+    int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name, group);
+    int resourceId = 0;
+
+    for (int i = 0; i < resourceNameId.length; i++) {
+      if (resourceService.SearchResourceId(crop_id, resourceNameId[i], group) != null) {
+        resourceId = resourceService.SearchResourceId(crop_id, resourceNameId[i], group);
+        break;
+      }
+    }
+
+    List<Detail> details = detailService.SelectDetailListByResource(resourceId);
+
+    result.put("detail", details);
+
+    for(int i=1; i<details.size() ; i++) {
+    	System.out.println(details.get(i).getDetail_name());
+    }
+    
+//    System.out.println("standardLists : " + standardLists);
+//    System.out.println("breed : "+breed);
+    
+    return result;
+  }
+  */
 }

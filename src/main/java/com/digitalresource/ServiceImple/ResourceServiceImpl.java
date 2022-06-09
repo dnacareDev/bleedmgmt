@@ -194,4 +194,10 @@ public int detailDisplayAction(Map<String, Object> param) {
   public Resource selectResourceById(int resource_id) {
 	  return resourceMapper.selectResourceById(resource_id);
   }
+  
+  // 2022-06-07
+  @Override
+  public int UpdateDeleteCheck(int resource_id) {
+	  return resourceMapper.UpdateDeleteCheck(resource_id);
+  }
 }

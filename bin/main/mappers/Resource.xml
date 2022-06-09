@@ -28,6 +28,7 @@
         WHERE crop_id = #{crop_id}
     </delete>
 
+	  
     <delete id="deleteResource" parameterType="int">
         update resource
         set resource_use = 0
@@ -76,7 +77,7 @@
                  left join trait t on r.trait_id = t.trait_id
                  inner join crop c on c.crop_id = r.crop_id
                  inner join resource_name rn on rn.resource_name_id = r.resource_name_id
-        where r.user_group = #{user_group} and r.delete_check is null
+        where r.user_group = #{user_group} and r.delete_check = 0
         ORDER BY r.resource_id DESC
     </select>
 
@@ -169,5 +170,11 @@
         UPDATE resource
         SET resource_use = #{resource_use}
         WHERE resource_id = #{resource_id}
+    </update>
+    
+    <update id="UpdateDeleteCheck">
+    	UPDATE resource
+    	SET delete_check = 1
+    	WHERE resource_id = #{resource_id}
     </update>
 </mapper>

@@ -55,5 +55,5 @@ public interface ResourceMapper {
 
   int UpdateResourceUse(@Param("resource_use") int resource_use, @Param("resource_id") int resource_id);
   
-  //List<ResourceList> searchResourceTemplate(int resource_id); 						// 2022-06-02
+  int UpdateDeleteCheck(int resource_id); 												// 2022-06-07 | 삭제처리(delete_check)
 }

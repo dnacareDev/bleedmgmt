@@ -1496,7 +1496,7 @@
                     <span class="breed_title"></span>
                 </div>
                 <div class="modal-body">
-                    <div class="bg-white">
+                    <div class="bg-white" id="gridGroup">
                         <div id="selectGrid"></div>
                     </div>
                 </div>
@@ -1533,6 +1533,7 @@
         
         console.log("thymeleaf test : [[${resource_id}]]");
         
+        console.log("${type} ? : [[${type}]]");
         
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
@@ -1544,32 +1545,67 @@
                     dataType: 'json',
                     data: {"crop_id": crop_id, "resource_name": resource_name},
                     success: function (result) {
-                    	//console.log("detail result : " , result);
                     	
-                    	var detail_name_arr = [];
                     	
+                    	var detail_arr = [];
+                    	
+                    	// '첨부파일' column이 남아있지만 차후에 올릴때부터는 없으므로 i=0부터
                     	for(var i=0 ; i<result.detail.length ; i++) {
-                    		detail_name_arr[i] = result.detail[i].detail_name;
+                    		detail_arr.push(result.detail[i].detail_name);
                     	}
                     	
-                    	//console.log("엑셀 서식에 필요한 컬럼 조회 확인 : ", detail_name_arr);
-                    	
-                    	/*
-                    	console.log(result.detail.length);
-						var buf = new ArrayBuffer(result.detail.length);
-						var view = new Uint8Array(buf);
-						for(var i=0 ; i<result.detail.length ; i++) {
-							view[i] = result.detail[i].detail_name;
-							console.log("[", result.detail[i].detail_name, "&", view[i], "]" );
-						}
-						console.log(view);
-						*/
+						var arr_of_arrs = [];
 						
+						arr_of_arrs.push(detail_arr);
+                    	
+						console.log(arr_of_arrs);
+                    	
+                    	//console.log("testbtn result : ", result);
+                    	
+                    	var excelHandler = {
+        		
+				        		getExcelFileName : function(){
+				        		    return '[[${type}]].xlsx';
+				        		},
+				        		getSheetName : function(){
+				        			return '[[${type}]]';
+				        		},
+				        		getExcelData : function(){
+				        			return arr_of_arrs;
+				        		},
+				        		getWorksheet : function(){
+				        			return XLSX.utils.aoa_to_sheet(this.getExcelData());
+				        		}
+				        }
+						
+                    	// step 1. workbook 생성
+                        var wb = XLSX.utils.book_new();
+
+                        // step 2. 시트 만들기 
+                        var newWorksheet = excelHandler.getWorksheet();
+                        
+                        // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.  
+                        XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+
+                        // step 4. 엑셀 파일 만들기 
+                        var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+
+                        // step 5. 엑셀 파일 내보내기 
+                        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), excelHandler.getExcelFileName());
+                    	
                     }
                     
     	});
         
+         
         
+        
+        function s2ab(s) { 
+            var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+            var view = new Uint8Array(buf);  //create uint8array as viewer
+            for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+            return buf;    
+        }
         
 
         
@@ -1915,17 +1951,11 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        $("#CropSelect").val(getSessionS(type_id));
-
+        // $("#CropSelect").val(getSessionS(type_id));			// 2022-06-07 | 최근방문한 작물 종류 저장(관리자원 삭제기능 도입시 문제가 생길것 같아 비활성화)
+        
         console.log(type);
-        console.log(type.indexOf('파종대장'));
 
-        /* 2022-06-06 | '파종대장'이외의 대장에서 통합분석 버튼을 의도적으로 숨기는 기능
-        if (type.indexOf('파종대장') == '-1') {
-            $("#data_check_submit").css('display', 'none');
-        }
-        */
-
+        
         SearchBreed(1);
         SearchBreedgrid(1);
     });
@@ -2419,7 +2449,7 @@
     }
 
     /* s : 파종번호 모달창 */
-    let selectgrid = null;
+    let selectgrid = [];
 
     function Search(e) {
         $("#pop_data1").modal();
@@ -2430,7 +2460,96 @@
         let limit = $("#limit").val();
 
         let data = {"breed_id": breed_id, "crop_id": crop_id, "resource_name": resource_name};
+        //let data = {"breed_id": 407, "crop_id": 5, "resource_name": '무파종'}; 					// 무파종 모달창 출력
 
+        console.log("data : ", data);
+        
+        /*
+        $.ajax({
+            url: "resource-list",
+            method: "POST",
+            dataType: "json",
+            success: function (resource_list) {
+
+                console.log('resource_list : ', resource_list);
+
+                
+                for(let k=0 ; k<resource_list.resourceList.length ; k++) {
+                	console.log("k : ",k);
+                	var grid_id = resource_list.resourceList.resource_name_id
+                	$.ajax(
+                            {
+                                url: 'searchHeader',
+                                method: 'POST',
+                                dataType: 'json',
+                                data: data,
+                                success: function (result) {
+                                	
+                                	console.log('selectGrid'+k+1);
+                                	
+                                	console.log("searchHeader result : ", result);
+                                	
+                                	
+                                    selectgrid[k] = new tui.Grid({
+                                        el: document.getElementById('selectGrid'+k+1),
+                                        scrollX: true,
+                                        scrollY: false,
+                                        data: [],
+                                        editingEvent: 'click',
+                                        columns: [],
+                                        pageOptions: {
+                                            useClient: true,
+                                            perPage: limit
+                                        }
+                                    });
+
+                                    const headerArr = [];
+
+                                    let headerName = [];
+                                    let colName = [];
+
+                                    for (let i = 0; i < result.detail.length; i++) {
+                                        let colHeader = result.detail[i].detail_name;
+                                        colName[i] = result.detail[i].detail_id;
+
+                                        headerName[colName[i]] = result.detail[i].detail_id;
+
+                                        let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
+
+                                        let arr = {}
+
+                                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
+                                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+                                        } else if (result.detail[i].detail_info == 3) {
+                                            if (result.detail[i].detail_type == 0) {
+                                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
+                                                headerName[colName[i]] = 'img' + colName[i];
+                                            } else if (result.detail[i].detail_type == 1) {
+                                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
+                                                headerName[colName[i]] = 'doc' + colName[i];
+                                            }
+                                        } else if (result.detail[i].detail_info == 4) {
+                                            continue;
+                                        } else {
+                                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
+                                        }
+
+                                        headerArr.push(arr);
+                                    }
+
+                                    selectgrid[k].setColumns(headerArr);
+
+                                    
+                                    
+                                }
+                            });
+                }
+                
+            }
+        })
+        */
+        
+        
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2440,6 +2559,7 @@
                 success: function (result) {
                 	
                 	console.log("searchHeader result : ", result);
+                	
                 	
                     selectgrid = new tui.Grid({
                         el: document.getElementById('selectGrid'),
@@ -2494,6 +2614,9 @@
                     
                 }
             });
+        
+        
+        
     }
 
     /* e : 파종번호 모달창 */
@@ -2881,15 +3004,84 @@
 
         reader.onload = function () {
             var fileData = reader.result;
-            var wb = XLSX.read(fileData, {type: 'binary'});
+            var wb = XLSX.read(fileData, {type: 'binary'});		
             var sheetNameList = wb.SheetNames; // 시트 이름 목록 가져오기
             var firstSheetName = sheetNameList[0]; // 첫번째 시트명
             var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
             callback(firstSheet);
+            
+            // delete firstSheet.A1;									
+            var rowdata = XLSX.utils.sheet_to_json(firstSheet, {defval: ""});
+            
+            var keys = Object.keys(rowdata[0]);
 
-            delete firstSheet.A1;
-            var rowdata = XLSX.utils.sheet_to_json(firstSheet);
+            var html = "";
 
+            html += "<thead class='text-center'>";
+            html += "<tr>";
+            
+            $.each(rowdata[0], function (idx, key) {
+                html += "<th><span class='excel-title'>" + idx + "</span></th>";
+            })
+            
+            html += "</tr>";
+            html += "</thead>";
+            
+            html += "<tbody class='text-center'>";
+            html += "<tr class='excel_tr'>";
+            
+            for (var i = 0; i < rowdata.length; i++) {
+                if (i === 0) {
+                	
+                	html += "<tbody class='text-center'>";
+                    html += "<tr class='excel_tr'>";
+                    
+                     $.each(rowdata[0], function (idx, value) {
+                         html += "<td class='excel'><span>" + value + "</span></td>";
+                     })
+
+                    
+                } else if (i !== 0) {
+                	
+                	html += "<tbody class='text-center'>";
+                    html += "<tr class='excel_tr'>";
+
+                    var tmp = Object.keys(rowdata[0]);
+                    var j = 0;
+
+                    $.each(rowdata[i], function (idx, value) {
+                        // 공백처리
+                        if (idx == tmp[j]) {
+
+                            html += "<td class='excel'><span>" + value + "</span></td>";
+                            j++;
+
+                        } else {
+                            var idx_str = idx.replace(/[^0-9]/g, '');
+                            var tmp_str = tmp[j].replace(/[^0-9]/g, '');
+
+                            var gap = idx_str - tmp_str;
+
+                            while (gap > 0) {
+                                gap--;
+                                html += "<td><span> </span></td>";
+                            }
+
+                            html += "<td class='excel'><span>" + value + "</span></td>";
+                            j++;
+
+                            j = idx_str;
+                            j++;
+                        }
+                    });
+
+                    html += "</tr>";
+                    html += "</tbody>";
+                }
+            }
+            
+            /*
+            
             var keys = Object.values(rowdata[0]);
 
             var html = "";
@@ -2943,6 +3135,8 @@
                 }
             }
 
+            */
+            
             var excel = [];
 
             for (var k = 1; k < rowdata.length; k++) {
@@ -3106,6 +3300,8 @@
             total_arr.push(excel_arr);
         }
 
+        console.log("process? : ", total_arr);
+        
         let resource_id = $('#resource_id').val();
         let type_check = 1;
         let group = $('#user_group').val();

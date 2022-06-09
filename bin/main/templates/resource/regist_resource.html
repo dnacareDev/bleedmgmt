@@ -380,7 +380,7 @@
         -->
         
         <div class="btn_cover clearfix">
-            <button type="button" class="gray_btn" onclick="location.href='management-resource'" style="width:130px;height:45px;padding:0;">목록</button>
+            <button type="button" class="gray_btn" onclick="location.href='management-resource'" style="width:130px;height:45px;padding:0;">신규등록 취소</button>
             <button type="button" class="green_btn" onclick="saveResource()" style="width:130px;height:45px;padding:0;">저장</button>
         </div>
     </div>
@@ -592,10 +592,12 @@
 
                     charArr.push(headerArr);
                 }
+                //console.log("value? : ", value );
             })
 
             dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
             headerGrid.setColumns(dataArr);
+            //console.log("dataArr : ", dataArr);
 
             let bodyArr = {}
             let dataSet = [];

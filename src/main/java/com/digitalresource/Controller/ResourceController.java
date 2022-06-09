@@ -233,11 +233,26 @@ public class ResourceController {
 
   @ResponseBody
   @RequestMapping("deleteResource")
-  public int deleteResource(Resource resource) {
-    int result = 0;
-    result = RService.deleteResource(resource);
-    return result;
-  }
+  public int deleteResource(@RequestParam("resource_id") String resource_id) {
+	    int result = 0;
+
+	    JSONArray arr = new JSONArray(resource_id);
+	    System.out.println("arr : " + arr);
+
+	    // 2022-06-07 | 삭제기능 일단 구현. 현재 자원관리 출력 및 필터링에 문제가 있어 보류 
+	    System.out.println("arr : " + arr);
+	    for(int i = 0; i < arr.length(); i++) {
+		      int resourceId = arr.getInt(i);
+		      result = RService.UpdateResourceUse(0, resourceId);
+		      result = RService.UpdateDeleteCheck(resourceId);
+		      System.out.println("after delete = " + RService.SelectResourceUse(resourceId));
+	    }
+	    
+
+	    return result;
+	  }
+  
+  
 
   @ResponseBody
   @RequestMapping("resource-list")
