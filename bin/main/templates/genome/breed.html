@@ -871,6 +871,11 @@
             height: 100%;
             object-fit: contain;
         }
+        
+        /* tui 최신화하면서 cell 왼쪽정렬이 기본값이 되어버린듯. 중앙정렬로 수정 */
+        .main-content {
+		    text-align: center !important;
+		}
     </style>
 </head>
 <body class="layout-light top-menu overlayScroll">
@@ -1492,11 +1497,11 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title"><span class="titleType" th:text="${type}"></span></h6>
+                    <h6 class="modal-title"><span class="titleType"></span></h6>
                     <span class="breed_title"></span>
                 </div>
                 <div class="modal-body">
-                    <div class="bg-white" id="gridGroup">
+                    <div class="bg-white">
                         <div id="selectGrid"></div>
                     </div>
                 </div>
@@ -2450,11 +2455,15 @@
 
     /* s : 파종번호 모달창 */
     let selectgrid = [];
+    //let selectgrid = null;
 
-    function Search(e) {
+    function Search(e, v) {
         $("#pop_data1").modal();
+        //$(".titleType").text("파종대장");
+        $(".titleType").empty();
 
         let breed_id = e;
+        let breed_detail_id = v;
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
         let limit = $("#limit").val();
@@ -2559,7 +2568,14 @@
                 success: function (result) {
                 	
                 	console.log("searchHeader result : ", result);
-                	
+                
+                	// 2022-06-12 | cell과 연동되는 modal창의 title 출력
+                	for(let i=0 ; i<result.detail.length ; i++) {
+                		if(breed_detail_id == result.detail[i].detail_id) {
+		                	$(".titleType").text(result.detail[i].detail_name);
+                			break;
+                		}
+                	}
                 	
                     selectgrid = new tui.Grid({
                         el: document.getElementById('selectGrid'),
@@ -2574,7 +2590,20 @@
                         }
                     });
 
-                    const headerArr = [];
+                    const headerArr = [
+                        {
+                            'header': '첨부파일',
+                            'name': 'file',
+                            'width': 50,
+                        },
+                        {
+                            'header': '특성상태',
+                            'name': 'status',
+                            'width': 150,
+                        }
+                    ];
+                    
+                    //const headerArr = [];
 
                     let headerName = [];
                     let colName = [];
@@ -2590,7 +2619,7 @@
                         let arr = {}
 
                         if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter};
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
                                 arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
@@ -2601,15 +2630,38 @@
                             }
                         } else if (result.detail[i].detail_info == 4) {
                             continue;
-                        } else {
+                        } /*else if (result.detail[i].detail_info == 5) {
+                        	arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter};
+                        	headerName[colName[i]] = colName[i] + '_checked';
+                        } */else {
+                        	console.log("info==5");
                             arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
                         }
-
+                        
+                        
+//                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
+//                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+//                        } else if (result.detail[i].detail_info == 3) {
+//                            if (result.detail[i].detail_type == 0) {
+//                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
+//                                headerName[colName[i]] = 'img' + colName[i];
+//                            } else if (result.detail[i].detail_type == 1) {
+//                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
+//                                headerName[colName[i]] = 'doc' + colName[i];
+//                            }
+//                        } else if (result.detail[i].detail_info == 4) {
+//                            continue;
+//                        } else {
+//                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
+//                        }
+                        
+                        
                         headerArr.push(arr);
                     }
 
+                    console.log("headerArr : ", headerArr);
+                    
                     selectgrid.setColumns(headerArr);
-
                     
                     
                 }
@@ -2656,8 +2708,8 @@
                         scrollX: true,
                         scrollY: false,
                         data: result.breed,
+                        //header: {align: 'left'},
                         rowHeaders: ['checkbox'],
-                        editingEvent: 'click',
                         columns: [],
                         pageOptions: {
                             useClient: true,
@@ -2706,12 +2758,14 @@
                         {
                             'header': '첨부파일',
                             'name': 'file',
-                            'width': 50,
+                            'width': 80,
+                            'align': 'center'
                         },
                         {
                             'header': '특성상태',
                             'name': 'status',
-                            'width': 150,
+                            'width': 120,
+                            'align': 'center'
                         }
                     ];
 
@@ -2720,6 +2774,17 @@
 
                     for (let i = 0; i < result.detail.length; i++) {
                         let colHeader = result.detail[i].detail_name;
+                        
+                        /*
+                        let colHeader = "";
+                        
+                        if(result.detail[i].detail_name.includes('_checked')) {
+                    		colHeader = result.detail[i].detail_name.replace('_checked','');
+                    	} else {
+	                        colHeader = result.detail[i].detail_name;
+                    	}
+                        */
+                        
                         colName[i] = result.detail[i].detail_id;
 
                         headerName[colName[i]] = result.detail[i].detail_id;
@@ -2729,7 +2794,7 @@
                         let arr = {}
 
                         if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
+                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 400, 'filter': filter,'align': 'center'};
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
                                 arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
@@ -2740,12 +2805,17 @@
                             }
                         } else if (result.detail[i].detail_info == 4) {
                             continue;
+                        } else if (result.detail[i].detail_info == 5) {
+                        	arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 400, 'filter': filter, 'align': 'center'};
+                        	headerName[colName[i]] = colName[i] + '_checked';
                         } else {
-                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
+                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter, 'align': 'center'}
                         }
 
                         headerArr.push(arr);
                     }
+                    
+                    console.log("headerArr : ", headerArr);
                     
                  	// 2022-06-02 | export option 설정 //////////////////////////
                     let headerArrKeys = [];
@@ -2778,7 +2848,23 @@
                         } else {
                             tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                         }
-
+                        
+                        
+                        for (let j = 1; j < headerName.length; j++) {
+                            if ((typeof headerName[colName[j - 1]]) === 'string') {
+                            	if(typeof Number(headerName[colName[j - 1]].replace('_checked','')) === 'number' ) {
+                            		tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
+                            	} else {
+	                                tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                            	}
+                            } else if ((typeof headerName[colName[j - 1]]) === 'number') {
+                                if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
+                                    tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
+                                }
+                            }
+                        }
+                        
+                        /*
                         for (let j = 1; j < headerName.length; j++) {
                             if ((typeof headerName[colName[j - 1]]) === 'string') {
                                 tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
@@ -2788,7 +2874,9 @@
                                 }
                             }
                         }
+                        */
 
+                        //console.log("tempArray : ", tempArray);
                         dataList.push(tempArray);
                     }
 
@@ -2803,6 +2891,8 @@
                     breedgrid.on('click', (ev) => {
                         let header;
                         let allCol = ev.instance.store.column.allColumns;
+                        
+                        console.log("ev : ", ev);
 
                         for (let i = 0; allCol.length; i++) {
                             if (allCol[i].name == ev.columnName) {
@@ -2810,6 +2900,8 @@
                                 break;
                             }
                         }
+                        
+                        
 
                         if (ev.targetType === 'cell' && ev.columnName === 'file') {
                             let id = breedgrid.getRow(ev.rowKey).breed_id;
@@ -2827,10 +2919,19 @@
                             let e_id = breedgrid.getRow(ev.rowKey).breed_id;
 
                             EmptyBtn(e_id);
-                        } else if (ev.targetType === 'cell' && header === '파종번호') {
+                        } /* else if (ev.targetType === 'cell' && header === '파종번호') {
                             let breed_id = breedgrid.getRow(ev.rowKey).breed_id;
 
                             Search(breed_id);
+                        } */
+                        else if (ev.targetType === 'cell' && ev.columnName.includes('_checked')) {
+                        	console.log("_checked 분류 성공. modal 구현중");
+                        	
+                        	let breed_id = breedgrid.getRow(ev.rowKey).breed_id;
+                        	
+                        	let breed_detail_id = ev.columnName.replace('_checked','');
+                        	
+                            Search(breed_id, breed_detail_id);
                         }
                     });
 
@@ -2846,7 +2947,14 @@
 
                                 if (after != before) {
                                     var breed_id = breedgrid.getRow(ev.changes[i].rowKey).breed_id;
-                                    var detail_id = ev.changes[i].columnName;
+                                    console.log(breed_id);
+                                    // var detail_id = ev.changes[i].columnName;
+
+                                    if(typeof ev.changes[i].columnName === 'number') {
+                                    	var detail_id = ev.changes[i].columnName;
+                                    } else {
+                                    	var detail_id = ev.changes[i].columnName.replace('_checked','');
+                                    }
                                     var standard = after;
 
                                     if (breed_id != null) {

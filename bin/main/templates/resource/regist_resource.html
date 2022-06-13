@@ -328,7 +328,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="data_cover2 clearfix">
+                            <div class="table-responsive">
                                 <div id="headerGrid"></div>
                             </div>
                         </div>
@@ -336,49 +336,6 @@
                 </div>
             </div>
         </div>
-
-		<!--  2022-06-02 | 사진등록, 문서등록 영역 삭제
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 mb-30">
-                    <div class="card">
-                        <div class="card-extra mt-20 mr-20">
-                            <div class="data_cover1 clearfix">
-                                <span class="sub_title">추가연동</span>
-                                <div class="data_list_type" style="padding:0 0 50px 0">
-                                    <ul>
-                                        <li>
-                                            <div class="this_check">
-                                                <input type="checkbox" style="display: none">
-                                                <span class="check_box_design"></span>
-                                                <span class="check_span">사진등록</span>
-                                            </div>
-                                            <input type="text" class="style_ver">
-                                            <button type="button" class="greenop_btn" style="width: 10%;" onclick="showType(this)">적용</button>
-                                            <ul><!-- 등록 text 나오는곳 --=>
-                                            </ul>
-
-                                        </li>
-                                        <li>
-                                            <div class="this_check">
-                                                <input type="checkbox" style="display: none">
-                                                <span class="check_box_design"></span><span class="check_span">문서등록</span>
-                                            </div>
-                                            <input type="text" class="style_ver">
-                                            <button type="button" class="greenop_btn" style="width: 10%;" onclick="showTypeDocu(this)">적용</button>
-                                            <ul><!-- 등록 text 나오는곳 --=>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
-        
         <div class="btn_cover clearfix">
             <button type="button" class="gray_btn" onclick="location.href='management-resource'" style="width:130px;height:45px;padding:0;">신규등록 취소</button>
             <button type="button" class="green_btn" onclick="saveResource()" style="width:130px;height:45px;padding:0;">저장</button>
@@ -544,12 +501,18 @@
     function excelExportFile(event, callback) {
         var input = event.target;
         var reader = new FileReader();
-
+  	
         charArr = [];
         dataArr = [];
 
+        /* grid empty check
         if (headerGrid != null) {
             headerGrid.destroy();
+        }
+        */
+        
+        if($("#headerGrid").html() != null) {
+        	$("#headerGrid").empty();
         }
 
         reader.onload = function () {
@@ -560,14 +523,6 @@
             var firstSheetName = sheetNameList[0]; // 첫번째 시트명
             var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
             callback(firstSheet);
-
-            headerGrid = new tui.Grid({
-                el: document.getElementById('headerGrid'),
-                scrollX: true,
-                scrollY: false,
-                data: [],
-                columns: []
-            });
 
             var currentCount = 1;
             var endCount = 1;
@@ -592,24 +547,44 @@
 
                     charArr.push(headerArr);
                 }
-                //console.log("value? : ", value );
+                //console.log("idx : ", idx);
+                //console.log("value : ", value );
             })
 
+            console.log("charArr : ", charArr);
+            
             dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
-            headerGrid.setColumns(dataArr);
-            //console.log("dataArr : ", dataArr);
+            
+          	//console.log("dataArr : ", dataArr);
+            //dataArr[0].header += '_checked';
+            //console.log("dataArr After : ", dataArr);
 
             let bodyArr = {}
             let dataSet = [];
-
-            for(let i = 0; i < dataArr.length; i++) {
-                bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
-            }
-
+            
+            
             dataSet.push(bodyArr);
-            headerGrid.resetData(dataSet);
+            
+			let grid_str = '<table><tr>';
+			for(let i=0 ; i<dataArr.length ; i++) {
+				grid_str += '<th>' + dataArr[i].name + '</th>';
+			}
+			grid_str += '</tr>';
+			grid_str += '<tr>';
+			for(let i=0 ; i<dataArr.length ; i++) {
+				grid_str += '<td><input type="checkbox" class="anaCheck"></td>';
+			}
+			grid_str += '</tr></table>';
+			
+			//console.log(grid_str);
+			$("#headerGrid").html(grid_str);
+			
+			//console.log("innerHTML : ", document.getElementById("headerGrid").innerHTML);
+			//console.log("jQuery innerHTML : ", $("#headerGrid").html());
+			
         };
-
+        
+        
         reader.readAsBinaryString(input.files[0]);
     }
     /* e : 특성파일 추가 */
@@ -621,8 +596,8 @@
 
         inputArr = [];
 
-        if (headerGrid != null) {
-            headerGrid.destroy();
+        if($("#headerGrid").html() != null) {
+        	$("#headerGrid").empty();
         }
 
         reader.onload = function () {
@@ -632,15 +607,8 @@
             var firstSheetName = sheetNameList[0]; // 첫번째 시트명
             var firstSheet = wb.Sheets[firstSheetName]; // 첫번째 시트
             callback(firstSheet);
-
-            headerGrid = new tui.Grid({
-                el: document.getElementById('headerGrid'),
-                scrollX: true,
-                scrollY: false,
-                data: [],
-                columns: []
-            });
-
+            
+            
             var currentCount = 1;
             var endCount = 1;
 
@@ -667,17 +635,27 @@
             })
 
             dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
-            headerGrid.setColumns(dataArr);
+            
+            console.log("dataArr(header) : ", dataArr);
 
             let bodyArr = {}
             let dataSet = [];
 
-            for(let i = 0; i < dataArr.length; i++) {
-                bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
-            }
-
             dataSet.push(bodyArr);
-            headerGrid.resetData(dataSet);
+            
+            let grid_str = '<table><tr>';
+			for(let i=0 ; i<dataArr.length ; i++) {
+				grid_str += '<th>' + dataArr[i].name + '</th>';
+			}
+			grid_str += '</tr>';
+			grid_str += '<tr>';
+			for(let i=0 ; i<dataArr.length ; i++) {
+				grid_str += '<td><input type="checkbox" class="anaCheck"></td>';
+			}
+			grid_str += '</tr></table>';
+			
+			$("#headerGrid").html(grid_str);
+			
         };
 
         reader.readAsBinaryString(input.files[0]);
@@ -708,12 +686,24 @@
         if (checkName == 1) {
             let checkBox = document.getElementsByClassName("anaCheck");
             let group = $("#user_group").val();
+            
+            console.log(dataArr);
 
             for(let i = 0; i < checkBox.length; i++) {
                 if(checkBox[i].checked == true) {
                     dataArr[i].check = 1;
+                    // 2022-06-10 | 체크한 컬럼의 header(확인용 임시), name에 '_checked' 문자열 추가. 
+                    //				이후 해당 문자열 포함시 이벤트 발생
+                    console.log("i : " , i)
+                    console.log("dataArr[i].header", dataArr[i].header);
+                    console.log("dataArr[i].name", dataArr[i].name);
+                    //dataArr[i].header += '_checked';
+                    //dataArr[i].name += '_checked';
+                    dataArr[i].info = 5;					// check 이벤트를 발생시키는 기준 : detail
                 }
             }
+            
+            console.log(dataArr);
 
             let detail_count = dataArr.length;
             let dataList = JSON.stringify(dataArr);

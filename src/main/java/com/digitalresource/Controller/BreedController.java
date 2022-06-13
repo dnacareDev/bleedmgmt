@@ -261,13 +261,10 @@ public class BreedController {
 
     List<StandardList> standards = new ArrayList<StandardList>();
 
-    for (int i = 0; i < arr.length(); i++) {
+    for (int i = 1; i < arr.length(); i++) {						// 원인은 모르겠으나 arr.getJSONArray(0)이 빈 데이터. 따라서 i=0부터 시작
       JSONArray item = arr.getJSONArray(i);
 
       System.out.println("item = " + item);
-      //System.out.println("item.get(11) = " + item.get(11));
-      //System.out.println("item.get(12) = " + item.get(12));
-      //System.out.println("item.get(13) = " + item.get(13));
 
       int crop_id = Integer.parseInt(item.getString(0));
 
@@ -286,34 +283,27 @@ public class BreedController {
       int cnt = 1;
 
       for (int j = 0; j < detail.size(); j++) {
-        //System.out.println("j = " + j);
         StandardList standard = new StandardList();
 
         standard.setBreed_id(breed.getBreed_id());
         standard.setDetail_id(detail.get(j).getDetail_id());
 
-        //System.out.println("standard = " + standard);
 
         if(detail.get(j).getDetail_type() == 2) {
-          //System.out.println("cnt = " + cnt);
 
           if (cnt <= item.length()) {
             if(!item.isNull(cnt)) {
-              //System.out.println("item.get(" + cnt + ") = " + item.get(cnt));
               standard.setStandard_data((String) item.get(cnt));
             } else {
               standard.setStandard_data(null);
             }
           } else {
-            //System.out.println("check");
             standard.setStandard_data(null);
           }
 
           cnt++;
-          //System.out.println("cnt++ = " + cnt);
         } else {
           standard.setStandard_data(null);
-          //System.out.println("not cnt++ = " + cnt);
         }
 
         standards.add(standard);
@@ -416,6 +406,8 @@ public class BreedController {
     int result = 0;
 
     JSONArray arr = new JSONArray(data);
+    
+    System.out.println("arr : " + arr);
 
     for (int i = 0; i < arr.length(); i++) {
       JSONObject item = arr.getJSONObject(i);
