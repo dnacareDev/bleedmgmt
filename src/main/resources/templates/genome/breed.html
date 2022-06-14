@@ -1494,14 +1494,14 @@
 
     <!-- 연계 데이터 -->
     <div class="modal-basic modal fade show pop7" id="pop_data1" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content modal-bg-white">
                 <div class="modal-header" style="border: none">
                     <h6 class="modal-title"><span class="titleType"></span></h6>
                     <span class="breed_title"></span>
                 </div>
                 <div class="modal-body">
-                    <div class="bg-white">
+                    <div class="bg-white" id="gridGroup">
                         <div id="selectGrid"></div>
                     </div>
                 </div>
@@ -1963,6 +1963,8 @@
         
         SearchBreed(1);
         SearchBreedgrid(1);
+        
+        SearchResourceList();
     });
 
     // 작물 선택
@@ -1975,6 +1977,7 @@
         setSessionS(type_id, $("#CropSelect option:selected").val());
     })
 
+    
     // 갯수 선택
     $("#limit").change(function () {
         breedgrid.destroy();
@@ -1983,6 +1986,26 @@
         SearchBreedgrid(1);
     })
 
+
+    var resource_list =[];
+    
+    // 2022-06-13 | document.ready에서 resource-list를 재호출하고 필요데이터를 전역변수화 
+    function SearchResourceList() {
+    	$.ajax({
+            url: "resource-list",
+            method: "POST",
+            dataType: "json",
+            success: function (result) {
+            	console.log('resource-list result : ', result);
+            	//console.log("result.resourceList data를 전역변수화시켜야 함");
+            	
+            	resource_list = result.resourceList;
+            }
+    	});
+    }
+    
+
+    
     // 품종 삭제
     function DeleteBreed() {
         var user_type = $("#user_type").val();
@@ -2454,16 +2477,192 @@
     }
 
     /* s : 파종번호 모달창 */
+    
+    /* 코드 일시중지 (1초) */
+    function sleep(num) {
+    	var now = new Date();
+    	var stop = now.getTime() + num;
+    	//console.log("sleep...");
+    	while(true)	{
+    		now = new Date();
+    		if(now.getTime() > stop) return;
+    	}
+    }
+    
     let selectgrid = [];
     //let selectgrid = null;
 
-    function Search(e, v) {
-        $("#pop_data1").modal();
+    function Search(e, d, v) {
+    	
+    	selectgrid = [];
+    	
+    	console.log("list : ", resource_list);
+    	
+    	$("#pop_data1").modal();
         //$(".titleType").text("파종대장");
         $(".titleType").empty();
+    	
+    	for(let i=0 ; i<resource_list.length ; i++) {
+    		
+    		// resource_list의 숫자만큼 div 생성. 그리드를 생성할 영역 준비
+    		let grid_list_str = '<div id=grid_' + resource_list[i].resource_name_id + '>';
+    		grid_list_str += '</div>';
+    		$("#gridGroup").append(grid_list_str);
+    		
+    		
+    		let breed_id = e;
+            let breed_detail_name = d;
+            let cell_value = v;
+            let crop_id = $("#CropSelect").val();
+            let resource_name = $(".manage")[0].innerText;
+            //let limit = $("#limit").val();
+            
+            let data = {"breed_id": resource_list[i].resource_name_id, "crop_id": crop_id, "resource_name": resource_list[i].resource_name};
+    	
+            
+            //console.log("resource_list[i] : ", resource_list[i]);
+
+            // 각 resource_list에 해당하는 그리드 데이터 조회
+            $.ajax(
+                    {
+                        url: 'searchHeader',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: data,
+                        success: function (result) {
+                        	console.log("result grid_ ", resource_list[i].resource_name_id, " : ", result );
+                        	
+                        	
+                        	//클릭한 cell의 컬럼명(breed_detail_name)이 없다면 그리드 출력에서 제외 + 몇번째 컬럼인지 변수로 저장
+                        	let flag = false;
+                        	let nth_column = null;
+                        	for(let i=0 ; i<result.detail.length ; i++) {
+                        		if(breed_detail_name == result.detail[i].detail_name) {
+                        			flag = true;
+                        			nth_column = i;
+                        			console.log("flag true")
+                        			console.log("nth_column : ", nth_column);
+                        			break;
+                        		}
+                        	}
+                        	if(!flag) 
+                        		return;
+
+                        	
+                        	//데이터가 없을 경우 || 현재 관리대장과 일치하는 데이터일 경우(필요없으므로) 그리드 출력에서 제외
+                        	if(result.breed.length == 0 /*|| resource_list[i].resource_name == "[[${type}]]"*/ ){
+                        		return;
+                        	} 
+
+                        	$("#grid_" + resource_list[i].resource_name_id).text(resource_list[i].resource_name);
+
+                        	// 한번에 모든 데이터를 불러올 경우 정상적인 출력이 되지않으므로 시간차를 주는 함수.
+                        	// 현재 1초로 설정했으나 정상출력되는지 여부에 따라 유동적으로 변경한다
+                        	sleep(1000);
+
+                        	// 그리드 출력시 cell과 일치하는 데이터만 필터링하여 출력해야 함
+                        	selectgrid[i] = new tui.Grid({
+                                el: document.getElementById('grid_' + resource_list[i].resource_name_id),
+                                scrollX: true,
+                                scrollY: false,
+                                data: [],
+                                editingEvent: 'click',
+                                columns: [],
+                                pageOptions: {
+                                    useClient: true,
+                                    perPage: 10
+                                }
+                            });
+                        	
+                        	const headerArr = [];
+
+                            let headerName = [];
+                            let colName = [];
+                            
+                            for (let j = 0; j < result.detail.length; j++) {
+                                let colHeader = result.detail[j].detail_name;
+                                colName[j] = result.detail[j].detail_id;
+
+                                headerName[colName[j]] = result.detail[j].detail_id;
+
+                                let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
+
+                                let arr = {}
+
+                                if (result.detail[j].detail_info == 1 || result.detail[j].detail_info == 2) {
+                                    arr = {'header': colHeader, 'name': colName[j], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter, align: 'center'}
+                                } else if (result.detail[j].detail_info == 4) {
+                                    continue;
+                                } else {
+                                    arr = {'header': colHeader, 'name': colName[j], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter, align: 'center'}
+                                }
+
+                                headerArr.push(arr);
+                            }
+
+                            selectgrid[i].setColumns(headerArr);
+                            
+                            
+                            // standard에 있는 데이터값을 그리드에 입력
+                            const dataList = [];
+
+                            for (let j = 0; j < result.breed.length; j++) {
+                                let data = result.breed[j].standardList;
+                                let tempArray = {};
+
+                                // console.log(data);
+                                
+                                tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                                tempArray['breed_id'] = result.breed[j].breed_id;
+
+                                if (result.breed[j].detail_count == 0) {
+                                    tempArray['status'] = '<span style="color:red">EMPTY</span>';
+                                } else {
+                                    tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
+                                }
+                                
+                                
+                                for (let k = 1; k < headerName.length; k++) {
+                                    if ((typeof headerName[colName[k - 1]]) === 'string') {
+                                        tempArray[headerName[colName[k - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                                    } else if ((typeof headerName[colName[k - 1]]) === 'number') {
+                                        if (headerName[colName[k - 1]] == data[k - 1].detail_id) {
+                                            tempArray[headerName[colName[k - 1]]] = data[k - 1].standard_data;
+                                        }
+                                    }
+                                }
+                                
+                                
+                                /*
+                                for (let j = 1; j < headerName.length; j++) {
+                                    if ((typeof headerName[colName[j - 1]]) === 'string') {
+                                        tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                                    } else if ((typeof headerName[colName[j - 1]]) === 'number') {
+                                        if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
+                                            tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
+                                        }
+                                    }
+                                }
+                                */
+
+                                //console.log("tempArray : ", tempArray);
+                                dataList.push(tempArray);
+                            }
+
+                            selectgrid[i].resetData(dataList);
+                            
+                        }
+            });
+            
+            
+            
+    	}
+    	
+
 
         let breed_id = e;
-        let breed_detail_id = v;
+        let breed_detail_id = d;
+        let cell_value = v;
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
         let limit = $("#limit").val();
@@ -2473,202 +2672,7 @@
 
         console.log("data : ", data);
         
-        /*
-        $.ajax({
-            url: "resource-list",
-            method: "POST",
-            dataType: "json",
-            success: function (resource_list) {
-
-                console.log('resource_list : ', resource_list);
-
-                
-                for(let k=0 ; k<resource_list.resourceList.length ; k++) {
-                	console.log("k : ",k);
-                	var grid_id = resource_list.resourceList.resource_name_id
-                	$.ajax(
-                            {
-                                url: 'searchHeader',
-                                method: 'POST',
-                                dataType: 'json',
-                                data: data,
-                                success: function (result) {
-                                	
-                                	console.log('selectGrid'+k+1);
-                                	
-                                	console.log("searchHeader result : ", result);
-                                	
-                                	
-                                    selectgrid[k] = new tui.Grid({
-                                        el: document.getElementById('selectGrid'+k+1),
-                                        scrollX: true,
-                                        scrollY: false,
-                                        data: [],
-                                        editingEvent: 'click',
-                                        columns: [],
-                                        pageOptions: {
-                                            useClient: true,
-                                            perPage: limit
-                                        }
-                                    });
-
-                                    const headerArr = [];
-
-                                    let headerName = [];
-                                    let colName = [];
-
-                                    for (let i = 0; i < result.detail.length; i++) {
-                                        let colHeader = result.detail[i].detail_name;
-                                        colName[i] = result.detail[i].detail_id;
-
-                                        headerName[colName[i]] = result.detail[i].detail_id;
-
-                                        let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
-
-                                        let arr = {}
-
-                                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-                                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
-                                        } else if (result.detail[i].detail_info == 3) {
-                                            if (result.detail[i].detail_type == 0) {
-                                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
-                                                headerName[colName[i]] = 'img' + colName[i];
-                                            } else if (result.detail[i].detail_type == 1) {
-                                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
-                                                headerName[colName[i]] = 'doc' + colName[i];
-                                            }
-                                        } else if (result.detail[i].detail_info == 4) {
-                                            continue;
-                                        } else {
-                                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
-                                        }
-
-                                        headerArr.push(arr);
-                                    }
-
-                                    selectgrid[k].setColumns(headerArr);
-
-                                    
-                                    
-                                }
-                            });
-                }
-                
-            }
-        })
-        */
-        
-        
-        $.ajax(
-            {
-                url: 'searchHeader',
-                method: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                	
-                	console.log("searchHeader result : ", result);
-                
-                	// 2022-06-12 | cell과 연동되는 modal창의 title 출력
-                	for(let i=0 ; i<result.detail.length ; i++) {
-                		if(breed_detail_id == result.detail[i].detail_id) {
-		                	$(".titleType").text(result.detail[i].detail_name);
-                			break;
-                		}
-                	}
-                	
-                    selectgrid = new tui.Grid({
-                        el: document.getElementById('selectGrid'),
-                        scrollX: true,
-                        scrollY: false,
-                        data: [],
-                        editingEvent: 'click',
-                        columns: [],
-                        pageOptions: {
-                            useClient: true,
-                            perPage: limit
-                        }
-                    });
-
-                    const headerArr = [
-                        {
-                            'header': '첨부파일',
-                            'name': 'file',
-                            'width': 50,
-                        },
-                        {
-                            'header': '특성상태',
-                            'name': 'status',
-                            'width': 150,
-                        }
-                    ];
-                    
-                    //const headerArr = [];
-
-                    let headerName = [];
-                    let colName = [];
-
-                    for (let i = 0; i < result.detail.length; i++) {
-                        let colHeader = result.detail[i].detail_name;
-                        colName[i] = result.detail[i].detail_id;
-
-                        headerName[colName[i]] = result.detail[i].detail_id;
-
-                        let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
-
-                        let arr = {}
-
-                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter};
-                        } else if (result.detail[i].detail_info == 3) {
-                            if (result.detail[i].detail_type == 0) {
-                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
-                                headerName[colName[i]] = 'img' + colName[i];
-                            } else if (result.detail[i].detail_type == 1) {
-                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
-                                headerName[colName[i]] = 'doc' + colName[i];
-                            }
-                        } else if (result.detail[i].detail_info == 4) {
-                            continue;
-                        } /*else if (result.detail[i].detail_info == 5) {
-                        	arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter};
-                        	headerName[colName[i]] = colName[i] + '_checked';
-                        } */else {
-                        	console.log("info==5");
-                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
-                        }
-                        
-                        
-//                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-//                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter}
-//                        } else if (result.detail[i].detail_info == 3) {
-//                            if (result.detail[i].detail_type == 0) {
-//                                arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
-//                                headerName[colName[i]] = 'img' + colName[i];
-//                            } else if (result.detail[i].detail_type == 1) {
-//                                arr = {'header': colHeader, 'name': 'doc' + colName[i], 'width': 100, 'info': 'doc'};
-//                                headerName[colName[i]] = 'doc' + colName[i];
-//                            }
-//                        } else if (result.detail[i].detail_info == 4) {
-//                            continue;
-//                        } else {
-//                            arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter}
-//                        }
-                        
-                        
-                        headerArr.push(arr);
-                    }
-
-                    console.log("headerArr : ", headerArr);
-                    
-                    selectgrid.setColumns(headerArr);
-                    
-                    
-                }
-            });
-        
-        
-        
+       
     }
 
     /* e : 파종번호 모달창 */
@@ -2676,7 +2680,8 @@
     /* s : 모달창 닫힐 때 이벤트 발생 */
     $(document).ready(function () {
         $('#pop_data1').on('hidden.bs.modal', function () {
-            selectgrid.destroy();
+            //selectgrid.destroy();
+            $('#gridGroup').empty();
         });
     });
     /* e : 모달창 닫힐 때 이벤트 발생 */
@@ -2708,7 +2713,6 @@
                         scrollX: true,
                         scrollY: false,
                         data: result.breed,
-                        //header: {align: 'left'},
                         rowHeaders: ['checkbox'],
                         columns: [],
                         pageOptions: {
@@ -2775,16 +2779,6 @@
                     for (let i = 0; i < result.detail.length; i++) {
                         let colHeader = result.detail[i].detail_name;
                         
-                        /*
-                        let colHeader = "";
-                        
-                        if(result.detail[i].detail_name.includes('_checked')) {
-                    		colHeader = result.detail[i].detail_name.replace('_checked','');
-                    	} else {
-	                        colHeader = result.detail[i].detail_name;
-                    	}
-                        */
-                        
                         colName[i] = result.detail[i].detail_id;
 
                         headerName[colName[i]] = result.detail[i].detail_id;
@@ -2794,7 +2788,7 @@
                         let arr = {}
 
                         if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 400, 'filter': filter,'align': 'center'};
+                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 200, 'filter': filter,'align': 'center'};
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
                                 arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
@@ -2806,7 +2800,7 @@
                         } else if (result.detail[i].detail_info == 4) {
                             continue;
                         } else if (result.detail[i].detail_info == 5) {
-                        	arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 400, 'filter': filter, 'align': 'center'};
+                        	arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 200, 'filter': filter, 'align': 'center'};
                         	headerName[colName[i]] = colName[i] + '_checked';
                         } else {
                             arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter, 'align': 'center'}
@@ -2820,10 +2814,16 @@
                  	// 2022-06-02 | export option 설정 //////////////////////////
                     let headerArrKeys = [];
                     for(let i=0 ; i<headerArr.length ; i++) {			
-                    	if(isNaN(headerArr[i].name)) continue;
+                    	if(isNaN(headerArr[i].name)) {
+                    		if(isNaN(headerArr[i].name.replace('_checked',''))) 
+                    			continue;
+                    		else	
+                    			headerArrKeys.push(headerArr[i].name);
+                    		
+                    	}
                     	headerArrKeys.push(headerArr[i].name);
                     }
-                    console.log("headerArrKeys(=> colheader key)", headerArrKeys);
+                    console.log("headerArrKeys(excel header)", headerArrKeys);
                     const breedgridExportOption = { fileName: $(".manage")[0].innerText ,
 													columnNames: headerArrKeys }		
                     ////////////////////////////////////////////////////////////
@@ -2889,18 +2889,19 @@
                     })
 
                     breedgrid.on('click', (ev) => {
-                        let header;
-                        let allCol = ev.instance.store.column.allColumns;
+                        //let header;
+                        //let allCol = ev.instance.store.column.allColumns;
                         
                         console.log("ev : ", ev);
 
+                        /*
                         for (let i = 0; allCol.length; i++) {
                             if (allCol[i].name == ev.columnName) {
                                 header = allCol[i].header
                                 break;
                             }
                         }
-                        
+                        */
                         
 
                         if (ev.targetType === 'cell' && ev.columnName === 'file') {
@@ -2919,21 +2920,48 @@
                             let e_id = breedgrid.getRow(ev.rowKey).breed_id;
 
                             EmptyBtn(e_id);
-                        } /* else if (ev.targetType === 'cell' && header === '파종번호') {
-                            let breed_id = breedgrid.getRow(ev.rowKey).breed_id;
-
-                            Search(breed_id);
-                        } */
-                        else if (ev.targetType === 'cell' && ev.columnName.includes('_checked')) {
-                        	console.log("_checked 분류 성공. modal 구현중");
-                        	
+                        }  else if (ev.targetType === 'cell' && ev.columnName.includes('_checked')) {
                         	let breed_id = breedgrid.getRow(ev.rowKey).breed_id;
+                        	let breed_detail_name = null;
                         	
-                        	let breed_detail_id = ev.columnName.replace('_checked','');
+                        	console.log("value : ", breedgrid.getValue(ev.rowKey, ev.columnName));
                         	
-                            Search(breed_id, breed_detail_id);
-                        }
+                        	// cell값이 비어있을 경우 검색없이 return
+                        	if(!breedgrid.getValue(ev.rowKey, ev.columnName)) {
+                        		alert("빈값은 검색할 수 없습니다.");
+                        		return;
+                        	}
+                        	
+                        	for(let i=0 ; i<headerArr.length ; i++) {
+                        		if(ev.columnName == headerArr[i].name) {
+                        			breed_detail_name = headerArr[i].header;
+                        			break;
+                        		}
+                        	}
+                        	
+                        	//console.log("breed_detail_name : ", breed_detail_name);
+                        	
+                            Search(breed_id, breed_detail_name, breedgrid.getValue(ev.rowKey, ev.columnName));
+                        } 
+                        
                     });
+                    
+                    /* alert를 띄웠지만 불편함. header를 간단한 툴팁으로 띄우는 방법이 필요
+                    breedgrid.on('mouseover', (ev) => {
+                    	if (ev.targetType === 'columnHeader') {
+                        	for(let j=0 ; j<result.detail.length ; j++) {
+                        		if( ev.columnName == result.detail[j].detail_id) {
+                        			alert(result.detail[j].detail_name);
+                        			break;
+                        		} else if(ev.columnName.replace('_checked','') == result.detail[j].detail_id) {
+                        			alert(result.detail[j].detail_name);
+                        			break;
+                        		}
+                        	}
+                    	}
+                    });
+                    */
+                    
 
                     breedgrid.on('afterChange', (ev) => {
                         var user_type = $("#user_type").val();
