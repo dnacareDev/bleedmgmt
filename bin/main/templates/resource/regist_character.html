@@ -311,6 +311,18 @@
                             <div class="data_cover1 clearfix">
                                 <div class="data_type data_type1">
                                     
+                                    <!--  
+                                    <input list="selectCategory" onchange="getCrop(this)" id="cropCategory"> 
+                                    <datalist id="selectCategory" >
+                                    	<option value="-1" selected disabled hidden>작물구분</option>
+						
+                                        <th:block th:each="cat : ${cropCategoryList}" >
+                                            <option th:value="${cat.category_id}" th:text="${cat.category_name}"></option>
+                                        </th:block>
+                                    </datalist>
+                                    -->
+                                    
+                                     
                                     <select name="selectCategory" onchange="getCrop(this)" id="cropCategory">
                                         <option value="-1" selected disabled hidden>작물구분</option>
 

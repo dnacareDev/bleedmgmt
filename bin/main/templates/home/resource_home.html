@@ -245,13 +245,13 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
+                    	<!--  
                     	<p class="color-primary fa-lg mb-3 mt-5 ml-3">관리대장 상황</p>
-                        <div class="card-body" style="height: auto;">
+                    	-->
+                        <div class="card-body" style="height: 600px;">
                             <div id="doughnut" class="slick-slider slick-dots-bottom" data-dots-slick='true'>
                                 <div class="slick-slider__single d-flex">
-                                    <!--  
-                                    <p class="color-primary" style="color: black;  width: 100%; padding-bottom: 10px;">관리대장 상황</p>
-                                    -->
+                                    <p class="color-primary fa-lg mb-3 mt-5 ml-3">관리대장 상황</p>
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: right;" name="selectCrop" id="CropSelect">
                                         <th:block th:each="list : ${cropList}">
                                             <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
@@ -268,7 +268,7 @@
                                                 </ul>
                                             </div>
                                              -->
-                                            <canvas id="bar1" style="height: 210px; width: 100%;"></canvas>
+                                            <canvas id="bar1" style="height: 400px; width: 100%;"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -284,7 +284,7 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <p class="color-primary fa-lg mb-3 mt-5 ml-3">작목별 관리 현황</p>
-                        <div class="card-body">
+                        <div class="card-body" style="height: auto;">
                             <!--  
                             <div class="labels">
                                 <ul class="selector">
@@ -295,7 +295,7 @@
                             </div>
                             -->
                             <div>
-                                <canvas id="bar2" style="height: 344px; width:100%"></canvas>
+                                <canvas id="bar2" style="height: 444px; width:100%"></canvas>
                             </div>
                         </div>
                     </div>
@@ -303,7 +303,7 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <p class="color-primary fa-lg mb-3 mt-5 ml-3">등록 자료 현황</p>
-                        <div class="card-body">
+                        <div class="card-body" style="height: auto;">
                             <div class="container">
                                 <canvas id="bar3" style="height: 368px; width:100%"></canvas>
                             </div>
@@ -431,25 +431,25 @@
                 
 				for (let i = 0; i < label.length; i++) {
                    
-	               	color1 += 53;
-	                   color2 += 47;
-	                   color3 += 39;
+	               	color1 += 33;
+	                   color2 += 67;
+	                   color3 += 89;
 	               	
-	               	if(color1 > 255) {
-	                   	color1 -= 255;
+	               	if(color1 > 200) {
+	                   	color1 -= 200;
 	                   }
 	               	
-	               	if(color2 > 255) {
-	                   	color2 -= 255;
+	               	if(color2 > 200) {
+	                   	color2 -= 150;
 	                   }
 	               	
-	               	if(color3 > 255) {
-	                   	color3 -= 255;
+	               	if(color3 > 200) {
+	                   	color3 -= 130;
 	                   }
 
 	                var dataset = {
 	                    label: label[i],
-	                    data: count[i],
+	                    data: data[i],
 	                    backgroundColor: 'rgb(' + color1 + ', ' + color2 + ', ' + color3 + ')',
 	                    //stack: 'Stack 0',
 	                    //stackSeries: true
@@ -558,26 +558,26 @@
 
                 var bar2 = new Chart(ctx2, config2);
 
-                var color1 = 29;
+                var color1 = 89;
                 var color2 = 51;
                 var color3 = 137;
                 
                 for (let i = 0; i < label.length; i++) {
                     
-                	color1 += 53;
-                    color2 += 47;
-                    color3 += 39;
+                	color1 += 33;
+                    color2 += 67;
+                    color3 += 89;
                 	
-                	if(color1 > 180) {
-                    	color1 -= 180;
+                	if(color1 > 200) {
+                    	color1 -= 200;
                     }
                 	
-                	if(color2 > 255) {
-                    	color2 -= 255;
+                	if(color2 > 200) {
+                    	color2 -= 150;
                     }
                 	
-                	if(color3 > 255) {
-                    	color3 -= 255;
+                	if(color3 > 200) {
+                    	color3 -= 130;
                     }
                 	
                 	

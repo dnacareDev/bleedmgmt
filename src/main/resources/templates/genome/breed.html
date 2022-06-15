@@ -2530,7 +2530,6 @@
                         dataType: 'json',
                         data: data,
                         success: function (result) {
-                        	console.log("result grid_ ", resource_list[i].resource_name_id, " : ", result );
                         	
                         	
                         	//클릭한 cell의 컬럼명(breed_detail_name)이 없다면 그리드 출력에서 제외 + 몇번째 컬럼인지 변수로 저장
@@ -2545,19 +2544,23 @@
                         			break;
                         		}
                         	}
-                        	if(!flag) 
+                        	if(!flag) {
                         		return;
+                        	}
 
                         	
+                        	console.log("result grid_ ", resource_list[i].resource_name_id, " : ", result );
+                        	
+                        	
                         	//데이터가 없을 경우 || 현재 관리대장과 일치하는 데이터일 경우(필요없으므로) 그리드 출력에서 제외
-                        	if(result.breed.length == 0 /*|| resource_list[i].resource_name == "[[${type}]]"*/ ){
+                        	if(result.breed.length == 0 || resource_list[i].resource_name == "[[${type}]]" ){
                         		return;
                         	} 
 
                         	$("#grid_" + resource_list[i].resource_name_id).text(resource_list[i].resource_name);
 
                         	// 한번에 모든 데이터를 불러올 경우 정상적인 출력이 되지않으므로 시간차를 주는 함수.
-                        	// 현재 1초로 설정했으나 정상출력되는지 여부에 따라 유동적으로 변경한다
+                        	// 현재 1000ms = 1초로 설정했으나 정상출력되는지 여부에 따라 유동적으로 변경한다
                         	sleep(1000);
 
                         	// 그리드 출력시 cell과 일치하는 데이터만 필터링하여 출력해야 함
@@ -2602,7 +2605,6 @@
 
                             selectgrid[i].setColumns(headerArr);
                             
-                            
                             // standard에 있는 데이터값을 그리드에 입력
                             const dataList = [];
 
@@ -2610,8 +2612,9 @@
                                 let data = result.breed[j].standardList;
                                 let tempArray = {};
 
-                                // console.log(data);
+                                //console.log("data : ", data);
                                 
+                                /*
                                 tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                                 tempArray['breed_id'] = result.breed[j].breed_id;
 
@@ -2620,17 +2623,32 @@
                                 } else {
                                     tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
                                 }
+                                */
                                 
                                 
+                                
+                                // 데이터를 그리드 cell에 입력
                                 for (let k = 1; k < headerName.length; k++) {
+                                	
+                                	// cell_value값이 아닐경우 출력제외
+                                	if(cell_value != data[nth_column].standard_data){
+	                                	continue;
+	                                }
+                                	
                                     if ((typeof headerName[colName[k - 1]]) === 'string') {
                                         tempArray[headerName[colName[k - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                                     } else if ((typeof headerName[colName[k - 1]]) === 'number') {
+                                    	//console.log(tempArray[headerName[colName[k - 1]]], " vs ", data[k - 1].standard_data);
                                         if (headerName[colName[k - 1]] == data[k - 1].detail_id) {
-                                            tempArray[headerName[colName[k - 1]]] = data[k - 1].standard_data;
+	                                        tempArray[headerName[colName[k - 1]]] = data[k - 1].standard_data;
+        	                                
                                         }
                                     }
                                 }
+                                
+                                // 데이터 필터링 콘솔 
+                                console.log(cell_value, " vs ", data[nth_column].standard_data);
+                                
                                 
                                 
                                 /*
@@ -2646,7 +2664,13 @@
                                 */
 
                                 //console.log("tempArray : ", tempArray);
-                                dataList.push(tempArray);
+                                
+                                // 필터링되었을 경우 dataList에 밀어넣지 않음
+                                if(cell_value != data[nth_column].standard_data){
+                                	continue;
+                                } else {
+	                                dataList.push(tempArray);
+                                }
                             }
 
                             selectgrid[i].resetData(dataList);
@@ -2802,11 +2826,16 @@
                         } else if (result.detail[i].detail_info == 5) {
                         	arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 200, 'filter': filter, 'align': 'center'};
                         	headerName[colName[i]] = colName[i] + '_checked';
+                        	
+                        	// detail_info==5 일때 파란색, 밑줄, 포인터 css 적용하도록 코드 삽입
+                        	
                         } else {
                             arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter, 'align': 'center'}
                         }
 
                         headerArr.push(arr);
+                        
+                        
                     }
                     
                     console.log("headerArr : ", headerArr);

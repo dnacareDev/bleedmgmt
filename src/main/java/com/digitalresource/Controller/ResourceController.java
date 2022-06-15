@@ -57,7 +57,7 @@ public class ResourceController {
   public ModelAndView registResourcePage(ModelAndView mv, Authentication auth) {
     List<Crop> cropList = cropService.selectCropList();
     User user = (User)auth.getPrincipal();
-
+    
     mv.addObject("user", user);
     mv.addObject("cropList", cropList);
 

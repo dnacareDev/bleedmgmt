@@ -113,6 +113,8 @@
 <body class="layout-light top-menu overlayScroll">
 <div class="mobile-search"></div>
 <div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
 <th:block th:include="/../fragments/topbar.html"></th:block>
 <main class="main-content">
 	<div class="container-fluid">
@@ -180,14 +182,31 @@
 	});
 	
     /* s : 파일 이름 출력 */
+    /* 
     window.onload = function () {
+        let target = document.getElementById('filed');
+        // target = document.getElementById('filed');
+        target.addEventListener('change', function () {
+            let fileList = target.files[0].name;
+            // target2 = document.getElementById('file-label');
+            let target2 = document.getElementById('file-label');
+            target2.innerHTML = fileList;
+        });
+        
+    }
+	*/
+	
+	// 2022-06-15 | window.onload가 문제인거 같아서 document.ready로 수정
+	// 해결. 파일 업로드시 파일명도 정상출력. 서버에 배포해서 그림이 제대로 나오는지는 추후 확인
+	$(document).ready(function () {
         target = document.getElementById('filed');
         target.addEventListener('change', function () {
             fileList = target.files[0].name;
             target2 = document.getElementById('file-label');
             target2.innerHTML = fileList;
-        })
-    }
+        });
+	});
+	
     /* e : 파일 이름 출력 */
 </script>
 <!-- 공통 하단 -->
