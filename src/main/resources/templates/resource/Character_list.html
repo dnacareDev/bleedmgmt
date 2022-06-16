@@ -1037,7 +1037,6 @@
                             'crop_name': result.trait[i].crop_name,
                             'trait_description': result.trait[i].trait_description,
                             'trait_year': result.trait[i].trait_year,
-                            //'trait_file': '<div data-value="' + result.trait[i].trait_file + '">download</div>',
                             'trait_file': '<a href="upload/' + result.trait[i].trait_file + '" download=><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
                             'create_date': result.trait[i].create_date
                         }
@@ -1085,34 +1084,6 @@
                         }
 
                     });
-
-                    /* 셀 클릭이벤트를 다운로드 아이콘으로 변경
-                    traitGrid.on('click', (ev) => {
-                        if (ev.targetType === 'cell' && ev.columnName === 'trait_file') {
-                            let value = ev.nativeEvent.srcElement;
-                            let fileName = value.dataset.value;
-
-                            if (fileName == 'null' || fileName == undefined) {
-                                return Alert1("파일이 존재하지 않습니다.")
-                            } else {
-
-                                let a = document.createElement('a');
-                                a.style.display = 'none';
-                                a.href = '/upload?filename=' + value.dataset.value;
-                                // document.body.appendChild(a);
-                                // a.click();
-                                $.get(a.href)
-                                    .done(function () {
-                                        document.body.appendChild(a);
-                                        a.click();
-                                    }).fail(function () {
-                                    return Alert1("파일이 존재하지 않습니다!")
-                                })
-
-                            }
-                        }
-                    });
-                    */
                 }
 
             });

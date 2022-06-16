@@ -46,6 +46,9 @@ public class BreedController {
 
   @Autowired
   private FileController fileController;
+  
+  @Autowired
+  private LogService logService;
 
   @RequestMapping("/breed")
   public ModelAndView breed(Authentication auth, ModelAndView mv, @RequestParam(value = "type") String type, @RequestParam(value = "id") int resource_id, @RequestParam(value = "crop_id", required = false) int crop_id) {
@@ -132,6 +135,10 @@ public class BreedController {
     int[] arr_breed = Arrays.stream(str).mapToInt(Integer::parseInt).toArray();
 
     datalistService.DeleteList(arr_breed);
+    
+    // 로그 추가
+    //logService.LogDeleteBreed(arr_breed.length, arr_breed[0]);
+    
 
     return result;
   }
