@@ -32,7 +32,7 @@ public class LogController {
 	@RequestMapping("/searchLog")
 	public Map<String, Object> searchResource() {
 		Map<String, Object> result = new HashMap<>();
-		System.out.println("aaa");
+
 		List<LogList> logList = logService.searchLog();
 		result.put("logList", logList);
 		

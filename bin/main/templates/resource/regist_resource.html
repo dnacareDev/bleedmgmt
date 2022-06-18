@@ -543,7 +543,7 @@
                 }
 
                 if (!idx.startsWith('!')) {
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 1, "check": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 1, "check": 0, 'click': 0};
 
                     charArr.push(headerArr);
                 }
@@ -595,6 +595,7 @@
         var reader = new FileReader();
 
         inputArr = [];
+        dataArr = [];
 
         if($("#headerGrid").html() != null) {
         	$("#headerGrid").empty();
@@ -628,7 +629,7 @@
                 }
 
                 if (!idx.startsWith('!')) {
-                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0, "check": 0};
+                    headerArr = {'header': value.v, 'name': value.v, 'width': 120, 'type': 2, "info": 0, "check": 0, 'click': 0};
 
                     inputArr.push(headerArr);
                 }
@@ -699,7 +700,10 @@
                     console.log("dataArr[i].name", dataArr[i].name);
                     //dataArr[i].header += '_checked';
                     //dataArr[i].name += '_checked';
-                    dataArr[i].info = 5;					// check 이벤트를 발생시키는 기준 : detail
+                    //dataArr[i].info = 5;					// check 이벤트를 발생시키는 기준 : detail
+                    
+                    // 2022-06-18 | data_info=5를 data_click=1로 변경
+                    dataArr[i].click = 1;
                 }
             }
             
@@ -752,7 +756,72 @@
 
         desArr = [];
         dataArr = [];
+        
+        if($("#headerGrid").html() != null) {
+        	$("#headerGrid").empty();
+        }
 
+        $.ajax({
+            url: "featureHeadList",
+            POST: "GET",
+            dataTyp: "json",
+            data: data,
+            success: function (result) {
+                
+
+                var currentCount = 1;
+                var endCount = 1;
+
+                $.each(result, function (idx, value) {
+
+                    if (currentCount > endCount)
+                        return;
+
+                    if (value.t == "n" && value.v == endCount && value.w == "1") {
+                        currentCount++;
+                        return;
+                    }
+
+                    let header = value.feature_num + ". " + value.feature_name;
+                    headerArr = {'header': header, 'name': header, 'width': 300, "type": 2, "info": 2, "check": 0};
+                    desArr.push(headerArr);
+                });
+
+                dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
+                //headerGrid.setColumns(dataArr);
+
+                let bodyArr = {}
+                let dataSet = [];
+
+                /*
+                for(let i = 0; i < dataArr.length; i++) {
+                    bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
+                }
+                */
+
+                dataSet.push(bodyArr);
+                
+                let grid_str = '<table><tr>';
+    			for(let i=0 ; i<dataArr.length ; i++) {
+    				grid_str += '<th>' + dataArr[i].name + '</th>';
+    			}
+    			grid_str += '</tr>';
+    			grid_str += '<tr>';
+    			for(let i=0 ; i<dataArr.length ; i++) {
+    				grid_str += '<td><input type="checkbox" class="anaCheck"></td>';
+    			}
+    			grid_str += '</tr></table>';
+    			
+    			//console.log(grid_str);
+    			$("#headerGrid").html(grid_str);
+                
+                //headerGrid.resetData(dataSet);
+
+                featureFileName = result[0].feature_file;
+            }
+        })
+        
+        /*
         if (headerGrid != null) {
             headerGrid.destroy();
         }
@@ -805,6 +874,7 @@
                 featureFileName = result[0].feature_file;
             }
         })
+        */
     }
 
     let digitalCheckEl = document.querySelector("#digitalCheckBox");

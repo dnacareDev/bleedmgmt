@@ -9,6 +9,8 @@ import lombok.ToString;
 @ToString
 public class LogList {
 	private int log_id;
+	private String log_user_id_name;
+	private String log_user_name;
 	private String log_contents;
 	private String log_create_date;
 }

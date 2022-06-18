@@ -112,9 +112,11 @@ public class BreedController {
 
   @ResponseBody
   @RequestMapping("insertBreed2")
-  public int insertBreed(Authentication auth, @RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name, @RequestParam(value = "type_check") int type_check) {
+  public int insertBreed(Authentication auth, @RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name, @RequestParam(value = "type_check") int type_check, @RequestParam(value = "log_contents") String log_contents) {
     int result = 0;
 
+    System.out.println("log_contents"+log_contents);
+    
     User user = (User) auth.getPrincipal();
     int group = user.getUser_group();
 
@@ -122,13 +124,20 @@ public class BreedController {
 
     result = breedService.insertBreed(resource_id, data, crop_id, resource_name, type_check, group);
 
+    String userIdName = user.getUser_username(); 
+	String userName = user.getUser_name();
+    logService.RecordLog(userIdName, userName, log_contents);
+    
     return result;
   }
 
   @ResponseBody
   @RequestMapping("deleteBreed")
-  public int deleteBreed(String breed_id) {
-    int result = breedService.deleteBreed(breed_id);
+  public int deleteBreed(Authentication auth, String breed_id, @RequestParam("log_contents") String log_contents) {
+    
+	User user = (User)auth.getPrincipal();
+	
+	int result = breedService.deleteBreed(breed_id);
 
     String[] str = breed_id.split(",");
 
@@ -136,8 +145,10 @@ public class BreedController {
 
     datalistService.DeleteList(arr_breed);
     
-    // 로그 추가
-    //logService.LogDeleteBreed(arr_breed.length, arr_breed[0]);
+    // 삭제시 사용이력에 로그 기록
+    String userIdName = user.getUser_username(); 
+	String userName = user.getUser_name();
+    logService.RecordLog(userIdName, userName, log_contents);
     
 
     return result;
@@ -261,14 +272,19 @@ public class BreedController {
 
   @ResponseBody
   @RequestMapping("excelBreed")
-  public int excelUpload(@RequestParam("excel_list") String excel_list, @RequestParam("resource_id") int resource_id, @RequestParam("type_check") int type_check, @RequestParam("user_group") int user_group) {
+  public int excelUpload(Authentication auth, 
+		  				@RequestParam("excel_list") String excel_list, 
+		  				@RequestParam("resource_id") int resource_id, 
+		  				@RequestParam("type_check") int type_check, 
+		  				@RequestParam("user_group") int user_group, 
+		  				@RequestParam("resource_name") String resource_name) {
     JSONArray arr = new JSONArray(excel_list);
 
     System.out.println("arr = " + arr);
 
     List<StandardList> standards = new ArrayList<StandardList>();
 
-    for (int i = 1; i < arr.length(); i++) {						// 원인은 모르겠으나 arr.getJSONArray(0)이 빈 데이터. 따라서 i=0부터 시작
+    for (int i = 1; i < arr.length(); i++) {						// 원인은 모르겠으나 arr.getJSONArray(0)이 빈 데이터. 따라서 i=1부터 시작
       JSONArray item = arr.getJSONArray(i);
 
       System.out.println("item = " + item);
@@ -318,7 +334,14 @@ public class BreedController {
     }
 
     int result = breedService.InsertExcel(standards);
+    
+    User user = (User) auth.getPrincipal();
+    String userIdName = user.getUser_username(); 
+	String userName = user.getUser_name();
+    String log_contents = resource_name + " " + (arr.length() - 1) + "행 입력";
 
+    logService.RecordLog(userIdName, userName, log_contents);
+    
     return result;
 //    return 0;
   }
@@ -409,7 +432,7 @@ public class BreedController {
 
   @ResponseBody
   @RequestMapping("updateBreed")
-  public int UpdateBreed(@RequestParam("data") String data) {
+  public int UpdateBreed(Authentication auth, @RequestParam("data") String data, @RequestParam("resource_name") String resource_name) {
     int result = 0;
 
     JSONArray arr = new JSONArray(data);
@@ -430,6 +453,13 @@ public class BreedController {
       }
     }
 
+    User user = (User) auth.getPrincipal();
+    String userIdName = user.getUser_username(); 
+	String userName = user.getUser_name();
+    String log_contents = resource_name + " 데이터 셀 " + arr.length() + "개 수정";
+    
+    logService.RecordLog(userIdName, userName, log_contents);
+    
     return result;
   }
 

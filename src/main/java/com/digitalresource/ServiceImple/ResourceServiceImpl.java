@@ -106,6 +106,7 @@ public class ResourceServiceImpl implements ResourceService {
       map.put("detail_type", jsonObject.get("type"));
       map.put("detail_info", jsonObject.get("info"));
       map.put("detail_check", jsonObject.get("check"));
+      map.put("detail_click", jsonObject.get("click"));
       map.put("detail_index", i + 1);
       map.put("user_group", group);
 

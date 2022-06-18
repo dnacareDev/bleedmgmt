@@ -909,59 +909,84 @@
 
    var log_grid = null;
    
+   
    function searchLog() {
 	   
 	   console.log("searchLog");
 
 	   let search_log = null;
-	   //ajax 테스트용. 정상전달
+	   
+	   /*
 	   $.ajax({
            url: "resource-list",
            method: "POST",
            dataType: "json",
            success: function (result) {
-				console.log(result);           		
+				console.log("resource-list : ",result);           		
            }    
        })
-	   
-       //LogService.java로 전달이 안됨. 아예 서버 부팅에 실패한다
+	   */  
+       
 	   $.ajax(
 			   {
 				   url: 'searchLog',
 				   method: 'POST',
 				   success: function(result) {
-					   console.log("success");
+					   console.log("log result : ", result);
+					   
+					   let log_data = result.logList
 					   
 					   log_grid = new tui.Grid({
 							  el: document.getElementById('logGrid'),
 							  scrollX: false,
 							  scrollY: false,
-							  data: [
-								  {
-									  'user_id': 'cult',
-									  'contents': 'data 삭제',
-									  'create_date': '2022-06-16'
-								  }
-							  ],
-							  rowHeaders: ['rowNum'],
+							  data: [],
+							  //rowHeaders: ['rowNum'],
 							  columns: [
 								  {
+									header: 'No.',
+									name: 'log_id',
+									align: 'center',
+									width: 50,
+								  },
+								  {
 									  header: '사용자 ID',
-									  name: 'user_id',
-									  align: 'center'
+									  name: 'log_user_name',
+									  align: 'center',
 								  },
 								  {
 									  header: '내용',
-									  name: 'contents',
+									  name: 'log_contents',
 									  align: 'center',
 								  },
 								  {
 									  header: '생성날짜',
-									  name: 'create_date',
+									  name: 'log_create_date',
 									  align: 'center',
 								  }
-							  ]
-						   }); 
+							  ],
+							  pageOptions: {
+                                  useClient: true,
+                                  perPage: 10
+                              }
+					   }); 
+					   
+					   let dataArr = [];
+					   
+					   for(let i=0 ; i<result.logList.length ; i++){
+						   let rowArr = {
+								   'log_id' : result.logList[i].log_id,
+								   'log_user_name' : result.logList[i].log_user_id_name + " (" +  result.logList[i].log_user_name + ")"   ,
+								   'log_contents' : result.logList[i].log_contents,
+								   'log_create_date' : result.logList[i].log_create_date,
+						   }
+						   
+						   dataArr.push(rowArr);
+					   }
+					   
+					   log_grid.resetData(dataArr);
+					   
+					   
 					   
 				   }
 		});

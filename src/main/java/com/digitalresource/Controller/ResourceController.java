@@ -276,6 +276,7 @@ public class ResourceController {
     param.put("resource_name", resource_name);
     List<Detail> detailList = RService.selectDetailHead(param);
     map.put("detailList", detailList);
+    System.out.println(map);
     return ResponseEntity.ok(map);
   }
 

@@ -18,5 +18,13 @@ public class LogServiceImpl implements LogService {
 	public List<LogList> searchLog() {
 		return logMapper.searchLog();
 	}
+	
+	@Override
+	public int RecordLog(String userIdName, String userName, String log_contents) {
+		System.out.println(userIdName);
+		System.out.println(userName);
+		System.out.println(log_contents);
+		return logMapper.RecordLog(userIdName, userName, log_contents);
+	}
 
 }

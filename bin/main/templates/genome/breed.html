@@ -1536,9 +1536,8 @@
     function testbtn() {
         
         
-        console.log("thymeleaf test : [[${resource_id}]]");
-        
-        console.log("${type} ? : [[${type}]]");
+        //console.log("thymeleaf test : [[${resource_id}]]");
+        //console.log("${type} ? : [[${type}]]");
         
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
@@ -1563,8 +1562,7 @@
 						
 						arr_of_arrs.push(detail_arr);
                     	
-						console.log(arr_of_arrs);
-                    	
+						//console.log(arr_of_arrs);
                     	//console.log("testbtn result : ", result);
                     	
                     	var excelHandler = {
@@ -2027,6 +2025,7 @@
             var formData = new FormData();
             formData.append("breed_id", total_id);
             formData.append("breed_row", breed_rows);
+            formData.append("log_contents", "[[${type}]] " + breedgrid.getCheckedRows().length +"행 삭제");
             if (confirm("삭제하시겠습니까?") == true) {
                 $.ajax(
                     {
@@ -2482,7 +2481,7 @@
     function sleep(num) {
     	var now = new Date();
     	var stop = now.getTime() + num;
-    	//console.log("sleep...");
+    	
     	while(true)	{
     		now = new Date();
     		if(now.getTime() > stop) return;
@@ -2535,18 +2534,21 @@
                         	//클릭한 cell의 컬럼명(breed_detail_name)이 없다면 그리드 출력에서 제외 + 몇번째 컬럼인지 변수로 저장
                         	let flag = false;
                         	let nth_column = null;
+                        	
                         	for(let i=0 ; i<result.detail.length ; i++) {
                         		if(breed_detail_name == result.detail[i].detail_name) {
                         			flag = true;
                         			nth_column = i;
-                        			console.log("flag true")
-                        			console.log("nth_column : ", nth_column);
+                        			//console.log("flag true")
+                        			//console.log("nth_column : ", nth_column);
                         			break;
                         		}
                         	}
                         	if(!flag) {
                         		return;
                         	}
+                        	
+                        	nth_column = i;
 
                         	
                         	console.log("result grid_ ", resource_list[i].resource_name_id, " : ", result );
@@ -2647,7 +2649,7 @@
                                 }
                                 
                                 // 데이터 필터링 콘솔 
-                                console.log(cell_value, " vs ", data[nth_column].standard_data);
+                                //console.log(cell_value, " vs ", data[nth_column].standard_data);
                                 
                                 
                                 
@@ -2812,7 +2814,12 @@
                         let arr = {}
 
                         if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
-                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 200, 'filter': filter,'align': 'center'};
+                        	if(result.detail[i].detail_click == 1) {
+                        		arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 200, 'filter': filter, 'align': 'center'};
+                            	headerName[colName[i]] = colName[i] + '_checked';
+                        	} else {
+	                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 200, 'filter': filter,'align': 'center'};
+                        	}
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
                                 arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};
@@ -2823,13 +2830,13 @@
                             }
                         } else if (result.detail[i].detail_info == 4) {
                             continue;
-                        } else if (result.detail[i].detail_info == 5) {
+                        } /*else if (result.detail[i].detail_info == 5) {
                         	arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 200, 'filter': filter, 'align': 'center'};
                         	headerName[colName[i]] = colName[i] + '_checked';
                         	
-                        	// detail_info==5 일때 파란색, 밑줄, 포인터 css 적용하도록 코드 삽입
+                        	// detail_click==1 일때 _checked 추가
                         	
-                        } else {
+                        }*/ else {
                             arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter, 'align': 'center'}
                         }
 
@@ -3032,10 +3039,21 @@
     var lastID = 0;
     var saveStandard = [];
     let breedData = [];
-
+	let insertChk = 0;
+    
     function insertRow() {
-        var user_type = $("#user_type").val();
+    	
+    	console.log("breedgrid.getCheckedRows.length : ", breedgrid.getCheckedRows.length);
+    	
+        if (insertChk == 1) {
+        	alert ("이미 데이터 추가 창이 활성화 중입니다.");
+        	return;
+        }
+        
+        insertChk = 1;
 
+        var user_type = $("#user_type").val();
+        
         if (user_type != 0 && user_type != 2) {
             return Alert("등록 권한이 없습니다.");
         } else {
@@ -3054,7 +3072,7 @@
                         let check = 0;
 
                         for (let j = 0; j < breedData.length; j++) {
-                            if (breedData[j].detail_id == ev.changes[i].columnName) {
+                            if (breedData[j].detail_id.toString().replace("_checked","") == ev.changes[i].columnName.toString().replace("_checked","")) {
                                 breedData[j].standard = ev.changes[i].value
                                 check = 1;
                                 break;
@@ -3062,20 +3080,25 @@
                         }
 
                         if (check == 0) {
-                            breedData.push({"detail_id": ev.changes[i].columnName, "standard": ev.changes[i].value})
+                            breedData.push({"detail_id": ev.changes[i].columnName.toString().replace("_checked",""), "standard": ev.changes[i].value})
                         }
                     } else {
-                        breedData.push({"detail_id": ev.changes[i].columnName, "standard": ev.changes[i].value})
+                        breedData.push({"detail_id": ev.changes[i].columnName.toString().replace("_checked",""), "standard": ev.changes[i].value})
                     }
                 }
+                console.log(breedData);
             });
-            /**/
+            
+            
+            
         }
     }
 
     function saveRow() {
         const sortBreed = [...breedData].sort((a, b) => a?.detail_id - b?.detail_id)
-
+        console.log("breedData : ", breedData);
+        console.log("sortBreed : ", sortBreed);
+        
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
 
@@ -3083,6 +3106,7 @@
         let type_check = 0;
         let group = $('#user_group').val();
 
+        
          $.ajax(
              {
                  url: 'insertBreed2',
@@ -3094,7 +3118,8 @@
                      "crop_id": crop_id,
                      "resource_name": resource_name,
                      "type_check": type_check,
-                     "user_group": group
+                     "user_group": group,
+                     "log_contents": "[[${type}]] 1행 입력"
                  },
                  success: function (result) {
                      if (result == 0) {
@@ -3105,12 +3130,15 @@
                      }
                  }
              });
+        
     }
 
     function cancelRow() {
         breedgrid.removeCheckedRows();
 
         $(".plus_btn_submit1").css("display", "none");
+        
+        insertChk = 0;
     }
 
     function updateRow() {
@@ -3119,7 +3147,7 @@
                 url: 'updateBreed',
                 method: 'POST',
                 dataType: 'json',
-                data: {"data": JSON.stringify(updateBreedData)},
+                data: {"data": JSON.stringify(updateBreedData), "resource_name": "[[${type}]]"},
                 success: function (result) {
                     if (result == 0) {
                         return Alert("수정에 실패하였습니다.")
@@ -3465,8 +3493,6 @@
             total_arr.push(excel_arr);
         }
 
-        console.log("process? : ", total_arr);
-        
         let resource_id = $('#resource_id').val();
         let type_check = 1;
         let group = $('#user_group').val();
@@ -3482,7 +3508,8 @@
                     "excel_list": JSON.stringify(total_arr),
                     "resource_id": resource_id,
                     "type_check": type_check,
-                    "user_group": group
+                    "user_group": group,
+                    "resource_name": "[[${type}]]"
                 },
                 success: function (result) {
 

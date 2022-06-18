@@ -12,5 +12,7 @@ public class Detail {
     private int detail_info;
     private int detail_display;
     private int user_group;
+    private int detail_check;
+    private int detail_click;
 }
  

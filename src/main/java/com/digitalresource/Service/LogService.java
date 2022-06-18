@@ -10,4 +10,6 @@ import com.digitalresource.Entity.LogList;
 public interface LogService {
 
 	List<LogList> searchLog();
+	
+	int RecordLog(String userIdName, String userName, String log_contents);
 }
