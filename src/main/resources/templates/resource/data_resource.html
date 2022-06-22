@@ -1012,19 +1012,25 @@
             total_id.push(samplegrid.getCheckedRows()[i].resource_id)
         }
         
-        $.ajax(
-                {
-                    url: 'deleteResource',
-                    method: 'POST',
-                    dataType: 'json',
-                    data: {
-                        "resource_id": JSON.stringify(total_id)
-                    },
-                    success: function (result) {
-                    	sessionStorage.removeItem('type_id'); 
-                    	location.reload();
-                    }
-                });
+        if(confirm("정말 이 관리자원을 삭제하시겠습니까?") == true) {
+        	$.ajax(
+                    {
+                        url: 'deleteResource',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {
+                            "resource_id": JSON.stringify(total_id)
+                        },
+                        success: function (result) {
+                        	sessionStorage.removeItem('type_id'); 
+                        	location.reload();
+                        }
+                    });
+        } else {
+        	console.log("관리자원 삭제 취소");
+        }
+        
+        
     }
 
     /* 엑셀 다운로드 */

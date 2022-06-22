@@ -170,11 +170,11 @@ public class ResourceController {
     int resource_id = RNService.insertResource_name(resourceName);
     
     Crop crop = new Crop();
-    crop.setCrop_name(new_crop);
     
     System.out.println("crop before : " + crop);
     
     if(crop_id == -1) {
+    	crop.setCrop_name(new_crop);
     	crop_id = cropService.registCrop(crop);
     }
     
@@ -229,9 +229,18 @@ public class ResourceController {
     */
     
     Resource resource = new Resource();
-    //resource.setCrop_id(Integer.parseInt(crop_id));
+    
+    //resource.setCrop_id(Integer.parseInt(crop_id));    
     //resource.setCrop_id(crop_id);
-    resource.setCrop_id(crop.getCrop_id());
+    //resource.setCrop_id(crop.getCrop_id());
+    
+    // 신규작물(crop_id = -1) 이면 Crop table(PK, AI)에서 받은 id값을, 기존작물이면 javascript에서 받은 id값을 쓴다
+    if(crop_id == -1) {
+    	resource.setCrop_id(crop.getCrop_id());
+    } else {
+    	resource.setCrop_id(crop_id);
+    }
+    
     resource.setResource_id(resource_id);
     resource.setDetailCount(detail_count);
     resource.setTrait_id(feature_group);

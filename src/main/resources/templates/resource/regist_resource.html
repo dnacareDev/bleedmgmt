@@ -781,11 +781,13 @@
             
             
             if(!new_crop) {
-            	log_contents = "신규 관리대장 등록 (작물명 : " + $("#crop_id").text() + " | 관리자원명 : " + input_val + ")";
+            	log_contents = "신규 관리대장 등록 (작물명 : " + $("#crop_id option:selected").text() + " | 관리자원명 : " + input_val + ")";
             } else {
             	log_contents = "신규 관리대장 등록 (작물명 : " + new_crop  + " | 관리자원명 : " + input_val + ")";
             }
 
+            console.log("log_contents : ", log_contents);
+            
             
           	//신규작목 입력 체크
             if(crop_id == -1 && !new_crop) {
@@ -796,9 +798,6 @@
             if(!$("#excelFile")[0].files[0]) {
             	Alert1("입력항목 파일에 엑셀파일을 첨부해주세요");
             }
-            
-            
-            
             
             var formData = new FormData();
 
@@ -830,9 +829,10 @@
                     location.href = "management-resource";
                 }
             })
+            
         } else {
             Alert1("중복확인을 진행해주세요.");
-        }
+        } 
 
     }
 
