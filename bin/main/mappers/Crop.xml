@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalresource.Mapper.CropMapper">
-    <insert id="registCrop" parameterType="Crop">
+    <insert id="registCrop" parameterType="Crop" useGeneratedKeys="true" keyProperty="crop_id">
         INSERT INTO crop(category_id,
                          crop_name,
                          create_date)
-        VALUES (#{category_id},
+        VALUES (<!-- #{category_id} 2로 고정. 
+        		category_id는 종자원에 연동되는 값인데 종자원 신규등록을 삭제할 것이므로 아무의미도 없다.
+        		작업중 가장 많이썼던 2번을 쓰는것 --> 
+        		2,
                 #{crop_name},
                 SYSDATE())
     </insert>
@@ -68,4 +71,7 @@
         where rn.resource_name = #{type};
     </select>
 
+	<insert id="insertNewCrop" >
+		
+	</insert>
 </mapper>

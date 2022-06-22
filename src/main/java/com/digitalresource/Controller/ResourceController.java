@@ -2,16 +2,13 @@ package com.digitalresource.Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
-import com.digitalresource.Entity.*;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -29,7 +26,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.Detail;
+import com.digitalresource.Entity.Feature;
+import com.digitalresource.Entity.Resource;
+import com.digitalresource.Entity.ResourceList;
+import com.digitalresource.Entity.ResourceName;
+import com.digitalresource.Entity.User;
 import com.digitalresource.Service.CropService;
+import com.digitalresource.Service.LogService;
 import com.digitalresource.Service.ResourceNameService;
 import com.digitalresource.Service.ResourceService;
 
@@ -43,6 +48,9 @@ public class ResourceController {
 
   @Autowired
   private ResourceService RService;
+  
+  @Autowired
+  private LogService logService;
 
   @Autowired
   private FileController fileController;
@@ -91,14 +99,32 @@ public class ResourceController {
 
   @ResponseBody
   @RequestMapping("confirmResourceName")
-  public int confirmResourceName(@RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name, @RequestParam("group") int group) {
+  public int confirmResourceName(@RequestParam("crop_id") int crop_id, 
+		  						@RequestParam("resource_name") String resource_name,
+		  						@RequestParam("new_crop") String new_crop,
+		  						@RequestParam("group") int group) {
     Map<String, Object> param = new HashMap<String, Object>();
+    
+    System.out.println("crop_id : " + crop_id);
+    System.out.println("resource_name : " + resource_name);
+    System.out.println("new_crop : " + new_crop);
+    System.out.println("group : " + group);
+    
+    
     param.put("crop_id", crop_id);
     param.put("resource_name", resource_name);
     param.put("user_group", group);
     int result = RNService.confirmResourceName(param);
     System.out.println(result);
+    
+    if(crop_id == -1 && new_crop == "") {
+    	return -1;
+    } else if(resource_name == "") {
+    	return -2;
+    }
+    
     return result;
+    
   }
 
   @ResponseBody
@@ -110,18 +136,50 @@ public class ResourceController {
 
   @ResponseBody
   @RequestMapping("registerResource")
-  public int registerResource(MultipartFile inputFile, MultipartFile charFile1, @RequestParam(value = "charFile2", required = false) String charFile2,
-                              @RequestParam(value = "crop_id", required = false) String crop_id, @RequestParam("resource_name") String resource_name,
+  public int registerResource(Authentication auth, MultipartFile inputFile, MultipartFile charFile1, @RequestParam(value = "charFile2", required = false) String charFile2,
+                              //@RequestParam(value = "crop_id", required = false) String crop_id,
+                              @RequestParam(value = "crop_id", required = false) int crop_id,
+                              @RequestParam("new_crop") String new_crop,
+                              @RequestParam("resource_name") String resource_name,
                               @RequestParam(value = "detail_list") String detail_list,
                               @RequestParam(value = "feature_group", required = false) String feature_group,
                               @RequestParam(value = "detail_count") int detail_count,
-                              @RequestParam("user_group") int group) throws IOException {
+                              @RequestParam("user_group") int group,
+                              @RequestParam("log_contents") String log_contents) throws IOException {
     Map<String, Object> param = new HashMap<String, Object>();
     ResourceName resourceName = new ResourceName();
+    
+    System.out.println("=================================");
+    System.out.println("registerResource Controller Start");
+    System.out.println("=================================");
+    System.out.println("crop_id : " + crop_id);
+    System.out.println("new_crop : " + new_crop);
+    System.out.println("resource_name : " + resource_name);
+    System.out.println("detail_list : " + detail_list);
+    System.out.println("feature_group : " + feature_group);
+    System.out.println("detail_count : " + detail_count);
+    
+    
     resourceName.setResource_name(resource_name);
     resourceName.setUser_group(group);
+    
+    System.out.println("resourceName : " + resourceName);
+    System.out.println();
+    
     // insert resource_name
     int resource_id = RNService.insertResource_name(resourceName);
+    
+    Crop crop = new Crop();
+    crop.setCrop_name(new_crop);
+    
+    System.out.println("crop before : " + crop);
+    
+    if(crop_id == -1) {
+    	crop_id = cropService.registCrop(crop);
+    }
+    
+    System.out.println("crop after : " + crop);
+    /* 파일 업로드는 이제 필요없으므로 주석화
     // 파일 업로드 및 파일 이름 저장
     String inputFile_name = "";
     String charFile_name = "";
@@ -144,7 +202,6 @@ public class ResourceController {
 
       Files.copy(inputFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
     }
-
     if (charFile1 != null) {
       String[] extension = charFile1.getOriginalFilename().split("\\.");
 
@@ -160,7 +217,7 @@ public class ResourceController {
 
       Files.copy(charFile1.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
     }
-
+    
 
     Resource resource = new Resource();
     resource.setResource_template(inputFile_name);
@@ -169,7 +226,12 @@ public class ResourceController {
     } else {
       resource.setResource_character_template_file(charFile_name);
     }
-    resource.setCrop_id(Integer.parseInt(crop_id));
+    */
+    
+    Resource resource = new Resource();
+    //resource.setCrop_id(Integer.parseInt(crop_id));
+    //resource.setCrop_id(crop_id);
+    resource.setCrop_id(crop.getCrop_id());
     resource.setResource_id(resource_id);
     resource.setDetailCount(detail_count);
     resource.setTrait_id(feature_group);
@@ -178,9 +240,19 @@ public class ResourceController {
     resource.setDetailList(detail_list);
     resource.setUser_group(group);
 
+    System.out.println("resource : " + resource);
+    
     int result = RService.insertResource(resource);
 
+    //로그 컨텐츠
+    User user = (User) auth.getPrincipal();
+    String userIdName = user.getUser_username(); 
+	String userName = user.getUser_name();
+    logService.RecordLog(userIdName, userName, log_contents);
+    
     return result;
+    
+
   }
 
   @ResponseBody

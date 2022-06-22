@@ -2315,6 +2315,7 @@
         }
     }
 
+    
     function FileBtn(e, type) {
         if (type == 'file') {
             $("#upload_id").val(e);
@@ -2419,6 +2420,8 @@
 
     }
 
+    
+    
     function InsertFileBtn() {
         $("#breed_file").modal("hide");
         $("#insert_file").modal("show");
@@ -2803,6 +2806,7 @@
                     let colName = [];
 
                     for (let i = 0; i < result.detail.length; i++) {
+                    	
                         let colHeader = result.detail[i].detail_name;
                         
                         colName[i] = result.detail[i].detail_id;
@@ -2871,12 +2875,28 @@
                     const dataList = [];
 
                     for (let i = 0; i < result.breed.length; i++) {
+                    	
+                    	let isMatch = false;
+                    	
+                    	//isMatch 방식으로 파일이 있는 breed_id 검출
+                    	for(let j=0 ; j<result.breed_file.length ; j++) {
+                    		if(result.breed[i].breed_id == result.breed_file[j].breed_id) {
+                    			isMatch = true;
+                    			break;
+                    		}
+                    	}
+                    	
                         let data = result.breed[i].standardList;
                         let tempArray = {};
 
-                        // console.log(data);
+                        console.log(isMatch);
                         
-                        tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
+                        if(isMatch == true ){
+                        	tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down-fill"></i>';
+                        } else {
+	                        tempArray['file'] = '<i class="bi bi-file-earmark"></i>';
+                        }
+    
                         tempArray['breed_id'] = result.breed[i].breed_id;
 
                         if (result.breed[i].detail_count == 0) {
@@ -2890,8 +2910,6 @@
                             if ((typeof headerName[colName[j - 1]]) === 'string') {
                             	if(typeof Number(headerName[colName[j - 1]].replace('_checked','')) === 'number' ) {
                             		tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
-                            	} else {
-	                                tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
                             	}
                             } else if ((typeof headerName[colName[j - 1]]) === 'number') {
                                 if (headerName[colName[j - 1]] == data[j - 1].detail_id) {

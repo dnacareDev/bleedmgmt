@@ -30,6 +30,8 @@ public interface BreedService {
 	// 첨부파일 목록 조회
 	List<BreedFile> SelectBreedFile(int breed_id, int file_type);
 
+	List<BreedFileSimple> IsMatchBreedFile();
+	
 	// 첨부파일 내용 수정
 	int UpdateBreedFile(BreedFile breed_file);
 

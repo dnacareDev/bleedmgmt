@@ -17,6 +17,7 @@ public class CropServiceImpl implements CropService {
     @Autowired
     private ResourceService resourceService;
 
+    /* duplication체크는 javascript에서 이미 했음. 복잡하게 짤 필요는 없을것 같다
     @Override
     public int registCrop(Crop crop) {
         int result = -1;
@@ -30,6 +31,13 @@ public class CropServiceImpl implements CropService {
             return result;
 
         return -1001;
+    }
+    */
+    
+    @Override
+    public int registCrop(Crop crop) {
+    	//새로 생성된 crop_id를 controller에 return
+    	return mapper.registCrop(crop);
     }
 
     @Override
@@ -92,5 +100,5 @@ public class CropServiceImpl implements CropService {
     public List<Crop> SearchCropList(String type, int group) {
         return mapper.SearchCropList(type, group);
     }
-
+    
 }

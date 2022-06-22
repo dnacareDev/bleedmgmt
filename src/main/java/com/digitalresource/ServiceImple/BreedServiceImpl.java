@@ -181,6 +181,11 @@ public class BreedServiceImpl implements BreedService {
   public List<BreedFile> SelectBreedFile(int breed_id, int file_type) {
     return breedMapper.SelectBreedFile(breed_id, file_type);
   }
+  
+  @Override
+  public List<BreedFileSimple> IsMatchBreedFile() {
+	  return breedMapper.IsMatchBreedFile();
+  }
 
   @Override
   public int UpdateBreedFile(BreedFile breed_file) {

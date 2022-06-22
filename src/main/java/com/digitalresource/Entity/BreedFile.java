@@ -10,6 +10,7 @@ import org.apache.ibatis.type.Alias;
 @ToString
 @Alias("BreedFile")
 public class BreedFile {
+  
   private int breed_file_id;
   private Integer breed_id;
   private int file_type;

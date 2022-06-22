@@ -98,9 +98,12 @@ public class BreedController {
       breed.get(i).setStandardList(standardLists);
     }
 
+    List<BreedFileSimple> breed_file = breedService.IsMatchBreedFile();
+    
     result.put("breed", breed);
     result.put("detail", details);
     result.put("resource_id", resourceId);
+    result.put("breed_file", breed_file);
 //    Gson gson = new Gson();
 //    String jsonString = gson.toJson(result.get("standardList"));
 //

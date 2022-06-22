@@ -32,6 +32,8 @@ public interface BreedMapper {
 	int selectResourceId(Map<String, Object> param);
 
 	List<BreedFile> SelectBreedFile(@Param("breed_id") int breed_id, @Param("file_type") int file_type);
+	
+	List<BreedFileSimple> IsMatchBreedFile();
 
 	int InsertBreedFile(BreedFile breed_file);
 

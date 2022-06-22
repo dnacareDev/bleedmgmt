@@ -266,6 +266,10 @@
         .footer-wrapper {
             background-color: #FCFCFC;
         }
+        
+        ::placeholder {
+        	color: #B2B2B2;
+        }
 
     </style>
 </head>
@@ -289,28 +293,34 @@
                             <div class="data_cover1 clearfix">
                                 <div class="data_type data_type1">
                                     <span class="sub_title">작목 선택</span>
-                                    <select id="crop_id">
+                                    <select id="crop_id" onChange = "selectOptionEvent(value)">
                                         <option value="-22" selected disabled hidden>작물 선택</option>
-                                        <!--   <option value="-1">신규 등록</option> -->
+                                        <option value="-1">신규 등록</option>
                                         <th:block th:each="crop : ${cropList}">
                                             <option th:value="${crop.crop_id}" th:text="${crop.crop_name}"></option>
                                         </th:block>
                                     </select>
                                 </div>
+                                <div class="data_type data_type5" id="newCropInput" style="display: none">
+                                <span class="sub_title">신규 작목</span>
+                                	<input type ="text" id="newCrop" placeholder="기존 작물명과 중복금지" onChange="overlap_check_crop()">
+                                </div>
                                 <div class="data_type data_type2">
                                     <span class="sub_title">관리자원 명</span>
                                     <input type="text" id="resource_name">
-                                    <button type="button" class="greenop_btn" onclick="overlap_check()">중복확인</button>
+                                    <button type="button" class="greenop_btn" id="overlap_check_button" onclick="overlap_check()">중복확인</button>
                                 </div>
-                                <div class="data_type data_type3">
+                                
+                                
+                            </div>
+                            <div class="data_cover3 clearfix">
+                            	<div class="data_type data_type3">
                                     <span class="sub_title">입력항목 파일</span>
                                     <div class="data_files" onclick="return filed('#excelFile');">
                                         <img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>템플릿 엑셀 첨부</span>
                                     </div>
                                     <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none">
                                 </div>
-                            </div>
-                            <div class="data_cover3 clearfix">
                                 <div class="data_type data_type4">
                                     <span class="sub_title">특성항목 파일</span>
                                     <div class="data_files" onclick="return filed('#data_file2')"><img src="../assets/vendor_assets/img/upload.png"
@@ -446,10 +456,29 @@
     function overlap_check() { // 관리자원 이름 중복검사
         let input_val = $("#resource_name").val();
         let crop_id = $("#crop_id").val();
+        let new_crop = $("#newCrop").val();
         let group = $("#user_group").val();
+        
+        let cropList = $("#crop_id").find("option").map(function() {return $(this).text(); }).get();
+        
+        /* 저장을 눌러도 overlap_check_crop()이 작동해서 필요없음(정확히는 저장이 안 눌러짐)
+        // i=0:작물선택, i=1:신규등록
+        for(let i=2 ; i<cropList.length ; i++) {
+        	if(new_crop == cropList[i]) {
+        		Alert1("기존 작물과 중복된 이름입니다");
+        		return;
+        	}
+        }
+        */
 
-        var data = {"resource_name": input_val, "crop_id": crop_id, "group": group}
+        var data = {"resource_name": input_val, "crop_id": crop_id, "new_crop": new_crop, "group": group}
 
+        //console.log("input_val", input_val);
+        //console.log("crop_id", crop_id);
+        //console.log("new_crop", new_crop);
+        //console.log("group", group);
+        //console.log("cropList", cropList);
+        
         $.ajax(
             {
                 url: 'confirmResourceName',
@@ -457,16 +486,48 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                	console.log(result);
                     if (result == 0) {
                         Alert1("사용 가능한 자원관리명 입니다.");
                         checkName = 1;
+                    } else if(result == -1) {
+                    	Alert1("신규 작목의 이름을 입력해주세요.")
+                    	checkName = 0;
+                    } else if(result == -2) {
+                    	Alert1("관리자원 명을 입력해주세요.")
+                    	checkName = 0;
                     } else {
                         Alert1("이미 사용중인 자원관리명 입니다.")
+                        checkName = 0;
                     }
+                },
+                error: function () {
+                	if(!crop_id) {
+                		Alert1("작물을 선택해주십시오");
+                		checkName = 0;
+                	} 
                 }
             }
         )
+        
     }
+    
+	function overlap_check_crop() {
+		console.log("new crop name changed!");	
+		
+		let new_crop = $("#newCrop").val();
+		let cropList = $("#crop_id").find("option").map(function() {return $(this).text(); }).get();
+        
+        // i=0:작물선택, i=1:신규등록
+        for(let i=2 ; i<cropList.length ; i++) {
+        	if(new_crop == cropList[i]) {
+        		Alert1("기존 작물과 중복된 이름은 사용할 수 없습니다");
+        		$("#newCrop").val("");
+        		break;
+        	}
+        }
+		
+	}   
 
     function filesFunction() {
         let filesBtn = document.getElementById("excelFile");
@@ -687,17 +748,17 @@
         if (checkName == 1) {
             let checkBox = document.getElementsByClassName("anaCheck");
             let group = $("#user_group").val();
-            
-            console.log(dataArr);
+
+            //console.log(dataArr);
 
             for(let i = 0; i < checkBox.length; i++) {
                 if(checkBox[i].checked == true) {
                     dataArr[i].check = 1;
                     // 2022-06-10 | 체크한 컬럼의 header(확인용 임시), name에 '_checked' 문자열 추가. 
                     //				이후 해당 문자열 포함시 이벤트 발생
-                    console.log("i : " , i)
-                    console.log("dataArr[i].header", dataArr[i].header);
-                    console.log("dataArr[i].name", dataArr[i].name);
+                    //console.log("i : " , i)
+                    //console.log("dataArr[i].header", dataArr[i].header);
+                    //console.log("dataArr[i].name", dataArr[i].name);
                     //dataArr[i].header += '_checked';
                     //dataArr[i].name += '_checked';
                     //dataArr[i].info = 5;					// check 이벤트를 발생시키는 기준 : detail
@@ -714,8 +775,31 @@
 
             let input_val = $("#resource_name").val();
             let crop_id = $("#crop_id").val();
+            let new_crop = $("#newCrop").val();
             let feature_group = $("#featureId").val();
+            let log_contents = "";
+            
+            
+            if(!new_crop) {
+            	log_contents = "신규 관리대장 등록 (작물명 : " + $("#crop_id").text() + " | 관리자원명 : " + input_val + ")";
+            } else {
+            	log_contents = "신규 관리대장 등록 (작물명 : " + new_crop  + " | 관리자원명 : " + input_val + ")";
+            }
 
+            
+          	//신규작목 입력 체크
+            if(crop_id == -1 && !new_crop) {
+            	Alert1("신규 작목의 이름을 입력해주세요.");
+            	return;
+            }
+            //입력항목 파일 체크
+            if(!$("#excelFile")[0].files[0]) {
+            	Alert1("입력항목 파일에 엑셀파일을 첨부해주세요");
+            }
+            
+            
+            
+            
             var formData = new FormData();
 
             formData.append("inputFile", $("#excelFile")[0].files[0]);
@@ -726,11 +810,13 @@
                 formData.append("charFile2", featureFileName);
             }
             formData.append("crop_id", crop_id);
+            formData.append("new_crop", new_crop);
             formData.append("resource_name", input_val);
             formData.append("detail_list", dataList);
             formData.append("feature_group", feature_group);
             formData.append("detail_count", detail_count);
             formData.append("user_group", group);
+            formData.append("log_contents", log_contents);
 
             $.ajax({
                 processData: false,
@@ -740,6 +826,7 @@
                 dataType: "json",
                 data: formData,
                 success: function (result) {
+                	//console.log("result(= -1) : ", result);
                     location.href = "management-resource";
                 }
             })
@@ -783,7 +870,7 @@
                     }
 
                     let header = value.feature_num + ". " + value.feature_name;
-                    headerArr = {'header': header, 'name': header, 'width': 300, "type": 2, "info": 2, "check": 0};
+                    headerArr = {'header': header, 'name': header, 'width': 300, "type": 2, "info": 2, "check": 0, "click": 0};
                     desArr.push(headerArr);
                 });
 
@@ -965,6 +1052,33 @@
         dataSet.push(bodyArr);
         headerGrid.resetData(dataSet);
     }
+    
+    /* 셀렉트 박스 선택시 이벤트 발생 */
+    var subCrop;
+    function selectOptionEvent(value){
+   		var selectOption = document.getElementById("newCropInput");
+   		var newCropInput = document.getElementById("newCrop")
+   		
+   		var overlap_check_button = document.getElementById("overlap_check_button");
+    	
+   		// 신규등록(value=-1)이면 관리자원명을 중복확인할 필요가 없음(신규작목명은 이와 별개로 중복체크가 되는 중)
+   		// 기존작목이면 다시 중복확인 버튼 활성화(block이 아닌 inline으로)
+   		if(value == -1){
+        	selectOption.style.display="block";	
+        	overlap_check_button.style.display="none";
+        	checkName = 1;
+    	}else{
+        	selectOption.style.display="none";	
+        	newCropInput.value=null;
+        	overlap_check_button.style.display="inline";
+        	checkName = 0;
+    	}
+   		
+   		// option 변경시 checkName = 0으로 변경(중복확인 다시 해야함)
+   		
+    	
+    }
+    
 </script>
 </body>
 </html>

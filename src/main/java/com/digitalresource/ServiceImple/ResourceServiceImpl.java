@@ -109,9 +109,9 @@ public class ResourceServiceImpl implements ResourceService {
       map.put("detail_click", jsonObject.get("click"));
       map.put("detail_index", i + 1);
       map.put("user_group", group);
-
+      
       result = resourceMapper.registerDetail(map);
-
+      
       if (result == 0) {
         return 0;
       }

@@ -108,6 +108,13 @@
                  LEFT JOIN uploads u ON bf.breed_file_id = u.breed_file_id
         WHERE bf.breed_id = #{breed_id} AND bf.file_type = #{file_type}
     </select>
+    
+    <!-- 2022-06-20 | 자료가 있으면 아이콘 변경  -->
+    <select id="IsMatchBreedFile" resultType="BreedFileSimple">
+    SELECT bf.breed_file_id, bf.breed_id, u.uploads_file, u.uploads_origin_file
+        FROM breed_file bf
+        	LEFT JOIN uploads u ON bf.breed_file_id = u.breed_file_id
+    </select>
 
     <!-- 첨부파일 내용 등록 -->
     <insert id="InsertBreedFile" parameterType="BreedFile">
