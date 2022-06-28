@@ -100,9 +100,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                	<div class="breadcrumb-main">
-			        		<h4 class="text-capitalize breadcrumb-title">Digital MABC DB</h4>
-			        </div>
                 </div>
             </div>
             <div class="row">
@@ -110,20 +107,19 @@
             		<div class="card-body">
 	        			<div class="bg-white">
 	                        <div class="card" id="cardPlus" style="width:1100px" >	<!-- width를 지정해야 다 보인다. 오른쪽으로 쏠려있으니 그것도 방법을 찾아보자. 일단은 container-fluid가 중앙정렬된게 원인으로 보임 -->
-		                        <div class='card-extra mt-10 mb-10 mr-20 plus_btn_submit1'>
-		                            <button type='button' id="cancelRow" onclick="cancelRow()">취소</button>
-		                            <button type='button' id="saveRow" onclick="saveRow()">저장</button>
-		                        </div>
 		                        <div class="card-body" style="padding-top: 0;">
 		                            <div class="bg-white">
+		                            	<div>
+			                            	<h4 class="text-capitalize breadcrumb-title">Digital MABC DB</h4><br>
+		                            	</div>
 		                                <div id="mabc_grid"><!-- 여기에 그리드 출력 --></div>
 		                                <div class="row">
 		                                    <div class="col-4">
 		                                        <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#insert_file">
-		                                            <span>추가</span>
+		                                            <span data-feather="plus"></span>
 		                                        </button>
 		                                        <button class="btn btn-icon btn-light btn-circle" onclick="delete_row()">
-		                                            <span>삭제</span>
+		                                            <span data-feather="trash-2"></span>
 		                                        </button>
 		                                        <button class="btn btn-icon btn-light btn-circle" onclick="run()">
 		                                        	<span>병합</span>
@@ -146,7 +142,7 @@
     </div>
 
     <!-- modal code -->
-<!-- 첨부파일 등록창 (breed.html에서 가져옴) -->
+	<!-- 첨부파일 등록창 (breed.html에서 가져옴) -->
     <div class="modal-basic modal fade show pop1" id="insert_file" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white " id="file_modal">
@@ -154,23 +150,28 @@
                     <h6 class="modal-title">엑셀파일 업로드</h6>
                     <span class="breed_title"></span>
                 </div>
-                <form action="insertMABCFile" id="insertFile" method="POST" enctype="multipart/form-data">
+                <form action="insertMabcFile" id="insertFile" method="POST" enctype="multipart/form-data">
 	                <div class="modal-body">
+		                <!--  
 		                <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="crop" id="crop">
-                                            <option value="고추">고추</option>
-                                            <option value="대파">대파</option>
-                                            <option value="멜론">멜론</option>
-                                            <option value="무">무</option>
-                                            <option value="배추">배추</option>
-                                            <option value="수박">수박</option>
-                                            <option value="양배추">양배추</option>
-                                            <option value="양파">양파</option>
-                                            <option value="참외">참외</option>
-                                            <option value="토마토">토마토</option>
-	                              </select>
+                                     <option value="고추">고추</option>
+                                     <option value="대파">대파</option>
+                                     <option value="멜론">멜론</option>
+                                     <option value="무">무</option>
+                                     <option value="배추">배추</option>
+                                     <option value="수박">수박</option>
+                                     <option value="양배추">양배추</option>
+                                     <option value="양파">양파</option>
+                                     <option value="참외">참외</option>
+                                     <option value="토마토">토마토</option>
+                        </select>
+                        -->
 		                <table class="table">
 		               		<tbody>
-			               		
+			               		<tr>
+		                			<td><label class="reg" for="crop">작물</label></td>
+		                			<td><input type="text" name="crop"></td>
+		                		</tr>
 		               			<tr>
 		                			<td><label class="reg" for="mabc_category">분류</label></td>
 		                			<td><input type="text" name="mabc_category"></td>
@@ -184,8 +185,8 @@
 		                			<td><input type="text" name="regist_date"></td>
 		                		</tr>
 		                		<tr>
-		                			<td><label class="reg" for="detail">상세내용</label></td>
-		                			<td><input type="text" name="detail"></td>
+		                			<td><label class="reg" for="detail_note">상세내용</label></td>
+		                			<td><input type="text" name="detail_note"></td>
 		                		</tr>
 		                	</tbody>
 			            </table>
@@ -202,59 +203,13 @@
 	                </div>
 	                <div class="modal-footer" style="border: none">
 	                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
-	                    <button type="button" class="btn btn-primary btn-sm" onclick="insert_qtl_information()" style="background-color:#217566; color:#fff">등록</button>
+	                    <button type="button" class="btn btn-primary btn-sm" onclick="insert_mabc_sample()" style="background-color:#217566; color:#fff">등록</button>
 	                </div>
                 </form>
             </div>
         </div>
     </div>
 
-
-    
-    <!-- 첨부파일 등록창 (breed.html에서 가져옴) -->
-    <div class="modal-basic modal fade show pop1" id="insert_file" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content modal-bg-white " id="file_modal">
-                <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">엑셀파일 업로드</h6>
-                    <span class="breed_title"></span>
-                </div>
-                <form action="insertMABCFile" id="insertFile" method="POST" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="form-group mb-0">
-                           <span>작목</span>
-                           <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="crop">
-                                <option value="고추">고추</option>
-                                <option value="대파">대파</option>
-                                <option value="멜론">멜론</option>
-                                <option value="무">무</option>
-                                <option value="배추">배추</option>
-                                <option value="수박">수박</option>
-                                <option value="양배추">양배추</option>
-                                <option value="양파">양파</option>
-                                <option value="참외">참외</option>
-                                <option value="토마토">토마토</option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-0">
-                            <span>코멘트</span>
-                            <input type="text" id="comment" class="form-control form-control-lg mt-10 mb-10 mr-10" placeholder="텍스트를 입력하세요" name="mabc_comment">
-                        </div>
-                        <div>
-                            <div class="atbd-upload">
-                                <div class="atbd-upload__button">
-                                    <input type="file" id="upload_file" name="file">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>	
-            </div>
-        </div>
-    </div>
-    
-    
     
     <!-- 엑셀출력용 임시박스. 웹페이지에 출력되어선 안됨 -->
     <div id="excel_box" aria-hidden="true"></div>
@@ -270,8 +225,6 @@
 	$(document).ready(function(){
 				SearchPlan();
 
-				// 취소, 저장버튼 숨겨놓기(현재 + 기능이 작동하지않아 취소,저장도 정상기능을 못함. 추후 삭제)
-				$(".plus_btn_submit1").css("display", "none");			
 		});
 	
 	// 페이지 당 데이터 개수 변경
@@ -283,7 +236,6 @@
 	
 	// grid
     var mabc_grid = null;
-    let update_mabc_data = [];
 	
 	function SearchPlan() {
 		
@@ -299,54 +251,27 @@
                 data: data,
                 success: function (result) {
                 	
-	                	console.log(result);
+	                	console.log("result : ", result);
 	                	
 						let dataArr = [];
-						
 						let rowArr = {};
 						
-						//console.log(result.search_uploads[0]);
-						//console.log(result.search_mabc_sample[0]);
-						//console.log(result.search_mabc_sample[1]);
-						
-						//eerer
-						for(let i=result.search_mabc_sample.length -1 ; i>0 ; i--) {
-							//console.log("aaa");
-							/*
-							rowArr = {
-									'mabc_id': result.search_mabc_sample[i].mabc_id,
-									'crop': result.search_mabc_sample[i].crop,
-									'detail' : result.search_mabc_sample[i].detail,
-									'mabc_category': result.search_mabc_sample[i].mabc_category,
-									//'file': '<a href="upload/' + result.search_uploads[j].uploads_file + '" download><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
-									'file': '<i class="bi bi-file-earmark-arrow-down-fill"></i>',
-									'regist_date': result.search_mabc_sample[i].regist_date,
-									'regist_person': result.search_mabc_sample[i].regist_person
-							};
-							*/
+						for(let i=0 ; i<result.mabc_sample.length ;  i++) {
 							
-							for(let j=0 ; j<result.search_uploads.length ; j++) {
-								if(result.search_mabc_sample[i].mabc_id == result.search_uploads[j].mabc_id) {
-									
-									rowArr = {
-											'mabc_id': result.search_mabc_sample[i].mabc_id,
-											'crop': result.search_mabc_sample[i].crop,
-											'detail' : result.search_mabc_sample[i].detail,
-											'mabc_category': result.search_mabc_sample[i].mabc_category,
-											//'file': '<a href="upload/' + result.search_uploads[j].uploads_file + '" download><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
-											'file': '<a href="upload/' + result.search_uploads[j].uploads_file + '" download=' + result.search_uploads[j].uploads_origin_file + '><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
-											//'file': '<i class="bi bi-file-earmark-arrow-down-fill"></i>',
-											'file_name': result.search_uploads[j].uploads_file,
-											'file_origin_name':result.search_uploads[j].uploads_origin_file,
-											'regist_date': result.search_mabc_sample[i].regist_date,
-											'regist_person': result.search_mabc_sample[i].regist_person
+							rowArr = {
+											'mabc_id': result.mabc_sample[i].mabc_id,
+											'crop': result.mabc_sample[i].crop,
+											'detail' : result.mabc_sample[i].detail,
+											'mabc_category': result.mabc_sample[i].mabc_category,
+											'file': '<a href="upload/' + result.mabc_sample[i].file_name + '" download=' + result.mabc_sample[i].file_origin_name + '><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
+											'file_name': result.mabc_sample[i].file_name,
+											'file_origin_name': result.mabc_sample[i].file_origin_name,
+											'regist_date': result.mabc_sample[i].regist_date,
+											'regist_person': result.mabc_sample[i].regist_person,
+											'detail_note': result.mabc_sample[i].detail_note,
 									};
 									
-									//console.log(result.search_uploads[j].uploads_file);
-									//console.log(rowArr);
-									
-								}
-							}
+							console.log(rowArr);
 							
 							dataArr.push(rowArr);
 						}
@@ -364,60 +289,57 @@
 				                    editor: 'text',
 				                    sortable: true,
 				                    hidden:true,
-				                    width: 180,
-				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
 				                },
 				                {
 				                    header: '파일',
 				                    name: 'file',
 				                    width: 80,
+				                    align: 'center',
 				                },
-				               /* {
-				                    header: '파일명',
-				                    name: 'file_name',
-				                    editor: 'text',
-				                    hidden: true,
-				                    sortable: true,
-				                    width: 180,
-				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
-				                }, */
+
 				                {
 				                    header: '파일명',
 				                    name: 'file_origin_name',
-				                    width: 200,
+				                    width: 180,
+				                    align: 'center',
 				                },
 				                {
 				                    header: '작물',
 				                    name: 'crop',
 				                    sortable: true,
 				                    width: 100,
-				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+				                    align: 'center',
 				                },
 				                {
 				                    header: '분류',
 				                    name: 'mabc_category',
 				                    sortable: true,
-				                    width: 100,
-				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+				                    width: 120,
+				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+				                    align: 'center',
 				                },
 				                {
 				                    header: '등록자',
 				                    name: 'regist_person',
 				                    sortable: true,
-				                    width: 100,
-				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+				                    width: 120,
+				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+				                    align: 'center',
 				                },
 				                {
 				                    header: '등록일',
 				                    name: 'regist_date',
 				                    sortable: true,
 				                    width: 150,
-				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+				                    align: 'center',
 				                },
 				                {
-				                    header: '상세내용',
-				                    name: 'detail',
-				                    width: 230,
+				                    header: '비고',
+				                    name: 'detail_note',
+				                    width: 200,
+				                    align: 'center',
 				                },
 							],
 							pageOptions: {
@@ -429,64 +351,8 @@
                 }
 	            	
 	        });
-		
-		
-		
-		
-		
 	}
 	
-	function insert_mabc_sample() {
-		let input_mabc_data = [];
-		
-		input_mabc_data.push({  	'crop' : $("#crop").val(),
-									'recurrent_parents' : $("#recurrent_parents").val(),
-									'donor_parents' : $("#donor_parents").val(),
-									'systematic_id' : $("#systematic_id").val(),
-									'systematic_name' : $("#systematic_name").val(),
-									'CAPS_CONTIG_7051' : $("#CAPS_CONTIG_7051").val(),
-									'CAPS_CONTIG_5625' : $("#CAPS_CONTIG_5625").val(),
-									'ANOK_CO908560' : $("#ANOK_CO908560").val(),
-									'CAPS_CONTIG_12022' : $("#CAPS_CONTIG_12022").val(),
-									'KS13030B11' : $("#KS13030B11").val(),
-									'CAPS_CONTIG_11020' : $("#CAPS_CONTIG_11020").val(),
-									'CAPS_CONTIG_11112' : $("#CAPS_CONTIG_11112").val(),
-									'CAPS_CONTIG_8855' : $("#CAPS_CONTIG_8855").val(),
-									'CAPS_CONTIG_10091' : $("#CAPS_CONTIG_10091").val(),
-									'KS23001F06' : $("#KS23001F06").val(),
-									'CAPS_CONTIG_5050' : $("#CAPS_CONTIG_5050").val(),
-									'ANOK_CO907546' : $("#ANOK_CO907546").val(),
-									'CAPS_CONTIG_1476' : $("#CAPS_CONTIG_1476").val(),
-									'ACRI_DV643211' : $("#ACRI_DV643211").val(),
-									'CAPS_CONTIG_4964' : $("#CAPS_CONTIG_4964").val(),
-									'CAPS_CONTIG_6936' : $("#CAPS_CONTIG_6936").val(),
-									'KS01048D11' : $("#KS01048D11").val(),
-									'CAPS_CONTIG_7192' : $("#CAPS_CONTIG_7192").val(),
-									'ANOK_CO776394' : $("#ANOK_CO776394").val(),
-									'CAPS_CONTIG_9655' : $("#CAPS_CONTIG_9655").val()
-		});
-		
-		console.log("input_mabc_data 입력 확인 : " , input_mabc_data);
-		
-		
-		$.ajax(
-			{
-				url: 'insert_mabc_sample',
-				method: 'POST',
-				dataType: 'json',
-				data: { "input_mabc_data" : JSON.stringify(input_mabc_data) },
-				success: function(result) {
-					
-					if(result != null) {
-						location.reload();									// ajax 성공시 새로고침
-					}
-					
-				},
-			}		
-		)
-	}
-	
-	var tablechk = 0; 	// samplegrid, outcomegrid 구별용인듯. 일단 안바뀌니까 0으로 설정
 	
 	function delete_row() {
 		let total_mabc_id = [];
@@ -497,6 +363,9 @@
         	total_mabc_id.push(mabc_grid.getCheckedRows()[i].mabc_id)
         }
 
+
+
+        
         if( mabc_grid.getCheckedRows().length >= 1) {
         	
 	        if( confirm("삭제하시겠습니까?") == true) {
@@ -515,11 +384,11 @@
 		       			}
 		       		});
 	        } else {
-	        	return false;
+	        	return;
 	        }
         } else {
-        	alert("하나 이상의 체크박스를 체크해주세요.");
-        	return false;
+        	Alert1("하나 이상의 체크박스를 체크해주세요.");
+        	return;
         }
 	}
 	
@@ -527,9 +396,8 @@
 	
     
 	// 첨부파일 등록
-	function insert_qtl_information() {
+	function insert_mabc_sample() {
 		var file = $("#upload_file");
-        
 
         if (file.val() == "") {
             alert("파일을 선택해주세요.");
@@ -540,46 +408,10 @@
 	}
 	
 
-	/*
-    // 마커 상세정보
-    function mabc_sample_information(sys_id) {
-    	$("#mabc_sample_information").modal("show");
-    	
-    	
-    		console.log("sys_id : ", sys_id);
-    		
-    		$('input[name=mabc_id]').attr('value',result.mabc_information[0].mabc_id);
-			$('input[name=mabc_name]').attr('value',result.mabc_information[0].mabc_name);
-			$('input[name=mabc_kinds]').attr('value',result.mabc_information[0].mabc_kinds);
-			$('input[name=crop]').attr('value',result.mabc_information[0].crop);
-			$('input[name=chromosome_number]').attr('value',result.mabc_information[0].chromosome_number);
-			$('input[name=location_start]').attr('value',result.mabc_information[0].location_start);
-			$('input[name=location_end]').attr('value',result.mabc_information[0].location_end);
-			$('input[name=characteristic]').attr('value',result.mabc_information[0].characteristic);
-			$('input[name=mabc_reference]').attr('value',result.mabc_information[0].mabc_reference);
-    		
-    }
-	*/
-    
-    function mabc_excel_download(e) {
-    	
-    }
+
 
 	function run() {
-		
-		/*
-	       for(let i = 0 ; i<mabc_grid.getCheckedRows().length; i++) {
-	        	if(mabc_grid.getCheckedRows()[0].crop == mabc_grid.getCheckedRows()[i].crop) {
-	        		continue;
-	        	} else {
-	        		alert("작물명이 서로 다릅니다.");
-	        		return false;
-	        	}
-	        }*/
-		
-		
-	        
-	        
+	
 		for(let i =0 ; i< mabc_grid.getCheckedRows().length ; i++) {
 			console.log(mabc_grid.getCheckedRows()[i]);
 			if(mabc_grid.getCheckedRows()[0].crop == mabc_grid.getCheckedRows()[i].crop) {
@@ -609,33 +441,7 @@
     	
     	console.log(str);
     	window.open('/geneticMerge/selectType.jsp?selectfiles='+ str , 'selectType', 'top=300, left=600, width=600, height=400, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no');
-    	/*
-        for (let i = 0; i < mabc_grid.getCheckedRows().length; i++) {
-        	total_file_name.push(mabc_grid.getCheckedRows()[i].file_name);
-        }
-        
-        for (let i = 0; i < mabc_grid.getCheckedRows().length; i++) {
-	       	total_file_origin_name.push(mabc_grid.getCheckedRows()[i].file_origin_name);
-        }
-        */
-        
-        
-        
-        
-        /*
-        $.ajax(
-                {
-                    url: 'MABC_DB',
-                    method: 'POST',
-                    dataType: 'json',
-                    data: {'total_file_name' : total_file_name, 'total_file_origin_name':total_file_origin_name },
-                    success: function (str) {
-                       	console.log(str);
-						window.open('http://112.169.63.197:8883/geneticMerge/selectType.jsp?selectfiles='+ str , 'target', 'top=100, left=1000, width=1200, height=800, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no');
 
-                    }
-                });
-			*/
        
     }
     

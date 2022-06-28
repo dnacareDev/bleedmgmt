@@ -147,7 +147,7 @@
 		                                            <span data-feather="trash-2"></span>
 		                                        </button>
 		                                        <button type="button" class="btn btn-icon btn-light btn-circle" onclick="read_csv()">
-		                                            지도
+		                                            <span data-feather="map"></span>
 		                                        </button>
 		                                    </div>
 		                                    <div class="col-4">
@@ -385,51 +385,6 @@
 		$("#insertFile").submit();
 	}
 	
-	// 마커 상세정보 수정 함수 (작업중)
-	function update_marker_information() {
-
-		$("$modifyFile").submit();
-	}
-	
-	// 비활성화
-	function update_marker_information2() {
-		let input_marker_data = [];
-		
-		update_marker_data.push({  	'marker_id' : $('input[name=marker_id]').val(),
-									'marker_name' : $('input[name=marker_name]').val(),
-									'marker_kinds' : $('input[name=marker_kinds]').val(),
-									'crop' : $('input[name=crop]').val(),
-									'chromosome_number' : $('input[name=chromosome_number]').val(),
-									'location_start' : $('input[name=location_start]').val(),
-									'location_end' : $('input[name=location_end]').val(),
-									'characteristic' : $('input[name=characteristic]').val(),
-									'marker_reference' : $('input[name=marker_reference]').val()
-		});
-		
-		console.log("update_marker_data 입력 확인 : " , update_marker_data);
-		
-
-		$.ajax(
-			{
-				url: 'update_marker_information',
-				method: 'POST',
-				dataType: 'json',
-				data: { "update_marker_data" : JSON.stringify(update_marker_data) },
-				success: function(result) {
-					
-					if(result != null) {
-						location.reload();									// ajax 성공시 새로고침
-					}
-					
-				},
-				error: function() {
-					alert("입력실패")
-				}
-			}		
-		);
-	}
-	
-	
 	var tablechk = 0; 	// samplegrid, outcomegrid구별용인듯. 일단 안바뀌니까 0으로 설정
 	var insertCheck = 0;	// insert가 이미 활성화되었는지 체크용. 없으면 누를때마다 추가행이 계속 뜨겠지
 	
@@ -466,25 +421,6 @@
         
 	}
 	
-	function chromosome_map() {
-		console.log("script 출력");
-
-	}
-    
-	
-    function cancelRow() {
-        if (tablechk === 0) {
-            marker_grid.removeCheckedRows();
-        } else {
-            outcomegrid.removeCheckedRows();
-        }
-
-        $(".plus_btn_submit1").css("display", "none");
-
-        insertCheck = 0;
-    }
-    
-    	
    	function read_csv() {
    		
    		let total_file_name = [];
@@ -508,7 +444,7 @@
         }
            
            console.log("total_file_name", total_file_name);
-           
+           /*
            $.ajax(
                    {
                        url: 'MarkerMap',
@@ -521,7 +457,7 @@
 
                        }
                    });
-          
+          */
        }
 		
     

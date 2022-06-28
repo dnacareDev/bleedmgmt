@@ -137,7 +137,7 @@
 		                            	<div>
 			                            	<h4 class="text-capitalize breadcrumb-title">Digital analysis</h4><br>
 		                            	</div>
-		                                <div id="marker_grid"><!-- 여기에 그리드 출력 --></div>
+		                                <div id="analysis_grid"><!-- 여기에 그리드 출력 --></div>
 		                                <div class="row">
 		                                    <div class="col-4">
 		                                        <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#marker_insert_modal">
@@ -147,7 +147,7 @@
 		                                            <span data-feather="trash-2"></span>
 		                                        </button>
 		                                        <button type="button" class="btn btn-icon btn-light btn-circle" onclick="matrix()">
-		                                            분석
+		                                            matrix
 		                                        </button>
 		                                    </div>
 		                                    <div class="col-4">
@@ -171,23 +171,8 @@
     <div class="modal-basic modal fade show" id="marker_insert_modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white ">
-            	<form action="insertMarkerFile" id="insertFile" method="POST" enctype="multipart/form-data">
+            	<form action="insertAnalysisFile" id="insertFile" method="POST" enctype="multipart/form-data">
 	                <div class="modal-body">
-	                	
-	                	<!--  
-	                	<select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="crop" id="crop">
-                                            <option value="고추">고추</option>
-                                            <option value="대파">대파</option>
-                                            <option value="멜론">멜론</option>
-                                            <option value="무">무</option>
-                                            <option value="배추">배추</option>
-                                            <option value="수박">수박</option>
-                                            <option value="양배추">양배추</option>
-                                            <option value="양파">양파</option>
-                                            <option value="참외">참외</option>
-                                            <option value="토마토">토마토</option>
-	                    </select>
-		                -->
 		                <table class="table">
 		               		<tbody>
 			               		<tr>
@@ -195,20 +180,16 @@
 		                			<td><input type="text" name="crop_name"></td>
 		                		</tr>
 		               			<tr>
-		                			<td><label class="reg" for="marker_category">분류</label></td>
-		                			<td><input type="text" name="marker_category"></td>
+		                			<td><label class="reg" for="analysis_category">분류</label></td>
+		                			<td><input type="text" name="analysis_category"></td>
 		                		</tr>
 		                		<tr>
-		                			<td><label class="reg" for="regist_person">등록자</label></td>
-		                			<td><input type="text" name="regist_person"></td>
+		                			<td><label class="reg" for="detail">상세내용</label></td>
+		                			<td><input type="text" name="detail"></td>
 		                		</tr>
 		                		<tr>
-		                			<td><label class="reg" for="regist_date">등록일</label></td>
-		                			<td><input type="text" name="regist_date"></td>
-		                		</tr>
-		                		<tr>
-		                			<td><label class="reg" for="detail_note">상세내용</label></td>
-		                			<td><input type="text" name="detail_note"></td>
+		                			<td><label class="reg" for="note">비고</label></td>
+		                			<td><input type="text" name="note"></td>
 		                		</tr>
 		                	</tbody>
 		                </table>	
@@ -225,7 +206,7 @@
 	                </div>
 	                <div class="modal-footer" style="border: none">
 	                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
-	                    <button type="button" class="btn btn-primary btn-sm" onclick="insert_marker_information()" style="background-color:#217566; color:#fff">등록</button>
+	                    <button type="button" class="btn btn-primary btn-sm" onclick="insert_analysis_db()" style="background-color:#217566; color:#fff">등록</button>
 	                </div>
                 </form>
             </div>
@@ -251,19 +232,19 @@
 	
 	// 페이지 당 데이터 개수 변경
 	$("#limit").change(function () {
-        	marker_grid.destroy();
+        	analysis_grid.destroy();
 
         	SearchDB();
         });
 	
 	$("#CropSelect").change(function() {
-			marker_grid.destroy();
+			analysis_grid.destroy();
 			
 			SearchDB();
 	})
 	
 	// grid
-    let marker_grid = null;
+    let analysis_grid = null;
     let update_marker_data = [];
 	
 	function SearchDB() {
@@ -271,35 +252,27 @@
 		var limit = $("#limit").val();
 		
 		
-		
-		
-		
-		/*
 		$.ajax({
-			url : 'search_marker_information',
+			url : 'search_analysis_db',
 			method : 'POST',
 			//dataType: 'json',
 			//data : data,
 			success : function(result) {
 				
 				let dataArr = [];
-				
 				let rowArr = {};
 				
 				console.log("result marker", result);
 				
-				for(let i=0 ; i<result.marker_information.length ; i++) {
+				for(let i=0 ; i<result.analysis_db.length ; i++) {
 					
 					rowArr = {
-									'file': '<a href="upload/' + result.marker_information[i].marker_file + '" download=' + result.marker_information[i].marker_origin_file + '><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
-									'file_name' : result.marker_information[i].marker_file,			// 파일명 조회 용도
-									'file_origin_name' : result.marker_information[i].marker_origin_file,
-									'marker_num': result.marker_information[i].marker_num,
-									'crop_name': result.marker_information[i].crop_name,
-									'marker_category': result.marker_information[i].marker_category,
-									'regist_person': result.marker_information[i].regist_person,
-									'regist_date': result.marker_information[i].regist_date,
-									'detail_note': result.marker_information[i].detail_note,
+									'analysis_id': result.analysis_db[i].analysis_id,
+									'crop_name': result.analysis_db[i].crop_name,
+									'analysis_category': result.analysis_db[i].analysis_category,
+									'regist_date': result.analysis_db[i].regist_date,
+									'detail': result.analysis_db[i].detail,
+									'note': result.analysis_db[i].note,
 							};
 							dataArr.push(rowArr);
 					
@@ -307,25 +280,19 @@
 					
 				console.log(dataArr);
 							
-				marker_grid = new tui.Grid({
-					el: document.getElementById('marker_grid'),
+				analysis_grid = new tui.Grid({
+					el: document.getElementById('analysis_grid'),
 					scrollX: true,
 					scrollY: true,
 					data: dataArr,
 					rowHeaders: ['checkbox'],
 					columns: [
 						{
-                            header: 'marker_num',
-                            name: 'marker_num',
-                            hidden: true,
+                            header: '번호',
+                            name: 'analysis_id',
+                            //hidden: true,
                             sortable: true,
                             width: 100,
-                            align: 'center',
-                        },
-						{
-                            header: '다운로드',
-                            name: 'file',
-                            width: 80,
                             align: 'center',
                         },
 						{
@@ -338,19 +305,25 @@
                         },
                         {
                             header: '분류',
-                            name: 'marker_category',
+                            name: 'analysis_category',
                             sortable: true,
                             width: 150,
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                         },
                         {
-                            header: '등록자',
-                            name: 'regist_person',
+                            header: '상세내용',
+                            name: 'detail',
                             sortable: true,
                             width: 150,
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '비고',
+                            name: 'note',
+                            width: 230,
+                            align: 'center',
                         },
                         {
                             header: '등록일',
@@ -360,12 +333,7 @@
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                         },
-                        {
-                            header: '비고',
-                            name: 'detail_note',
-                            width: 230,
-                            align: 'center',
-                        }
+                        
 					],
 					pageOptions: {
                         useClient: true,
@@ -376,10 +344,10 @@
 
 			}
 		});
-		*/
+		
 	}
 	
-	function insert_marker_information() {
+	function insert_analysis_db() {
 		
 		let fileCheck = $("#upload_file").val();
 
@@ -388,107 +356,68 @@
 			return false;
 		}
 		
-		$("#insertFile").submit();
-	}
-	
-	// 마커 상세정보 수정 함수 (작업중)
-	function update_marker_information() {
-
-		$("$modifyFile").submit();
-	}
-	
-	// 비활성화
-	function update_marker_information2() {
-		let input_marker_data = [];
+		let url = $("#insertFile").attr("action");
+		let form = $('#insertFile')[0]; 
+		let formData = new FormData(form);
+		let queryString = $("#insertFile").serialize();
+		console.log(queryString);
 		
-		update_marker_data.push({  	'marker_id' : $('input[name=marker_id]').val(),
-									'marker_name' : $('input[name=marker_name]').val(),
-									'marker_kinds' : $('input[name=marker_kinds]').val(),
-									'crop' : $('input[name=crop]').val(),
-									'chromosome_number' : $('input[name=chromosome_number]').val(),
-									'location_start' : $('input[name=location_start]').val(),
-									'location_end' : $('input[name=location_end]').val(),
-									'characteristic' : $('input[name=characteristic]').val(),
-									'marker_reference' : $('input[name=marker_reference]').val()
+		
+		//$("#insertFile").submit();
+		
+		$.ajax({
+			url : 'insertAnalysisFile',
+			method : 'POST',
+			data : formData,
+	        contentType : false,   
+	        processData : false, 
+	        cache: false,
+			success : function(result) {
+				console.log("insert result : ", result);	
+			}
 		});
-		
-		console.log("update_marker_data 입력 확인 : " , update_marker_data);
-		
-
-		$.ajax(
-			{
-				url: 'update_marker_information',
-				method: 'POST',
-				dataType: 'json',
-				data: { "update_marker_data" : JSON.stringify(update_marker_data) },
-				success: function(result) {
-					
-					if(result != null) {
-						location.reload();									// ajax 성공시 새로고침
-					}
-					
-				},
-				error: function() {
-					alert("입력실패")
-				}
-			}		
-		);
 	}
+	
+
 	
 	
 	var tablechk = 0; 	// samplegrid, outcomegrid구별용인듯. 일단 안바뀌니까 0으로 설정
 	var insertCheck = 0;	// insert가 이미 활성화되었는지 체크용. 없으면 누를때마다 추가행이 계속 뜨겠지
 	
 	function delete_row() {
-		let total_marker_num = [];
+		let total_analysis_id = [];
 
 
-        for (let i = 0; i < marker_grid.getCheckedRows().length; i++) {
-        	total_marker_num.push(marker_grid.getCheckedRows()[i].marker_num)
+        for (let i = 0; i < analysis_grid.getCheckedRows().length; i++) {
+        	total_marker_num.push(analysis_grid.getCheckedRows()[i].marker_num)
         }
         
         // total_marker_id 배열은 위에서 아래로 쌓인다. getCheckedRows()도 체크된 행이 어디인지 구분하지 않고 위에서부터 순서대로 쌓는다
-        console.log("marker_grid.getCheckedRows()",marker_grid.getCheckedRows());
-        console.log(total_marker_num);
+        console.log("analysis_grid.getCheckedRows()",analysis_grid.getCheckedRows());
+        console.log(total_analysis_id);
         
-        if(marker_grid.getCheckedRows().length == 0) {
-        	alert("하나 이상의 체크박스를 체크해주세요.");
+        if(analysis_grid.getCheckedRows().length == 0) {
+        	Alert1("하나 이상의 체크박스를 체크해주세요.");
         } else {
 	        if( confirm("삭제하시겠습니까?") == true) {
 		        $.ajax(
 		       		{
-		       			url: 'delete_marker_information',
+		       			url: 'delete_analysis_db',
 		       			method: 'POST',
 		       			dataType: 'json',
-		       			data: {'total_marker_num' : total_marker_num},
+		       			data: {'total_analysis_id' : total_analysis_id},
 		       			success: function(result)	{
 		       				location.reload();
 		       			},
 		       		});
 	        } else {
-	        	return false;
+	        	return;
 	        }
         }
         
 	}
 	
-	function chromosome_map() {
-		console.log("script 출력");
 
-	}
-    
-	
-    function cancelRow() {
-        if (tablechk === 0) {
-            marker_grid.removeCheckedRows();
-        } else {
-            outcomegrid.removeCheckedRows();
-        }
-
-        $(".plus_btn_submit1").css("display", "none");
-
-        insertCheck = 0;
-    }
     
     	
    	function matrix() {

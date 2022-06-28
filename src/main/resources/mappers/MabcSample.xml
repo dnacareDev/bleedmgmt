@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalresource.Mapper.MabcSampleMapper">
+	
+	<select id="searchMabcSample" resultType="MabcSample">
+        SELECT * FROM mabc_sample
+        ORDER BY mabc_id DESC
+    </select>
+    
+    <insert id="insertMabcSample" parameterType="MabcSample">
+    	INSERT INTO mabc_sample(file_name, file_origin_name, crop, mabc_category, regist_person, regist_date, detail_note)
+    	VALUES(#{file_name},#{file_origin_name},#{crop},#{mabc_category},#{regist_person},#{regist_date},#{detail_note})
+    </insert>
+    
+    <select id="deleteMabcSample" parameterType="java.util.ArrayList" resultType="int">
+    	DELETE FROM mabc_sample
+    	WHERE
+    	<foreach collection="array" item="item" open="(" close=")" separator="OR">
+            mabc_id = #{item}
+        </foreach>
+    </select>
+    
+</mapper>

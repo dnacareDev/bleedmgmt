@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalresource.Mapper.AnalysisDbMapper">
+
+	<select id="searchAnalysisDB" resultType="AnalysisDB">
+		SELECT * FROM analysis_db
+		ORDER BY analysis_id DESC
+	</select>
+	
+	<insert id="insertAnalysisDB" parameterType="AnalysisDB">
+		INSERT INTO analysis_db(crop_name, analysis_category, detail, note, regist_date)
+		VALUES(#{crop_name}, #{analysis_category}, #{detail}, #{note}, NOW())
+	</insert>
+	
+	<select id="deleteAnalysisDB" parameterType="java.util.ArrayList" resultType="int">
+		DELETE FROM analysis_db
+        WHERE
+        <foreach collection="array" item="item" open="(" close=")" separator="OR">
+            analysis_id = #{item}
+        </foreach>
+	</select>
+
+</mapper>
