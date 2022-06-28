@@ -235,10 +235,10 @@ public class ResourceController {
     //resource.setCrop_id(crop.getCrop_id());
     
     // 신규작물(crop_id = -1) 이면 Crop table(PK, AI)에서 받은 id값을, 기존작물이면 javascript에서 받은 id값을 쓴다
-    if(crop_id == -1) {
-    	resource.setCrop_id(crop.getCrop_id());
-    } else {
+    if(crop.getCrop_id() == 0) {
     	resource.setCrop_id(crop_id);
+    } else {
+    	resource.setCrop_id(crop.getCrop_id());
     }
     
     resource.setResource_id(resource_id);
@@ -320,8 +320,17 @@ public class ResourceController {
 	    JSONArray arr = new JSONArray(resource_id);
 	    System.out.println("arr : " + arr);
 
+	    
+	    for(int i=0 ; i<arr.length() ; i++) {
+	    	int resourceId = arr.getInt(i);
+	    	RService.deleteResourceNameById(resourceId);		// resourceId와 일치하는 resource_name 데이터 삭제
+	    	RService.deleteBreedById(resourceId);				// resourceId와 일치하는 breed_id 데이터 삭제
+	    	RService.deleteResourceById(resourceId);			// resourceId에 해당하는 resource 데이터 삭제
+	    }
+	    
+	    
 	    // 2022-06-07 | 삭제기능 일단 구현. 현재 자원관리 출력 및 필터링에 문제가 있어 보류 
-	    System.out.println("arr : " + arr);
+	    /*
 	    for(int i = 0; i < arr.length(); i++) {
 		      int resourceId = arr.getInt(i);
 		      result = RService.UpdateResourceUse(0, resourceId);
@@ -330,6 +339,8 @@ public class ResourceController {
 	    }
 	    
 
+	    return result;
+	    */
 	    return result;
 	  }
   

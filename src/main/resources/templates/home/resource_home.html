@@ -402,28 +402,6 @@
                         },
                     }
                 };
-
-                /*
-                for (let i = 0; i < label.length; i++) {
-                    var color1 = Math.floor(Math.random() * 256);
-                    var color2 = Math.floor(Math.random() * 256);
-                    var color3 = Math.floor(Math.random() * 256);
-                    
-
-                    var dataset = {
-                        label: label[i],
-                        data: data[i],
-                        backgroundColor: 'rgb(' + color1 + ', ' + color2 + ', ' + color3 + ')',
-                        //backgroundColor: 'rgb(255, 155, 147)',
-                        stack: 'Stack 0',
-                        stackSeries: true
-                    }
-
-                    config1.data.datasets.push(dataset);
-                }
-                */
-                
-                
 				
                 var color1 = 29;
                 var color2 = 51;
@@ -456,47 +434,10 @@
 	                }
 	                
 	                config1.data.datasets.push(dataset);
-	                console.log("config1",config1);
-	                console.log("config1.data.datasets", config1.data.datasets);
+	                //console.log("config1",config1);
+	                //console.log("config1.data.datasets", config1.data.datasets);
                    
 				}
-                
-				
-                /*
-                var color1 = 29;
-                var color2 = 51;
-                var color3 = 137;
-                
-                for (let i = 0; i < label.length; i++) {
-                    
-                	color1 += 53;
-                    color2 += 47;
-                    color3 += 39;
-                	
-                	if(color1 > 255) {
-                    	color1 -= 255;
-                    }
-                	
-                	if(color2 > 255) {
-                    	color2 -= 255;
-                    }
-                	
-                	if(color3 > 255) {
-                    	color3 -= 255;
-                    }
-                	
-                	
-
-                    var dataset = {
-                        label: label[i],
-                        data: count[i],
-                        backgroundColor: 'rgb(' + color1 + ', ' + color2 + ', ' + color3 + ')',
-                        //backgroundColor: 'rgb(255, 155, 147)',
-                    }
-
-                    config2.data.datasets.push(dataset);
-                }
-                */
                 
                 bar1 = new Chart(ctx1, config1);
             }
@@ -504,12 +445,28 @@
     }
 
     function SelectCrop() {
+    	
+    	/* 
+    	// 작목별 관리현황에서 관리대장에 활성화된 작물만 차트목록에 노출시켜야 함
+    	$.ajax({
+            url: "resource-list",
+            method: "POST",
+            dataType: "json",
+            success: function (result) {
+           		console.log("(home) resource-list result : ", result); 	
+            }
+    	});
+    	*/
+    	
         $.ajax({
             url: 'selectCrop',
             method: 'POST',
             dataType: 'json',
             data: data,
             success: function (result) {
+            	
+            	console.log("crop result : ", result);
+            	
                 var labels = []
 
                 for (let i = 0; i < result.resourceList.length; i++) {
@@ -591,6 +548,9 @@
 
                     config2.data.datasets.push(dataset);
                 }
+                
+                console.log("config2 : ", config2);
+                console.log("datasets : ", config2.datasets);
 
                 bar2.update();
             }

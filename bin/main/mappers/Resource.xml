@@ -27,7 +27,6 @@
         FROM resource
         WHERE crop_id = #{crop_id}
     </delete>
-
 	  
     <delete id="deleteResource" parameterType="int">
         update resource
@@ -39,6 +38,33 @@
                      from resource
                      where resource_id in (${resource_name})) a)
     </delete>
+
+	<!-- 2022-06-23 | 삭제처리 ===================================================================== -->
+	<!-- 주의! mysql에서는 delete, update시 서브쿼리에 동일한 테이블을 직접 참조하지 못한다. ======================= -->
+	<!-- 해결하려면 임시테이블을 만들거나, 아예 서브쿼리를 쓰지않도록 해야한다(resource_id가 같으니 서브쿼리 삭제 가능) ====== -->
+	<delete id="deleteResourceNameById" parameterType="int">
+		DELETE 
+		FROM resource_name
+		WHERE resource_name_id in (
+			SELECT resource_name_id 
+			FROM resource
+			WHERE resource_id = #{resourceId}
+		)
+	</delete>
+	
+	<delete id="deleteBreedById" parameterType="int">
+		DELETE
+		FROM breed
+		WHERE resource_id = #{resourceId}
+	</delete>
+	
+	<delete id="deleteResourceById" parameterType="int">
+		DELETE
+		FROM resource
+		WHERE resource_id = #{resourceId}
+		
+	</delete>
+	<!-- ===================================================================================== -->
 
     <insert id="insertResource" useGeneratedKeys="true" keyProperty="resource_id">
         insert into resource(resource_name_id, crop_id,
@@ -77,7 +103,7 @@
                  left join trait t on r.trait_id = t.trait_id
                  inner join crop c on c.crop_id = r.crop_id
                  inner join resource_name rn on rn.resource_name_id = r.resource_name_id
-        where r.user_group = #{user_group} and r.delete_check = 0
+        where r.user_group = #{user_group} <!--  and r.delete_check = 0 -->
         ORDER BY r.resource_id DESC
     </select>
 

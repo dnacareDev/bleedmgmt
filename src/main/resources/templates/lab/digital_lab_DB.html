@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+
+    <style>
+        table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+		.top-menu .main-content{
+			background-color:#FCFCFC;
+		}
+		.top-menu .main-content .contents{
+			background-color:#FCFCFC;
+		}
+		.atbd-box{
+			display: inherit;
+		    width: 100%;
+		    justify-content: center;
+		}
+		.atbd-upload{
+			flex: 0 0 50%;
+		}
+		.atbd-box a {
+			width:100%;
+		}
+		.atbd-box button{
+			background-color:#217566;
+			border: 1px solid #217566;
+			margin-left: 10px;
+		}
+		.top-menu .main-content .card{
+			padding-bottom: 100px;
+		}
+		.top-menu .main-content .btn-primary{
+			background-color:#EDF6F1;
+			color:#217566;
+		}
+		.top-menu .main-content .btn-primary img{
+			margin-right: 10px;
+		}
+		.top-menu .main-content .align-items-center{
+			justify-content: center;
+		}
+		select{
+			margin-left: 25px;
+		}
+		.top-menu .main-content .form-group{
+			margin-left: 30px;
+   		    padding-bottom: 0;
+		}
+		.main-content .form-group input[type=text]{
+			margin-left: 25px;
+		}
+		@media (min-width: 576px){
+			.top-menu .main-content .modal-dialog {
+			    max-width: 850px;
+			    margin: 1.75rem auto;
+			}
+		}
+		
+		/* 그리드 특정 column의 텍스트에 링크형태 */
+		#marker_example_file  {
+            color: mediumblue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+		
+    </style>
+
+</head>
+
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+
+<main class="main-content">
+
+    <div class="contents">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                	<div class="breadcrumb-main">
+			        		
+			        </div>
+                </div>
+            </div>
+            <div class="row">
+            	<div class="card">
+            		<div class="card-body">
+	        			<div class="bg-white">
+	                        <div class="card" id="cardPlus" style="width:1100px" >	<!-- width를 지정해야 다 보인다. 오른쪽으로 쏠려있으니 그것도 방법을 찾아보자. 일단은 container-fluid가 중앙정렬된게 원인으로 보임 -->
+	                        	<div class="card-extra mt-20 mr-20">
+		                            <div class="action-btn d-flex justify-content-end">
+		                                <div class="atbd-button-list d-flex flex-wrap">
+		                                    <form action="" name="searchForm" class="d-flex align-items-center add-contact__form my-sm-0 my-2">
+		                                        <!-- 
+		                                        <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" id="CropSelect">
+		                                            <option value="고추">고추</option>
+		                                            <option value="대파">대파</option>
+		                                            <option value="멜론">멜론</option>
+		                                            <option value="무">무</option>
+		                                            <option value="배추">배추</option>
+		                                            <option value="수박">수박</option>
+		                                            <option value="양배추">양배추</option>
+		                                            <option value="양파">양파</option>
+		                                            <option value="참외">참외</option>
+		                                            <option value="토마토">토마토</option>
+		                                        </select>
+		                                         -->
+		                                    </form>
+		                                </div>
+                            		</div>
+		                        </div>
+		                        <div class="card-body" style="padding-top: 0;">
+		                            <div class="bg-white">
+		                            	<div>
+			                            	<h4 class="text-capitalize breadcrumb-title">Digital Marker</h4><br>
+		                            	</div>
+		                                <div id="marker_grid"><!-- 여기에 그리드 출력 --></div>
+		                                <div class="row">
+		                                    <div class="col-4">
+		                                        <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#marker_insert_modal">
+		                                            <span data-feather="plus"></span>
+		                                        </button>
+		                                        <button type="button" class="btn btn-icon btn-light btn-circle" onclick="delete_row()">
+		                                            <span data-feather="trash-2"></span>
+		                                        </button>
+		                                        <button type="button" class="btn btn-icon btn-light btn-circle" onclick="read_csv()">
+		                                            지도
+		                                        </button>
+		                                    </div>
+		                                    <div class="col-4">
+		                                        <div class="row" style="justify-content: center;">
+		                                            <div id="pageNum" style="text-align:center; margin: 2% 0 0 0;"></div>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>		                        
+	                        </div>
+	                    </div>
+            		</div>
+            	</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal code -->
+    <!-- 마커 등록버튼 클릭시 나타나는 modal -->
+    <div class="modal-basic modal fade show" id="marker_insert_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content modal-bg-white ">
+            	<form action="insertMarkerFile" id="insertFile" method="POST" enctype="multipart/form-data">
+	                <div class="modal-body">
+	                	
+	                	<!--  
+	                	<select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="crop" id="crop">
+                                            <option value="고추">고추</option>
+                                            <option value="대파">대파</option>
+                                            <option value="멜론">멜론</option>
+                                            <option value="무">무</option>
+                                            <option value="배추">배추</option>
+                                            <option value="수박">수박</option>
+                                            <option value="양배추">양배추</option>
+                                            <option value="양파">양파</option>
+                                            <option value="참외">참외</option>
+                                            <option value="토마토">토마토</option>
+	                    </select>
+		                -->
+		                <table class="table">
+		               		<tbody>
+			               		<tr>
+		                			<td><label class="reg" for="crop_name">작물</label></td>
+		                			<td><input type="text" name="crop_name"></td>
+		                		</tr>
+		               			<tr>
+		                			<td><label class="reg" for="marker_category">분류</label></td>
+		                			<td><input type="text" name="marker_category"></td>
+		                		</tr>
+		                		<tr>
+		                			<td><label class="reg" for="regist_person">등록자</label></td>
+		                			<td><input type="text" name="regist_person"></td>
+		                		</tr>
+		                		<tr>
+		                			<td><label class="reg" for="regist_date">등록일</label></td>
+		                			<td><input type="text" name="regist_date"></td>
+		                		</tr>
+		                		<tr>
+		                			<td><label class="reg" for="detail_note">상세내용</label></td>
+		                			<td><input type="text" name="detail_note"></td>
+		                		</tr>
+		                	</tbody>
+		                </table>	
+	                	<div>
+                            <div class="atbd-upload">
+                            	<div class="atbd-upload__button">
+                                	<a id="marker_example_file" href="/common/r/example/maker_example.xlsx" download>예제파일다운</a></td>
+                                </div>
+                                <div class="atbd-upload__button">
+                                    <input type="file" id="upload_file" name="file">
+                                </div>
+                            </div>
+                        </div>
+	                </div>
+	                <div class="modal-footer" style="border: none">
+	                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+	                    <button type="button" class="btn btn-primary btn-sm" onclick="insert_marker_information()" style="background-color:#217566; color:#fff">등록</button>
+	                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+   
+    
+  
+</main>
+
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+
+<script type="text/javascript">
+	// 페이지 시작
+	$(document).ready(function(){
+			SearchDB();
+
+		});
+	
+	// 페이지 당 데이터 개수 변경
+	$("#limit").change(function () {
+        	marker_grid.destroy();
+
+        	SearchDB();
+        });
+	
+	$("#CropSelect").change(function() {
+			marker_grid.destroy();
+			
+			SearchDB();
+	})
+	
+	// grid
+    let marker_grid = null;
+    let update_marker_data = [];
+	
+	function SearchDB() {
+		
+		var limit = $("#limit").val();
+		
+		$.ajax({
+			url : 'search_marker_information',
+			method : 'POST',
+			//dataType: 'json',
+			//data : data,
+			success : function(result) {
+				
+				let dataArr = [];
+				
+				let rowArr = {};
+				
+				console.log("result marker", result);
+				
+				for(let i=0 ; i<result.marker_information.length ; i++) {
+					
+					rowArr = {
+									'file': '<a href="upload/' + result.marker_information[i].marker_file + '" download=' + result.marker_information[i].marker_origin_file + '><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
+									'file_name' : result.marker_information[i].marker_file,			// 파일명 조회 용도
+									'file_origin_name' : result.marker_information[i].marker_origin_file,
+									'marker_num': result.marker_information[i].marker_num,
+									'crop_name': result.marker_information[i].crop_name,
+									'marker_category': result.marker_information[i].marker_category,
+									'regist_person': result.marker_information[i].regist_person,
+									'regist_date': result.marker_information[i].regist_date,
+									'detail_note': result.marker_information[i].detail_note,
+							};
+							dataArr.push(rowArr);
+					
+				}
+					
+				console.log(dataArr);
+							
+				marker_grid = new tui.Grid({
+					el: document.getElementById('marker_grid'),
+					scrollX: true,
+					scrollY: true,
+					data: dataArr,
+					rowHeaders: ['checkbox'],
+					columns: [
+						{
+                            header: 'marker_num',
+                            name: 'marker_num',
+                            hidden: true,
+                            sortable: true,
+                            width: 100,
+                            align: 'center',
+                        },
+						{
+                            header: '다운로드',
+                            name: 'file',
+                            width: 80,
+                            align: 'center',
+                        },
+						{
+                            header: '작물',
+                            name: 'crop_name',
+                            sortable: true,
+                            width: 100,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '분류',
+                            name: 'marker_category',
+                            sortable: true,
+                            width: 150,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '등록자',
+                            name: 'regist_person',
+                            sortable: true,
+                            width: 150,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '등록일',
+                            name: 'regist_date',
+                            sortable: true,
+                            width: 250,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '비고',
+                            name: 'detail_note',
+                            width: 230,
+                            align: 'center',
+                        }
+					],
+					pageOptions: {
+                        useClient: true,
+                        perPage: 10
+                    },
+				});
+				
+
+			}
+		});
+	}
+	
+	function insert_marker_information() {
+		
+		let fileCheck = $("#upload_file").val();
+
+		if(!fileCheck) {
+			alert("파일을 첨부해 주세요.");
+			return false;
+		}
+		
+		$("#insertFile").submit();
+	}
+	
+	// 마커 상세정보 수정 함수 (작업중)
+	function update_marker_information() {
+
+		$("$modifyFile").submit();
+	}
+	
+	// 비활성화
+	function update_marker_information2() {
+		let input_marker_data = [];
+		
+		update_marker_data.push({  	'marker_id' : $('input[name=marker_id]').val(),
+									'marker_name' : $('input[name=marker_name]').val(),
+									'marker_kinds' : $('input[name=marker_kinds]').val(),
+									'crop' : $('input[name=crop]').val(),
+									'chromosome_number' : $('input[name=chromosome_number]').val(),
+									'location_start' : $('input[name=location_start]').val(),
+									'location_end' : $('input[name=location_end]').val(),
+									'characteristic' : $('input[name=characteristic]').val(),
+									'marker_reference' : $('input[name=marker_reference]').val()
+		});
+		
+		console.log("update_marker_data 입력 확인 : " , update_marker_data);
+		
+
+		$.ajax(
+			{
+				url: 'update_marker_information',
+				method: 'POST',
+				dataType: 'json',
+				data: { "update_marker_data" : JSON.stringify(update_marker_data) },
+				success: function(result) {
+					
+					if(result != null) {
+						location.reload();									// ajax 성공시 새로고침
+					}
+					
+				},
+				error: function() {
+					alert("입력실패")
+				}
+			}		
+		);
+	}
+	
+	
+	var tablechk = 0; 	// samplegrid, outcomegrid구별용인듯. 일단 안바뀌니까 0으로 설정
+	var insertCheck = 0;	// insert가 이미 활성화되었는지 체크용. 없으면 누를때마다 추가행이 계속 뜨겠지
+	
+	function delete_row() {
+		let total_marker_num = [];
+
+
+        for (let i = 0; i < marker_grid.getCheckedRows().length; i++) {
+        	total_marker_num.push(marker_grid.getCheckedRows()[i].marker_num)
+        }
+        
+        // total_marker_id 배열은 위에서 아래로 쌓인다. getCheckedRows()도 체크된 행이 어디인지 구분하지 않고 위에서부터 순서대로 쌓는다
+        console.log("marker_grid.getCheckedRows()",marker_grid.getCheckedRows());
+        console.log(total_marker_num);
+        
+        if(marker_grid.getCheckedRows().length == 0) {
+        	alert("하나 이상의 체크박스를 체크해주세요.");
+        } else {
+	        if( confirm("삭제하시겠습니까?") == true) {
+		        $.ajax(
+		       		{
+		       			url: 'delete_marker_information',
+		       			method: 'POST',
+		       			dataType: 'json',
+		       			data: {'total_marker_num' : total_marker_num},
+		       			success: function(result)	{
+		       				location.reload();
+		       			},
+		       		});
+	        } else {
+	        	return false;
+	        }
+        }
+        
+	}
+	
+	function chromosome_map() {
+		console.log("script 출력");
+
+	}
+    
+	
+    function cancelRow() {
+        if (tablechk === 0) {
+            marker_grid.removeCheckedRows();
+        } else {
+            outcomegrid.removeCheckedRows();
+        }
+
+        $(".plus_btn_submit1").css("display", "none");
+
+        insertCheck = 0;
+    }
+    
+    	
+   	function read_csv() {
+   		
+   		let total_file_name = [];
+
+    	let total_crop_name = [];
+
+        for (let i = 0; i < marker_grid.getCheckedRows().length; i++) {
+        	total_file_name.push(marker_grid.getCheckedRows()[i].file_name);
+        	console.log("marker_grid.getCheckedRows()[i].file_name",marker_grid.getCheckedRows()[i].file_name);
+        	console.log("total_file_name",total_file_name);
+        	total_crop_name.push(marker_grid.getCheckedRows()[i].crop);
+        }
+        
+        for(let i = 0 ; i<marker_grid.getCheckedRows().length; i++) {
+        	if(marker_grid.getCheckedRows()[0].crop == marker_grid.getCheckedRows()[i].crop) {
+        		continue;
+        	} else {
+        		alert("작물명이 서로 다릅니다.");
+        		return false;
+        	}
+        }
+           
+           console.log("total_file_name", total_file_name);
+           
+           $.ajax(
+                   {
+                       url: 'MarkerMap',
+                       method: 'POST',
+                       dataType: 'json',
+                       data: {'total_file_name' : total_file_name},
+                       success: function (result) {
+                          console.log("현재시간 : " , result)
+   						  window.open('/chrMakerViewerMarker/drawmap.jsp?orga=' + marker_grid.getCheckedRows()[0].crop + '&jobid=' + result , 'drawmap_marker', 'top=100, left=400, width=1200, height=800, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no');
+
+                       }
+                   });
+          
+       }
+		
+    
+
+    
+		
+</script>
+
+</body>
+
+</html>

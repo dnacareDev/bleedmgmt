@@ -83,6 +83,8 @@ public class BreedController {
         break;
       }
     }
+    System.out.println("resource_name : " + resource_name);
+    System.out.println("resourceId : " + resourceId);
 
     List<Detail> details = detailService.SelectDetailListByResource(resourceId);
 

@@ -33,6 +33,10 @@
     .main-content .form-group input[type=text] {
         flex: 0 0 70%;
     }
+    
+    li>a {
+    	cursor: pointer;
+    }
 
 
 </style>
@@ -71,16 +75,18 @@
                                 <span class="menu-text">분석관리</span>
                             </a>
                             <ul class="subMenu">
-                                <!--  
+                                
                                 <li>
-                                    <a onclick="research(0);">통합분석</a>
-                                </li>
-                                -->
-                                <li>
-                                    <a onclick="research(2);">MABC - data</a>
+                                    <a onclick="research(0);">MABC - data</a>
                                 </li>
                                 <li>
-                                    <a onclick="research(3);">MABC - analysis</a>
+                                    <a onclick="research(1);">Digital Analysis</a>
+                                </li>
+                                <li>
+                                    <a onclick="research(2);">Digital Marker</a>
+                                </li>
+                                <li>
+                                    <a onclick="research(4);">Digital MABC DB</a>
                                 </li>
                             </ul>
                         </li>
@@ -218,11 +224,18 @@
             return Alert("접근 권한이 없습니다.");
         } else {
             if (e == 0) {
-                location.href = "/analysis";
-            } else if (e == 2) {
+                //location.href = "/analysis";
                 location.href = "/mabc";
+                //location.href = "/digital_MABC_DB"
+            } else if (e == 1) {
+            	location.href = "/digital_analysis";
+            } else if (e == 2) {
+                //location.href = "/mabc";
+                location.href = "/digital_lab_DB";
             } else if (e == 3) {
-                location.href = "/matrix";
+            	//location.href = "/digital_MABC_DB";
+            } else if (e == 4) {
+            	location.href = "/digital_MABC_DB";
             }
         }
     }

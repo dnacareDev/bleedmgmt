@@ -201,4 +201,20 @@ public int detailDisplayAction(Map<String, Object> param) {
   public int UpdateDeleteCheck(int resource_id) {
 	  return resourceMapper.UpdateDeleteCheck(resource_id);
   }
+  
+  // 2022-06-23 | 삭제처리(delete)
+  @Override
+  public int deleteResourceNameById(int resourceId) {
+	  return resourceMapper.deleteResourceNameById(resourceId);
+  }
+  @Override
+  public int deleteBreedById(int resourceId) {
+	  return resourceMapper.deleteBreedById(resourceId);
+  }
+  @Override
+  public int deleteResourceById(int resourceId) {
+	  return resourceMapper.deleteResourceById(resourceId);
+  }
+  
+  
 }

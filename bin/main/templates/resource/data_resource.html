@@ -1012,7 +1012,13 @@
             total_id.push(samplegrid.getCheckedRows()[i].resource_id)
         }
         
-        if(confirm("정말 이 관리자원을 삭제하시겠습니까?") == true) {
+        if(total_id.length == 0) {
+        	Alert1("삭제할 관리자원을 찾을 수 없습니다.");
+        	return;
+        }
+        
+        
+        if(confirm("정말 삭제하시겠습니까?") == true) {
         	$.ajax(
                     {
                         url: 'deleteResource',
@@ -1124,6 +1130,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                	
                     $("#upload_id").val(e);
 
                     var file_list = $("#file_list");
@@ -1206,7 +1213,8 @@
                                 header: '순번',
                                 name: 'resource_id',
                                 width: 100,
-                                align: 'center'
+                                align: 'center',
+                                hidden: true
                             },
                             {
                                 header: '작목',
@@ -1258,7 +1266,7 @@
                         }
                     });
 
-                    console.log(result);
+                    console.log("resource result : ", result);
                     
                     const dataArr = [];
 

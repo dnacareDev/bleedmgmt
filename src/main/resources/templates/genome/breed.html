@@ -871,11 +871,14 @@
             height: 100%;
             object-fit: contain;
         }
-        
-        /* tui 최신화하면서 cell 왼쪽정렬이 기본값이 되어버린듯. 중앙정렬로 수정 */
-        .main-content {
-		    text-align: center !important;
+		
+		#breedGrid .tui-grid-body-area td[data-column-name*='_checked'] {
+			color: mediumblue;
+            text-decoration: underline;
+            cursor: pointer;
 		}
+		
+		
     </style>
 </head>
 <body class="layout-light top-menu overlayScroll">
@@ -1549,7 +1552,6 @@
                     dataType: 'json',
                     data: {"crop_id": crop_id, "resource_name": resource_name},
                     success: function (result) {
-                    	
                     	
                     	var detail_arr = [];
                     	
@@ -2492,16 +2494,52 @@
     }
     
     let selectgrid = [];
-    //let selectgrid = null;
 
+    // 2022-06-27 | 새 방식
+    function search_cell_value(cell_value) {
+		
+    	console.log("cell_value : ", cell_value);
+		console.log("list : ", resource_list);
+		
+		let crop_id = $("#CropSelect").val();
+        let resource_name = $(".manage")[0].innerText;
+		
+    	
+    	$("#pop_data1").modal();
+        $(".titleType").empty();
+    	
+    	for(let i=0 ; i<resource_list.length ; i++) {
+    		
+    		// resource_list의 숫자만큼 div 생성. 그리드를 생성할 영역 준비
+    		let grid_list_str = '<div id=grid_' + resource_list[i].resource_name_id + '>';
+    		grid_list_str += '</div>';
+    		$("#gridGroup").append(grid_list_str);
+    		
+    		$.ajax(
+                    {
+                        url: 'searchCellValue',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {"breed_id": resource_list[i].resource_name_id, "crop_id": crop_id, "resource_name": resource_list[i].resource_name},
+                        success: function (result) {
+                        	console.log(success);
+                        }
+            });
+    	}
+    }
+    
+    
+    /*
+    // 2022-06-24 | 기존 방식 주석화. 컬럼명에 제한되지 않고 모든 standard를 for문 없이 쿼리문에서 한번에 불러오도록 작업중
     function Search(e, d, v) {
+    	
+    	console.log("e : ", e, " & d : ", d, " & v : ", v);
     	
     	selectgrid = [];
     	
     	console.log("list : ", resource_list);
     	
     	$("#pop_data1").modal();
-        //$(".titleType").text("파종대장");
         $(".titleType").empty();
     	
     	for(let i=0 ; i<resource_list.length ; i++) {
@@ -2517,13 +2555,12 @@
             let cell_value = v;
             let crop_id = $("#CropSelect").val();
             let resource_name = $(".manage")[0].innerText;
-            //let limit = $("#limit").val();
             
             let data = {"breed_id": resource_list[i].resource_name_id, "crop_id": crop_id, "resource_name": resource_list[i].resource_name};
     	
-            
-            //console.log("resource_list[i] : ", resource_list[i]);
+            console.log("resource_list[i] : ", resource_list[i]);
 
+            
             // 각 resource_list에 해당하는 그리드 데이터 조회
             $.ajax(
                     {
@@ -2533,6 +2570,7 @@
                         data: data,
                         success: function (result) {
                         	
+                        	console.log("grid result : ", result);
                         	
                         	//클릭한 cell의 컬럼명(breed_detail_name)이 없다면 그리드 출력에서 제외 + 몇번째 컬럼인지 변수로 저장
                         	let flag = false;
@@ -2557,7 +2595,7 @@
                         	console.log("result grid_ ", resource_list[i].resource_name_id, " : ", result );
                         	
                         	
-                        	//데이터가 없을 경우 || 현재 관리대장과 일치하는 데이터일 경우(필요없으므로) 그리드 출력에서 제외
+                        	// 데이터가 없을 경우 || 현재 관리대장과 일치하는 데이터일 경우(필요없으므로) 그리드 출력에서 제외
                         	if(result.breed.length == 0 || resource_list[i].resource_name == "[[${type}]]" ){
                         		return;
                         	} 
@@ -2618,20 +2656,7 @@
                                 let tempArray = {};
 
                                 //console.log("data : ", data);
-                                
-                                /*
-                                tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                                tempArray['breed_id'] = result.breed[j].breed_id;
-
-                                if (result.breed[j].detail_count == 0) {
-                                    tempArray['status'] = '<span style="color:red">EMPTY</span>';
-                                } else {
-                                    tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
-                                }
-                                */
-                                
-                                
-                                
+  
                                 // 데이터를 그리드 cell에 입력
                                 for (let k = 1; k < headerName.length; k++) {
                                 	
@@ -2654,20 +2679,6 @@
                                 // 데이터 필터링 콘솔 
                                 //console.log(cell_value, " vs ", data[nth_column].standard_data);
                                 
-                                
-                                
-                                /*
-                                for (let j = 1; j < headerName.length; j++) {
-                                    if ((typeof headerName[colName[j - 1]]) === 'string') {
-                                        tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                                    } else if ((typeof headerName[colName[j - 1]]) === 'number') {
-                                        if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
-                                            tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
-                                        }
-                                    }
-                                }
-                                */
-
                                 //console.log("tempArray : ", tempArray);
                                 
                                 // 필터링되었을 경우 dataList에 밀어넣지 않음
@@ -2682,28 +2693,15 @@
                             
                         }
             });
-            
+            ////////////////////////////////////////////////////////////////////////////////////////////
             
             
     	}
-    	
-
-
-        let breed_id = e;
-        let breed_detail_id = d;
-        let cell_value = v;
-        let crop_id = $("#CropSelect").val();
-        let resource_name = $(".manage")[0].innerText;
-        let limit = $("#limit").val();
-
-        let data = {"breed_id": breed_id, "crop_id": crop_id, "resource_name": resource_name};
-        //let data = {"breed_id": 407, "crop_id": 5, "resource_name": '무파종'}; 					// 무파종 모달창 출력
-
-        console.log("data : ", data);
-        
-       
     }
+    */
 
+    
+    
     /* e : 파종번호 모달창 */
 
     /* s : 모달창 닫힐 때 이벤트 발생 */
@@ -2817,7 +2815,7 @@
 
                         let arr = {}
 
-                        if (result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
+                        if (result.detail[i].detail_info == 0 || result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
                         	if(result.detail[i].detail_click == 1) {
                         		arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 200, 'filter': filter, 'align': 'center'};
                             	headerName[colName[i]] = colName[i] + '_checked';
@@ -2978,7 +2976,7 @@
                         	let breed_id = breedgrid.getRow(ev.rowKey).breed_id;
                         	let breed_detail_name = null;
                         	
-                        	console.log("value : ", breedgrid.getValue(ev.rowKey, ev.columnName));
+                        	//console.log("value : ", breedgrid.getValue(ev.rowKey, ev.columnName));
                         	
                         	// cell값이 비어있을 경우 검색없이 return
                         	if(!breedgrid.getValue(ev.rowKey, ev.columnName)) {
@@ -2996,6 +2994,9 @@
                         	//console.log("breed_detail_name : ", breed_detail_name);
                         	
                             Search(breed_id, breed_detail_name, breedgrid.getValue(ev.rowKey, ev.columnName));
+                            
+                        	//search_cell_value(breedgrid.getValue(ev.rowKey, ev.columnName));
+                            
                         } 
                         
                     });

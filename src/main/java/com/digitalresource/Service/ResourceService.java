@@ -50,4 +50,10 @@ public interface ResourceService {
 	Resource selectResourceById(int resource_id);
 	
 	int UpdateDeleteCheck(int resource_id);								// 2022-06-07 | 삭제처리(delete_check)
+	
+	// 2022-06-23 | 삭제처리(delete)
+	public int deleteResourceNameById(int resourceId);
+	public int deleteBreedById(int resourceId);
+	public int deleteResourceById(int resourceId);
+	
 }

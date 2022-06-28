@@ -42,7 +42,7 @@ public interface ResourceMapper {
   public List<Detail> selectDetailHead(Map<String, Object> param);
 
   public int detailDisplayAction(@Param("detailIds") String detailIds);
-
+ 
   public int detailDisplayAction(Map<String, Object> param);
 
   int SelectCropCount(@Param("resource_name") String resource_name, @Param("crop_name") String crop_name, @Param("user_group") int user_group);
@@ -56,4 +56,9 @@ public interface ResourceMapper {
   int UpdateResourceUse(@Param("resource_use") int resource_use, @Param("resource_id") int resource_id);
   
   int UpdateDeleteCheck(int resource_id); 												// 2022-06-07 | 삭제처리(delete_check)
+  
+  // 2022-06-23 | 삭제처리(delete)
+  public int deleteResourceNameById(int resourceId);
+  public int deleteBreedById(int resourceId);
+  public int deleteResourceById(int resourceId);
 }

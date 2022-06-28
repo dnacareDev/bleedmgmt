@@ -743,8 +743,17 @@
     });
 
     let featureFileName = null;
+    let saveFlag = false;
 
     function saveResource() {
+    	
+    	// 저장버튼을 빠르게 2번이상 누르는 현상 방지
+    	if(saveFlag) {
+    		Alert1("관리자원 저장이 이미 진행중입니다.")
+    		return;
+    	}
+    	saveFlag = true;
+    	
         if (checkName == 1) {
             let checkBox = document.getElementsByClassName("anaCheck");
             let group = $("#user_group").val();
@@ -761,7 +770,7 @@
                     //console.log("dataArr[i].name", dataArr[i].name);
                     //dataArr[i].header += '_checked';
                     //dataArr[i].name += '_checked';
-                    //dataArr[i].info = 5;					// check 이벤트를 발생시키는 기준 : detail
+                    //dataArr[i].info = 2;					// check 이벤트를 발생시키는 기준 : detail
                     
                     // 2022-06-18 | data_info=5를 data_click=1로 변경
                     dataArr[i].click = 1;
