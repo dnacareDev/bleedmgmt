@@ -82,7 +82,10 @@
 
     <select id="SelectResourceNameId" resultType="int">
         SELECT resource_name_id FROM resource_name
+        <!-- 왜 CONCAT이 붙지? 
         WHERE resource_name LIKE CONCAT('%', #{resource_name}, '%') AND user_group = #{user_group}
+        -->
+        WHERE resource_name = #{resource_name} AND user_group = #{user_group}
     </select>
 
 </mapper>

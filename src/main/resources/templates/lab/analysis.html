@@ -789,20 +789,10 @@
                         </div>
                         <div class="container clearfix">
                             <form action="" method="post">
-                                <div class="cover_top">
-                                    <div class="selectType">
-                                        <select id="select_crop">
-                                            <th:block th:each="list : ${cropList}">
-                                                <option th:if="${crop_id != list.crop_id} " th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
-                                                <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
-                                            </th:block>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="contents clearfix" style="clear:both; padding-top:10px;">
                                     <h6 class="title">분석대상선택</h6>
                                     <div class="box box1">
-                                        <input type="text" id="search_target" onchange="SearchTarget();" placeholder="파종번호 검색">
+                                        <!--  <input type="text" id="search_target" onchange="SearchTarget();" placeholder="파종번호 검색"> -->
                                         <div class="text_box text_box1" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
                                             <ul id="target_list">
                                             </ul>
@@ -857,7 +847,7 @@
                                 <div class="contents clearfix">
                                     <h6 class="title">분석형질</h6>
                                     <div class="box box1">
-                                        <input type="text" id="search_trait" onchange="SearchTrait();" placeholder="파종번호 검색">
+                                        <!--  <input type="text" id="search_trait" onchange="SearchTrait();" placeholder="파종번호 검색"> -->
                                         <div class="text_box text_box5" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
                                             <ul id="trait_list">
                                             </ul>
@@ -930,6 +920,15 @@
     let array2 = [];
     let textLi;
 
+    $(document).ready(function () {
+
+        SearchTarget();
+        SearchTrait();
+        CheckFunction();
+        autoHeight();
+    });
+    
+    
     /* s : sessionStorage 저장 예제 */
     function setSessionS(key, value) {
         sessionStorage.setItem(key, value);
@@ -955,16 +954,8 @@
 
     /* e : sessionStorage 저장 예제 */
 
-    let type_id = '파종대장_id';
 
-    $(document).ready(function () {
-        $("#select_crop").val(getSessionS(type_id));
 
-        SearchTarget();
-        SearchTrait();
-        CheckFunction();
-        autoHeight();
-    });
 
     // 작물 선택
     $("#select_crop").change(function () {
@@ -976,13 +967,25 @@
     });
 
     function SearchTarget() {
-        let name = $("#select_crop option:selected").text();
+        //let name = $("#select_crop option:selected").text();
+        
+        
         let url = new URL(window.location).searchParams;
+        let crop_name = url.get("crop");
         let total_id = url.get("total_id");
-        let selected = $(".manage").val();
-        let type = 0;
+        let type = url.get("type");
+        let first_column = url.get("first_column");
+        //let resource_id = url.get("resource_id");
+        
+        //let selected = $(".manage").val();
+        
+        
+        console.log("total_id", total_id);
+        
+        //console.log('resource_id : ', resource_id);
+        
 
-        let data = {"name": name, "total_id": total_id, "type": type};
+        let data = {"crop_name": crop_name, "total_id": total_id, "type": type, "first_column":first_column};
 
         $.ajax(
             {
@@ -1030,12 +1033,17 @@
     }
 
     function SearchTrait() {
-        let crop_id = $("#select_crop").val();
+        //let crop_id = $("#select_crop").val();
         let url = new URL(window.location).searchParams;
+        let crop_name = url.get("crop");
         let total_id = url.get("total_id");
+        let resource_id = url.get("resource_id");
+        
+        //console.log(crop_id);
 
-        let data = {"crop_id": crop_id, "total_id": total_id};
+        let data = {"crop_name": crop_name, "total_id": total_id, "resource_id": resource_id};
 
+        
         $.ajax(
             {
                 url: "selectTrait1",
@@ -1043,6 +1051,9 @@
                 dataType: "JSON",
                 data: data,
                 success: function (result) {
+                	
+                	console.log("trait result : ", result); 
+                	
                     let trait_list = $("#trait_list");
                     let add_list = "";
 
@@ -1090,9 +1101,11 @@
                     }
                 }
             });
+        
     }
 
     function CheckFunction() {
+    	//console.log("check function");
         $('.text_box li').off('click').on('click', function (e) {
             if (!keyShiftBool) {
                 e.preventDefault();
@@ -1475,7 +1488,13 @@
         var method = 0;
         var trait_id = [];
         var selected = $(".manage").val();
-        var detail_type = 0;
+        var detail_type = 2;
+        
+        let url = new URL(window.location).searchParams;
+        let detail_name = url.get("crop");
+        let resource_id = url.get("resource_id");
+        
+        console.log(detail_name);
 
         $(".minus_target").each(function () {
             target_id.push($(this).val());
@@ -1493,12 +1512,14 @@
         });
 
         var data = {
-            "detail_name": $("#select_crop").val(),
+            //"detail_name": $("#select_crop").val(),
+            "detail_name": detail_name,
             "detail_type": detail_type,
             "target_id": target_id,
             "target_name": target_name,
             "method": method,
-            "trait_id": JSON.stringify(trait_id)
+            "trait_id": JSON.stringify(trait_id),
+            "resource_id": resource_id
         };
 
         const loading = document.querySelector('.load_wrap');

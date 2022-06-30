@@ -8,8 +8,8 @@
 	</select>
 	
 	<insert id="insertAnalysisDB" parameterType="AnalysisDB">
-		INSERT INTO analysis_db(crop_name, analysis_category, detail, note, regist_date)
-		VALUES(#{crop_name}, #{analysis_category}, #{detail}, #{note}, NOW())
+		INSERT INTO analysis_db(crop_name, analysis_category, detail, note, regist_date, jobid)
+		VALUES(#{crop_name}, #{analysis_category}, #{detail}, #{note}, NOW(), #{jobid})
 	</insert>
 	
 	<select id="deleteAnalysisDB" parameterType="java.util.ArrayList" resultType="int">

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.digitalresource.Entity.ChromosomeViewer;
 import com.digitalresource.Entity.MarkerInformation;
 
 @Mapper
@@ -15,5 +16,7 @@ public interface MarkerInformationMapper {
 	public int InsertMarkerInformation(MarkerInformation marker_information);
 	
 	public Integer DeleteMarkerInformation(int[] total_marker_num);
+	
+	public int InsertChromosomeViewer(ChromosomeViewer chromosomeViewer);
 	
 }

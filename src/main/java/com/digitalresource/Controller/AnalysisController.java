@@ -1,9 +1,18 @@
 package com.digitalresource.Controller;
 
-import com.digitalresource.Entity.*;
-import com.digitalresource.RModule.RunCorrlation;
-import com.digitalresource.RModule.RunTrait;
-import com.digitalresource.Service.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -12,13 +21,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import com.digitalresource.Entity.Breed;
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.Detail;
+import com.digitalresource.Entity.StandardList;
+import com.digitalresource.Entity.User;
+import com.digitalresource.RModule.RunCorrlation;
+import com.digitalresource.RModule.RunTrait;
+import com.digitalresource.Service.AnalysisService;
+import com.digitalresource.Service.BreedService;
+import com.digitalresource.Service.CropService;
+import com.digitalresource.Service.ResourceNameService;
+import com.digitalresource.Service.ResourceService;
 
 @Controller
 public class AnalysisController {
@@ -44,12 +58,18 @@ public class AnalysisController {
     User user = (User)auth.getPrincipal();
     int group = user.getUser_group();
 
-    String type = "파종대장";
+    //String type = "파종대장";
+    
+//    int crop_id = service.SelectCropIdByName(crop);
 
-    List<Crop> crops = cropService.SearchCropList(type, group);
-
-    mv.addObject("cropList", crops);
-
+//    List<Crop> crops = cropService.SearchCropList(resource_name, group);
+    
+//    System.out.println("resource_name(mv) : " + resource_name);
+//    System.out.println("crop_id(mv) : " + crop_id);
+//    System.out.println("cropList(mv) : " + crops.get(0).getCrop_id());
+    
+//    mv.addObject("crop_id", crop_id);
+//    mv.addObject("cropList", crops);
     mv.setViewName("lab/analysis");
 
     return mv;
@@ -60,28 +80,51 @@ public class AnalysisController {
   // 작목 조회
   @ResponseBody
   @RequestMapping("/selectTarget")
-  public Map<String, Object> SelectTarget(Authentication auth, @RequestParam("name") String name, @RequestParam(required = false, value = "total_id") int[] total_id, @RequestParam("type") int type) {
+  public Map<String, Object> SelectTarget(
+//		  									Authentication auth, 
+		  									@RequestParam("crop_name") String crop_name, 
+		  									@RequestParam(required = false, value = "total_id") int[] total_id,
+//		  									@RequestParam("resource_id") int resource_id,
+		  									@RequestParam("first_column") String first_column,
+		  									@RequestParam("type") int type) {
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
     List<Breed> breed = new ArrayList<Breed>();
-    User user = (User)auth.getPrincipal();
-    int group = user.getUser_group();
+//    User user = (User)auth.getPrincipal();
+//    int group = user.getUser_group();
 
-    int crop_id = service.SelectCropIdByName(name);
+//    int crop_id = service.SelectCropIdByName(crop_name);
+    
+//    String resourceName = "파종대장";
 
-    String resourceName = "파종대장";
+//    int[] resource_name_id = resourceNameService.SelectResourceNameId(resource_name, group);
+    
+//    System.out.println("resource_name_id : " + Arrays.toString(resource_name_id));
 
-    int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName, group);
-
-    int[] resource_id = new int[resource_name_id.length];
-
+//    int[] resource_id = new int[resource_name_id.length];
+    
+//    int selected_resource_id = 0;
+/*
     for (int i = 0; i < resource_name_id.length; i++) {
       if (resourceService.SearchResourceId(crop_id, resource_name_id[i], group) != null) {
         resource_id[i] = resourceService.SearchResourceId(crop_id, resource_name_id[i], group);
+        
+        if(resource_id[i] != 0) {
+        	selected_resource_id = resource_id[i];
+        	break;
+        }
       }
     }
+  */  
+//    System.out.println("resource_id : " + resource_id);
+    
+//    System.out.println("selected_resource_id : " + selected_resource_id);
 
-    breed = service.SelectBreed(name, resource_id, type);
+//	1도 2도 작동을 안함. 아예 SelectBreed3이라는 새로운 쿼리문을 만드는것도 방법    
+//  breed = service.SelectBreed(crop_name, resource_id, type);
+    breed = service.SelectBreed3(crop_name, total_id, first_column, type);
+    
+//    System.out.println("breed : " + breed);
 
     result.put("breed", breed);
 
@@ -121,32 +164,42 @@ public class AnalysisController {
 
   @ResponseBody
   @RequestMapping("selectTrait1")
-  public List<Detail> SelectTrait1(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam(required = false, value = "total_id") int[] total_id) {
+  public List<Detail> SelectTrait1(
+		  							Authentication auth, 
+		  							@RequestParam("crop_name") String crop_name, 
+		  							@RequestParam(required = false, value = "total_id") int[] total_id,
+  									@RequestParam("resource_id") int resource_id){
     List<Detail> result = new ArrayList<>();
     User user = (User)auth.getPrincipal();
     int group = user.getUser_group();
 
-    String resourceName = "파종대장";
-
-    int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName, group);
-
-    System.out.println("resource_name_id = " + Arrays.toString(resource_name_id));
-
-    for (int i = 0; i < resource_name_id.length; i++) {
-
-      int resource_id = 0;
-
-      if (resourceService.SearchResourceId(crop_id, resource_name_id[i], group) != null) {
-        resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i], group);
-      }
-
-      System.out.println("resource_id = " + resource_id);
-
-      if (resource_id != 0) {
-        result = service.SelectTrait(resource_id);
-        break;
-      }
-    }
+//    String resourceName = "파종대장";
+//
+//    int[] resource_name_id = resourceNameService.SelectResourceNameId(resourceName, group);
+//
+//    System.out.println("resource_name_id(selectTrait1) = " + Arrays.toString(resource_name_id));
+//
+//    for (int i = 0; i < resource_name_id.length; i++) {
+//
+//      int resource_id = 0;
+//
+//      if (resourceService.SearchResourceId(crop_name, resource_name_id[i], group) != null) {
+//        resource_id = resourceService.SearchResourceId(crop_name, resource_name_id[i], group);
+//      }
+//
+//      System.out.println("resource_id = " + resource_id);
+//
+//      if (resource_id != 0) {
+//        result = service.SelectTrait(resource_id);
+//        break;
+//      }
+//    }
+    
+//    System.out.println(resource_id);
+    
+    result = service.SelectTrait(resource_id);
+    
+//    System.out.println("result : " + result);
 
     result.forEach(System.out::println);
 
@@ -156,12 +209,26 @@ public class AnalysisController {
   // 형질 분석
   @ResponseBody
   @RequestMapping("runAnalysis")
-  public String RunAnalysis(@RequestParam("detail_name") String detail_name, @RequestParam("detail_type") int detail_type, @RequestParam("target_id[]") int[] target_id, @RequestParam("target_name[]") String[] target_name, @RequestParam("method") int method, @RequestParam("trait_id") String trait_id) {
-    String result = null;
+  public String RunAnalysis(
+		  					@RequestParam("detail_name") String detail_name, 
+		  					@RequestParam("detail_type") int detail_type, 
+		  					@RequestParam("target_id[]") int[] target_id, 
+		  					@RequestParam("target_name[]") String[] target_name, 
+		  					@RequestParam("method") int method, 
+		  					@RequestParam("trait_id") String trait_id,
+		  					@RequestParam("resource_id") int resource_id) {
+    
+	  String result = null;
 
-    List<Detail> detail = service.SelectDetail(detail_name);
+    List<Detail> detail = service.SelectDetail(detail_name, resource_id);
     List<StandardList> standard = service.SelectStandard(target_id, detail_type);
 
+    
+    System.out.println("target_id : " + Arrays.toString(target_id));
+//    System.out.println("detail : " + detail);
+//    System.out.println("standard : " + standard);
+    
+    
     Date date = new Date();
 
     String date_name = (1900 + date.getYear()) + "" + (date.getMonth() + 1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
@@ -177,6 +244,7 @@ public class AnalysisController {
 
       path = new File(root);
       file = new File(root + "/" + file_name);
+      System.out.println("file make : " + path);
     } else {
       root = "/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/r_plot/trait/" + date_name;
 //      root = "C:\\upload\\" + date_name;
@@ -196,13 +264,24 @@ public class AnalysisController {
 
       BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
+      
       for (int i = 0; i < detail.size(); i++) {
         writer.write("\t");
         writer.write("PH" + (i + 1));
       }
-
+      
+      writer.newLine();
+      writer.write("aaaa");
+      
+      for(int i = 0; i < detail.size(); i++){
+		writer.write("\t");
+		System.out.print(detail.get(i).getDetail_name().replaceAll("[ |\r\n|\r|\n|\n\r]", "") + "\t");
+		writer.write(detail.get(i).getDetail_name().replaceAll("[ |\r\n|\r|\n|\n\r]", ""));
+      }
+      
       for (int i = 0; i < standard.size(); i++) {
         if (i % detail.size() == 0) {
+        	System.out.println("target_name[i / detail.size()] : " + target_name[i / detail.size()]);
           writer.newLine();
           writer.write(target_name[i / detail.size()]);
           writer.write("\t");
@@ -238,6 +317,7 @@ public class AnalysisController {
       trait = trait.replace("]", "");
       trait = trait.replace("\"", "");
 
+      
       if (method == 0) {
         RunCorrlation runcorrlation = new RunCorrlation();
         runcorrlation.MakeCorrplot("c\\(" + trait + "\\)", "/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/", date_name);
@@ -246,7 +326,7 @@ public class AnalysisController {
         RunTrait runtrait = new RunTrait();
         runtrait.MakeTraitplot(trait, "/data/apache-tomcat-9.0.8/webapps/ROOT/common/resultfiles/", date_name);
 //        runtrait.MakeTraitplot(trait, "\"C:\\\\upload\\\\\"", date_name);
-      }
+      } 
     } catch
     (IOException e) {
       System.out.println(e.getMessage());

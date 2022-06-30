@@ -22,5 +22,10 @@
             marker_num = #{item}
         </foreach>
     </select>
+    
+    <insert id="InsertChromosomeViewer" parameterType="ChromosomeViewer">
+		INSERT INTO chromosomeViewer(chr, pos, mname, sel, jobid)
+		VALUES(#{str1}, #{str2}, #{str3}, #{sel}, #{jobid})
+	</insert>
 
 </mapper>

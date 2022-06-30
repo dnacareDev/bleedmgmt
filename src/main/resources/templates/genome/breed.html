@@ -2312,7 +2312,8 @@
             if (chk === 1) {
                 Alert1("형질 값이 존재하지 않습니다.")
             } else {
-                window.open("/analysis?crop=" + crop + "&total_id=" + total_id + "&type=" + 1);
+                //window.open("/analysis?crop=" + crop + "&total_id=" + total_id + "&type=" + 1 + "&resource_name=[[${type}]]" + "&first_column="+ first_column + "&resource_id=" + $("#resource_id").val());
+            	window.open("/analysis?crop=" + crop + "&total_id=" + total_id + "&type=" + 1 + "&first_column="+ first_column + "&resource_id=" + $("#resource_id").val());
             }
         }
     }
@@ -2713,9 +2714,14 @@
     });
     /* e : 모달창 닫힐 때 이벤트 발생 */
 
+    
+
+    //통합분석에서 get으로 보낼 파라미터. SearchBreedgrid(e) 에서 ajax 후 변수값 삽입
+    var first_column = null;
+    
     let breedgrid = null;
     let updateBreedData = [];
-
+    
     function SearchBreedgrid(e) {
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
@@ -2734,6 +2740,8 @@
                     $("#resource_id").val(result.resource_id);
                     
                     console.log("breed result : ", result)
+                    
+                    console.log("resource_id : ", resource_id);
                     
                     breedgrid = new tui.Grid({
                         el: document.getElementById('breedGrid'),
@@ -2793,7 +2801,7 @@
                             'align': 'center'
                         },
                         {
-                            'header': '특성상태',
+                            'header': '자원정보',
                             'name': 'status',
                             'width': 120,
                             'align': 'center'
@@ -2802,6 +2810,8 @@
 
                     let headerName = [];
                     let colName = [];
+                    
+                    first_column = result.detail[0].detail_name;
 
                     for (let i = 0; i < result.detail.length; i++) {
                     	
@@ -2874,9 +2884,9 @@
 
                     for (let i = 0; i < result.breed.length; i++) {
                     	
+                    	//isMatch 방식으로 파일이 있는 breed_id 검출
                     	let isMatch = false;
                     	
-                    	//isMatch 방식으로 파일이 있는 breed_id 검출
                     	for(let j=0 ; j<result.breed_file.length ; j++) {
                     		if(result.breed[i].breed_id == result.breed_file[j].breed_id) {
                     			isMatch = true;
@@ -2884,10 +2894,11 @@
                     		}
                     	}
                     	
+                    	
                         let data = result.breed[i].standardList;
                         let tempArray = {};
 
-                        console.log(isMatch);
+                        //console.log(isMatch);
                         
                         if(isMatch == true ){
                         	tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down-fill"></i>';

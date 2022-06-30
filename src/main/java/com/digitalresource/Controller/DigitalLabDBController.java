@@ -77,6 +77,7 @@ public class DigitalLabDBController {
 		String[] extension = file.getOriginalFilename().split("\\.");
 
 	    String file_name = fileController.ChangeFileName(extension[1]);
+//		String file_name = formatedNow + "." + extension[1];
 	    String origin_file_name = file.getOriginalFilename();
 	    
 	    marker_information.setMarker_file(file_name);
@@ -102,11 +103,13 @@ public class DigitalLabDBController {
 	    // DB에 파일명 및 파일경로 지정
 	    int insert_file = MService.InsertMarkerInformation(marker_information);
 	    
+	    
 		
 		mv.setViewName("redirect:/digital_lab_DB");
 		
 		return mv;
 	}
+	
 	
 	@ResponseBody
 	@RequestMapping("delete_marker_information")
@@ -190,9 +193,9 @@ public class DigitalLabDBController {
 					chromosomeViewer.setSel(0);
 					chromosomeViewer.setJobid(formatedNow);
 					
-//					System.out.println(chromosomeViewer);
+					System.out.println(chromosomeViewer);
 					
-//					int result = service.InsertChromosomeViewer(chromosomeViewer);
+					MService.InsertChromosomeViewer(chromosomeViewer);
 				}
 			}
 		}

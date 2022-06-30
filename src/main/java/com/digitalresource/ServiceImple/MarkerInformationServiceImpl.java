@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.digitalresource.Entity.ChromosomeViewer;
 import com.digitalresource.Entity.MarkerInformation;
 import com.digitalresource.Mapper.MarkerInformationMapper;
 import com.digitalresource.Service.MarkerInformationService;
@@ -29,5 +30,10 @@ public class MarkerInformationServiceImpl implements MarkerInformationService {
 	@Override
 	public Integer DeleteMarkerInformation(int[] total_marker_num) {
 		return mapper.DeleteMarkerInformation(total_marker_num);
+	}
+	
+	@Override
+	public int InsertChromosomeViewer(ChromosomeViewer chromosomeViewer) {
+		return mapper.InsertChromosomeViewer(chromosomeViewer);
 	}
 }

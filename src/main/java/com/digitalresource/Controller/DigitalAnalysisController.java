@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.Entity.AnalysisDB;
+import com.digitalresource.RModule.RunEtcR;
 import com.digitalresource.Service.AnalysisDbService;
 
 @Controller
@@ -58,7 +60,7 @@ public class DigitalAnalysisController {
 	
 	@ResponseBody
 	@RequestMapping("/insertAnalysisFile")
-	public ModelAndView insertAnalysisFele(ModelAndView mv, 
+	public String insertAnalysisFele(
 											@ModelAttribute AnalysisDB analysis_db,
 											@RequestParam("file") MultipartFile file) throws IOException {
 		
@@ -72,15 +74,19 @@ public class DigitalAnalysisController {
 		
 		
 		String[] extension = file.getOriginalFilename().split("\\.");
+		
+		System.out.println("extension : " + Arrays.toString(extension));
 
-	    String file_name = fileController.ChangeFileName(extension[1]);
-	    String origin_file_name = file.getOriginalFilename();
+//	    String file_name = fileController.ChangeFileName(extension[1]);
+		String file_name = formatedNow + ".xlsx";
+//	    String origin_file_name = file.getOriginalFilename();
 	    
 //	    analysis_db.setMarker_file(file_name);
 //	    analysis_db.setMarker_origin_file(origin_file_name);
+	    analysis_db.setJobid(formatedNow);
 
 //				    String path = "src/main/webapp/upload";
-	    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/";
+	    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/common/r/result/" + formatedNow;
 
 	    File filePath = new File(path);
 
@@ -94,18 +100,15 @@ public class DigitalAnalysisController {
 	    Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 	    
 	    // html에서 제출된 name들의 정상출력 여부 + file_name 세팅
- 		System.out.println(analysis_db);
+ 		//System.out.println(analysis_db);
 	    
 	    // DB에 파일명 및 파일경로 지정
-	    int insert_file = service.insertAnalysisDB(analysis_db);
+	    service.insertAnalysisDB(analysis_db);
 		
-		System.out.println(analysis_db);
-		System.out.println("insert_file" + insert_file);
+	    RunEtcR runetcr = new RunEtcR();
+		runetcr.MakeRunEtcR(formatedNow, file_name);
 	    
-	    mv.addObject("path", formatedNow);
-		mv.setViewName("lab/matrix");
-		
-		return mv;
+	    return formatedNow;
 		
 	}
 	

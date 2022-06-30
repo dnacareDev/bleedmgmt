@@ -26,6 +26,27 @@
         LEFT JOIN standard s ON d.detail_id = s.detail_id
         WHERE b.variety_name = #{name} AND (d.detail_name LIKE CONCAT('%', '파종번호' ,'%')) AND s.breed_id = b.breed_id AND s.standard_data IS NOT NULL AND b.resource_id = #{resource_id}
     </select>
+    
+    <select id="SelectBreed3" resultType="Breed">
+    	<!-- SelectBreed 하드코딩 수정 + total_id(breed_id[]) + 첫번째 컬럼을 parameter로 적용 -->
+    	  
+        SELECT b.breed_id, b.resource_id, b.create_date, b.row_file, b.variety_name, b.breed_row, b.user_group, d.detail_id, d.detail_type, d.detail_name, s.standard_id, s.standard_data,
+        (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND (d.detail_info = 1 OR d.detail_info = 2) AND s.standard_data IS NOT NULL) AS standard_count
+        FROM breed b
+        LEFT JOIN detail d ON b.resource_id = d.resource_id
+        LEFT JOIN standard s ON d.detail_id = s.detail_id
+        WHERE b.variety_name = #{name} AND d.detail_name = #{first_column} AND s.breed_id = b.breed_id AND s.standard_data IS NOT NULL
+        
+        <choose>
+            <when test="type != '0' and total_id != null">
+                <foreach collection="total_id" item="item" open="AND (" close=")" separator="OR">
+                    b.breed_id = #{item}
+                </foreach>
+            </when>
+        </choose>
+        
+    </select>
+    
 
     <!-- 분석 형질 조회 -->
     <select id="selectTrait" resultType="Detail">
@@ -42,14 +63,16 @@
         FROM detail
         WHERE resource_id = #{resource_id}
           AND (detail_info = 2 OR detail_info = 1)
+          <!--  
           AND detail_check = 1
+          -->
     </select>
 
     <!--  -->
     <select id="SelectDetail" resultType="Detail">
         SELECT *
         FROM detail
-        WHERE detail_info = 2 OR detail_info = 1
+        WHERE (detail_info = 2 OR detail_info = 1) AND resource_id = #{resource_id}
     </select>
 
     <!--  -->

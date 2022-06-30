@@ -35,7 +35,7 @@ public class DigitalMabcDBController {
 	@Autowired
 	private FileController fileController;
 
-	@RequestMapping("/digital_MABC_DB")
+	@RequestMapping(path="/digital_MABC_DB")
 	public ModelAndView digitalMabcDB(ModelAndView mv) {
 		
 		mv.setViewName("lab/digital_MABC_DB");

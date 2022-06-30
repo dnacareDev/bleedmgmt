@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <!-- 공통 헤더 -->
+    <th:block th:include="/../fragments/header.html"></th:block>
+
+    <style>
+        table {
+            border-top: 1px solid grey;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border-bottom: 2px solid #E5E9F2;
+            padding: 10px;
+            text-align: center;
+            font-weight: initial;
+        }
+
+        th, tbody tr {
+            background-color: white;
+        }
+		.top-menu .main-content{
+			background-color:#FCFCFC;
+		}
+		.top-menu .main-content .contents{
+			background-color:#FCFCFC;
+		}
+		.atbd-box{
+			display: inherit;
+		    width: 100%;
+		    justify-content: center;
+		}
+		.atbd-upload{
+			flex: 0 0 50%;
+		}
+		.atbd-box a {
+			width:100%;
+		}
+		.atbd-box button{
+			background-color:#217566;
+			border: 1px solid #217566;
+			margin-left: 10px;
+		}
+		.top-menu .main-content .card{
+			padding-bottom: 100px;
+		}
+		.top-menu .main-content .btn-primary{
+			background-color:#EDF6F1;
+			color:#217566;
+		}
+		.top-menu .main-content .btn-primary img{
+			margin-right: 10px;
+		}
+		.top-menu .main-content .align-items-center{
+			justify-content: center;
+		}
+		select{
+			margin-left: 25px;
+		}
+		.top-menu .main-content .form-group{
+			margin-left: 30px;
+   		    padding-bottom: 0;
+		}
+		.main-content .form-group input[type=text]{
+			margin-left: 25px;
+		}
+		@media (min-width: 576px){
+			.top-menu .main-content .modal-dialog {
+			    max-width: 850px;
+			    margin: 1.75rem auto;
+			}
+		}
+		
+		/* 예제파일 다운로드 텍스트에 링크형태 */
+		.example_file {
+            color: mediumblue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+.modal{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+		
+    </style>
+
+</head>
+
+<body class="layout-light top-menu overlayScroll">
+<div class="mobile-search"></div>
+
+<div class="mobile-author-actions"></div>
+
+<!-- 공통 topbar -->
+<th:block th:include="/../fragments/topbar.html"></th:block>
+
+<main class="main-content">
+
+    <div class="contents">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                	
+                </div>
+            </div>
+            <div class="row">
+            	<div class="card">
+            		<div class="card-body">
+	        			<div class="bg-white">
+	                        <div class="card" id="cardPlus" style="width:1100px" >	<!-- width를 지정해야 다 보인다. 오른쪽으로 쏠려있으니 그것도 방법을 찾아보자. 일단은 container-fluid가 중앙정렬된게 원인으로 보임 -->
+		                        <div class="card-body" style="padding-top: 0;">
+		                            <div class="bg-white">
+			                            <div class="breadcrumb-main">
+				        					<h4 class="text-capitalize breadcrumb-title">MABC 디자인 [MABC design]</h4>
+				        				</div>
+		                                <div id="MABC_design_grid"><!-- 여기에 그리드 출력 --></div>
+		                                <div class="row">
+		                                    <div class="col-4">
+		                                        <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#MABCDesignModal">
+		                                            <span data-feather="plus"></span>
+		                                        </button>
+		                                    </div>
+		                                    <div class="col-4">
+		                                        <div class="row" style="justify-content: center;">
+		                                            <div id="pageNum" style="text-align:center; margin: 2% 0 0 0;"></div>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>		                        
+	                        </div>
+	                    </div>
+            		</div>
+            	</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal code -->
+<!-- 첨부파일 등록창 (breed.html에서 가져옴) -->
+    <div class="modal-basic modal fade show pop1" id="MABCDesignModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content modal-bg-white " id="file_modal">
+                <div class="modal-header" style="border: none">
+                    <h6 class="modal-title">MABC 디자인 [MABC Design]</h6><a class="example_file" href="/common/r/example/MABC_Design.pdf" download>매뉴얼 다운로드</a>
+                    <span class="breed_title"></span>
+                </div>
+                <form action="insertMABCDesign" id="insertFile" name="insertFile" method="POST" enctype="multipart/form-data">
+	                <div align="center" class="modal-body">
+		                <table class="table">
+		               		<!--  
+		               		<tr>
+			               		<td>
+		               				<select style="width: '250px';" name="crop" id="crop">
+	                                         <option value="고추">고추</option>
+	                                         <option value="대파">대파</option>
+	                                         <option value="멜론">멜론</option>
+	                                         <option value="무">무</option>
+	                                         <option value="배추">배추</option>
+	                                         <option value="수박">수박</option>
+	                                         <option value="양배추">양배추</option>
+	                                         <option value="양파">양파</option>
+	                                         <option value="참외">참외</option>
+	                                         <option value="토마토">토마토</option>
+	                           		</select>
+                             	</td>
+                            	<td><input type="text" name="memo" placeholder="상세내용"></td>
+			               	</tr>
+			               	-->
+			               	<tr>
+			               		<td><input type="text" name="crop" placeholder="작목명"></td>
+                            	<td><input type="text" name="note" placeholder="상세내용"></td>
+			               	</tr>
+		               		<tr>
+	                			<td colspan="2"><h4><strong>parameter 설정</strong></h4></td>
+	                		</tr>
+		               		<tr>
+	                			<td><label class="reg" for="htwo">h2</label></td>
+	                			<td><input type="text" id="htwo" name="htwo"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="nbchromosome">NbChromosome</label></td>
+	                			<td><input type="text" id="nbchromosome" name="nbchromosome"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="numberofrepeats">NumberOfRepeats</label></td>
+	                			<td><input type="text" id="numberofrepeats" name="numberofrepeats"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="gtrainingpop">gTrainingPop</label></td>
+	                			<td><input type="text" id="gtrainingpop" name="gtrainingpop"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="geneticlengthf">geneticLengthF</label></td>
+	                			<td><input type="text" id="geneticlengthf" name="geneticlengthf"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="geneticlengthm">geneticLengthM</label></td>
+	                			<td><input type="text" id="geneticlengthm" name="geneticlengthm"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="nbqtls">NbQTLs</label></td>
+	                			<td><input type="text" id="nbqtls" name="nbqtls"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="nbsnps">NbSNPs</label></td>
+	                			<td><input type="text" id="nbsnps" name="nbsnps"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="nbkeepqtl">NbKeepQTL</label></td>
+	                			<td><input type="text" id="nbkeepqtl" name="nbkeepqtl"></td>
+	                		</tr>
+	               			<tr>
+	                			<td><label class="reg" for="nugammaf">nuGammaF</label></td>
+	                			<td><input type="text" id="nugammaf" name="nugammaf"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="pf">pF</label></td>
+	                			<td><input type="text" id="pf" name="pf"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="nugammam">nuGammaM</label></td>
+	                			<td><input type="text" id="nugammam" name="nugammam"></td>
+	                		</tr>
+	                		<tr>
+	                			<td><label class="reg" for="pm">pM</label></td>
+	                			<td><input type="text" id="pm" name="pm"></td>
+	                		</tr>
+	                		
+	                		<tr>
+	                			
+	                			<td><div class="atbd-upload__button">
+                                    <input type="file" id="upload_file1" name="file1" >
+                                </div></td>
+                                <td><a class="example_file" href="/common/r/example/positionQTLsF.csv" download>positionQTLsF.csv</a></td>
+	                		</tr>
+
+	                		<tr>
+	                			<td><div class="atbd-upload__button">
+                                    <input type="file" id="upload_file2" name="file2" >
+                                </div></td>
+                                <td><a class="example_file" href="/common/r/example/positionQTLsM.csv" download>positionQTLsM.csv</a></td>
+	                		</tr>
+	                		<tr>
+	                			<td><div class="atbd-upload__button">
+                                    <input type="file" id="upload_file3" name="file3" >
+                                </div></td>
+                                <td><a class="example_file" href="/common/r/example/positionSNPsF.csv" download>positionSNPsF.csv</a></td>
+	                		</tr>
+	                		<tr>
+	                			<td><div class="atbd-upload__button">
+                                    <input type="file" id="upload_file4" name="file4" >
+                                </div></td>
+                                <td><a class="example_file" href="/common/r/example/positionSNPsM.csv" download>positionSNPsM.csv</a></td>
+	                		</tr>
+	                		<tr>
+	                			<td><div class="atbd-upload__button">
+                                    <input type="file" id="upload_file5" name="file5" >
+                                </div></td>
+                                <td><a class="example_file" href="/common/r/example/weightMrkrs.csv" download>weightMrkrs.csv</a></td>
+	                		</tr>
+	                				                		<tr>
+	                			<td><div class="atbd-upload__button">
+                                    <input type="file" id="upload_file6" name="file6" >
+                                </div></td>
+                                <td><a class="example_file" href="/common/r/example/GenerationParameters.csv" download>GenerationParameters.csv</a></td>
+	                		</tr>
+			            </table>
+	                </div>
+	                <div class="modal-footer" style="border: none">
+	                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+	                    <button type="button" class="btn btn-primary btn-sm" onclick="MABC_Design()" style="background-color:#217566; color:#fff">등록</button> 
+	                    <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">open modal</button>  -->
+						
+	                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    
+ 
+ 
+    
+    
+    
+    
+    
+</main>
+
+<!-- 공통 하단 -->
+<th:block th:include="/../fragments/footer.html"></th:block>
+<!-- 공통 js -->
+<th:block th:include="/../fragments/commonjs.html"></th:block>
+
+<script type="text/javascript">
+	// 페이지 시작
+	$(document).ready(function(){
+				SearchPlan();
+	});
+
+	let MABC_design_grid = null;
+	
+function SearchPlan() {
+		
+		//var crop_name = $("#CropSelect").val();
+		//var limit = $("#limit").val();
+		
+		
+		
+		$.ajax({
+			url : 'search_mabc_design',
+			method : 'POST',
+			dataType: 'json',
+			data : data,
+			success : function(result) {
+				console.log("result : ",result);
+				
+				let dataArr = [];
+				
+				let rowArr = {};
+				console.log("result.mabc_sample : ",result.mabc_sample);
+				
+				/*
+				for(let i=0 ; i < result.mabc_sample.length ; i++) {
+					console.log("i",i);
+						rowArr = {
+								'mabc_design_id' : result.mabc_sample[i].MABC_design_grid_num,
+								'crop' : result.mabc_sample[i].crop,
+								'mabc_status': result.mabc_sample[i].mabc_status,
+								'note': result.mabc_sample[i].note,
+								'create_date': result.mabc_sample[i].create_date
+								
+						};
+						console.log("rowArr",rowArr)
+						dataArr.push(rowArr);
+					
+						
+				}
+				
+				console.log("dataArr", dataArr);
+				*/
+				
+				// 2022-05-12 | marker_grid를 qtl_grid로 교체. 뭔가 출력이 안된다 싶으면 이 부분을 확인해보자
+				MABC_design_grid = new tui.Grid({
+					el: document.getElementById('MABC_design_grid'),
+					scrollX: true,
+					scrollY: true,
+					//data: dataArr,
+					data: result.mabc_sample,
+					columns: [
+						{
+                            header: 'No.',
+                            name: 'mabc_design_id',
+                            sortable: true,
+                            width: 180,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+                        },
+                        {
+                            header: '작물',
+                            name: 'crop',
+                            sortable: true,
+                            width: 180,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        
+                        },
+						{
+                            header: '분석상태',
+                            name: 'mabc_status',
+                            editor: 'text',
+                            sortable: true,
+                            width: 180,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '상세내용',
+                            name: 'note',
+                            sortable: true,
+                            width: 200,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        },
+						{
+                            header: 'jobid',
+                            name: 'jobid',
+                            editor: 'text',
+                            hidden: true,
+                            sortable: true,
+                            width: 150,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '등록날짜',
+                            name: 'create_date',
+                            editor: 'text',
+                            sortable: true,
+                            width: 250,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+					],
+					pageOptions: {
+                        useClient: true,
+                        perPage: 10
+                    },
+				});
+				
+				
+				
+				MABC_design_grid.on('click', (ev) => {
+					if (ev.targetType === 'cell' && ev.columnName === 'mabc_design_id') {
+						let value = ev.nativeEvent.srcElement;
+						let value2 = result.mabc_sample[ev.rowKey].jobid
+						console.log("jobid", result.mabc_sample[ev.rowKey].jobid);
+	                    //result.marker_information[ev.rowKey].marker_id
+	                    
+	                    console.log("분석?", result.mabc_sample[ev.rowKey].mabc_status);
+	                    
+	                    if(result.mabc_sample[ev.rowKey].mabc_status === '분석완료') {
+	                    	
+	                    	console.log("result.mabc_sample[ev.rowKey].jobid");
+	                    	
+
+	                    	window.open("/mabcsimulation/simulate_result.jsp?jobid=" + result.mabc_sample[ev.rowKey].jobid, 'simulate_result', 'top=100, left=400, width=1200, height=800, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no'); 
+	                    	
+	                    	/*
+	                    	
+	                    	$.ajax({
+	        					url : '/MABC_design_result_html_and_pdf',
+	        					method : 'POST',
+	        					data : { "jobid" : result.MABCDesign[ev.rowKey].jobid},
+	        			        cache: false,
+	        					success : function(result) {
+	        						console.log(result);
+	        					},
+	        					error: function(result) {
+	        						console.log("등록 실패");
+	        					}
+	        				
+	        				});
+	                    	
+	                    	*/
+	                    	
+	                    	// location.href = '/MABC_design_result_html_and_pdf';
+	                    } else if(result.mabc_sample[ev.rowKey].mabc_status === '분석중') {
+	                    	alert("분석중입니다.");
+	                    	return false;
+	                    	//window.open("/MABCDesign_fail");
+	                    } else if(result.mabc_sample[ev.rowKey].mabc_status === '분석실패') {
+	                    	alert("분석에 실패했습니다.\n설정 및 매뉴얼을 확인해주세요.");
+	                    }
+					}
+				});
+				
+				
+				
+				
+
+			},
+			error: function() {
+				console.log("DB 작업중");
+			}
+		});
+	}
+	
+	function MABC_Design() {
+		//$("#insertFile").submit();
+		//$('input[name=qtl_name]').attr('readonly',false);
+		
+	
+		let fileCheck1 = $("#upload_file1").val();
+		let fileCheck2 = $("#upload_file2").val();
+		let fileCheck3 = $("#upload_file3").val();
+		let fileCheck4 = $("#upload_file4").val();
+		let fileCheck5 = $("#upload_file5").val();
+		let fileCheck6 = $("#upload_file6").val();
+		
+		let inputCheck1 = $("#htwo").val();
+		let inputCheck2 = $("#nbchromosome").val();
+		let inputCheck3 = $("#numberofrepeats").val();
+		let inputCheck4 = $("#gtrainingpop").val();
+		let inputCheck5 = $("#geneticlengthf").val();
+		let inputCheck6 = $("#geneticlengthm").val();
+		let inputCheck7 = $("#nbqtls").val();
+		let inputCheck8 = $("#nbsnps").val();
+		let inputCheck9 = $("#nbkeepqtl").val();
+		let inputCheck10 = $("#nugammaf").val();
+		let inputCheck11= $("#pf").val();
+		let inputCheck12 = $("#nugammam").val();
+		let inputCheck13 = $("#pm").val();
+		
+		/*
+		console.log(inputCheck1);
+		console.log(inputCheck2);
+		console.log(inputCheck3);
+		console.log(inputCheck4);
+		console.log(inputCheck5);
+		console.log(inputCheck6);
+		console.log(inputCheck7);
+		console.log(inputCheck8);
+		console.log(inputCheck9);
+		console.log(inputCheck10);
+		console.log(inputCheck11);
+		console.log(inputCheck12);
+		console.log(inputCheck13);
+		*/
+
+		if(!inputCheck1 || !inputCheck2 || !inputCheck3 || !inputCheck4 || !inputCheck5 || !inputCheck6 || !inputCheck7 || !inputCheck8 || !inputCheck9 || !inputCheck10 || !inputCheck11 || !inputCheck12 || !inputCheck13 ) {
+			alert("Parameter 설정을 확인해주세요.");
+			return false;
+		}
+
+		if(!fileCheck1 || !fileCheck2 || !fileCheck3 || !fileCheck4 || !fileCheck5 || !fileCheck6 ) {
+			alert("파일을 첨부해 주세요.");
+			return false;
+		}
+		
+		
+		var url = $("#insertFile").attr("action"); 
+		var form = $('#insertFile')[0]; 
+		var formData = new FormData(form);
+
+//		var queryString = $("form[name=insertFile]").serialize() ;
+
+		var queryString = $("#insertFile").serialize();
+		//console.log(queryString);
+
+		console.log(queryString);
+
+
+		console.log("formdata1" , formData);
+		
+		$.ajax({
+			url : 'insertMABCDesign',
+			method : 'POST',
+			data : formData,
+	        contentType : false,   
+	        processData : false, 
+	        cache: false,
+			success : function(result) {
+						queryString += "&jobid="+result;
+						console.log("result qS"+result);
+
+				$.ajax({
+					url : '/mabcsimulation/generation_config.jsp',
+					method : 'POST',
+					data : queryString,
+			        cache: false,
+					dataType: "json",
+					
+					success : function(result) {
+						location.href="/digital_MABC_Design";
+					},
+					error: function(result) {
+						console.log("등록 실패");
+					} 
+				
+				});
+			},
+			error: function(result) {
+				console.log("등록 실패");
+			}
+		});
+		
+		/*
+		setTimeout(function() {
+			location.href="/digital_MABC_Design";
+		}, 500);
+		*/
+		
+		
+	}
+
+		
+	
+	
+</script>
+
+</body>
+
+</html>

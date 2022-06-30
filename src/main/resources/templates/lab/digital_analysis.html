@@ -196,7 +196,7 @@
 	                	<div>
                             <div class="atbd-upload">
                             	<div class="atbd-upload__button">
-                                	<a id="marker_example_file" href="/common/r/example/maker_example.xlsx" download>예제파일다운</a></td>
+                                	<a id="marker_example_file" href="/sample.xlsx" download>예제파일다운</a></td>
                                 </div>
                                 <div class="atbd-upload__button">
                                     <input type="file" id="upload_file" name="file">
@@ -273,6 +273,7 @@
 									'regist_date': result.analysis_db[i].regist_date,
 									'detail': result.analysis_db[i].detail,
 									'note': result.analysis_db[i].note,
+									'jobid': result.analysis_db[i].jobid
 							};
 							dataArr.push(rowArr);
 					
@@ -285,6 +286,7 @@
 					scrollX: true,
 					scrollY: true,
 					data: dataArr,
+					//data: result.analysis_db,
 					rowHeaders: ['checkbox'],
 					columns: [
 						{
@@ -333,6 +335,15 @@
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                         },
+                        {
+                            header: 'jobid',
+                            name: 'jobid',
+                            sortable: true,
+                            width: 250,
+                            hidden: true,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
                         
 					],
 					pageOptions: {
@@ -340,6 +351,20 @@
                         perPage: 10
                     },
 				});
+				
+				analysis_grid.on('click', (ev) => {
+					
+					console.log("ev : ", ev);
+					
+					if (ev.targetType === 'cell' && ev.columnName === 'analysis_id') {
+	                    let jobid = analysis_grid.getRow(ev.rowKey).jobid;
+
+						//console.log("jobid : ", jobid);
+						location.href = "/matrix?jobid=" + jobid;
+	                }
+				});
+				
+				
 				
 
 			}
@@ -373,7 +398,7 @@
 	        processData : false, 
 	        cache: false,
 			success : function(result) {
-				console.log("insert result : ", result);	
+				location.href= "/matrix?jobid=" + result;	
 			}
 		});
 	}
@@ -389,7 +414,7 @@
 
 
         for (let i = 0; i < analysis_grid.getCheckedRows().length; i++) {
-        	total_marker_num.push(analysis_grid.getCheckedRows()[i].marker_num)
+        	total_analysis_id.push(analysis_grid.getCheckedRows()[i].analysis_id)
         }
         
         // total_marker_id 배열은 위에서 아래로 쌓인다. getCheckedRows()도 체크된 행이 어디인지 구분하지 않고 위에서부터 순서대로 쌓는다

@@ -146,9 +146,6 @@
 		                                        <button type="button" class="btn btn-icon btn-light btn-circle" onclick="delete_row()">
 		                                            <span data-feather="trash-2"></span>
 		                                        </button>
-		                                        <button type="button" class="btn btn-icon btn-light btn-circle" onclick="read_csv()">
-		                                            <span data-feather="map"></span>
-		                                        </button>
 		                                    </div>
 		                                    <div class="col-4">
 		                                        <div class="row" style="justify-content: center;">
@@ -429,8 +426,8 @@
 
         for (let i = 0; i < marker_grid.getCheckedRows().length; i++) {
         	total_file_name.push(marker_grid.getCheckedRows()[i].file_name);
-        	console.log("marker_grid.getCheckedRows()[i].file_name",marker_grid.getCheckedRows()[i].file_name);
-        	console.log("total_file_name",total_file_name);
+        	//console.log("marker_grid.getCheckedRows()[i].file_name",marker_grid.getCheckedRows()[i].file_name);
+        	//console.log("total_file_name",total_file_name);
         	total_crop_name.push(marker_grid.getCheckedRows()[i].crop);
         }
         
@@ -444,7 +441,7 @@
         }
            
            console.log("total_file_name", total_file_name);
-           /*
+           
            $.ajax(
                    {
                        url: 'MarkerMap',
@@ -452,12 +449,12 @@
                        dataType: 'json',
                        data: {'total_file_name' : total_file_name},
                        success: function (result) {
-                          console.log("현재시간 : " , result)
+                          console.log("jobid : " , result)
    						  window.open('/chrMakerViewerMarker/drawmap.jsp?orga=' + marker_grid.getCheckedRows()[0].crop + '&jobid=' + result , 'drawmap_marker', 'top=100, left=400, width=1200, height=800, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no');
 
                        }
                    });
-          */
+          
        }
 		
     

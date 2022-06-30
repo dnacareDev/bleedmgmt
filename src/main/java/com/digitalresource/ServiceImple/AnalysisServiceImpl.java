@@ -8,6 +8,7 @@ import com.digitalresource.Service.AnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -27,6 +28,11 @@ public class AnalysisServiceImpl implements AnalysisService
 	public List<Breed> SelectBreed2(String name, int resource_id, int type) {
 		return mapper.SelectBreed2(name, resource_id, type);
 	}
+	
+	@Override
+	public List<Breed> SelectBreed3(String name, int[] total_id, String first_column, int type) {
+		return mapper.SelectBreed3(name, total_id, first_column, type);
+	}
 
 	//	 분석 형질 조회
 	@Override
@@ -41,9 +47,9 @@ public class AnalysisServiceImpl implements AnalysisService
 	}
 
 	@Override
-	public List<Detail> SelectDetail(String detail_name)
+	public List<Detail> SelectDetail(String detail_name, int resource_id)
 	{
-		return mapper.SelectDetail(detail_name);
+		return mapper.SelectDetail(detail_name, resource_id);
 	}
 
 	@Override

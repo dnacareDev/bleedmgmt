@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalresource.Mapper.MabcDesignMapper">
+
+	<select id="searchMabcSample" resultType="MabcDesign">
+		SELECT mabc_design_id, crop, if(mabc_status=0,"분석중",if(mabc_status=1,"분석완료","분석실패")) as mabc_status, note, create_date, jobid from mabc_design
+		ORDER BY mabc_design_id DESC;
+	</select>
+	
+	<insert id="insertMabcDesign" parameterType="MabcDesign">
+		INSERT into mabc_design(crop, mabc_status, note, create_date, jobid)
+		VALUES(#{crop},0,#{note},NOW(),#{jobid})
+	</insert>
+</mapper>

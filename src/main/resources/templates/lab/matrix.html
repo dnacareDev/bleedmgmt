@@ -150,19 +150,25 @@
 							</ul>
 						</div>
 						<div class="content_type1 contents">
+							<!--  
 							<th:block th:if="${path != null}">
 								<img th:src="|/common/r/result/${path}/${path}_distancematrix.png|">
 							</th:block>
+							-->
 						</div>
 						<div class="content_type2 contents">
+							<!--
 							<th:block th:if="${path != null}">
 								<img th:src="|/common/r/result/${path}/${path}_phylogenictree3.png|">
 							</th:block>
+							-->
 						</div>
 						<div class="content_type3 contents">
+							<!--
 							<th:block th:if="${path != null}">
 								<img th:src="|/common/r/result/${path}/${path}_pca.png|">
 							</th:block>
+							-->
 						</div>
 					</div>
 				</div>
@@ -197,6 +203,29 @@
         });
 	});
 	*/
+	
+	$(function() {
+		let url = location.href;
+		let jobid = (url.slice(url.indexOf("?") + 7, url.length));
+		console.log("jobid : ", jobid);
+		
+		if(jobid != null) {
+			let distance_matrix = "<img src='/common/r/result/" + jobid + "/" + jobid + "_distancematrix.png'>";
+			let phylogenic_tree = "<img src='/common/r/result/" + jobid + "/" + jobid + "_phylogenictree3.png'>";
+			let pca_plot = "<img src='/common/r/result/" + jobid + "/" + jobid + "_pca.png'>"
+			
+			$(".content_type1").append(distance_matrix);
+			$(".content_type2").append(phylogenic_tree);
+			$(".content_type3").append(pca_plot);
+			
+		}
+		
+		
+		
+		
+	});
+	
+	
 	
     /* e : 파일 이름 출력 */
 </script>

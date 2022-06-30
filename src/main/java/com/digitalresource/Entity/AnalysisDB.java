@@ -10,4 +10,5 @@ public class AnalysisDB {
 	private String detail;
 	private String note;
 	private String regist_date;
+	private String jobid;
 }
