@@ -21,6 +21,7 @@ public interface ResourceService {
 	public int selectResourceCount(int user_group);
 
 	public List<ResourceList> searchResource(int user_group);
+	public List<ResourceAllList> searchResourceAll(int crop_id);
 
 	public int changeResourceUse(Map<String, Object> map);
 

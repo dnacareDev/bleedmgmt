@@ -22,6 +22,12 @@
         th, tbody tr {
             background-color: white;
         }
+        
+        .main-content .contents .container-fluid {
+            max-width: 100%;
+            padding: 50px;
+        }
+        
 		.top-menu .main-content{
 			background-color:#FCFCFC;
 		}
@@ -80,6 +86,10 @@
             text-decoration: underline;
             cursor: pointer;
         }
+        
+        .tui-grid-cell {
+            background-color: white;
+        }
 		
     </style>
 
@@ -94,73 +104,30 @@
 <th:block th:include="/../fragments/topbar.html"></th:block>
 
 <main class="main-content">
-
     <div class="contents">
-
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12">
-                	<div class="breadcrumb-main">
-			        		
-			        </div>
-                </div>
-            </div>
-            <div class="row">
+            <div class="col-lg-12 mb-30">
             	<div class="card">
             		<div class="card-body">
 	        			<div class="bg-white">
-	                        <div class="card" id="cardPlus" style="width:1100px" >	<!-- width를 지정해야 다 보인다. 오른쪽으로 쏠려있으니 그것도 방법을 찾아보자. 일단은 container-fluid가 중앙정렬된게 원인으로 보임 -->
-	                        	<div class="card-extra mt-20 mr-20">
-		                            <div class="action-btn d-flex justify-content-end">
-		                                <div class="atbd-button-list d-flex flex-wrap">
-		                                    <form action="" name="searchForm" class="d-flex align-items-center add-contact__form my-sm-0 my-2">
-		                                        <!-- 
-		                                        <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" id="CropSelect">
-		                                            <option value="고추">고추</option>
-		                                            <option value="대파">대파</option>
-		                                            <option value="멜론">멜론</option>
-		                                            <option value="무">무</option>
-		                                            <option value="배추">배추</option>
-		                                            <option value="수박">수박</option>
-		                                            <option value="양배추">양배추</option>
-		                                            <option value="양파">양파</option>
-		                                            <option value="참외">참외</option>
-		                                            <option value="토마토">토마토</option>
-		                                        </select>
-		                                         -->
-		                                    </form>
-		                                </div>
-                            		</div>
-		                        </div>
-		                        <div class="card-body" style="padding-top: 0;">
-		                            <div class="bg-white">
-		                            	<div>
-			                            	<h4 class="text-capitalize breadcrumb-title">Digital analysis</h4><br>
-		                            	</div>
-		                                <div id="analysis_grid"><!-- 여기에 그리드 출력 --></div>
-		                                <div class="row">
-		                                    <div class="col-4">
-		                                        <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#marker_insert_modal">
-		                                            <span data-feather="plus"></span>
-		                                        </button>
-		                                        <button type="button" class="btn btn-icon btn-light btn-circle" onclick="delete_row()">
-		                                            <span data-feather="trash-2"></span>
-		                                        </button>
-		                                        <button type="button" class="btn btn-icon btn-light btn-circle" onclick="matrix()">
-		                                            matrix
-		                                        </button>
-		                                    </div>
-		                                    <div class="col-4">
-		                                        <div class="row" style="justify-content: center;">
-		                                            <div id="pageNum" style="text-align:center; margin: 2% 0 0 0;"></div>
-		                                        </div>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>		                        
-	                        </div>
-	                    </div>
-            		</div>
+	        				<div>
+                            	<h4 class="text-capitalize breadcrumb-title">Digital analysis</h4><br>
+                           	</div>
+                            <div id="analysis_grid"><!-- 여기에 그리드 출력 --></div>
+	                            <div class="row">
+	                                <div class="col-4">
+	                                    <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#marker_insert_modal">
+	                                        <span data-feather="plus"></span>
+	                                    </button>
+	                                    <button type="button" class="btn btn-icon btn-light btn-circle" onclick="delete_row()">
+	                                        <span data-feather="trash-2"></span>
+	                                    </button>
+	                                </div>
+	                            </div>
+		                    </div>
+	            		</div>
+	            	</div>
             	</div>
             </div>
         </div>
@@ -171,6 +138,10 @@
     <div class="modal-basic modal fade show" id="marker_insert_modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white ">
+            	<div class="modal-header" style="border: none">
+                    <h6 class="modal-title">Digital Analysis</h6><a class="example_file" href="/common/r/example/MABC_Design.pdf" download>매뉴얼 다운로드</a>
+                    <span class="breed_title"></span>
+                </div>
             	<form action="insertAnalysisFile" id="insertFile" method="POST" enctype="multipart/form-data">
 	                <div class="modal-body">
 		                <table class="table">
@@ -227,6 +198,8 @@
 	// 페이지 시작
 	$(document).ready(function(){
 			SearchDB();
+			
+			
 
 		});
 	
@@ -280,6 +253,8 @@
 				}
 					
 				console.log(dataArr);
+				
+				tui.Grid.applyTheme('clean');
 							
 				analysis_grid = new tui.Grid({
 					el: document.getElementById('analysis_grid'),

@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.digitalresource.DigitalTools.RunMarkerDB;
 import com.digitalresource.Entity.ChromosomeViewer;
 import com.digitalresource.Entity.MarkerInformation;
+import com.digitalresource.Entity.User;
+import com.digitalresource.Service.LogService;
 import com.digitalresource.Service.MarkerInformationService;
 
 @Controller
@@ -34,6 +37,9 @@ public class DigitalLabDBController {
 	
 	@Autowired
 	private MarkerInformationService MService;
+	
+	@Autowired
+	private LogService logService;
 	
 	@Autowired
 	private FileController fileController;
@@ -63,7 +69,7 @@ public class DigitalLabDBController {
 	
 	@ResponseBody
 	@RequestMapping("/insertMarkerFile")
-	public ModelAndView InsertMarkerFile(ModelAndView mv,											
+	public ModelAndView InsertMarkerFile(Authentication auth, ModelAndView mv,											
 										@ModelAttribute MarkerInformation marker_information,
 									   	@RequestParam("file") MultipartFile file) throws IOException {
 								
@@ -104,6 +110,12 @@ public class DigitalLabDBController {
 	    int insert_file = MService.InsertMarkerInformation(marker_information);
 	    
 	    
+	    User user = (User) auth.getPrincipal();
+	    String userIdName = user.getUser_username(); 
+		String userName = user.getUser_name();
+		String log_contents = "Digital Marker 1행 입력";
+		logService.RecordLog(userIdName, userName, log_contents);
+	    
 		
 		mv.setViewName("redirect:/digital_lab_DB");
 		
@@ -113,10 +125,16 @@ public class DigitalLabDBController {
 	
 	@ResponseBody
 	@RequestMapping("delete_marker_information")
-	public int DeleteMarkerInformation(@RequestParam("total_marker_num[]") int[] total_marker_num) {
+	public int DeleteMarkerInformation(Authentication auth, @RequestParam("total_marker_num[]") int[] total_marker_num) {
 		// System.out.println(); 
 		
 		MService.DeleteMarkerInformation(total_marker_num);
+		
+		User user = (User) auth.getPrincipal();
+	    String userIdName = user.getUser_username(); 
+		String userName = user.getUser_name();
+		String log_contents = "Digital Analysis " + total_marker_num.length + "행 삭제";
+		logService.RecordLog(userIdName, userName, log_contents);
 		
 		return 1;
 	}

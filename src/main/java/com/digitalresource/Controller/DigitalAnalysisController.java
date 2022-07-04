@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,14 +24,19 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.Entity.AnalysisDB;
+import com.digitalresource.Entity.User;
 import com.digitalresource.RModule.RunEtcR;
 import com.digitalresource.Service.AnalysisDbService;
+import com.digitalresource.Service.LogService;
 
 @Controller
 public class DigitalAnalysisController {
 	
 	@Autowired
 	private AnalysisDbService service;
+
+	@Autowired
+	private LogService logService;	
 	
 	@Autowired
 	private FileController fileController;
@@ -61,6 +67,7 @@ public class DigitalAnalysisController {
 	@ResponseBody
 	@RequestMapping("/insertAnalysisFile")
 	public String insertAnalysisFele(
+											Authentication auth,
 											@ModelAttribute AnalysisDB analysis_db,
 											@RequestParam("file") MultipartFile file) throws IOException {
 		
@@ -107,16 +114,30 @@ public class DigitalAnalysisController {
 		
 	    RunEtcR runetcr = new RunEtcR();
 		runetcr.MakeRunEtcR(formatedNow, file_name);
-	    
+		
+		
+		User user = (User) auth.getPrincipal();
+	    String userIdName = user.getUser_username(); 
+		String userName = user.getUser_name();
+		String log_contents = "Digital Analysis 1행 입력";
+		logService.RecordLog(userIdName, userName, log_contents);
+		
 	    return formatedNow;
 		
 	}
 	
 	@ResponseBody
 	@RequestMapping("delete_analysis_db")
-	public int deleteAnalysisDB(@RequestParam("total_analysis_id[]") int[] total_analysis_id) {
+	public int deleteAnalysisDB(Authentication auth, @RequestParam("total_analysis_id[]") int[] total_analysis_id) {
 		
 		service.deleteAnalysisDB(total_analysis_id);
+		
+		User user = (User) auth.getPrincipal();
+	    String userIdName = user.getUser_username(); 
+		String userName = user.getUser_name();
+		String log_contents = "Digital Analysis " + total_analysis_id.length + "행 삭제";
+		logService.RecordLog(userIdName, userName, log_contents);
+		
 		
 		return 1;
 	}

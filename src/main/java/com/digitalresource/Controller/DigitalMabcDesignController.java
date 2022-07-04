@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.Entity.MabcDesign;
+import com.digitalresource.Entity.User;
+import com.digitalresource.Service.LogService;
 import com.digitalresource.Service.MabcDesignService;
 
 
@@ -31,9 +34,14 @@ public class DigitalMabcDesignController {
 	
 	@Autowired
 	private MabcDesignService service;
+
+	@Autowired
+	private LogService logService;
 	
 	@Autowired
 	private FileController fileController;
+	
+
 
 	@RequestMapping("/digital_MABC_Design")
 	public ModelAndView digitalMabcDesign(ModelAndView mv) {
@@ -60,23 +68,7 @@ public class DigitalMabcDesignController {
 	
 	@ResponseBody
 	@RequestMapping("insertMABCDesign") 
-	public String insertMabcDesign( @ModelAttribute MabcDesign mabc_design,
-//														@RequestParam("htwo") String htwo,
-//														@RequestParam("nbchromosome") String nbchromosome,
-//														@RequestParam("numberofrepeats") String numberofrepeats,
-//														@RequestParam("gtrainingpop") String gtrainingpop,
-//														@RequestParam("geneticlengthf") String geneticlengthf,
-//														@RequestParam("geneticlengthm") String geneticlengthm,
-//														@RequestParam("nbqtls") String nbqtls,
-//														@RequestParam("nbsnps") String nbsnps,
-//														@RequestParam("nbkeepqtl") String nbkeepqtl,
-//														@RequestParam("nugammaf") String nugammaf,
-//														@RequestParam("pf") String pf,
-//														@RequestParam("nugammam") String nugammam,
-//														@RequestParam("pm") String pm,
-//														@RequestParam("crop") String crop,
-//														@RequestParam("note") String note,
-														
+	public String insertMabcDesign( Authentication auth, @ModelAttribute MabcDesign mabc_design,
 														@RequestParam("file1") MultipartFile file1,
 														@RequestParam("file2") MultipartFile file2,
 														@RequestParam("file3") MultipartFile file3,
@@ -91,15 +83,6 @@ public class DigitalMabcDesignController {
 		LocalDateTime now = LocalDateTime.now();
 		String formatedNow = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 
-		// html에서 제출된 name들이 정상출력됐는지 여부
-		
-//		String[] extension = file1.getOriginalFilename().split("\\.");
-//
-//	    String file_name = fileController.ChangeFileName(extension[1]);
-//	    String origin_file_name = file1.getOriginalFilename();
-
-//	    String path = "src/main/webapp/upload";
-	    
 	    // 기존 업로드 폴더에 업로드날짜를 이름으로하는 새로운 폴더(경로)를 추가
 	    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/common/r/MABC/" + formatedNow + "/";
 	    //String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/";
@@ -118,9 +101,6 @@ public class DigitalMabcDesignController {
 	    
 	    String time = formatedNow;
 	    
-//	    Path fileLocation = Paths.get(path).toAbsolutePath().normalize();
-//	    Path targetLocation = fileLocation.resolve(file_name);
-	    
 	    // 서버에 첨부파일 업로드
 	    
 	    Files.copy(file1.getInputStream(), target1, StandardCopyOption.REPLACE_EXISTING);
@@ -132,27 +112,16 @@ public class DigitalMabcDesignController {
 	    // DB에 파일명 및 파일경로 지정
 	    
 	    String jobid = formatedNow;
-//	    mabc_design.setCrop(crop);
 	    mabc_design.setJobid(jobid);
 	    service.insertMabcDesign(mabc_design);
 	    
-//	    mv.setViewName("lab/MABC_parameter");
-//	    mv.addObject("NbChromosome", NbChromosome);
-//	    mv.addObject("NumberOfRepeats", NumberOfRepeats);
-//	    mv.addObject("gTrainingPop", gTrainingPop);
-//	    mv.addObject("geneticLengthF", geneticLengthF);
-//	    mv.addObject("geneticLengthM", geneticLengthM);
-//	    mv.addObject("NbQTLs", NbQTLs);
-//	    mv.addObject("NbSNPs", NbSNPs);
-//	    mv.addObject("NbKeepQTL", NbKeepQTL);
-//	    mv.addObject("nuGammaF", nuGammaF);
-//	    mv.addObject("nuGammaM", nuGammaM);
-//	    mv.addObject("pM", pM);
-//	    mv.addObject("jobid", formatedNow);
-	    
-//	    mv.setViewName("lab/MABCDesign");
-
 	    System.out.println(formatedNow);
+	    
+	    User user = (User) auth.getPrincipal();
+	    String userIdName = user.getUser_username(); 
+		String userName = user.getUser_name();
+		String log_contents = "MABC Simulation 1행 입력";
+		logService.RecordLog(userIdName, userName, log_contents);
 	    
 	    return formatedNow;
 	    

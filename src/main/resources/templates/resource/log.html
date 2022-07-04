@@ -864,7 +864,7 @@
     </style>
 </head>
 
-<body class="layout-light top-menu overlayScroll" oncontextmenu='return false'>
+<body class="layout-light top-menu" oncontextmenu='return false'>
 <div class="mobile-search"></div>
 <div class="mobile-author-actions"></div>
 <!-- 공통 topbar -->
@@ -877,20 +877,28 @@
                     <div class="card" id="cardPlus">
                         <div class="card-extra mt-20 mr-20">
                             <div class="breadcrumb-main" style="float: left;">
-                                <h4 class="text-capitalize breadcrumb-title">로그 이력</h4>
+                                <h4 class="text-capitalize breadcrumb-title">사용 이력</h4>
                                 <input type="hidden" id="user_type" th:value="${user.user_type}">
                             </div>
-                        </div>
-                        <div class="card-body" style="padding-top: 0;">
-                            <div class="bg-white">
+                           	<div class="action-btn d-flex justify-content-end" style="float: right;">
+	                            <div class="atbd-button-list d-flex flex-wrap">
+	                                <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: left;" id="limit">
+	                                    <option value="10" selected>10개</option>
+	                                    <option value="20">20개</option>
+	                                    <option value="30">30개</option>
+	                                </select>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="card-body" style="padding-top: 0;">
+                            <div class="bg-white table-responsive">
                                 <div id="logGrid"></div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+	                </div>
+	            </div>
+	        </div>
+		</div>
     </div>
     
     <!-- modal end -->
@@ -905,15 +913,25 @@
 <script type="text/javascript">
    $(function() {
 	   searchLog();
+	   console.log($("#limit").val());
    });
 
-   var log_grid = null;
    
+   $("#limit").change(function() {
+	   log_grid.destroy();
+	   
+	   searchLog();
+	   
+	   console.log($("#limit").val());
+	   
+	   //log_grid.setPerPage($("#limit").val());
+   });
+   
+   
+   var log_grid = null;
    
    function searchLog() {
 	   
-	   console.log("searchLog");
-
 	   let search_log = null;
 	   
 	   /*
@@ -925,7 +943,8 @@
 				console.log("resource-list : ",result);           		
            }    
        })
-	   */  
+       */
+	     
        
 	   $.ajax(
 			   {
@@ -935,6 +954,8 @@
 					   console.log("log result : ", result);
 					   
 					   let log_data = result.logList
+					   
+					   let limit = Number($("#limit").val());
 					   
 					   log_grid = new tui.Grid({
 							  el: document.getElementById('logGrid'),
@@ -969,7 +990,7 @@
 							  ],
 							  pageOptions: {
                                   useClient: true,
-                                  perPage: 10
+                                  perPage: limit,
                               }
 					   }); 
 					   

@@ -106,6 +106,12 @@
         where r.user_group = #{user_group} <!--  and r.delete_check = 0 -->
         ORDER BY r.resource_id DESC
     </select>
+    
+    <select id="searchResourceAll" resultType="ResourceAllList">
+    	SELECT r.resource_id, r.resource_name_id, r.crop_id, r.create_date, rn.resource_name, rn.user_group 
+    	FROM resource r LEFT JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
+    	WHERE r.crop_id = #{crop_id}
+    </select>
 
     <select id="selectResourceCount" resultType="int">
         select count(*)

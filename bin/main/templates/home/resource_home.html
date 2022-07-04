@@ -245,13 +245,13 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                    	<!--  
+                    	  
                     	<p class="color-primary fa-lg mb-3 mt-5 ml-3">관리대장 상황</p>
-                    	-->
+                    	
                         <div class="card-body" style="height: 600px;">
                             <div id="doughnut" class="slick-slider slick-dots-bottom" data-dots-slick='true'>
                                 <div class="slick-slider__single d-flex">
-                                    <p class="color-primary fa-lg mb-3 mt-5 ml-3">관리대장 상황</p>
+                                    <!--  <p class="color-primary fa-lg mb-3 mt-5 ml-3">관리대장 상황</p> -->
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: right;" name="selectCrop" id="CropSelect">
                                         <th:block th:each="list : ${cropList}">
                                             <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
@@ -281,7 +281,7 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     <div class="card">
                         <p class="color-primary fa-lg mb-3 mt-5 ml-3">작목별 관리 현황</p>
                         <div class="card-body" style="height: auto;">
@@ -300,6 +300,7 @@
                         </div>
                     </div>
                 </div>
+                <!--  
                 <div class="col-lg-4">
                     <div class="card">
                         <p class="color-primary fa-lg mb-3 mt-5 ml-3">등록 자료 현황</p>
@@ -310,6 +311,7 @@
                         </div>
                     </div>
                 </div>
+                -->
             </div>
         </div>
     </div>
@@ -359,6 +361,9 @@
             dataType: 'json',
             data: data,
             success: function (result) {
+            	
+            	console.log("month result : ", result);
+            	
                 var label = []
 
                 for (let i = 0; i < result.resourceList.length; i++) {

@@ -28,6 +28,7 @@ public interface ResourceMapper {
   public int registerDetail(Map<String, Object> map);
 
   public List<ResourceList> searchResource(@Param("user_group") int user_group);
+  public List<ResourceAllList> searchResourceAll(@Param("crop_id") int crop_id);
 
   public int selectResourceCount(@Param("user_group") int user_group);
 

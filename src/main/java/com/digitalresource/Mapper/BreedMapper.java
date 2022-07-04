@@ -73,5 +73,5 @@ public interface BreedMapper {
 
 	int UpdateAllBreed(List<StandardList> list);
 
-
+	List<StandardList> SearchStandardByCellValue(String cell_value);
 }

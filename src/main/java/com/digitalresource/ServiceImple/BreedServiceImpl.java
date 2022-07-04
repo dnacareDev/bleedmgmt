@@ -261,4 +261,9 @@ public class BreedServiceImpl implements BreedService {
   public int UpdateAllBreed(List<StandardList> list) {
     return breedMapper.UpdateAllBreed(list);
   }
+  
+  @Override
+  public List<StandardList> SearchStandardByCellValue(String cell_value) {
+	  return breedMapper.SearchStandardByCellValue(cell_value);
+  }
 }

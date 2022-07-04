@@ -174,11 +174,26 @@ public class BreedController {
 
   // 첨부파일 등록
   @RequestMapping("insertBreedFile")
-  public ModelAndView InsertBreedFile(ModelAndView mv, @ModelAttribute BreedFile breed_file, @RequestParam("file") MultipartFile file, @RequestParam("type") String type, @RequestParam("resource_id") int resource_id, @RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
-    String[] extension = file.getOriginalFilename().split("\\.");
+  public ModelAndView InsertBreedFile(
+		  							Authentication auth,
+		  							ModelAndView mv, 
+		  							@ModelAttribute BreedFile breed_file, 
+		  							@RequestParam("file") MultipartFile file,
+		  							@RequestParam("log_file_contents") String log_file_contents,
+		  							@RequestParam("type") String type, 
+		  							@RequestParam("resource_id") int resource_id, 
+		  							@RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
+    
+	
+	  
+	
+	  
+	String[] extension = file.getOriginalFilename().split("\\.");
 
     String file_name = fileController.ChangeFileName(extension[1]);
     String origin_file_name = file.getOriginalFilename();
+    
+//    System.out.println("breed_file : " + breed_file);
 
 //    String path = "src/main/webapp/upload";
     String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/";
@@ -201,6 +216,12 @@ public class BreedController {
     upload.setBreed_file_id(breed_file.getBreed_file_id());
 
     int insert_upload = breedService.InsertBreedUpload(upload);
+    
+    
+    User user = (User)auth.getPrincipal();
+    String userIdName = user.getUser_username(); 
+	String userName = user.getUser_name();
+    logService.RecordLog(userIdName, userName, log_file_contents);
 
     String str = URLEncoder.encode(type, "UTF-8");
     String url = "/breed?type=" + str + "&id=" + resource_id + "&crop_id=" + crop_id;
@@ -212,7 +233,15 @@ public class BreedController {
 
   // 첨부파일 수정
   @RequestMapping("updateBreedFile")
-  public ModelAndView UpdateBreedFile(ModelAndView mv, @ModelAttribute BreedFile breed_file, @RequestParam("file") MultipartFile file, @RequestParam("type") String type, @RequestParam("resource_id") int resource_id, @RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
+  public ModelAndView UpdateBreedFile(
+		  							Authentication auth,
+		  							ModelAndView mv, 
+		  							@ModelAttribute BreedFile breed_file, 
+		  							@RequestParam("file") MultipartFile file, 
+		  							@RequestParam("type") String type, 
+		  							@RequestParam("log_file_contents_modify") String log_file_contents_modify,
+		  							@RequestParam("resource_id") int resource_id, 
+		  							@RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
     if (file.isEmpty()) {
       int update_file = breedService.UpdateBreedFile(breed_file);
     } else {
@@ -247,6 +276,11 @@ public class BreedController {
       }
     }
 
+    User user = (User)auth.getPrincipal();
+    String userIdName = user.getUser_username(); 
+	String userName = user.getUser_name();
+    logService.RecordLog(userIdName, userName, log_file_contents_modify);
+    
     String str = URLEncoder.encode(type, "UTF-8");
     String url = "/breed?type=" + str + "&id=" + resource_id + "&crop_id=" + crop_id;
 
@@ -517,37 +551,56 @@ public class BreedController {
     return result;
   }
   
-  // 2022-06-08 | 등록서식 다운로드
-  /*
   @ResponseBody
-  @RequestMapping("formattingDownload")
-  public Map<String, Object> formattingDownload(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
+  @RequestMapping("searchCellValue")
+  public Map<String, Object> searchCellValue(
+//		  									@RequestParam("breed_id") int breed_id, 
+		  									@RequestParam("cell_value") String cell_value,
+		  									@RequestParam("crop_name") String crop_name,
+		  									@RequestParam("resource_id") String resource_id) {
+	  Map<String , Object> result = new LinkedHashMap<>();
+	  
+//	  System.out.println(breed_id + cell_value + crop_name + resource_id);
+	  
+	  List<StandardList> standardList = breedService.SearchStandardByCellValue(cell_value);
+	  
+	  System.out.println(standardList);
+	  
+	  result.put("standardList", standardList);
+	  
+	  return result;
+  }
+  
+  @ResponseBody
+  @RequestMapping("searchOnlyHeader")
+  public Map<String, Object> SearchOnlyHeader(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_id") int resource_id) {
     User user = (User)auth.getPrincipal();
     int group = user.getUser_group();
     Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-    int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name, group);
-    int resourceId = 0;
 
-    for (int i = 0; i < resourceNameId.length; i++) {
-      if (resourceService.SearchResourceId(crop_id, resourceNameId[i], group) != null) {
-        resourceId = resourceService.SearchResourceId(crop_id, resourceNameId[i], group);
-        break;
-      }
+
+    List<Detail> details = detailService.SelectDetailListByResource(resource_id);
+
+    String crop_name = breedService.SearchCropName(crop_id);
+
+    List<Breed> breed = breedService.SearchBreed2(crop_name, resource_id);
+
+    /*
+    List<StandardList> standardLists = new ArrayList<StandardList>();
+
+    for(int i = 0; i < breed.size(); i++) {
+      standardLists = breedService.SelectStandard2(breed.get(i).getBreed_id());
+
+      breed.get(i).setStandardList(standardLists);
     }
+    */
 
-    List<Detail> details = detailService.SelectDetailListByResource(resourceId);
-
+    
+    result.put("breed", breed);
     result.put("detail", details);
+    result.put("resource_id", resource_id);
 
-    for(int i=1; i<details.size() ; i++) {
-    	System.out.println(details.get(i).getDetail_name());
-    }
-    
-//    System.out.println("standardLists : " + standardLists);
-//    System.out.println("breed : "+breed);
-    
     return result;
   }
-  */
 }

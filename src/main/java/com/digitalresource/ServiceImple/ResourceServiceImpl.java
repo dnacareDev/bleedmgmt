@@ -129,6 +129,11 @@ public class ResourceServiceImpl implements ResourceService {
   public List<ResourceList> searchResource(int user_group) {
     return resourceMapper.searchResource(user_group);
   }
+  
+  @Override
+  public List<ResourceAllList> searchResourceAll(int crop_id) {
+	  return resourceMapper.searchResourceAll(crop_id);
+  }
 
   @Override
   public int changeResourceUse(Map<String, Object> map) {

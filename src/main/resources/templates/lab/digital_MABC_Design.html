@@ -22,6 +22,12 @@
         th, tbody tr {
             background-color: white;
         }
+        
+        .main-content .contents .container-fluid {
+            max-width: 100%;
+            padding: 50px;
+        }
+        
 		.top-menu .main-content{
 			background-color:#FCFCFC;
 		}
@@ -81,12 +87,16 @@
             cursor: pointer;
         }
         
-.modal{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+		.modal{
+		  position: fixed;
+		  top: 50%;
+		  left: 50%;
+		  transform: translate(-50%, -50%);
+		}
+		
+		.tui-grid-cell {
+            background-color: white;
+        }
 		
     </style>
 
@@ -101,43 +111,27 @@
 <th:block th:include="/../fragments/topbar.html"></th:block>
 
 <main class="main-content">
-
     <div class="contents">
-
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12">
-                	
-                </div>
-            </div>
-            <div class="row">
-            	<div class="card">
-            		<div class="card-body">
-	        			<div class="bg-white">
-	                        <div class="card" id="cardPlus" style="width:1100px" >	<!-- width를 지정해야 다 보인다. 오른쪽으로 쏠려있으니 그것도 방법을 찾아보자. 일단은 container-fluid가 중앙정렬된게 원인으로 보임 -->
-		                        <div class="card-body" style="padding-top: 0;">
-		                            <div class="bg-white">
-			                            <div class="breadcrumb-main">
-				        					<h4 class="text-capitalize breadcrumb-title">MABC 디자인 [MABC design]</h4>
-				        				</div>
-		                                <div id="MABC_design_grid"><!-- 여기에 그리드 출력 --></div>
-		                                <div class="row">
-		                                    <div class="col-4">
-		                                        <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#MABCDesignModal">
-		                                            <span data-feather="plus"></span>
-		                                        </button>
-		                                    </div>
-		                                    <div class="col-4">
-		                                        <div class="row" style="justify-content: center;">
-		                                            <div id="pageNum" style="text-align:center; margin: 2% 0 0 0;"></div>
-		                                        </div>
-		                                    </div>
-		                                </div>
+	            <div class="col-lg-12 mb-30">
+	            	<div class="card">
+	            		<div class="card-body">
+		        			<div class="bg-white">
+			        			<div class="breadcrumb-main">
+		        					<h4 class="text-capitalize breadcrumb-title">MABC Simulation</h4>
+		        				</div>
+		                        <div id="MABC_design_grid"><!-- 여기에 그리드 출력 --></div>
+		                        <div class="row">
+		                            <div class="col-4">
+		                                <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#MABCDesignModal">
+		                                    <span data-feather="plus"></span>
+		                                </button>
 		                            </div>
-		                        </div>		                        
-	                        </div>
-	                    </div>
-            		</div>
+		                        </div>
+		                    </div>
+	            		</div>
+	            	</div>
             	</div>
             </div>
         </div>
@@ -149,7 +143,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content modal-bg-white " id="file_modal">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">MABC 디자인 [MABC Design]</h6><a class="example_file" href="/common/r/example/MABC_Design.pdf" download>매뉴얼 다운로드</a>
+                    <h6 class="modal-title">MABC Simulation</h6><a class="example_file" href="/common/r/example/MABC_Design.pdf" download>매뉴얼 다운로드</a>
                     <span class="breed_title"></span>
                 </div>
                 <form action="insertMABCDesign" id="insertFile" name="insertFile" method="POST" enctype="multipart/form-data">
@@ -349,6 +343,7 @@ function SearchPlan() {
 				console.log("dataArr", dataArr);
 				*/
 				
+				tui.Grid.applyTheme('clean');
 				// 2022-05-12 | marker_grid를 qtl_grid로 교체. 뭔가 출력이 안된다 싶으면 이 부분을 확인해보자
 				MABC_design_grid = new tui.Grid({
 					el: document.getElementById('MABC_design_grid'),
@@ -435,25 +430,6 @@ function SearchPlan() {
 
 	                    	window.open("/mabcsimulation/simulate_result.jsp?jobid=" + result.mabc_sample[ev.rowKey].jobid, 'simulate_result', 'top=100, left=400, width=1200, height=800, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no'); 
 	                    	
-	                    	/*
-	                    	
-	                    	$.ajax({
-	        					url : '/MABC_design_result_html_and_pdf',
-	        					method : 'POST',
-	        					data : { "jobid" : result.MABCDesign[ev.rowKey].jobid},
-	        			        cache: false,
-	        					success : function(result) {
-	        						console.log(result);
-	        					},
-	        					error: function(result) {
-	        						console.log("등록 실패");
-	        					}
-	        				
-	        				});
-	                    	
-	                    	*/
-	                    	
-	                    	// location.href = '/MABC_design_result_html_and_pdf';
 	                    } else if(result.mabc_sample[ev.rowKey].mabc_status === '분석중') {
 	                    	alert("분석중입니다.");
 	                    	return false;
@@ -574,11 +550,11 @@ function SearchPlan() {
 			}
 		});
 		
-		/*
+		
 		setTimeout(function() {
 			location.href="/digital_MABC_Design";
 		}, 500);
-		*/
+		
 		
 		
 	}

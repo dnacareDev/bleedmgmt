@@ -30,6 +30,7 @@ import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.Detail;
 import com.digitalresource.Entity.Feature;
 import com.digitalresource.Entity.Resource;
+import com.digitalresource.Entity.ResourceAllList;
 import com.digitalresource.Entity.ResourceList;
 import com.digitalresource.Entity.ResourceName;
 import com.digitalresource.Entity.User;
@@ -86,6 +87,21 @@ public class ResourceController {
     map.put("end_page", end_page);
     map.put("offset", offset);
     return map;
+  }
+  
+  // 2022-07-04 | crop_id가 일치하는 모든 resource_id를 조회
+  @ResponseBody
+  @RequestMapping("searchResourceAll")
+  public Map<String, Object> searchResourceAll(@RequestParam("crop_id") int crop_id) {
+	  Map<String, Object> map = new HashMap<>();
+	  
+	  System.out.println("crop_id : " + crop_id);
+	  
+	  List<ResourceAllList> resourceAllList = RService.searchResourceAll(crop_id);
+	  
+	  map.put("resourceAllList", resourceAllList);
+	  
+	  return map;
   }
 
   @ResponseBody

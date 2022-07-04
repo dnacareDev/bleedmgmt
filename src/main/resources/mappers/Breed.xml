@@ -299,4 +299,12 @@
             WHERE breed_id = #{item.breed_id} AND detail_id = #{item.detail_id}
         </foreach>
     </update>
+    
+    <select id="SearchStandardByCellValue" resultType="StandardList">
+    	SELECT * 
+    	FROM breed b LEFT JOIN standard s ON b.breed_id = s.breed_id
+    	WHERE s.breed_id in (
+    		SELECT breed_id from standard where standard_data = #{cell_value}
+    	)
+    </select>
 </mapper>
