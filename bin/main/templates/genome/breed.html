@@ -2588,19 +2588,17 @@
 
                             selectgrid[i].setColumns(headerArr);
                             
-                            
-                         // standard에 있는 데이터값을 그리드에 입력
-                            const dataList = [];
-
-                         	 
                          
+                            
+                         	
+                            // standard에 있는 데이터값을 그리드에 입력
+                            const dataList = [];
+                         	 
                             for (let j = 0; j < result.breed.length; j++) {
-                            	/*
+                            	
                             	let breed_id_flag = false;
                             	
-                            	console.log(result.breed[0].standardList[0].standard_data);
-                                
-                                for (let k = 0; k < result.breed[j].standardList.length; j++) {
+                                for (let k = 0; k < result.breed[j].standardList.length; k++) {
                                 	if(result.breed[j].standardList[k].standard_data == cell_value) {
                                 		breed_id_flag = true;
                                 		break;
@@ -2608,9 +2606,10 @@
                                 }
                                 
                                 if(breed_id_flag == false) {
+                                	//console.log("breed_flag");
                                 	continue;
                                 }
-                            	*/
+                            	
                             	
                             	
                                 let data = result.breed[j].standardList;
@@ -2632,16 +2631,12 @@
                                     }
                                 }
                                 
-                                // 데이터 필터링 콘솔 
-                                //console.log(cell_value, " vs ", data[nth_column].standard_data);
-                                
-                                //console.log("tempArray : ", tempArray);
+                                console.log("tempArray : ", tempArray);
                                 
                                 dataList.push(tempArray);
                             }
-
-                            selectgrid[i].resetData(dataList);
                             
+                            selectgrid[i].resetData(dataList);
                             
                             /*
                             $.ajax(
@@ -2664,8 +2659,6 @@
                                         		}
                                         	}
                                         }
-                                        
-                                        
                             });
                             */
                         	
