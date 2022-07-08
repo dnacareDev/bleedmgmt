@@ -37,7 +37,17 @@
     li>a {
     	cursor: pointer;
     }
-
+    
+    .btn-primary3, .btn-primary3:hover, .btn-primary3:active {
+    	border: none;
+    	background-color: #217566 ;
+    	color: #EDF6F1 ;
+    }
+    
+    .btn-secondary3 {
+    	border: none;
+    }
+    
 
 </style>
 <header class="header-top">
@@ -71,26 +81,29 @@
                         </li>
                         <li class="has-subMenu">
                             <a href="javascript:void(0)" class="">
+                                <span data-feather="archive" class="nav-icon"></span>
+                                <span class="menu-text">데이터 보관함</span>
+                            </a>
+                            <ul class="subMenu">
+                                <li>
+                                    <a onclick="research(2);">통합정보 보관함</a>
+                                </li>
+                                <li>
+                                    <a onclick="research(4);">MABC 유전형 보관함</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-subMenu">
+                            <a href="javascript:void(0)" class="">
                                 <span data-feather="calendar" class="nav-icon"></span>
                                 <span class="menu-text">분석관리</span>
                             </a>
                             <ul class="subMenu">
-                                <!--  
                                 <li>
-                                    <a onclick="research(0);">MABC - data</a>
-                                </li>
-                                -->
-                                <li>
-                                    <a onclick="research(1);">Digital Analysis</a>
+                                    <a onclick="research(1);">유연관계 분석</a>
                                 </li>
                                 <li>
-                                    <a onclick="research(2);">Digital Marker</a>
-                                </li>
-                                <li>
-                                    <a onclick="research(4);">Digital MABC DB</a>
-                                </li>
-                                <li>
-                                    <a onclick="research(5);">MABC Simulation</a>
+                                    <a onclick="research(5);">MABC 시뮬레이션</a>
                                 </li>
                             </ul>
                         </li>
@@ -104,7 +117,7 @@
                                     <a href="/management-resource">자원 관리 설정</a>
                                 </li>
                                 <li>
-                                    <a href="/character">종자원 특성 조사</a>
+                                    <a href="/character">종자원 특성조사 기준</a>
                                 </li>
                                 <li>
                                 	<a href="/log">사용이력</a>
@@ -134,22 +147,23 @@
                             <img src="/img/author-nav.jpg" alt="" class="rounded-circle">
                         </a>
                         <div class="dropdown-wrapper">
+                        	 
                             <div class="nav-author__info">
                                 <div class="author-img">
                                     <img src="/img/author-nav.jpg" alt="" class="rounded-circle">
                                 </div>
                                 <div>
                                     <h6 th:text="${user.user_name}"></h6>
-                                    <!-- <span>UI Designer</span> -->
                                 </div>
                             </div>
+                            
                             <div class="nav-author__options">
                                 <ul>
                                     <li>
-                                        <a onclick="return modalShow('#settings');"><span data-feather="settings"></span> Settings</a>
+                                        <a onclick="return modalShow('#settings');"><span data-feather="settings"></span> 비밀번호 변경</a>
                                     </li>
                                 </ul>
-                                <a href="/logout" class="nav-author__signout"><span data-feather="log-out"></span> Sign Out</a>
+                                <a href="/logout" class="nav-author__signout"><span data-feather="log-out"></span> 로그아웃</a>
                             </div>
                         </div>
                     </div>
@@ -174,7 +188,7 @@
                 <h6 class="modal-title">비밀번호 변경</h6>
             </div>
             <div class="modal-body clearfix" id="checking_password">
-                <span class="passwordM" style=" color: red; font-size: 10px; text-align: center;">비밀번호가 다릅니다 다시 확인해주세요</span>
+                <span class="passwordM" style="display: none; color: red; font-size: 10px; text-align: center;">비밀번호가 다릅니다 다시 확인해주세요</span>
                 <div class="form-group mb-0 clearfix" style="padding: 10px 0;">
                     <span style="vertical-align: middle;">변경할 비밀번호</span>
                     <input id="passwordCh1" type="password" name="" style="width: 70%; float: right; margin-left: 10px; border-radius: 5px;height:45px;">
@@ -185,8 +199,8 @@
                 </div>
             </div>
             <div class="modal-footer clearfix" style="border: none; clear:both;">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
-                <input type="submit" class="btn btn-primary btn-sm" value="저장" onclick="UpdateBtn();">
+                <button type="button" class="btn btn-secondary3 btn-sm" data-dismiss="modal" style="background-color:#EDF6F1; color:#217566;">취소</button>
+                <input type="submit" class="btn btn-primary3 btn-sm" value="저장" onclick="UpdateBtn(); ">
             </div>
         </div>
     </div>
@@ -197,6 +211,35 @@
     function modalShow(e) {
         $(e).modal("show");
     }
+    
+    
+    function UpdateBtn() {
+        if ($("#passwordCh1").val() !== $("#passwordCh2").val()) {
+            $("#checking_password").addClass("active");
+
+            $(".passwordM").css('display','');
+            
+            return false;
+        } else {
+        	$(".passwordM").css('display','none');
+        	
+            var data = {"user_password": $("#passwordCh1").val()};
+
+            $.ajax(
+                {
+                    url: 'updatePassword',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        if (result != 0) {
+                            location.reload();
+                        }
+                    }
+                });
+        }
+    }
+    
 
     window.onload = function () {
         $.ajax({

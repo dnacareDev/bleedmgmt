@@ -286,7 +286,8 @@ public class AnalysisController {
           writer.write(target_name[i / detail.size()]);
           writer.write("\t");
           if (standard.get(i).getStandard_data() == null) {
-            writer.write("");
+//            writer.write("");
+        	  writer.write("NaN");
           } else {
             writer.write(standard.get(i).getStandard_data());
           }

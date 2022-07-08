@@ -23,8 +23,11 @@ public class MabcDesignServiceImpl implements MabcDesignService {
 	
 	@Override
 	public int insertMabcDesign(MabcDesign mabc_design) {
-		System.out.println(mabc_design);
 		return mapper.insertMabcDesign(mabc_design);
 	}
 	
+	@Override
+	public Integer DeleteMabcDesign(int[] total_mabc_num) {
+		return mapper.DeleteMabcDesign(total_mabc_num);
+	}
 }

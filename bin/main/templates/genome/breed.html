@@ -66,7 +66,8 @@
 
         .content_1 {
             max-height: 500px;
-            overflow: auto;
+            /*overflow: auto;*/
+            overflow: hidden;
             line-height: 2;
         }
 
@@ -462,7 +463,7 @@
         .main-content .table thead th > img {
             margin: 6px 0 0 12px;
         }
-
+        
         /* 팝업 */
         .popup_wrap {
             display: none
@@ -508,6 +509,7 @@
             font-weight: 400;
             border-radius: 6px
         }
+        
 
         /* 2021 - 11 - 02 수정 */
         #data_upload .form-group button {
@@ -707,14 +709,21 @@
         .plus_btn_submit2 {
             display: none;
         }
-
+        
+        
         .modal-dialog {
             height: 90vh;
         }
-
+        
+        #modal-dialog-modify {
+        	height: 800px;
+        }
+		
+		
         .modal-content {
             height: 100%;
         }
+        
 
         .modal-body {
             width: 100%;
@@ -753,6 +762,12 @@
 
         #file_modal {
             height: 655px;
+        }
+        
+        #file_grid2 {
+        	width: 100%;
+            height: 600px;
+            overflow: scroll;
         }
 
         [id*="grid"] .color-dark.align-center {
@@ -879,6 +894,20 @@
             cursor: pointer;
 		}
 		
+		/* 마우스오버시 파란색으로 변화하는 현상 방지 */
+		.btn-primary:hover {
+        	background-color: #217566 !important; 
+        }
+		
+		/* 엑셀 등록시 나타나는 데이터 넓이 100% 고정 */
+		table#excel_data {
+			overflow: auto;
+		}
+		
+		#breed_file_delete_button {
+			float: left !important;
+		}
+		
     </style>
 </head>
 <body class="layout-light top-menu overlayScroll">
@@ -913,10 +942,10 @@
                                             <option th:if="${crop_id == list.crop_id}" th:value="${list.crop_id}" th:text="${list.crop_name}" selected></option>
                                         </th:block>
                                     </select>
-                                    <button class="btn btn-lg btn-primary data_btn2" title="데이터 등록" onclick="openExcel()">
+                                    <button class="btn btn-lg btn-primary4 data_btn2" title="데이터 등록" onclick="openExcel()">
                                         <img src="../assets/vendor_assets/img/icon1.png" alt="">
                                     </button>
-                                    <button class="btn btn-lg btn-primary data_btn2" title="표시항목 선택" onclick="DisplayBtn();">
+                                    <button class="btn btn-lg btn-primary4 data_btn2" title="표시항목 선택" onclick="DisplayBtn();">
                                         <img src="../assets/vendor_assets/img/icon3.png" alt="">
                                     </button>
                                 </div>
@@ -925,25 +954,26 @@
                         <input type="hidden" id="resource_id" th:value="${resource_id}">
                         <input type="hidden" id="resource_name" th:value="${type}">
                         <div class='card-extra mt-10 mb-10 mr-20 plus_btn_submit1'>
-                            <button type='button' id="cancelRow" onclick="cancelRow()">취소</button>
-                            <button type='button' id="saveRow" onclick="saveRow()">저장</button>
+	                        <button type='button' id="saveRow" onclick="saveRow()">저장</button>
+                            <button type='button' id="cancelRow" onclick="cancelRow()" style="margin-right: 5px; background-color: #EDF6F1; color: #217566;">취소</button>
+                            
                         </div>
                         <div class='card-extra mt-10 mb-10 mr-20 plus_btn_submit2'>
-                            <button type='button' id="cancelUpdate" onclick="cancelUpdate()">취소</button>
-                            <button type='button' id="updateRow" onclick="updateRow()">수정</button>
+                        	<button type='button' id="updateRow" onclick="updateRow()">수정</button>
+                            <button type='button' id="cancelUpdate" onclick="cancelUpdate()" style="margin-right: 5px; background-color: #EDF6F1; color: #217566;">취소</button>
                         </div>
                         <div class="card-body" style="padding-top: 0">
                             <div class="bg-white">
                                 <div id="breedGrid"></div>
                                 <div class="row" style="padding-top: 0;">
                                     <div class="col-4">
-                                        <button class="btn btn-icon btn-light btn-circle" onclick="insertRow();">
+                                        <button class="btn btn-icon btn-light btn-circle" onclick="insertRow();" title="데이터 추가">
                                             <span data-feather="plus"></span>
                                         </button>
-                                        <button class="btn btn-icon btn-light btn-circle" onclick="DeleteBreed();">
+                                        <button class="btn btn-icon btn-light btn-circle" onclick="DeleteBreed();" title="데이터 삭제">
                                             <span data-feather="trash-2"></span>
                                         </button>
-                                        <button class="btn btn-icon btn-light btn-circle" id="data_check_submit" onclick="AnalysisBtn();" style="width:44.03px; height:42px;">
+                                        <button class="btn btn-icon btn-light btn-circle" id="data_check_submit"  title="통합분석" onclick="AnalysisBtn();" style="width:44.03px; height:42px;">
                                             <img src="../assets/vendor_assets/img/check_tab.png" alt="check" style="width: 17px;margin-left: 4px;">
                                         </button>
                                         <input type="hidden" id="offset">
@@ -986,7 +1016,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -1048,7 +1078,7 @@
 
     <!-- 첨부파일 수정창 -->
     <div class="modal-basic modal fade show pop1" id="modify_file" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
+        <div class="modal-dialog modal-md" id="modal-dialog-modify" role="document">
             <div class="modal-content modal-bg-white ">
                 <div class="modal-header" style="border: none">
                     <h6 class="modal-title"><span class="titleType" th:text="${type}"></span> > 첨부파일</h6>
@@ -1092,6 +1122,7 @@
                         </div>
                     </div>
                     <div class="modal-footer" style="border: none">
+                    	<button type="button" class="btn btn-primary btn-sm mr-auto ml-2" onclick="DeleteFile()">삭제</button>
                         <input type="hidden" id="breed_file_id" name="breed_file_id">
                         <input type="hidden" id="type" name="type" th:value="${type}">
                         <input type="hidden" id="resource" name="resource_id" th:value="${resource_id}">
@@ -1125,15 +1156,15 @@
                                         <ul class="nav nav-tabs vertical-tabs" role="tablist" id="headerList">
                                             <li class="nav-item active">
                                                 <a class="nav-link" id="tab-horizontal-0-tab" data-toggle="tab" href="#tab-horizontal-0" role="tab" aria-controls="tab-horizontal-0"
-                                                   aria-selected="true">기본 정보</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="tab-horizontal-1-tab" data-toggle="tab" href="#tab-horizontal-1" role="tab" aria-controls="tab-horizontal-1"
-                                                   aria-selected="false">특성 정보[종자원 기준]</a>
+                                                   aria-selected="true">자원 정보</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="tab-horizontal-2-tab" data-toggle="tab" href="#tab-horizontal-2" role="tab" aria-controls="tab-horizontal-2"
-                                                   aria-selected="false">특성 정보[사내 기준]</a>
+                                                   aria-selected="false">특성 정보</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="tab-horizontal-1-tab" data-toggle="tab" href="#tab-horizontal-1" role="tab" aria-controls="tab-horizontal-1"
+                                                   aria-selected="false">종자원 특성 조사기준</a>
                                             </li>
                                         </ul>
                                         <span class="prev"></span>
@@ -1154,7 +1185,7 @@
                                                                 <div class="row mt-4" style="justify-content: center; align-items: center;">
                                                                     <div class="col-lg-5" style="padding:0;">
                                                                         <ul class="display_list" id="step_container1"
-                                                                            style="min-height: 500px; max-height: 500px; overflow-x: hidden; overflow-y: auto; border: 1px solid #D9D9D9">
+                                                                            style="min-height: 400px; max-height: 400px; overflow-x: hidden; overflow-y: auto; border: 1px solid #D9D9D9">
                                                                         </ul>
                                                                     </div>
                                                                     
@@ -1170,8 +1201,8 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-5">
-                                                                        <div class="row" style="overflow:auto; min-height: 500px; border: 1px solid #D9D9D9;">
-                                                                            <div class="list-group mt-2" style="max-height: 500px; overflow-x: hidden; overflow-y: auto;">
+                                                                        <div class="row" style="overflow:auto; min-height: 400px; border: 1px solid #D9D9D9;">
+                                                                            <div class="list-group mt-2" style="max-height: 400px; overflow-x: hidden; overflow-y: auto;">
                                                                                 <ul class="detail_list" id="display_container1" name="기본 정보">
                                                                                 </ul>
                                                                             </div>
@@ -1198,7 +1229,7 @@
                                                                 <div class="row mt-4" style="justify-content: center;align-items: center;">
                                                                     <div class="col-lg-5" style="padding:0;">
                                                                         <ul class="display_list" id="step_container2"
-                                                                            style="min-height: 500px; max-height: 500px; overflow-x: hidden; overflow-y: auto; border: 1px solid #D9D9D9">
+                                                                            style="min-height: 400px; max-height: 400px; overflow-x: hidden; overflow-y: auto; border: 1px solid #D9D9D9">
                                                                         </ul>
                                                                     </div>
                                                                     <div class="box_content">
@@ -1214,8 +1245,8 @@
                                                                     </div>
                                                                     
                                                                     <div class="col-lg-5">
-                                                                        <div class="row" style="overflow:auto; min-height: 500px; border: 1px solid #D9D9D9;">
-                                                                            <div class="list-group mt-2" style="max-height: 500px; overflow-x: hidden; overflow-y: auto;">
+                                                                        <div class="row" style="overflow:auto; min-height: 400px; border: 1px solid #D9D9D9;">
+                                                                            <div class="list-group mt-2" style="max-height: 400px; overflow-x: hidden; overflow-y: auto;">
                                                                                 <ul class="detail_list" id="display_container2" name="특성 정보(종자원 기준)">
                                                                                 </ul>
                                                                             </div>
@@ -1242,7 +1273,7 @@
                                                                 <div class="row mt-4" style="justify-content: center;align-items: center;">
                                                                     <div class="col-lg-5" style="padding:0;">
                                                                         <ul class="display_list" id="step_container3"
-                                                                            style="min-height: 500px; max-height: 500px; overflow-x: hidden; overflow-y: auto; border: 1px solid #D9D9D9">
+                                                                            style="min-height: 400px; max-height: 400px; overflow-x: hidden; overflow-y: auto; border: 1px solid #D9D9D9">
                                                                         </ul>
                                                                     </div>
                                                                     <div class="box_content">
@@ -1258,8 +1289,8 @@
                                                                     </div>
                                                                     
                                                                     <div class="col-lg-5">
-                                                                        <div class="row" style="overflow:auto; min-height: 500px; border: 1px solid #D9D9D9;">
-                                                                            <div class="list-group mt-2" style="max-height: 500px; overflow-x: hidden; overflow-y: auto;">
+                                                                        <div class="row" style="overflow:auto; min-height: 400px; border: 1px solid #D9D9D9;">
+                                                                            <div class="list-group mt-2" style="max-height: 400px; overflow-x: hidden; overflow-y: auto;">
                                                                                 <ul class="detail_list" id="display_container3" name="특성 정보(사내 기준)">
                                                                                 </ul>
                                                                             </div>
@@ -1315,7 +1346,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -1326,9 +1357,9 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white ">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title"><span class="titleType" th:text="${type}"></span> > 데이터 등1록</h6>
+                    <h6 class="modal-title"><span class="titleType" th:text="${type}"></span> > 데이터 등록</h6>
                 </div>
-                <div class="modal-body" style="overflow-y: auto;">
+                <div class="modal-body">
                     <div class="form-group mb-0" style="justify-content:end">
                         <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none"
                                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
@@ -1338,8 +1369,8 @@
                     <div>
                         <form action="excelBreed" id="excelForm" method="POST" enctype="multipart/form-data">
                             <input type="hidden" id="excel_list" name="excel_list">
-                            <div class="atbd-upload">
-                                 <table id="excel_data" >
+                            <div class="atbd-upload" id="file_grid2">
+                                 <table id="excel_data">
                                     <thead><!--
                                     <th><span class="title">작물</span></th>
                                     <th><span class="title">시교명(ID)</span></th>
@@ -1428,15 +1459,15 @@
                                         <ul class="nav nav-tabs vertical-tabs" role="tablist">
                                             <li class="nav-item">
                                                 <a class="nav-link active" id="tab-horizontal-0-tab" data-toggle="tab" href="#tab-horizontal-0" role="tab"
-                                                   aria-controls="tab-horizontal-0" aria-selected="true">기본 정보</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="tab-horizontal-1-tab" data-toggle="tab" href="#tab-horizontal-1" role="tab"
-                                                   aria-controls="tab-horizontal-1" aria-selected="false">특성 정보[종자원 기준]</a>
+                                                   aria-controls="tab-horizontal-0" aria-selected="true">자원 정보</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="tab-horizontal-2-tab" data-toggle="tab" href="#tab-horizontal-2" role="tab" aria-controls="tab-horizontal-2"
-                                                   aria-selected="false">특성 정보[사내 기준]</a>
+                                                   aria-selected="false">특성 정보</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="tab-horizontal-1-tab" data-toggle="tab" href="#tab-horizontal-1" role="tab"
+                                                   aria-controls="tab-horizontal-1" aria-selected="false">종자원 특성 조사기준</a>
                                             </li>
                                         </ul>
                                         <span class="prev"></span>
@@ -1447,7 +1478,7 @@
                                         <div class="tab-pane fade show active" id="tab-horizontal-0" role="tabpanel" aria-labelledby="tab-horizontal-0-tab">
                                             <div class="content_title clearfix">
                                                 <ul>
-                                                    <li>형질</li>
+                                                    <li>특성</li>
                                                     <li>조사값</li>
                                                 </ul>
                                             </div>
@@ -1459,27 +1490,27 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="tab-horizontal-1" role="tabpanel" aria-labelledby="tab-horizontal-1-tab">
-                                            <div class="content_title clearfix">
-                                                <ul>
-                                                    <li>형질</li>
-                                                    <li>조사값</li>
-                                                </ul>
-                                            </div>
-                                            <div class="content_1 clearfix">
-                                                <ul class="detail_list2" name="2">
-                                                </ul>
-                                            </div>
-                                        </div>
                                         <div class="tab-pane fade" id="tab-horizontal-2" role="tabpanel" aria-labelledby="tab-horizontal-2-tab">
                                             <div class="content_title clearfix">
                                                 <ul>
-                                                    <li>형질</li>
+                                                    <li>특성</li>
                                                     <li>조사값</li>
                                                 </ul>
                                             </div>
                                             <div class="content_1 clearfix">
                                                 <ul class="detail_list2" name="1">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tab-horizontal-1" role="tabpanel" aria-labelledby="tab-horizontal-1-tab">
+                                            <div class="content_title clearfix">
+                                                <ul>
+                                                    <li>특성</li>
+                                                    <li>조사값</li>
+                                                </ul>
+                                            </div>
+                                            <div class="content_1 clearfix">
+                                                <ul class="detail_list2" name="2">
                                                 </ul>
                                             </div>
                                         </div>
@@ -1511,7 +1542,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -1546,6 +1577,7 @@
         
         let crop_id = $("#CropSelect").val();
         let resource_name = $(".manage")[0].innerText;
+        
         
         $.ajax(
                 {
@@ -1925,14 +1957,17 @@
         let detail_id = e.name;
         let breed_id = wideBreedId;
 
-        wideUpdateValue.push({"breed_id": breed_id, "detail_id": detail_id, "standard": stan_value});
+        wideUpdateValue.push({"breed_id": breed_id, "detail_id": detail_id, "standard": stan_value, "resource_name": $(".manage")[0].innerText });
     }
 
     /* s : 특성상태 데이터 수정 버튼 */
     function UpdateAllBtn() {
+    	
+    	console.log("data : ", JSON.stringify(wideUpdateValue));
+    	
         $.ajax(
             {
-                url: 'updateBreed',
+                url: 'updateBreed2',
                 method: 'POST',
                 dataType: 'json',
                 data: {"data": JSON.stringify(wideUpdateValue)},
@@ -1977,6 +2012,7 @@
         SearchBreedgrid(1);
         setSessionS(type, $("#CropSelect option:selected").text());
         setSessionS(type_id, $("#CropSelect option:selected").val());
+        SearchResourceAll();
     })
 
     
@@ -2012,6 +2048,12 @@
     
     // 품종 삭제
     function DeleteBreed() {
+    	
+    	if(breedgrid.getCheckedRows().length == 0) {
+    		Alert1("삭제할 항목을 선택해주세요.");
+    		return;
+    	}
+    	
         var user_type = $("#user_type").val();
 
         if (user_type != 0) {
@@ -2291,9 +2333,18 @@
 
     // 통합 분석
     function AnalysisBtn() {
+    	
+    	if(breedgrid.getCheckedRows().length == 0) {
+    		Alert1("분석대상을 선택해주세요.");
+    		return;
+    	}
+    	
         let regExp = /<\/?[^>]+>/gi;
 
         let crop = $("#CropSelect option:selected").text();
+        let crop_id = $("#CropSelect").val();
+        
+        //console.log(crop_id);
 
         let total_id = [];
 
@@ -2305,7 +2356,7 @@
             let status = breedgrid.getCheckedRows()[i].status;
             let text = status.replace(regExp, "");
 
-            if (text === "EMPTY") {
+            if (text === "COMMON") {
                 chk = 1;
             }
 
@@ -2314,10 +2365,10 @@
 
         if (total_id.length != 0) {
             if (chk === 1) {
-                Alert1("형질 값이 존재하지 않습니다.")
+                Alert1("특성 정보가 존재하지 않습니다.")
             } else {
-                //window.open("/analysis?crop=" + crop + "&total_id=" + total_id + "&type=" + 1 + "&resource_name=[[${type}]]" + "&first_column="+ first_column + "&resource_id=" + $("#resource_id").val());
-            	window.open("/analysis?crop=" + crop + "&total_id=" + total_id + "&type=" + 1 + "&first_column="+ first_column + "&resource_id=" + $("#resource_id").val());
+                window.open("/analysis?crop=" + crop + "&crop_id=" + crop_id + "&total_id=" + total_id + "&type=" + 1 + "&resource_name=[[${type}]]" + "&first_column="+ first_column + "&resource_id=" + $("#resource_id").val());
+            	//window.open("/analysis?crop=" + crop + "&total_id=" + total_id + "&type=" + 1 + "&first_column="+ first_column + "&resource_id=" + $("#resource_id").val());
             }
         }
     }
@@ -2338,6 +2389,9 @@
                     dataType: 'json',
                     data: data,
                     success: function (result) {
+                    	
+                    	console.log("breed fileList result : " , result);
+                    	
                         let file_list = $("#file_list");
                         let file_add = "";
 
@@ -2462,7 +2516,8 @@
         $("#uploads_origin_file").text(files.uploads_origin_file);
         $("#uploads_file").val(files.uploads_file);
         $("#file_download").attr("href", "/upload/" + files.uploads_file);
-        $("#file_download").attr("download", "");
+        //$("#file_download").attr("download", "");
+        $("#file_download").attr("download", files.uploads_origin_file);
 
         let ele = $("#uploads_file").val(files.uploads_file)[0].defaultValue;
 
@@ -2470,6 +2525,30 @@
 
         $("#breed_file").modal("hide");
         $("#modify_file").modal("show");
+    }
+    
+    function DeleteFile() {
+    	
+    	if (confirm("삭제하시겠습니까?") == true) {
+    		breed_file_id = $("#breed_file_id").val();
+        	
+        	//console.log(breed_file_id);
+        	
+        	var loading = document.querySelector('.load_wrap');
+        	loading.classList.add('on');
+        	
+        	$.ajax(
+                    {
+                        url: 'DeleteBreedFile',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {"breed_file_id": breed_file_id},
+                        success: function (result) {
+                        	loading.classList.remove('on');
+                        	location.reload();
+                        }
+            }); 
+    	}
     }
 
     function CheckFunction() {
@@ -2515,7 +2594,7 @@
 		
     	
     	$("#pop_data1").modal();
-        $(".titleType").empty();
+        //$(".titleType").empty();
     	
         
     	for(let i=0 ; i<resource_all_resource.length ; i++) {
@@ -2588,9 +2667,6 @@
 
                             selectgrid[i].setColumns(headerArr);
                             
-                         
-                            
-                         	
                             // standard에 있는 데이터값을 그리드에 입력
                             const dataList = [];
                          	 
@@ -2631,7 +2707,7 @@
                                     }
                                 }
                                 
-                                console.log("tempArray : ", tempArray);
+                                //console.log("tempArray : ", tempArray);
                                 
                                 dataList.push(tempArray);
                             }
@@ -2664,187 +2740,10 @@
                         	
                         }
             });        
-    		
-    		
-    		
-    		
-    		
     	}
+    	
+    	
     }
-    
-    
-    /*
-    // 2022-06-24 | 기존 방식 주석화. 컬럼명에 제한되지 않고 모든 standard를 for문 없이 쿼리문에서 한번에 불러오도록 작업중
-    function Search(e, d, v) {
-    	
-    	console.log("e : ", e, " & d : ", d, " & v : ", v);
-    	
-    	selectgrid = [];
-    	
-    	console.log("list : ", resource_list);
-    	
-    	$("#pop_data1").modal();
-        $(".titleType").empty();
-    	
-    	for(let i=0 ; i<resource_list.length ; i++) {
-    		
-    		// resource_list의 숫자만큼 div 생성. 그리드를 생성할 영역 준비
-    		let grid_list_str = '<div id=grid_' + resource_list[i].resource_name_id + '>';
-    		grid_list_str += '</div>';
-    		$("#gridGroup").append(grid_list_str);
-    		
-    		
-    		let breed_id = e;
-            let breed_detail_name = d;
-            let cell_value = v;
-            let crop_id = $("#CropSelect").val();
-            let resource_name = $(".manage")[0].innerText;
-            
-            let data = {"breed_id": resource_list[i].resource_name_id, "crop_id": crop_id, "resource_name": resource_list[i].resource_name};
-    	
-            console.log("resource_list[i] : ", resource_list[i]);
-
-            
-            // 각 resource_list에 해당하는 그리드 데이터 조회
-            $.ajax(
-                    {
-                        url: 'searchHeader',
-                        method: 'POST',
-                        dataType: 'json',
-                        data: data,
-                        success: function (result) {
-                        	
-                        	console.log("grid result : ", result);
-                        	
-                        	//클릭한 cell의 컬럼명(breed_detail_name)이 없다면 그리드 출력에서 제외 + 몇번째 컬럼인지 변수로 저장
-                        	let flag = false;
-                        	let nth_column = null;
-                        	
-                        	for(let i=0 ; i<result.detail.length ; i++) {
-                        		if(breed_detail_name == result.detail[i].detail_name) {
-                        			flag = true;
-                        			nth_column = i;
-                        			//console.log("flag true")
-                        			//console.log("nth_column : ", nth_column);
-                        			break;
-                        		}
-                        	}
-                        	if(!flag) {
-                        		return;
-                        	}
-                        	
-                        	nth_column = i;
-
-                        	
-                        	console.log("result grid_ ", resource_list[i].resource_name_id, " : ", result );
-                        	
-                        	
-                        	// 데이터가 없을 경우 || 현재 관리대장과 일치하는 데이터일 경우(필요없으므로) 그리드 출력에서 제외
-                        	if(result.breed.length == 0 || resource_list[i].resource_name == "[[${type}]]" ){
-                        		return;
-                        	} 
-
-                        	$("#grid_" + resource_list[i].resource_name_id).text(resource_list[i].resource_name);
-
-                        	// 한번에 모든 데이터를 불러올 경우 정상적인 출력이 되지않으므로 시간차를 주는 함수.
-                        	// 현재 1000ms = 1초로 설정했으나 정상출력되는지 여부에 따라 유동적으로 변경한다
-                        	sleep(1000);
-
-                        	// 그리드 출력시 cell과 일치하는 데이터만 필터링하여 출력해야 함
-                        	selectgrid[i] = new tui.Grid({
-                                el: document.getElementById('grid_' + resource_list[i].resource_name_id),
-                                scrollX: true,
-                                scrollY: false,
-                                data: [],
-                                editingEvent: 'click',
-                                columns: [],
-                                pageOptions: {
-                                    useClient: true,
-                                    perPage: 10
-                                }
-                            });
-                        	
-                        	const headerArr = [];
-
-                            let headerName = [];
-                            let colName = [];
-                            
-                            for (let j = 0; j < result.detail.length; j++) {
-                                let colHeader = result.detail[j].detail_name;
-                                colName[j] = result.detail[j].detail_id;
-
-                                headerName[colName[j]] = result.detail[j].detail_id;
-
-                                let filter = {type: 'text', showApplyBtn: true, showClearBtn: true};
-
-                                let arr = {}
-
-                                if (result.detail[j].detail_info == 1 || result.detail[j].detail_info == 2) {
-                                    arr = {'header': colHeader, 'name': colName[j], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 500, 'filter': filter, align: 'center'}
-                                } else if (result.detail[j].detail_info == 4) {
-                                    continue;
-                                } else {
-                                    arr = {'header': colHeader, 'name': colName[j], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': 180, 'filter': filter, align: 'center'}
-                                }
-
-                                headerArr.push(arr);
-                            }
-
-                            selectgrid[i].setColumns(headerArr);
-                            
-                            // standard에 있는 데이터값을 그리드에 입력
-                            const dataList = [];
-
-                            for (let j = 0; j < result.breed.length; j++) {
-                                let data = result.breed[j].standardList;
-                                let tempArray = {};
-
-                                //console.log("data : ", data);
-  
-                                // 데이터를 그리드 cell에 입력
-                                for (let k = 1; k < headerName.length; k++) {
-                                	
-                                	// cell_value값이 아닐경우 출력제외
-                                	if(cell_value != data[nth_column].standard_data){
-	                                	continue;
-	                                }
-                                	
-                                    if ((typeof headerName[colName[k - 1]]) === 'string') {
-                                        tempArray[headerName[colName[k - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                                    } else if ((typeof headerName[colName[k - 1]]) === 'number') {
-                                    	//console.log(tempArray[headerName[colName[k - 1]]], " vs ", data[k - 1].standard_data);
-                                        if (headerName[colName[k - 1]] == data[k - 1].detail_id) {
-	                                        tempArray[headerName[colName[k - 1]]] = data[k - 1].standard_data;
-        	                                
-                                        }
-                                    }
-                                }
-                                
-                                // 데이터 필터링 콘솔 
-                                //console.log(cell_value, " vs ", data[nth_column].standard_data);
-                                
-                                //console.log("tempArray : ", tempArray);
-                                
-                                // 필터링되었을 경우 dataList에 밀어넣지 않음
-                                if(cell_value != data[nth_column].standard_data){
-                                	continue;
-                                } else {
-	                                dataList.push(tempArray);
-                                }
-                            }
-
-                            selectgrid[i].resetData(dataList);
-                            
-                        }
-            });
-            ////////////////////////////////////////////////////////////////////////////////////////////
-            
-            
-    	}
-    }
-    */
-
-    
     
     /* e : 파종번호 모달창 */
 
@@ -2871,7 +2770,6 @@
         let limit = $("#limit").val();
 
         let data = {"crop_id": crop_id, "resource_name": resource_name};
-
 
         $.ajax(
             {
@@ -2972,10 +2870,10 @@
 
                         if (result.detail[i].detail_info == 0 || result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2) {
                         	if(result.detail[i].detail_click == 1) {
-                        		arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': colHeader.length * 6 + 110, 'filter': filter, 'align': 'center'};
+                        		arr = {'header': colHeader, 'name': colName[i] + '_checked', 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': colHeader.length * 6 + 130, 'filter': filter, 'align': 'center'};
                             	headerName[colName[i]] = colName[i] + '_checked';
                         	} else {
-	                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': colHeader.length * 6 + 110, 'filter': filter,'align': 'center'};
+	                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': colHeader.length * 6 + 130, 'filter': filter,'align': 'center'};
                         	}
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
@@ -3002,7 +2900,7 @@
                         
                     }
                     
-                    //console.log("headerArr : ", headerArr);
+                    console.log("headerArr : ", headerArr);
                     
                  	// 2022-06-02 | export option 설정 //////////////////////////
                     let headerArrKeys = [];
@@ -3012,6 +2910,7 @@
                     			continue;
                     		else	
                     			headerArrKeys.push(headerArr[i].name);
+                    			continue;
                     		
                     	}
                     	headerArrKeys.push(headerArr[i].name);
@@ -3053,15 +2952,15 @@
     
                         tempArray['breed_id'] = result.breed[i].breed_id;
 
-                        /*
+                        
+                        
                         if (result.breed[i].detail_count == 0) {
-                            tempArray['status'] = '<span style="color:red">EMPTY</span>';
+                            tempArray['status'] = '<span style="color:blue">COMMON</span>';
                         } else {
-                            tempArray['status'] = '<span style="color:blue">PROGRESS</span>';
+                            tempArray['status'] = '<span style="color:blue">ANALYSIS</span>';
                         }
-                        */
-                        // EMPTY,PROGRESS 구분 삭제
-                        tempArray['status'] = '<span style="color:blue">INFROME</span>';
+                        
+                        
                         
                         for (let j = 1; j < headerName.length; j++) {
                             if ((typeof headerName[colName[j - 1]]) === 'string') {
@@ -3100,20 +2999,6 @@
                     })
 
                     breedgrid.on('click', (ev) => {
-                        //let header;
-                        //let allCol = ev.instance.store.column.allColumns;
-                        
-                        //console.log("ev : ", ev);
-
-                        /*
-                        for (let i = 0; allCol.length; i++) {
-                            if (allCol[i].name == ev.columnName) {
-                                header = allCol[i].header
-                                break;
-                            }
-                        }
-                        */
-                        
 
                         if (ev.targetType === 'cell' && ev.columnName === 'file') {
                             let id = breedgrid.getRow(ev.rowKey).breed_id;
@@ -3139,7 +3024,7 @@
                         	
                         	// cell값이 비어있을 경우 검색없이 return
                         	if(!breedgrid.getValue(ev.rowKey, ev.columnName)) {
-                        		alert("빈값은 검색할 수 없습니다.");
+                        		Alert1("빈값은 검색할 수 없습니다.");
                         		return;
                         	}
                         	
@@ -3451,63 +3336,6 @@
                 }
             }
             
-            /*
-            
-            var keys = Object.values(rowdata[0]);
-
-            var html = "";
-
-            for (var i = 0; i < rowdata.length; i++) {
-                if (i === 0) {
-                    html += "<thead class='text-center'>";
-                    html += "<tr>";
-
-                    $.each(rowdata[0], function (idx, value) {
-                        html += "<th><span class='excel-title'>" + value + "</span></th>";
-                    })
-
-                    html += "</tr>";
-                    html += "</thead>";
-                } else if (i !== 0) {
-                    html += "<tbody class='text-center'>";
-                    html += "<tr class='excel_tr'>";
-
-                    var tmp = Object.keys(rowdata[0]);
-                    var j = 0;
-
-                    $.each(rowdata[i], function (idx, value) {
-                        // 공백처리
-                        if (idx == tmp[j]) {
-
-                            html += "<td class='excel'><span>" + value + "</span></td>";
-                            j++;
-
-                        } else {
-                            var idx_str = idx.replace(/[^0-9]/g, '');
-                            var tmp_str = tmp[j].replace(/[^0-9]/g, '');
-
-                            var gap = idx_str - tmp_str;
-
-                            while (gap > 0) {
-                                gap--;
-                                html += "<td><span> </span></td>";
-                            }
-
-                            html += "<td class='excel'><span>" + value + "</span></td>";
-                            j++;
-
-                            j = idx_str;
-                            j++;
-                        }
-                    });
-
-                    html += "</tr>";
-                    html += "</tbody>";
-                }
-            }
-
-            */
-            
             var excel = [];
 
             for (var k = 1; k < rowdata.length; k++) {
@@ -3653,6 +3481,7 @@
 
     /* 엑셀 입력 */
     function InsertExcel() {
+    	
         var crop_id = $("#CropSelect").val();
         var excel_list = $(".excel_tr");
 
@@ -3676,6 +3505,10 @@
         let group = $('#user_group').val();
 
         $("#excel_list").val(JSON.stringify(total_arr));
+        
+		// 로딩창 추가
+		var loading = document.querySelector('.load_wrap');
+		loading.classList.add('on');
 
         $.ajax(
             {
@@ -3691,6 +3524,8 @@
                 },
                 success: function (result) {
 
+                	console.log("result : ", result);
+                	
                     now = new Date(+new Date() + 3240 * 10000).toISOString().split("T")[0];
 
                     let listData = [];
@@ -3713,9 +3548,14 @@
                                 "listData": JSON.stringify(listData)
                             },
                             success: function (result) {
+                            	loading.classList.remove('on');
                                 location.reload();
                             }
                         })
+                },
+                error: function() {
+                	Alert1("파일이 정상적으로 업로드되지 않았습니다.");
+                	loading.classList.remove('on');
                 }
             }
         )

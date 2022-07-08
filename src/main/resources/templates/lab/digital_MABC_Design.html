@@ -13,7 +13,7 @@
         }
 
         th, td {
-            border-bottom: 2px solid #E5E9F2;
+            border: 2px solid white !important;
             padding: 10px;
             text-align: center;
             font-weight: initial;
@@ -21,6 +21,10 @@
 
         th, tbody tr {
             background-color: white;
+        }
+        
+        #data_regist {
+        	font-size: 15px;
         }
         
         .main-content .contents .container-fluid {
@@ -56,6 +60,7 @@
 		.top-menu .main-content .btn-primary{
 			background-color:#EDF6F1;
 			color:#217566;
+			border-color: #217566;
 		}
 		.top-menu .main-content .btn-primary img{
 			margin-right: 10px;
@@ -97,6 +102,45 @@
 		.tui-grid-cell {
             background-color: white;
         }
+        
+        
+        .load_wrap {
+            display: none;
+        }
+
+        .load_wrap.on {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999999999;
+            background-color: rgba(0, 0, 0, 0.3);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .load_wrap .load {
+            background-color: #fff;
+            width: 220px;
+            height: 90px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .load_wrap .load > h2 {
+            font-size: 17px;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        #analysis_grid .tui-grid-body-area td[data-column-name = 'number'] {
+			color: mediumblue;
+            text-decoration: underline;
+            cursor: pointer;
+		}
 		
     </style>
 
@@ -115,18 +159,28 @@
         <div class="container-fluid">
             <div class="row">
 	            <div class="col-lg-12 mb-30">
-	            	<div class="card">
+	            	<div class="card" style="box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%)">
 	            		<div class="card-body">
 		        			<div class="bg-white">
 			        			<div class="breadcrumb-main">
-		        					<h4 class="text-capitalize breadcrumb-title">MABC Simulation</h4>
+		        					<h4 class="text-capitalize breadcrumb-title">MABC 시뮬레이션</h4>
 		        				</div>
+		        				<select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; height:40px; float: right;" id="limit">
+                                    <option value="10">10개</option>
+                                    <option value="20">20개</option>
+                                    <option value="30">30개</option>
+                                </select>
 		                        <div id="MABC_design_grid"><!-- 여기에 그리드 출력 --></div>
 		                        <div class="row">
-		                            <div class="col-4">
-		                                <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#MABCDesignModal">
-		                                    <span data-feather="plus"></span>
+		                            <div class="col-12">
+		                                  
+		                                <button class="btn btn-lg btn-primary bottom_btn" data-toggle="modal" data-target="#MABCDesignModal" style="float:right; background-color: #217566; color: #EDF6F1; height: 34px">
+		                                    신규분석
 		                                </button>
+		                                
+		                                <button type="button" class="btn btn-icon btn-light btn-circle" title="데이터 삭제" onclick="delete_row()">
+	                                        <span data-feather="trash-2"></span>
+	                                    </button>
 		                            </div>
 		                        </div>
 		                    </div>
@@ -143,7 +197,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content modal-bg-white " id="file_modal">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">MABC Simulation</h6><a class="example_file" href="/common/r/example/MABC_Design.pdf" download>매뉴얼 다운로드</a>
+                    <h6 class="modal-title">MABC 시뮬레이션 > 신규분석</h6><a class="example_file" href="/common/r/example/MABC_Design.pdf" download>매뉴얼 다운로드</a>
                     <span class="breed_title"></span>
                 </div>
                 <form action="insertMABCDesign" id="insertFile" name="insertFile" method="POST" enctype="multipart/form-data">
@@ -169,7 +223,7 @@
 			               	</tr>
 			               	-->
 			               	<tr>
-			               		<td><input type="text" name="crop" placeholder="작목명"></td>
+			               		<td><input type="text" name="crop" placeholder="작물명"></td>
                             	<td><input type="text" name="note" placeholder="상세내용"></td>
 			               	</tr>
 		               		<tr>
@@ -260,7 +314,7 @@
                                 </div></td>
                                 <td><a class="example_file" href="/common/r/example/weightMrkrs.csv" download>weightMrkrs.csv</a></td>
 	                		</tr>
-	                				                		<tr>
+	                		<tr>
 	                			<td><div class="atbd-upload__button">
                                     <input type="file" id="upload_file6" name="file6" >
                                 </div></td>
@@ -270,9 +324,7 @@
 	                </div>
 	                <div class="modal-footer" style="border: none">
 	                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
-	                    <button type="button" class="btn btn-primary btn-sm" onclick="MABC_Design()" style="background-color:#217566; color:#fff">등록</button> 
-	                    <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">open modal</button>  -->
-						
+	                    <button type="button" class="btn btn-primary btn-sm" onclick="MABC_Design()" style="background-color:#217566; color:#fff">분석실행</button> 
 	                </div>
                 </form>
             </div>
@@ -281,7 +333,12 @@
 
 
     
- 
+    <div class="load_wrap">
+        <div class="load">
+            <h2>잠시만 기다려주세요</h2>
+            <div class="loader"></div>
+        </div>
+    </div> 
  
     
     
@@ -304,12 +361,7 @@
 	let MABC_design_grid = null;
 	
 function SearchPlan() {
-		
-		//var crop_name = $("#CropSelect").val();
-		//var limit = $("#limit").val();
-		
-		
-		
+	
 		$.ajax({
 			url : 'search_mabc_design',
 			method : 'POST',
@@ -319,46 +371,32 @@ function SearchPlan() {
 				console.log("result : ",result);
 				
 				let dataArr = [];
-				
 				let rowArr = {};
-				console.log("result.mabc_sample : ",result.mabc_sample);
 				
-				/*
-				for(let i=0 ; i < result.mabc_sample.length ; i++) {
-					console.log("i",i);
-						rowArr = {
-								'mabc_design_id' : result.mabc_sample[i].MABC_design_grid_num,
-								'crop' : result.mabc_sample[i].crop,
-								'mabc_status': result.mabc_sample[i].mabc_status,
-								'note': result.mabc_sample[i].note,
-								'create_date': result.mabc_sample[i].create_date
-								
-						};
-						console.log("rowArr",rowArr)
-						dataArr.push(rowArr);
-					
-						
-				}
-				
-				console.log("dataArr", dataArr);
-				*/
-				
-				tui.Grid.applyTheme('clean');
+				//tui.Grid.applyTheme('clean');
 				// 2022-05-12 | marker_grid를 qtl_grid로 교체. 뭔가 출력이 안된다 싶으면 이 부분을 확인해보자
 				MABC_design_grid = new tui.Grid({
 					el: document.getElementById('MABC_design_grid'),
-					scrollX: true,
-					scrollY: true,
+					scrollX: false,
+					scrollY: false,
 					//data: dataArr,
-					data: result.mabc_sample,
+					//data: result.mabc_sample,
+					rowHeaders: ['checkbox'],
 					columns: [
 						{
-                            header: 'No.',
+							header: '번호',
+							name: 'number',
+							width: 60,
+							align: 'center',
+						},
+						{
+                            header: 'mabc_design_id',
                             name: 'mabc_design_id',
-                            sortable: true,
+                            //sortable: true,
                             width: 180,
                             align: 'center',
-                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+                            //filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+                            hidden: true
                         },
                         {
                             header: '작물',
@@ -372,9 +410,9 @@ function SearchPlan() {
 						{
                             header: '분석상태',
                             name: 'mabc_status',
-                            editor: 'text',
+                            //editor: 'text',
                             sortable: true,
-                            width: 180,
+                            width: 300,
                             align: 'center',
                             filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
                         },
@@ -382,7 +420,7 @@ function SearchPlan() {
                             header: '상세내용',
                             name: 'note',
                             sortable: true,
-                            width: 200,
+                            width: 600,
                             align: 'center',
                             filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
                         },
@@ -397,11 +435,11 @@ function SearchPlan() {
                             filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
                         },
                         {
-                            header: '등록날짜',
+                            header: '등록일',
                             name: 'create_date',
                             editor: 'text',
                             sortable: true,
-                            width: 250,
+                            width: 450,
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                         },
@@ -412,10 +450,26 @@ function SearchPlan() {
                     },
 				});
 				
+				for (let i = 0; i < result.mabc_sample.length; i++) {
+                    let rowArr = {
+                    	'number': result.mabc_sample.length - i, 
+                        'mabc_design_id': result.mabc_sample[i].mabc_design_id,
+                        'crop': result.mabc_sample[i].crop,
+                        'mabc_status': result.mabc_sample[i].mabc_status,
+                        'note': result.mabc_sample[i].note ,
+                        'create_date': result.mabc_sample[i].create_date
+                    }
+
+                    dataArr.push(rowArr);
+                }
+
+				MABC_design_grid.resetData(dataArr);
+				
+				
 				
 				
 				MABC_design_grid.on('click', (ev) => {
-					if (ev.targetType === 'cell' && ev.columnName === 'mabc_design_id') {
+					if (ev.targetType === 'cell' && ev.columnName === 'number') {
 						let value = ev.nativeEvent.srcElement;
 						let value2 = result.mabc_sample[ev.rowKey].jobid
 						console.log("jobid", result.mabc_sample[ev.rowKey].jobid);
@@ -507,16 +561,16 @@ function SearchPlan() {
 		var url = $("#insertFile").attr("action"); 
 		var form = $('#insertFile')[0]; 
 		var formData = new FormData(form);
-
-//		var queryString = $("form[name=insertFile]").serialize() ;
-
 		var queryString = $("#insertFile").serialize();
+		
 		//console.log(queryString);
-
-		console.log(queryString);
-
-
-		console.log("formdata1" , formData);
+		//console.log("formdata1" , formData);
+		
+		/*
+		// 로딩 추가
+		var loading = document.querySelector('.load_wrap');
+		loading.classList.add('on');
+		*/
 		
 		$.ajax({
 			url : 'insertMABCDesign',
@@ -555,11 +609,40 @@ function SearchPlan() {
 			location.href="/digital_MABC_Design";
 		}, 500);
 		
-		
-		
 	}
 
-		
+
+	function delete_row() {
+		let total_mabc_num = [];
+
+
+        for (let i = 0; i < MABC_design_grid.getCheckedRows().length; i++) {
+        	total_mabc_num.push(MABC_design_grid.getCheckedRows()[i].mabc_design_id)
+        }
+        
+        // total_marker_id 배열은 위에서 아래로 쌓인다. getCheckedRows()도 체크된 행이 어디인지 구분하지 않고 위에서부터 순서대로 쌓는다
+        console.log("MABC_design_grid.getCheckedRows()",MABC_design_grid.getCheckedRows());
+        console.log(total_mabc_num);
+        
+        if(MABC_design_grid.getCheckedRows().length == 0) {
+        	Alert1("삭제할 항목을 선택해주세요.");
+        } else {
+	        if( confirm("삭제하시겠습니까?") == true) {
+		        $.ajax(
+		       		{
+		       			url: 'delete_mabc_design',
+		       			method: 'POST',
+		       			dataType: 'json',
+		       			data: {'total_mabc_num' : total_mabc_num},
+		       			success: function(result)	{
+		       				location.reload();
+		       			},
+		       		});
+	        } else {
+	        	return false;
+	        }
+        }
+	}
 	
 	
 </script>

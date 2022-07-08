@@ -36,6 +36,8 @@ public interface BreedMapper {
 	List<BreedFileSimple> IsMatchBreedFile();
 
 	int InsertBreedFile(BreedFile breed_file);
+	
+	int DeleteBreedFile(int breed_file_id);
 
 	int InsertBreedUpload(Uploads upload);
 

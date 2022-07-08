@@ -13,4 +13,6 @@ public interface MabcDesignMapper {
 	public List<MabcDesign> searchMabcSample();
 	
 	public int insertMabcDesign(MabcDesign mabc_design);
+	
+	public Integer DeleteMabcDesign(int[] total_mabc_num);
 }

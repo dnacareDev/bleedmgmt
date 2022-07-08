@@ -7,13 +7,19 @@
     <th:block th:include="/../fragments/header.html"></th:block>
 
     <style>
+    	
+    	.card {
+            box-shadow: 0 3px 20px 3px rgb(0 0 0 / 7%);
+        }
+    	
         table {
-            border-top: 1px solid grey;
+            border-top: 1px solid grey; 
             border-collapse: collapse;
         }
 
         th, td {
-            border-bottom: 2px solid #E5E9F2;
+            /* border-bottom: 2px solid white !important; */
+            border: 2px solid white !important;
             padding: 10px;
             text-align: center;
             font-weight: initial;
@@ -21,6 +27,10 @@
 
         th, tbody tr {
             background-color: white;
+        }
+        
+        #data_regist {
+        	font-size: 15px;
         }
         
         /* card body 양쪽으로 쭉 늘리기 */
@@ -57,6 +67,7 @@
 		.top-menu .main-content .btn-primary{
 			background-color:#EDF6F1;
 			color:#217566;
+			border-color: #217566;
 		}
 		.top-menu .main-content .btn-primary img{
 			margin-right: 10px;
@@ -93,7 +104,7 @@
         }
 		
     </style>
-
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body class="layout-light top-menu overlayScroll">
@@ -112,21 +123,36 @@
 	            	<div class="card">
 	            		<div class="card-body">
 		        			<div class="bg-white">
-		        				<div>
-	                            	<h4 class="text-capitalize breadcrumb-title">Digital MABC DB</h4><br>
+		        				<div class="breadcrumb-main">
+	                            	<h4 class="text-capitalize breadcrumb-title">MABC 유전형 보관함</h4><br>
 	                           	</div>
+                                <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; height:40px; float: right;" id="limit">
+                                    <option value="10">10개</option>
+                                    <option value="20">20개</option>
+                                    <option value="30">30개</option>
+                                </select>
 	                            <div id="mabc_grid"><!-- 여기에 그리드 출력 --></div>
 	                            <div class="row">
-	                                <div class="col-4">
+	                                <div class="col-12">
+	                                	<!--  
 	                                    <button class="btn btn-icon btn-light btn-circle" data-toggle="modal" data-target="#insert_file">
 	                                        <span data-feather="plus"></span>
 	                                    </button>
-	                                    <button class="btn btn-icon btn-light btn-circle" onclick="delete_row()">
+	                                    -->
+	                                    <button class="btn btn-icon btn-light btn-circle" title="데이터 삭제" onclick="delete_row()">
 	                                        <span data-feather="trash-2"></span>
 	                                    </button>
+	                                    <!--  
 	                                    <button class="btn btn-icon btn-light btn-circle" onclick="run()">
-	                                    	<span>합</span>
+	                                    	<span data-feather="plus-square"></span>
 	                                    </button>
+	                                    -->
+	                                    <button class="btn btn-lg btn-primary bottom_btn" data-toggle="modal" data-target="#insert_file" style="float:right; background-color: #217566; color: #EDF6F1; height: 34px">
+		                                    데이터 등록
+		                                </button>
+		                                <button class="btn btn-lg btn-primary bottom_btn" onclick="run()" style="float:right; margin-right:5px; background-color: #217566; color: #EDF6F1; height: 34px">
+		                                    파일 합치기
+		                                </button>
 	                                </div>
 	                            </div>
 		                    </div>
@@ -143,7 +169,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white " id="file_modal">
                 <div class="modal-header" style="border: none">
-                    <h6 class="modal-title">Digital MABC DB</h6>
+                    <h6 class="modal-title">MABC 유전형 보관함 > 데이터 등록</h6>
                     <span class="breed_title"></span>
                 </div>
                 <form action="insertMabcFile" id="insertFile" method="POST" enctype="multipart/form-data">
@@ -184,8 +210,17 @@
 		                			<td><label class="reg" for="detail_note">상세내용</label></td>
 		                			<td><input type="text" name="detail_note"></td>
 		                		</tr>
+		                		<tr>
+		                			<td><div class="atbd-upload__button">
+		                				<input type="file" id="upload_file" name="file">
+		                			</div></td>
+		                			<td>
+		                				<a id="genoType_example_file" href="/common/r/example/genotype_data.xlsx" download>예제파일다운</a>
+		                			</td>
+		                		</tr>
 		                	</tbody>
 			            </table>
+			            <!--  
 			            <div>
                             <div class="atbd-upload">
                             	<div class="atbd-upload__button">
@@ -196,6 +231,7 @@
                                 </div>
                             </div>
                         </div>
+                        -->
 	                </div>
 	                <div class="modal-footer" style="border: none">
 	                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
@@ -255,6 +291,7 @@
 						for(let i=0 ; i<result.mabc_sample.length ;  i++) {
 							
 							rowArr = {
+											'number': result.mabc_sample.length - i,
 											'mabc_id': result.mabc_sample[i].mabc_id,
 											'crop': result.mabc_sample[i].crop,
 											'detail' : result.mabc_sample[i].detail,
@@ -272,24 +309,32 @@
 							dataArr.push(rowArr);
 						}
 	                	
-						tui.Grid.applyTheme('clean');
+						let limit = Number($("#limit").val());
 						
 						mabc_grid = new tui.Grid({
 							el: document.getElementById('mabc_grid'),
-							scrollX: true,
-							scrollY: true,
+							scrollX: false,
+							scrollY: false,
 							data: dataArr,
 							rowHeaders: ['checkbox'],
 							columns: [
 								{
+									header: '번호',
+									name: 'number',
+									width: 60,
+									align: 'center'
+								},
+								{
 				                    header: 'mabc_id',
 				                    name: 'mabc_id',
-				                    editor: 'text',
-				                    sortable: true,
-				                    hidden:true,
+				                    width: 80,
+				                    align: 'center',
+				                    //editor: 'text',
+				                    //sortable: true,
+				                    hidden: true
 				                },
 				                {
-				                    header: '파일',
+				                    header: '다운로드',
 				                    name: 'file',
 				                    width: 80,
 				                    align: 'center',
@@ -298,14 +343,14 @@
 				                {
 				                    header: '파일명',
 				                    name: 'file_origin_name',
-				                    width: 180,
+				                    width: 250,
 				                    align: 'center',
 				                },
 				                {
 				                    header: '작물',
 				                    name: 'crop',
 				                    sortable: true,
-				                    width: 100,
+				                    width: 150,
 				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
 				                    align: 'center',
 				                },
@@ -313,7 +358,7 @@
 				                    header: '분류',
 				                    name: 'mabc_category',
 				                    sortable: true,
-				                    width: 120,
+				                    width: 200,
 				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
 				                    align: 'center',
 				                },
@@ -321,7 +366,7 @@
 				                    header: '등록자',
 				                    name: 'regist_person',
 				                    sortable: true,
-				                    width: 120,
+				                    width: 250,
 				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
 				                    align: 'center',
 				                },
@@ -329,20 +374,20 @@
 				                    header: '등록일',
 				                    name: 'regist_date',
 				                    sortable: true,
-				                    width: 150,
+				                    width: 250,
 				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
 				                    align: 'center',
 				                },
 				                {
-				                    header: '비고',
+				                    header: '상세내용',
 				                    name: 'detail_note',
-				                    width: 200,
+				                    width: 470,
 				                    align: 'center',
 				                },
 							],
 							pageOptions: {
 				                useClient: true,
-				                perPage: 10
+				                perPage: limit
 				            }
 						});
 						
@@ -385,7 +430,7 @@
 	        	return;
 	        }
         } else {
-        	Alert1("하나 이상의 체크박스를 체크해주세요.");
+        	Alert1("삭제할 항목을 선택해주세요.");
         	return;
         }
 	}
@@ -410,6 +455,11 @@
 
 	function run() {
 	
+		if(mabc_grid.getCheckedRows().length < 2) {
+			Alert1("두개 이상의 파일을 선택해주세요.");
+			return;
+		}
+		
 		for(let i =0 ; i< mabc_grid.getCheckedRows().length ; i++) {
 			console.log(mabc_grid.getCheckedRows()[i]);
 			if(mabc_grid.getCheckedRows()[0].crop == mabc_grid.getCheckedRows()[i].crop) {

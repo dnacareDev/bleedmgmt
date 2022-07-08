@@ -39,6 +39,10 @@
         .data_type1, .data_type4 {
             margin-left: 0;
         }
+        
+        .data_type10 {
+            margin-left: 0;
+        }
 
         .data_type span.sub_title {
             display: block;
@@ -76,19 +80,19 @@
         }
 
         button[type="button"].gray_btn {
-            background-color: #E2E3E5;
-            color: #222;
+            background-color:#EDF6F1;
+			color:#217566;
             float: left;
         }
 
         button[type="button"].green_btn {
             background-color: #217566;
-            color: #fff;
+			color: #EDF6F1;
             float: right;
         }
 
         .data_files {
-            width: 100%;
+            width: 97%;
             border: 1px solid #E4E4E4;
             padding: 12px;
             border-radius: 5px;
@@ -287,12 +291,12 @@
                     <div class="card">
                         <div class="card-extra mt-20 mr-20">
                             <div class="breadcrumb-main" style="float: left;">
-                                <h4 class="text-capitalize breadcrumb-title">관리 자원</h4>
+                                <h4 class="text-capitalize breadcrumb-title">자원 관리 설정 > 신규등록</h4>
                             </div>
                             <input type="hidden" id="user_group" th:value="${user.user_group}">
                             <div class="data_cover1 clearfix">
                                 <div class="data_type data_type1">
-                                    <span class="sub_title">작목 선택</span>
+                                    <span class="sub_title">작물 선택</span>
                                     <select id="crop_id" onChange = "selectOptionEvent(value)">
                                         <option value="-22" selected disabled hidden>작물 선택</option>
                                         <option value="-1">신규 등록</option>
@@ -302,39 +306,39 @@
                                     </select>
                                 </div>
                                 <div class="data_type data_type5" id="newCropInput" style="display: none">
-                                <span class="sub_title">신규 작목</span>
+                                <span class="sub_title">신규 작물</span>
                                 	<input type ="text" id="newCrop" placeholder="기존 작물명과 중복금지" onChange="overlap_check_crop()">
                                 </div>
                                 <div class="data_type data_type2">
-                                    <span class="sub_title">관리자원 명</span>
+                                    <span class="sub_title">자원관리명</span>
                                     <input type="text" id="resource_name">
-                                    <button type="button" class="greenop_btn" id="overlap_check_button" onclick="overlap_check()">중복확인</button>
+                                    <button type="button" class="greenop_btn" id="overlap_check_button" onclick="overlap_check()" style="background-color:#217566; color:#fff">중복확인</button>
                                 </div>
                                 
                                 
                             </div>
                             <div class="data_cover3 clearfix">
                             	<div class="data_type data_type3">
-                                    <span class="sub_title">입력항목 파일</span>
+                                    <span class="sub_title">자원 정보</span>
                                     <div class="data_files" onclick="return filed('#excelFile');">
-                                        <img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>템플릿 엑셀 첨부</span>
+                                        <img src="../assets/vendor_assets/img/upload.png" alt="file업로드"><span>자원정보 엑셀파일 등록</span>
                                     </div>
                                     <input type="file" id="excelFile" onchange="excelExport(event)" style="display: none">
                                 </div>
                                 <div class="data_type data_type4">
-                                    <span class="sub_title">특성항목 파일</span>
+                                    <span class="sub_title">특성 정보</span>
                                     <div class="data_files" onclick="return filed('#data_file2')"><img src="../assets/vendor_assets/img/upload.png"
-                                                                                                       alt="file업로드"><span>템플릿 엑셀 첨부</span></div>
+                                                                                                       alt="file업로드"><span>특성정보 엑셀파일 등록</span></div>
                                     <input type="file" id="data_file2" onchange="excelExportFile1(event)" style="display: none;"> <!-- file  -->
 
                                     <div class="this_check" id="digitalCheckBox"><input class="digitalCheck" type="checkbox" style="display:none;"><span
-                                        class="check_box_design"></span><span class="check_span">종자원 특성 조사 기준 사용</span>
+                                        class="check_box_design"></span><span class="check_span">종자원 특성조사 기준 선택</span>
                                     </div>
                                 </div>
                                 <div class="data_type data_type10" id="digitalBox" style="display:none">
-                                    <span class="sub_title">종자원 특성 조사 선택</span>
+                                    <span class="sub_title">종자원 특성조사 기준</span>
                                     <select name="selectTrait" id="featureId" onChange="selectFeature()">
-                                        <option value="-1">신규등록</option>
+                                    	<option value="-1" selected hidden>종자원 특성조사 기준 선택</option>
                                     </select>
                                 </div>
                             </div>
@@ -347,7 +351,7 @@
             </div>
         </div>
         <div class="btn_cover clearfix">
-            <button type="button" class="gray_btn" onclick="location.href='management-resource'" style="width:130px;height:45px;padding:0;">신규등록 취소</button>
+            <button type="button" class="gray_btn" onclick="location.href='management-resource'" style="width:130px;height:45px;padding:0;">취소</button>
             <button type="button" class="green_btn" onclick="saveResource()" style="width:130px;height:45px;padding:0;">저장</button>
         </div>
     </div>
@@ -461,23 +465,7 @@
         
         let cropList = $("#crop_id").find("option").map(function() {return $(this).text(); }).get();
         
-        /* 저장을 눌러도 overlap_check_crop()이 작동해서 필요없음(정확히는 저장이 안 눌러짐)
-        // i=0:작물선택, i=1:신규등록
-        for(let i=2 ; i<cropList.length ; i++) {
-        	if(new_crop == cropList[i]) {
-        		Alert1("기존 작물과 중복된 이름입니다");
-        		return;
-        	}
-        }
-        */
-
         var data = {"resource_name": input_val, "crop_id": crop_id, "new_crop": new_crop, "group": group}
-
-        //console.log("input_val", input_val);
-        //console.log("crop_id", crop_id);
-        //console.log("new_crop", new_crop);
-        //console.log("group", group);
-        //console.log("cropList", cropList);
         
         $.ajax(
             {
@@ -491,7 +479,7 @@
                         Alert1("사용 가능한 자원관리명 입니다.");
                         checkName = 1;
                     } else if(result == -1) {
-                    	Alert1("신규 작목의 이름을 입력해주세요.")
+                    	Alert1("신규 작물의 이름을 입력해주세요.")
                     	checkName = 0;
                     } else if(result == -2) {
                     	Alert1("관리자원 명을 입력해주세요.")
@@ -558,7 +546,7 @@
 
     var headerGrid = null;
 
-    /* s : 특성파일 추가 */
+    /* s : 특성파일(특성정보) 추가 */
     function excelExportFile(event, callback) {
         var input = event.target;
         var reader = new FileReader();
@@ -566,12 +554,6 @@
         charArr = [];
         dataArr = [];
 
-        /* grid empty check
-        if (headerGrid != null) {
-            headerGrid.destroy();
-        }
-        */
-        
         if($("#headerGrid").html() != null) {
         	$("#headerGrid").empty();
         }
@@ -616,10 +598,6 @@
             
             dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
             
-          	//console.log("dataArr : ", dataArr);
-            //dataArr[0].header += '_checked';
-            //console.log("dataArr After : ", dataArr);
-
             let bodyArr = {}
             let dataSet = [];
             
@@ -632,7 +610,7 @@
 			}
 			grid_str += '</tr>';
 			grid_str += '<tr>';
-			for(let i=0 ; i<dataArr.length ; i++) {
+			for(let i=0 ; i<inputArr.length ; i++) {
 				grid_str += '<td><input type="checkbox" class="anaCheck"></td>';
 			}
 			grid_str += '</tr></table>';
@@ -650,7 +628,7 @@
     }
     /* e : 특성파일 추가 */
 
-    /* s : 헤더파일 추가 */
+    /* s : 헤더파일(기본정보) 추가 */
     function excelExportCommon(event, callback) {
         var input = event.target;
         var reader = new FileReader();
@@ -711,7 +689,7 @@
 			}
 			grid_str += '</tr>';
 			grid_str += '<tr>';
-			for(let i=0 ; i<dataArr.length ; i++) {
+			for(let i=0 ; i<inputArr.length ; i++) {
 				grid_str += '<td><input type="checkbox" class="anaCheck"></td>';
 			}
 			grid_str += '</tr></table>';
@@ -731,9 +709,10 @@
             POST: "GET",
             dataType: "json",
             success: function (result) {
+            	console.log("trait : ", result);
                 for (let i = 0; i < result.length; i++) {
                     var list = result[i];
-                    $("select[name=selectTrait]").append('<option value="' + list.trait_id + '">' + list.trait_description + '</option>');
+                    $("select[name=selectTrait]").append('<option value="' + list.trait_id + '">' + list.trait_description + '(' + list.trait_year + ')' + '</option>');
                 }
             }
         })
@@ -746,6 +725,34 @@
     let saveFlag = false;
 
     function saveResource() {
+    	
+        let input_val = $("#resource_name").val();
+        let crop_id = $("#crop_id").val();
+        let new_crop = $("#newCrop").val();
+        let feature_group = $("#featureId").val();
+        let log_contents = "";
+        
+        console.log(crop_id);
+        console.log("feature_group : ", feature_group);
+
+        
+        if(!crop_id) {
+        	Alert1("작물을 선택해주세요.");
+        	return;
+        }
+        
+      	//신규작목 입력 체크
+        if(crop_id == -1 && !new_crop) {
+        	Alert1("신규 작물의 이름을 입력해주세요.");
+        	return;
+        }
+      	
+      	if(!input_val) {
+      		Alert1("자원관리명을 입력해주세요.");
+      		return;
+      	}
+        
+
     	
     	// 저장버튼을 빠르게 2번이상 누르는 현상 방지
     	if(saveFlag) {
@@ -782,31 +789,28 @@
             let detail_count = dataArr.length;
             let dataList = JSON.stringify(dataArr);
 
-            let input_val = $("#resource_name").val();
-            let crop_id = $("#crop_id").val();
-            let new_crop = $("#newCrop").val();
-            let feature_group = $("#featureId").val();
-            let log_contents = "";
+
+        	
+            //입력항목 파일 체크
+            if(!$("#excelFile")[0].files[0]) {
+            	Alert1("자원 정보를 등록해주세요");
+            	saveFlag = false;
+            	console.log(saveFlag);
+            	return;
+            }
             
             
             if(!new_crop) {
-            	log_contents = "신규 관리대장 등록 (작물명 : " + $("#crop_id option:selected").text() + " | 관리자원명 : " + input_val + ")";
+            	log_contents = "신규 자원관리 등록 (작물명 : " + $("#crop_id option:selected").text() + " | 자원관리명 : " + input_val + ")";
             } else {
-            	log_contents = "신규 관리대장 등록 (작물명 : " + new_crop  + " | 관리자원명 : " + input_val + ")";
+            	log_contents = "신규 자원관리 등록 (작물명 : " + new_crop  + " | 자원관리명 : " + input_val + ")";
             }
 
             console.log("log_contents : ", log_contents);
             
             
-          	//신규작목 입력 체크
-            if(crop_id == -1 && !new_crop) {
-            	Alert1("신규 작목의 이름을 입력해주세요.");
-            	return;
-            }
-            //입력항목 파일 체크
-            if(!$("#excelFile")[0].files[0]) {
-            	Alert1("입력항목 파일에 엑셀파일을 첨부해주세요");
-            }
+
+
             
             var formData = new FormData();
 
@@ -841,6 +845,7 @@
             
         } else {
             Alert1("중복확인을 진행해주세요.");
+            saveFlag = false;
         } 
 
     }
@@ -903,7 +908,8 @@
     			}
     			grid_str += '</tr>';
     			grid_str += '<tr>';
-    			for(let i=0 ; i<dataArr.length ; i++) {
+    			//debugger;
+    			for(let i=0 ; i<inputArr.length ; i++) {
     				grid_str += '<td><input type="checkbox" class="anaCheck"></td>';
     			}
     			grid_str += '</tr></table>';
@@ -916,61 +922,6 @@
                 featureFileName = result[0].feature_file;
             }
         })
-        
-        /*
-        if (headerGrid != null) {
-            headerGrid.destroy();
-        }
-
-        $.ajax({
-            url: "featureHeadList",
-            POST: "GET",
-            dataTyp: "json",
-            data: data,
-            success: function (result) {
-                headerGrid = new tui.Grid({
-                    el: document.getElementById('headerGrid'),
-                    scrollX: true,
-                    scrollY: false,
-                    data: [],
-                    columns: []
-                });
-
-                var currentCount = 1;
-                var endCount = 1;
-
-                $.each(result, function (idx, value) {
-
-                    if (currentCount > endCount)
-                        return;
-
-                    if (value.t == "n" && value.v == endCount && value.w == "1") {
-                        currentCount++;
-                        return;
-                    }
-
-                    let header = value.feature_num + ". " + value.feature_name;
-                    headerArr = {'header': header, 'name': header, 'width': 300, "type": 2, "info": 2, "check": 0};
-                    desArr.push(headerArr);
-                });
-
-                dataArr = dataArr.concat(potoArr, docArr, inputArr, charArr, desArr);
-                headerGrid.setColumns(dataArr);
-
-                let bodyArr = {}
-                let dataSet = [];
-
-                for(let i = 0; i < dataArr.length; i++) {
-                    bodyArr[dataArr[i].name] = '<input type=checkbox class="anaCheck" name="' + dataArr[i].name + '">';
-                }
-
-                dataSet.push(bodyArr);
-                headerGrid.resetData(dataSet);
-
-                featureFileName = result[0].feature_file;
-            }
-        })
-        */
     }
 
     let digitalCheckEl = document.querySelector("#digitalCheckBox");
@@ -980,6 +931,10 @@
             $('#digitalBox').css('display', '');
         } else {
             $('#digitalBox').css('display', 'none');
+            
+            //종자원 기준 체크박스 해제시 종자원 드롭박스 초기화 및 테이블 조정
+            $('#featureId option:eq(0)').prop("selected", true);
+            selectFeature();
         }
     });
 

@@ -126,6 +126,10 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
+    
+    <delete id="DeleteBreedFile" parameterType="int">
+    	DELETE FROM breed_file WHERE breed_file_id = #{breed_file_id}
+    </delete>
 
     <!-- 첨부파일 등록 -->
     <insert id="InsertBreedUpload" parameterType="Uploads">

@@ -110,19 +110,22 @@
         }
 
         .text_box.text_box3 {
-            min-height: auto;
+            min-height: 60px;
         }
-
+        
+        
         .text_box.text_box2,
         .text_box.text_box6 {
             min-height: 300px;
             max-height: 300px;
-            margin-top: 53px;
+            /*margin-top: 53px;*/
         }
-
+        
+        
         .text_box.text_box4 {
-            min-height: 68px;
+            min-height: 60px;
         }
+        
 
         .text_box li {
             display: block;
@@ -548,7 +551,7 @@
         }
 
         .selectBox dd ul li.active {
-            background-color: #163692;
+            background-color: #777792;
             color: #fff;
         }
 
@@ -770,6 +773,19 @@
             height: 68px;
             margin-top: 8px;
         }
+        
+        /* 마우스오버시 파란색으로 변화하는 현상 방지 */
+        .btn-primary2, .btn-primary2:hover, .btn-primary2:active, .btn-primary2:visited {
+        	background-color: #217566 !important; 
+        	border: none;
+        	color: white;
+        }
+        
+        .btn-primary2 {
+        	border-color: #217566; 
+        }
+        
+        
     </style>
 </head>
 
@@ -790,7 +806,7 @@
                         <div class="container clearfix">
                             <form action="" method="post">
                                 <div class="contents clearfix" style="clear:both; padding-top:10px;">
-                                    <h6 class="title">분석대상선택</h6>
+                                    <h6 class="title" style="padding: 20px 0 7px 0">분석대상</h6>
                                     <div class="box box1">
                                         <!--  <input type="text" id="search_target" onchange="SearchTarget();" placeholder="파종번호 검색"> -->
                                         <div class="text_box text_box1" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
@@ -845,7 +861,7 @@
                                     </div>
                                 </div>
                                 <div class="contents clearfix">
-                                    <h6 class="title">분석형질</h6>
+                                    <h6 class="title" style="padding: 20px 0 7px 0">분석특성</h6>
                                     <div class="box box1">
                                         <!--  <input type="text" id="search_trait" onchange="SearchTrait();" placeholder="파종번호 검색"> -->
                                         <div class="text_box text_box5" style="-ms-user-select: none; -khtml-user-select: none; -webkit-user-select: none; user-select: none;">
@@ -871,7 +887,7 @@
                                     </div>
                                 </div>
                                 <div class="submit_btn">
-                                    <input type="button" class="btn btn-primary btn-sm" onclick="RunAnalysis();" value="분석실행">
+                                    <input type="button" class="btn btn-primary2 btn-sm" onclick="RunAnalysis();" value="분석실행">
                                 </div>
                             </form>
                         </div>
@@ -923,8 +939,9 @@
     $(document).ready(function () {
 
         SearchTarget();
-        SearchTrait();
+        //SearchTrait();
         CheckFunction();
+        SearchBreed();
         autoHeight();
     });
     
@@ -957,6 +974,7 @@
 
 
 
+    /*
     // 작물 선택
     $("#select_crop").change(function () {
         SearchTarget();
@@ -965,6 +983,7 @@
         $("#plus_target").empty();
         $("#trait_list").empty();
     });
+    */
 
     function SearchTarget() {
         //let name = $("#select_crop option:selected").text();
@@ -1032,18 +1051,83 @@
             });
     }
 
+    var flag_arr = [];
+    var selected_id = [];
+    var selected_breed = {
+			breed: [],
+			detail: []
+	};
+    
+    function SearchBreed() {
+    	
+    	let url = new URL(window.location).searchParams;
+    	let crop_id = url.get("crop_id");
+    	let total_id = url.get("total_id");
+    	let total_id_arr = total_id.split(',').map(Number);
+    	let resource_name = url.get("resource_name");
+    	
+    	console.log(total_id_arr);
+    	
+    	const loading = document.querySelector('.load_wrap');
+    	loading.classList.add('on');
+    	
+        $.ajax(
+                {
+                    url: "searchHeader",
+                    method: "POST",
+                    dataType: "JSON",
+                    data: {"crop_id": crop_id, "resource_name": resource_name},
+                    success: function (result) {
+                    	
+                    	//console.log("breed result : ", result);
+                    	
+                    	for(let i=0 ; i<result.detail.length ; i++) {
+                    		if(result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2)
+                    			selected_breed.detail.push(result.detail[i]);
+                    	}
+                    	
+                    	for(let i=0 ; i<result.breed.length ; i++) {
+                    		for(let j=0 ; j<total_id_arr.length ; j++) {
+                    			if(result.breed[i].breed_id == total_id_arr[j]) {
+                    				selected_breed.breed.push(result.breed[i]);
+                    			}
+                    		}
+                    	}
+                    	
+                    	
+                    	for(let i=0 ; i<selected_breed.breed.length ; i++) {
+                    		for(let j=0 ; j<selected_breed.breed[i].standardList.length ; j++) {
+                    			if(selected_breed.breed[i].standardList[j].detail_id < selected_breed.detail[0].detail_id) {
+                    				selected_breed.breed[i].standardList.shift();
+                    				j--;
+                    			}
+                    		}
+                    	}
+                    	
+                    	console.log("selected breed : ", selected_breed);
+                    	
+                    	for(let i=0 ; i<selected_breed.breed[0].standardList.length ; i++) {
+                    		flag_arr[i] = true;
+                    	}
+                    	
+                    	console.log("flag_arr: ", flag_arr);
+                    	
+                    	loading.classList.remove('on');
+                    	
+                    }
+        });
+    }
+
+    
+
     function SearchTrait() {
-        //let crop_id = $("#select_crop").val();
         let url = new URL(window.location).searchParams;
         let crop_name = url.get("crop");
         let total_id = url.get("total_id");
         let resource_id = url.get("resource_id");
         
-        //console.log(crop_id);
-
         let data = {"crop_name": crop_name, "total_id": total_id, "resource_id": resource_id};
 
-        
         $.ajax(
             {
                 url: "selectTrait1",
@@ -1054,15 +1138,53 @@
                 	
                 	console.log("trait result : ", result); 
                 	
+                	//T,F 초기화
+                	for(let i=0 ; i<flag_arr.length ; i++) {
+                		flag_arr[i] = true;
+                	}
+                	// 하나도 없을 경우 모든항목 비활성화
+                	if(selected_id.length==0) {
+                		for(let i=0 ; i<flag_arr.length ; i++) {
+                    		flag_arr[i] = false;
+                    	}
+                	}
+                	
+                	for(let i=0 ; i<selected_id.length ; i++) {
+                		for(let j=0 ; j<selected_breed.breed.length ; j++){
+                			if(selected_id[i] == selected_breed.breed[j].breed_id) {
+                				for(let k=0 ; k<flag_arr.length ; k++) {
+                					
+                					if(!selected_breed.breed[j].standardList[k].standard_data || isNaN(selected_breed.breed[j].standardList[k].standard_data)) {
+               							//console.log("false : ", selected_breed.breed[j].standardList[k].standard_data);
+               							
+               							flag_arr[k] = false;
+               						} else {
+               							//console.log("true : ", Number(selected_breed.breed[j].standardList[k].standard_data));
+               						}
+                				}
+                			}
+                		}
+                	}
+                	
+                	console.log("flag_arr after : ", flag_arr);
+                	
                     let trait_list = $("#trait_list");
                     let add_list = "";
-
+                    
+                    
                     for (let i = 0; i < result.length; i++) {
+                    	
+                    	//F면 만들지않고 넘긴다
+                    	if(flag_arr[i] == false) {
+                    		continue;
+                    	}
+                    	
                         add_list += '<li>';
                         add_list += '<input type="checkbox" class="plus_trait" name="' + result[i].detail_name + '" value="' + result[i].detail_id + '">';
                         add_list += '<span class="trait_list" name="' + (i + 1) + '">' + result[i].detail_name + '</span>';
                         add_list += '</li>';
                     }
+                    
 
                     trait_list.empty();
                     trait_list.append(add_list);
@@ -1264,6 +1386,7 @@
     function PlusBtn(e) {
         if (e == 0) {
             $(document).find("input:checkbox[class=plus_target]:checked").each(function () {
+            	
                 let detail_info = 2;
 
                 let target_add = "";
@@ -1276,6 +1399,16 @@
                 $(this).parent().remove();
                 $("#plus_target").append(target_add);
             })
+            
+            
+            selected_id = [];
+            $(".minus_target").each(function () {
+            	selected_id.push(Number($(this).val()));
+        	});
+            
+            console.log("selected_id : ", selected_id);
+            SearchTrait();
+            
         } else if (e == 1) {
             if ($("input:checkbox[class=plus_method]:checked").length == 2) {
                 return Alert1("분석방법은 단일 선택만 가능합니다.");
@@ -1348,12 +1481,26 @@
     function MinusBtn(e) {
         if (e == 0) {
             $(document).find("input:checkbox[class=minus_target]:checked").each(function () {
-                var add_list = "";
+                /*
+            	var add_list = "";
 
                 add_list += '<li><input type="checkbox" class="plus_target"><span class="target_list">' + $(this).next().text() + '</span></li>';
 
                 $(this).parent().remove();
                 $(".text_box1").append(add_list);
+                */
+                
+                let target_add = "";
+
+                target_add += '<li>';
+                target_add += '<input type="checkbox" class="plus_target" value="' + $(this).val() + '">';
+                target_add += '<span>' + $(this).next().text() + '</span>';
+                target_add += '</li>';
+
+                $(this).parent().remove();
+                $("#target_list").append(target_add);
+                
+                
             })
 
             selectorCheck = document.querySelectorAll("#target_list li");
@@ -1386,6 +1533,16 @@
             for (var h = 0; h < selectorCheck4.length; h++) {
                 selectorCheck4[h].addEventListener("click", delSectionSelector);
             }
+            
+            
+            selected_id = [];
+            $(".minus_target").each(function () {
+            	selected_id.push(Number($(this).val()));
+        	});
+            
+            console.log("selected_id : ", selected_id);
+            SearchTrait();
+            
         } else if (e == 1) {
             $(document).find("input:checkbox[class=minus_method]:checked").each(function () {
                 var add_list = "";
@@ -1523,6 +1680,7 @@
         };
 
         const loading = document.querySelector('.load_wrap');
+        loading.classList.add('on');
 
         $.ajax(
             {

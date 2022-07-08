@@ -12,7 +12,7 @@ public interface CropService {
 
     public List<Crop> selectCropListByResource(int resource_id);
 
-    public int deleteCrop(int crop_id);
+    public Integer deleteCrop(int crop_id);
 
     public int deleteCropByCategory(int category_id);
 

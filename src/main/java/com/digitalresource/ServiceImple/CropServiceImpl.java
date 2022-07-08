@@ -54,13 +54,15 @@ public class CropServiceImpl implements CropService {
     }
 
     @Override
-    public int deleteCrop(int crop_id) {
+    public Integer deleteCrop(int crop_id) {
         int result = -1;
 
         result = mapper.deleteCropById(crop_id);
+        /*
         if(result > 0){
             resourceService.deleteReourceByCrop(crop_id);
         }
+        */
 
         return result;
     }

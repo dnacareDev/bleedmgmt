@@ -112,6 +112,8 @@ public class DigitalAnalysisController {
 	    // DB에 파일명 및 파일경로 지정
 	    service.insertAnalysisDB(analysis_db);
 		
+	    
+
 	    RunEtcR runetcr = new RunEtcR();
 		runetcr.MakeRunEtcR(formatedNow, file_name);
 		
@@ -121,6 +123,7 @@ public class DigitalAnalysisController {
 		String userName = user.getUser_name();
 		String log_contents = "Digital Analysis 1행 입력";
 		logService.RecordLog(userIdName, userName, log_contents);
+		
 		
 	    return formatedNow;
 		

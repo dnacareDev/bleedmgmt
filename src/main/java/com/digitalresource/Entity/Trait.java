@@ -12,6 +12,7 @@ public class Trait {
   private String trait_description;
   private int trait_year;
   private String trait_file;
+  private String trait_origin_file;
   private LocalDate create_date;
   private LocalDate modify_date;
   private int feature_count;

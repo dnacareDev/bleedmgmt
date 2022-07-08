@@ -48,8 +48,11 @@ public interface ResourceMapper {
 
   int SelectCropCount(@Param("resource_name") String resource_name, @Param("crop_name") String crop_name, @Param("user_group") int user_group);
 
-  MonthCount SelectCropMonth(@Param("crop_name") String crop_name, @Param("month") String month, @Param("resource_name") String resource_name, @Param("user_group") int user_group);
+//  MonthCount SelectCropMonth(@Param("crop_name") String crop_name, @Param("month") String month, @Param("resource_name") String resource_name, @Param("user_group") int user_group);
+  MonthCount SelectCropMonth(@Param("crop_name") String crop_name, @Param("month") String month, @Param("year") int year, @Param("resource_name") String resource_name, @Param("user_group") int user_group);
+  YearCount SelectCropYear(@Param("crop_name") String crop_name, @Param("year")  String year, @Param("resource_name") String resource_name, @Param("user_group") int user_group);
 
+  
   Map<String, Object> SelectDetailInfo(String detail_id);
 
   int SelectResourceUse(@Param("resource_id") int resource_id);
@@ -62,4 +65,8 @@ public interface ResourceMapper {
   public int deleteResourceNameById(int resourceId);
   public int deleteBreedById(int resourceId);
   public int deleteResourceById(int resourceId);
+  
+  
+  int searchResourceCount(int resourceId);
+  int SelectCropIdByResourceId(int resourceId);
 }

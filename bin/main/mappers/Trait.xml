@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalresource.Mapper.TraitMapper">
     <select id="SelectTraitList" resultType="Trait">
+        <!--  
         select*,(select category_name from crop_category where category_id = (select category_id from crop where crop_id = t.crop_id))as category_name, (select crop_name from crop where crop_id= t.crop_id)as crop_name  from trait t;
+    	-->
+    	select * from trait t;
     </select>
 
     <select id="SelectTraitCount" resultType="int">
@@ -28,7 +31,8 @@
 	</update>
 	
 	<select id="traitDescriptionList" resultType="Trait">
-		select trait_id,trait_description, feature_group from trait;
+		<!--  select trait_id,trait_description, feature_group from trait; -->
+		select * from trait;
 	</select>
 
 	<update id="changeYear" parameterType="int">

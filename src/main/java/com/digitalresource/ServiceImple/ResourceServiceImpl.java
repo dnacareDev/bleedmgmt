@@ -154,11 +154,12 @@ public class ResourceServiceImpl implements ResourceService {
   public Integer SelectCropId(int resource_name_id) {
     return resourceMapper.SelectCropId(resource_name_id);
   }
-@Override
-public int deleteResource(String resource_id) {
-	// TODO Auto-generated method stub
-	return 0;
-}
+  
+  @Override
+  public int deleteResource(String resource_id) {
+  // TODO Auto-generated method stub
+  return 0;
+  }
 
 @Override
 public List<Detail> selectDetailHead(Map<String, Object> param) {
@@ -175,9 +176,21 @@ public int detailDisplayAction(Map<String, Object> param) {
     return resourceMapper.SelectCropCount(resource_name, crop_name, user_group);
   }
 
+  /*
   @Override
   public MonthCount SelectCropMonth(String crop_name, String month, String resource_name, int user_group) {
     return resourceMapper.SelectCropMonth(crop_name, month, resource_name, user_group);
+  }
+  */
+  
+  @Override
+  public MonthCount SelectCropMonth(String crop_name, String month, int year, String resource_name, int user_group) {
+	  return resourceMapper.SelectCropMonth(crop_name, month, year, resource_name, user_group);
+  }
+  
+  @Override
+  public YearCount SelectCropYear(String crop_name, String year, String resource_name, int user_group) {
+	  return resourceMapper.SelectCropYear(crop_name, year, resource_name, user_group);
   }
 
   @Override
@@ -219,6 +232,16 @@ public int detailDisplayAction(Map<String, Object> param) {
   @Override
   public int deleteResourceById(int resourceId) {
 	  return resourceMapper.deleteResourceById(resourceId);
+  }
+  
+  @Override
+  public int searchResourceCount(int resourceId) {
+	  return resourceMapper.searchResourceCount(resourceId);
+  }
+  
+  @Override 
+  public int SelectCropIdByResourceId(int resourceId) {
+	  return resourceMapper.SelectCropIdByResourceId(resourceId);
   }
   
   

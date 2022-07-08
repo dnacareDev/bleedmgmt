@@ -11,4 +11,12 @@
 		INSERT into mabc_design(crop, mabc_status, note, create_date, jobid)
 		VALUES(#{crop},0,#{note},NOW(),#{jobid})
 	</insert>
+	
+	<select id="DeleteMabcDesign" parameterType="java.util.ArrayList" resultType="int">
+    	DELETE FROM mabc_design
+        WHERE
+        <foreach collection="array" item="item" open="(" close=")" separator="OR">
+            mabc_design_id = #{item}
+        </foreach>
+    </select>
 </mapper>

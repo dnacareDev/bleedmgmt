@@ -171,6 +171,11 @@ public class BreedServiceImpl implements BreedService {
   public int InsertBreedFile(BreedFile breed_file) {
     return breedMapper.InsertBreedFile(breed_file);
   }
+  
+  @Override
+  public int DeleteBreedFile(int breed_file_id) {
+	  return breedMapper.DeleteBreedFile(breed_file_id);
+  }
 
   @Override
   public int InsertBreedUpload(Uploads upload) {

@@ -17,7 +17,7 @@ public interface CropMapper {
 
     public List<Crop> selectCropListByResourceName(@Param("resource_name_id") int resource_name_id);
 
-    public int deleteCropById(@Param("crop_id") int crop_id);
+    public Integer deleteCropById(@Param("crop_id") int crop_id);
 
     public int deleteCropByCategory(@Param("category_id") int category_id);
 

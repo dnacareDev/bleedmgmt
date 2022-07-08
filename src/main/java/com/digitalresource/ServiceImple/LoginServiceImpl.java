@@ -16,4 +16,9 @@ public class LoginServiceImpl implements LoginService {
         User user = mapper.LoginUserInfo(user_username);
         return user;
     }
+    
+    @Override
+    public int UpdatePassword(User user) {
+    	return mapper.UpdatePassword(user);
+    }
 }

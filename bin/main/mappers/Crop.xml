@@ -15,7 +15,10 @@
 
     <select id="selectCropList" resultType="Crop">
         SELECT *
-        FROM crop;
+        FROM crop c 
+        LEFT JOIN resource r ON c.crop_id = r.crop_id
+        WHERE r.resource_use = 1 
+        GROUP BY c.crop_name
     </select>
 
     <select id="selectCropListByResourceName" parameterType="int" resultType="Crop">
@@ -60,7 +63,7 @@
         from resource r
                  inner join resource_name rn on r.resource_name_id = rn.resource_name_id
                  inner join crop c on c.crop_id = r.crop_id
-        where rn.resource_name like CONCAT('%', #{type}, '%') AND rn.user_group = #{group} AND r.resource_use=1;
+        where rn.resource_name =#{type} AND rn.user_group = #{group} AND r.resource_use=1;
     </select>
 
     <select id="SearchCrop" resultType="Crop">

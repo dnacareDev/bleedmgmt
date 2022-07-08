@@ -311,16 +311,6 @@
                             <div class="data_cover1 clearfix">
                                 <div class="data_type data_type1">
                                     
-                                    <!--  
-                                    <input list="selectCategory" onchange="getCrop(this)" id="cropCategory"> 
-                                    <datalist id="selectCategory" >
-                                    	<option value="-1" selected disabled hidden>작물구분</option>
-						
-                                        <th:block th:each="cat : ${cropCategoryList}" >
-                                            <option th:value="${cat.category_id}" th:text="${cat.category_name}"></option>
-                                        </th:block>
-                                    </datalist>
-                                    -->
                                     
                                      
                                     <select name="selectCategory" onchange="getCrop(this)" id="cropCategory">
@@ -342,7 +332,7 @@
                                 	<input type ="text" id="newCrop">
                                 </div>
                             </div>
-                            <!--  
+                            
                             <form action="character" id="insertFile" method="POST" enctype="multipart/form-data">
                                 <div class="data_cover2 clearfix">
                                     <div class="data_type data_type4" style="display: flex">
@@ -352,11 +342,11 @@
                                             <img src="../assets/vendor_assets/img/upload.png" alt="file업로드">
                                             <span>템플릿 엑셀 첨부</span>
                                         </div>
-                                        <input type="file" id="upload_file" name="file" style="display: none;"> <!-- file  --*>
+                                        <input type="file" id="upload_file" name="file" style="display: none;"> 
                                     </div>
                                 </div>
                             </form>
-                            --> 
+                             
                         </div>
                         <div class="card-body" style="padding-top: 0">
                         	<div class="bg-white">
@@ -370,12 +360,12 @@
 	                                     <button class="btn btn-icon btn-light btn-circle" onclick="DeleteBreed();">
 	                                         <span data-feather="trash-2"></span>
 	                                     </button>
-	                                     <!--
+	                                     
 	                                     <button class="btn btn-icon btn-light btn-circle" id="data_check_submit" onclick="AnalysisBtn();" style="width:44.03px; height:42px;">
 	                                         <img src="../assets/vendor_assets/img/check_tab.png" alt="check" style="width: 17px;margin-left: 4px;">
 	                                     </button>
 	                                     <input type="hidden" id="offset">
-	                                     -->
+	                                     
 	                                 </div>
 	                             </div>
 	                         </div>	

@@ -25,6 +25,8 @@ public interface BreedService {
 	
 	public int updateStandardCell(StandardList data);
 
+	int DeleteBreedFile(int breed_file_id);
+	
 	int InsertBreedFile(BreedFile breed_file);
 
 	// 첨부파일 목록 조회

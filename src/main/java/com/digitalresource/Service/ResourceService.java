@@ -39,7 +39,10 @@ public interface ResourceService {
 
 	int SelectCropCount(String resource_name, String crop_name, int user_group);
 
-	MonthCount SelectCropMonth(String crop_name, String month, String resource_name, int user_group);
+//	MonthCount SelectCropMonth(String crop_name, String month, String resource_name, int user_group);
+	MonthCount SelectCropMonth(String crop_name, String month, int year, String resource_name, int user_group);
+	
+	YearCount SelectCropYear(String crop_name, String year, String resource_name, int user_group);
 
 	Map<String, Object> SelectDetailInfo(String detail_id);
 
@@ -56,5 +59,8 @@ public interface ResourceService {
 	public int deleteResourceNameById(int resourceId);
 	public int deleteBreedById(int resourceId);
 	public int deleteResourceById(int resourceId);
+	
+	int searchResourceCount(int resourceId);
+	int SelectCropIdByResourceId(int resourceId);
 	
 }

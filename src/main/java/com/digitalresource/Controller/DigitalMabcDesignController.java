@@ -128,4 +128,20 @@ public class DigitalMabcDesignController {
 	}
 	
 	
+	@ResponseBody
+	@RequestMapping("delete_mabc_design")
+	public int DeleteMarkerInformation(Authentication auth, @RequestParam("total_mabc_num[]") int[] total_mabc_num) {
+		
+		service.DeleteMabcDesign(total_mabc_num);
+		
+		User user = (User) auth.getPrincipal();
+	    String userIdName = user.getUser_username(); 
+		String userName = user.getUser_name();
+		String log_contents = "MABC 시뮬레이션 " + total_mabc_num.length + "행 삭제";
+		logService.RecordLog(userIdName, userName, log_contents);
+		
+		return 1;
+	}
+	
+	
 }

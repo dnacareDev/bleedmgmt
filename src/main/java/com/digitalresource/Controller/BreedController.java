@@ -171,6 +171,15 @@ public class BreedController {
 
     return result;
   }
+  
+  // 첨부파일 리스트에서 삭제
+  @ResponseBody
+  @RequestMapping("DeleteBreedFile")
+  public int DeleteFile(@RequestParam("breed_file_id") int breed_file_id) {
+	  int result = breedService.DeleteBreedFile(breed_file_id);
+	  
+	  return result;
+  }
 
   // 첨부파일 등록
   @RequestMapping("insertBreedFile")
@@ -239,17 +248,56 @@ public class BreedController {
 		  							@ModelAttribute BreedFile breed_file, 
 		  							@RequestParam("file") MultipartFile file, 
 		  							@RequestParam("type") String type, 
-		  							@RequestParam("log_file_contents_modify") String log_file_contents_modify,
+		  							//@RequestParam("log_file_contents_modify") String log_file_contents_modify,
 		  							@RequestParam("resource_id") int resource_id, 
 		  							@RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
-    if (file.isEmpty()) {
+    
+	  
+	  int update_file = breedService.UpdateBreedFile(breed_file);
+	  
+		String[] extension = file.getOriginalFilename().split("\\.");
+
+	    String file_name = fileController.ChangeFileName(extension[1]);
+	    String origin_file_name = file.getOriginalFilename();
+	    
+//	    System.out.println("breed_file : " + breed_file);
+
+//	    String path = "src/main/webapp/upload";
+	    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/";
+
+	    File filePath = new File(path);
+
+	    if (!filePath.exists())
+	      filePath.mkdirs();
+
+	    Path fileLocation = Paths.get(path).toAbsolutePath().normalize();
+	    Path targetLocation = fileLocation.resolve(file_name);
+
+	    Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+	    Uploads upload = new Uploads();
+	    upload.setUploads_file(file_name);
+	    upload.setUploads_origin_file(origin_file_name);
+	    upload.setBreed_file_id(breed_file.getBreed_file_id());
+
+	    int update_upload = breedService.UpdateBreedUpload(upload);
+	  
+	  
+	  /*
+	  if (file.isEmpty()) {
       int update_file = breedService.UpdateBreedFile(breed_file);
     } else {
+    	
+    	
+    	
 //      String delete_path = "upload/" + breed_file.getUploads_file();
       String delete_path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/" + breed_file.getUploads_file();
       File origin_file = new File(delete_path);
+      
+      System.out.println("delete_path : " + delete_path);
 
       if (origin_file.delete()) {
+    	  System.out.println("file delete success");
         String[] extension = file.getOriginalFilename().split("\\.");
 
         String file_name = fileController.ChangeFileName(extension[1]);
@@ -273,13 +321,18 @@ public class BreedController {
         upload.setBreed_file_id(breed_file.getBreed_file_id());
 
         int update_upload = breedService.UpdateBreedUpload(upload);
+        
+        
       }
     }
+    */
 
+    /*
     User user = (User)auth.getPrincipal();
     String userIdName = user.getUser_username(); 
 	String userName = user.getUser_name();
     logService.RecordLog(userIdName, userName, log_file_contents_modify);
+    */
     
     String str = URLEncoder.encode(type, "UTF-8");
     String url = "/breed?type=" + str + "&id=" + resource_id + "&crop_id=" + crop_id;
@@ -484,6 +537,46 @@ public class BreedController {
       int breed_id = item.getInt("breed_id");
       int detail_id = item.getInt("detail_id");
       String standard = item.getString("standard");
+
+      if(standard.isEmpty()) {
+        result = breedService.UpdateBreed(breed_id, detail_id, null);
+      } else {
+        result = breedService.UpdateBreed(breed_id, detail_id, standard);
+      }
+    }
+
+    User user = (User) auth.getPrincipal();
+    String userIdName = user.getUser_username(); 
+	String userName = user.getUser_name();
+    String log_contents = resource_name + " 데이터 셀 " + arr.length() + "개 수정";
+    
+    logService.RecordLog(userIdName, userName, log_contents);
+    
+    return result;
+  }
+  
+  @ResponseBody
+  @RequestMapping("updateBreed2")
+  public int UpdateBreed2(Authentication auth, 
+		  				@RequestParam("data") String data) {
+    int result = 0;
+
+
+    
+    JSONArray arr = new JSONArray(data);
+    
+    JSONObject item2 = arr.getJSONObject(0);
+    String resource_name = item2.getString("resource_name");
+    
+    System.out.println("arr : " + arr);
+
+    for (int i = 0; i < arr.length(); i++) {
+      JSONObject item = arr.getJSONObject(i);
+
+      int breed_id = item.getInt("breed_id");
+      int detail_id = item.getInt("detail_id");
+      String standard = item.getString("standard");
+      
 
       if(standard.isEmpty()) {
         result = breedService.UpdateBreed(breed_id, detail_id, null);

@@ -98,19 +98,27 @@
     </insert>
 
     <select id="searchResource" resultType="ResourceList">
+        <!--  
         select r.*, rn.*, t.trait_description, c.crop_name, (if(resource_use = 1, '사용', '미사용')) as use_name
         from resource r
                  left join trait t on r.trait_id = t.trait_id
                  inner join crop c on c.crop_id = r.crop_id
                  inner join resource_name rn on rn.resource_name_id = r.resource_name_id
-        where r.user_group = #{user_group} <!--  and r.delete_check = 0 -->
+        where r.user_group = #{user_group} 
+        ORDER BY r.resource_id DESC
+        --> 
+        select r.*, rn.*, c.crop_name, (if(resource_use = 1, '사용', '미사용')) as use_name
+        from resource r
+                 inner join crop c on c.crop_id = r.crop_id
+                 inner join resource_name rn on rn.resource_name_id = r.resource_name_id
+        where r.user_group = #{user_group} 
         ORDER BY r.resource_id DESC
     </select>
     
     <select id="searchResourceAll" resultType="ResourceAllList">
     	SELECT r.resource_id, r.resource_name_id, r.crop_id, r.create_date, rn.resource_name, rn.user_group 
     	FROM resource r LEFT JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
-    	WHERE r.crop_id = #{crop_id}
+    	WHERE r.crop_id = #{crop_id} AND r.resource_use = 1
     </select>
 
     <select id="selectResourceCount" resultType="int">
@@ -142,11 +150,21 @@
         AND resource_name_id = #{resource_name_id}
         AND user_group = #{user_group}
     </select>
-
+    
     <select id="SelectCropId" resultType="int">
         SELECT crop_id
         FROM resource
         WHERE resource_name_id = #{resource_name_id}
+    </select>
+    	
+    <select id="SelectCropIdByResourceId" resultType="int">
+    	SELECT crop_id
+        FROM resource
+        WHERE resource_id = #{resource_id}
+    </select>
+
+    <select id="searchResourceCount" resultType="int">
+    	select count(*) from resource where crop_id = #{resource_id};
     </select>
 
     <select id="selectDetailHead" resultType="Detail">
@@ -172,15 +190,41 @@
         INNER JOIN resource_name rn ON r.resource_name_id = rn.resource_name_id
         INNER JOIN crop c ON r.crop_id = c.crop_id
         INNER JOIN breed b ON b.resource_id = r.resource_id
-        WHERE b.user_group = #{user_group}
+        WHERE b.user_group = #{user_group} <!-- 미사용 관리자원 필터링 -->AND r.resource_use != 0
     </select>
 
     <select id="SelectCropMonth" resultType="monthcount">
+        <!--
         SELECT resource_name, count(resource_name) AS resource_count, DATE_FORMAT(create_date, '%m') AS mon
         FROM resource_name rn
         INNER JOIN breed b on rn.resource_name_id = b.resource_id
         WHERE b.variety_name = #{crop_name}
           AND DATE_FORMAT(create_date, '%m') = #{month}
+          AND DATE_FORMAT(create_date, '%Y') = #{year}
+          AND resource_name = #{resource_name}
+          AND b.user_group = #{user_group}
+        group by resource_name;
+        -->
+        <!-- 미사용 관리자원 필터링 -->
+        SELECT resource_name, count(resource_name) AS resource_count, DATE_FORMAT(b.create_date, '%m') AS mon
+        FROM resource_name rn
+        INNER JOIN breed b on rn.resource_name_id = b.resource_id
+        INNER JOIN resource r on rn.resource_name_id = r.resource_name_id
+        WHERE b.variety_name = #{crop_name}
+          AND DATE_FORMAT(b.create_date, '%m') = #{month}
+          AND DATE_FORMAT(b.create_date, '%Y') = #{year}
+          AND resource_name = #{resource_name}
+          AND b.user_group = #{user_group}
+          AND r.resource_use != 0
+        group by resource_name;
+    </select>
+    
+    <select id="SelectCropYear" resultType="yearcount">
+        SELECT resource_name, count(resource_name) AS resource_count, DATE_FORMAT(create_date, '%Y') AS year
+        FROM resource_name rn
+        INNER JOIN breed b on rn.resource_name_id = b.resource_id
+        WHERE b.variety_name = #{crop_name}
+          AND DATE_FORMAT(create_date, '%Y') = #{year}
           AND resource_name = #{resource_name}
           AND b.user_group = #{user_group}
         group by resource_name;

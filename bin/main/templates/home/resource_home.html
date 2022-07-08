@@ -223,7 +223,7 @@
             background-color: #FBAD55;
         }
 
-        .main-content #CropSelect {
+        .main-content #CropSelect, .main-content #selectMonthlyYearly, .main-content #selectYear {
             margin-top: -40px !important;
         }
     </style>
@@ -245,30 +245,24 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                    	  
-                    	<p class="color-primary fa-lg mb-3 mt-5 ml-3">관리대장 상황</p>
-                    	
-                        <div class="card-body" style="height: 600px;">
+                    	<p class="color-primary fa-lg mb-3 mt-5 ml-3">자원관리 현황</p>
+                        <div class="card-body" style="height: 350px;">
                             <div id="doughnut" class="slick-slider slick-dots-bottom" data-dots-slick='true'>
                                 <div class="slick-slider__single d-flex">
-                                    <!--  <p class="color-primary fa-lg mb-3 mt-5 ml-3">관리대장 상황</p> -->
+                                    
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: right;" name="selectCrop" id="CropSelect">
                                         <th:block th:each="list : ${cropList}">
                                             <option th:value="${list.crop_id}" th:text="${list.crop_name}"></option>
                                         </th:block>
                                     </select>
+                                    
+                                    <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: right;" name="selectYear" id="selectYear">
+                                        <!--  <option value="2022" selected>2022</option> -->
+                                    </select>
+                                    
                                     <div class="data_relative">
                                         <div class="doughnut_cover">
-                                            <!-- 
-                                            <div class="labels right_content_la">
-                                                <ul class="selector">
-                                                    <th:block th:each="list : ${resourceList}">
-                                                        <li><input type="checkbox" th:id="${list.resource_name}"><label th:for="${list.resource_name}" th:text="${list.resource_name}+'&nbsp'"></label></li>
-                                                    </th:block>
-                                                </ul>
-                                            </div>
-                                             -->
-                                            <canvas id="bar1" style="height: 400px; width: 100%;"></canvas>
+                                            <canvas id="bar1" style="height: 300px; width: 100%;"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -283,35 +277,14 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <p class="color-primary fa-lg mb-3 mt-5 ml-3">작목별 관리 현황</p>
+                        <p class="color-primary fa-lg mb-3 mt-5 ml-3">작물별 자원관리</p>
                         <div class="card-body" style="height: auto;">
-                            <!--  
-                            <div class="labels">
-                                <ul class="selector">
-                                    <th:block th:each="list : ${cropList}">
-                                        <li><input type="checkbox" th:id="${list.crop_name}"><label th:for="${list.crop_name}" th:text="${list.crop_name}+'&nbsp'"></label></li>
-                                    </th:block>
-                                </ul>
-                            </div>
-                            -->
                             <div>
-                                <canvas id="bar2" style="height: 444px; width:100%"></canvas>
+                                <canvas id="bar2" style="height: 350px; width:100%"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--  
-                <div class="col-lg-4">
-                    <div class="card">
-                        <p class="color-primary fa-lg mb-3 mt-5 ml-3">등록 자료 현황</p>
-                        <div class="card-body" style="height: auto;">
-                            <div class="container">
-                                <canvas id="bar3" style="height: 368px; width:100%"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                -->
             </div>
         </div>
     </div>
@@ -337,23 +310,177 @@
     });
 
     $(document).ready(function () {
-        SelectMonth();
+    	addYear();
+    	SelectMonth();
         SelectCrop();
         SelectFile();
+        
+        
     });
 
     $("#CropSelect").change(function () {
         bar1.reset();
 
         SelectMonth();
-    })
+        /*
+        if($("#selectMonthlyYearly option:selected").val() == 'monthly') {
+    		SelectMonth();
+    	} else {
+    		SelectYear();
+    	}
+        */
+    });
+    
+    $("#selectYear").change(function () {
+    	bar1.reset();
+    	
+    	SelectMonth();
+    });
+    
+    function addYear() {
+    	let currentTime = new Date();
+    	let thisYear = currentTime.getFullYear()
+    	//console.log(thisYear);
+    	
+    	for(let i=thisYear ; i>=2022 ; i--) {
+	    	$("#selectYear").append("<option value=" + i + ">" + i +"</option>");
+    	}
+    }
+    
+    /*
+    $("#selectMonthlyYearly").change(function () {
+    	bar1.reset();
+    	
+    	if($("#selectMonthlyYearly option:selected").val() == 'monthly') {
+    		SelectMonth();
+    	} else {
+    		SelectYear();
+    	}
+    	
+    });
 
     var bar1 = null;
 
-    function SelectMonth() {
+    
+    // 2022-07-05 | 작업중. 더기반 chart.js 참고해서 올해가 제일 오른쪽에 출력될 수 있도록 작업
+    function SelectYear() {
+    	
         var crop_id = $("#CropSelect").val();
 
         var data = {"crop_id": crop_id}
+
+        $.ajax({
+            url: 'selectYear',
+            method: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function (result) {
+            	console.log("year result : ", result);
+            	
+            	var date = new Date();
+                var year = date.getYear() + 1896
+                var year_list = [];
+            	
+            	
+            	
+                var label = []
+
+                for (let i = 0; i < result.resourceList.length; i++) {
+                    label.push(result.resourceList[i].resource_name);
+                }
+
+                var data = []
+
+                for (let i = 0; i < result.count.length; i++) {
+                    data.push(result.count[i]);
+                }
+
+                var ctx1 = document.getElementById("bar1");
+
+                let currentDate = new Date();
+                let currentYear = currentDate.getFullYear();
+                
+                var config1 = {
+                    type: 'bar',
+                    data: {
+                        //labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+                        labels: [(currentYear-4)+"년", (currentYear-3)+"년", (currentYear-2)+"년", (currentYear-1)+"년", currentYear+"년"],
+                        datasets: [],
+                        stackSeries: true,
+                    },
+                    options: {
+                        responsive: false,
+                        scales: {
+                            xAxes: [{
+                                barPercentage: 0.5
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 10,
+                                }
+                            }],
+                        },
+                        legend: {
+                            display: true,
+                            position: "left",
+                            labels: {
+                                usePointStyle: true,
+                            },
+                        },
+                    }
+                };
+				
+                var color1 = 29;
+                var color2 = 51;
+                var color3 = 137;
+                
+				for (let i = 0; i < label.length; i++) {
+                   
+	               	color1 += 33;
+	                   color2 += 67;
+	                   color3 += 89;
+	               	
+	               	if(color1 > 200) {
+	                   	color1 -= 200;
+	                   }
+	               	
+	               	if(color2 > 200) {
+	                   	color2 -= 150;
+	                   }
+	               	
+	               	if(color3 > 200) {
+	                   	color3 -= 130;
+	                   }
+
+	                var dataset = {
+	                    label: label[i],
+	                    data: data[i],
+	                    backgroundColor: 'rgb(' + color1 + ', ' + color2 + ', ' + color3 + ')',
+	                    //stack: 'Stack 0',
+	                    //stackSeries: true
+	                }
+	                
+	                config1.data.datasets.push(dataset);
+	                //console.log("config1",config1);
+	                //console.log("config1.data.datasets", config1.data.datasets);
+                   
+				}
+                
+                bar1 = new Chart(ctx1, config1);
+                
+            }
+        })
+    }
+    */
+    
+    function SelectMonth() {
+        var crop_id = $("#CropSelect").val();
+        let year = $("#selectYear option:selected").val();
+        
+        console.log("year : ",year);
+
+        var data = {"crop_id": crop_id, "year": year}
 
         $.ajax({
             url: 'selectMonth',
@@ -386,7 +513,7 @@
                         stackSeries: true,
                     },
                     options: {
-                        responsive: false,
+                        responsive: true,
                         scales: {
                             xAxes: [{
                                 barPercentage: 0.5
@@ -451,14 +578,14 @@
 
     function SelectCrop() {
     	
-    	/* 
+    	/*
     	// 작목별 관리현황에서 관리대장에 활성화된 작물만 차트목록에 노출시켜야 함
     	$.ajax({
-            url: "resource-list",
+            url: "search-resource2",
             method: "POST",
             dataType: "json",
             success: function (result) {
-           		console.log("(home) resource-list result : ", result); 	
+           		console.log("(home) searchResource2 result : ", result); 	
             }
     	});
     	*/

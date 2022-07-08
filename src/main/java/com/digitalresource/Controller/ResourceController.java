@@ -89,6 +89,22 @@ public class ResourceController {
     return map;
   }
   
+  /*
+  @PostMapping("search-resource2")
+  @ResponseBody
+  public Map<String, Object> searchResource2(Authentication auth) {
+    Map<String, Object> map = new HashMap<>();
+    
+    User user = (User)auth.getPrincipal();
+    
+    List<ResourceList> resourceList = RService.searchResource(user_group);
+    int count = RService.selectResourceCount(user_group);
+    map.put("resourceList", resourceList);
+    return map;
+  }
+  */
+  
+  
   // 2022-07-04 | crop_id가 일치하는 모든 resource_id를 조회
   @ResponseBody
   @RequestMapping("searchResourceAll")
@@ -103,6 +119,7 @@ public class ResourceController {
 	  
 	  return map;
   }
+  
 
   @ResponseBody
   @RequestMapping("nameOverlapCheck")
@@ -339,10 +356,36 @@ public class ResourceController {
 	    
 	    for(int i=0 ; i<arr.length() ; i++) {
 	    	int resourceId = arr.getInt(i);
+//	    	System.out.println("resourceId : " + resourceId);
 	    	RService.deleteResourceNameById(resourceId);		// resourceId와 일치하는 resource_name 데이터 삭제
 	    	RService.deleteBreedById(resourceId);				// resourceId와 일치하는 breed_id 데이터 삭제
-	    	RService.deleteResourceById(resourceId);			// resourceId에 해당하는 resource 데이터 삭제
+	    	
+	    	
+	    	
+	    	int crop_id = RService.SelectCropIdByResourceId(resourceId);
+    		System.out.println("crop_id : " + crop_id);
+    		
+    		int restCropCount = RService.searchResourceCount(crop_id);
+	    	System.out.println("restCropCount : " + restCropCount);
+    		
+	    	
+	    	if(restCropCount == 1) {
+	    		System.out.println("only one crop");
+	    		
+	    		RService.deleteResourceById(resourceId);
+	    		System.out.println("aaa");
+	    		cropService.deleteCrop(crop_id);
+	    		System.out.println("bbb");
+	    	} else {
+	    		RService.deleteResourceById(resourceId);
+	    	}
+	    	
+	    				// resourceId에 해당하는 resource 데이터 삭제
 	    }
+	    
+	    
+	    
+	    
 	    
 	    
 	    // 2022-06-07 | 삭제기능 일단 구현. 현재 자원관리 출력 및 필터링에 문제가 있어 보류 
