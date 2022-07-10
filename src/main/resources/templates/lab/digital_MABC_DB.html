@@ -208,7 +208,7 @@
 		                			<td><label class="reg" for="crop">작물</label></td>
 		                			<td>
 		                				<!--  <input type="text" name="crop"> -->
-		                				<select style="width: 230px; height:30px; padding:4px; margin-right:26px;" name="crop_name" id="crop_name">
+		                				<select style="width: 230px; height:30px; padding:4px; margin-right:26px;" name="crop" id="crop">
 	                                        <th:block th:each="list : ${cropList}">
 	                                            <option th:value="${list.crop_name}" th:text="${list.crop_name}"></option>
 	                                        </th:block>
@@ -237,11 +237,13 @@
 		                				<a id="genoType_example_file" href="/common/r/example/genotype_data.xlsx" download>예제파일다운</a>
 		                			</td>
 		                			<td><div class="atbd-upload__button">
+		                				<!--  
 		                				<label class="input-file-button" for="upload_file" id="file-label"
 	                                   	style="margin-top: 5px; margin-left: 68px; width: 63%; background-color: #fff; border: 1px solid #D9D9D9; color:#B2B2B2; font-size:14px;text-align:left; padding: 0 15px; display: flex; align-items: center">
 	                                		<i class="bi bi-upload" style="margin-right:5px; font-size:14px; vertical-align:middle"></i><span style="vertical-align:middle; margin-left:50px; font-weight:500;">Click to Upload</span>
 	                            		</label>
-		                				<input type="file" id="upload_file" name="file" style="display:none;">
+	                            		-->
+		                				<input type="file" id="upload_file" name="file" style="width: 250px; margin-left:10px;">
 		                			</div></td>
 		                		</tr>
 		                	</tbody>
@@ -514,7 +516,7 @@
 		}
     	
     	console.log(str);
-    	window.open('/geneticMerge/selectType.jsp?selectfiles='+ str , 'selectType', 'top=300, left=600, width=600, height=250, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no');
+    	window.open('/geneticMerge/selectType.jsp?selectfiles='+ str , 'selectType', 'top=250, left=600, width=500, height=250, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no');
 
        
     }
