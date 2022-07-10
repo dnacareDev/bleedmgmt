@@ -103,4 +103,8 @@ public class CropServiceImpl implements CropService {
         return mapper.SearchCropList(type, group);
     }
     
+    @Override
+    public List<Crop> searchAllCrops() {
+    	return mapper.searchAllCrops();
+    }
 }

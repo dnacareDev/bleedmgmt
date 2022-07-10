@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.MabcSample;
 import com.digitalresource.Entity.User;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.LogService;
 import com.digitalresource.Service.MabcSampleService;
 
@@ -39,11 +41,19 @@ public class DigitalMabcDBController {
 	private LogService logService;
 	
 	@Autowired
+	private CropService cropService;
+	
+	@Autowired
 	private FileController fileController;
 
 	@RequestMapping(path="/digital_MABC_DB")
 	public ModelAndView digitalMabcDB(ModelAndView mv) {
 		
+		List<Crop> cropList = cropService.searchAllCrops();
+//		System.out.println(cropList);
+		
+		
+		mv.addObject("cropList", cropList);
 		mv.setViewName("lab/digital_MABC_DB");
 		
 		return mv;

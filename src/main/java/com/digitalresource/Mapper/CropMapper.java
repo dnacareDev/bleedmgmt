@@ -27,4 +27,6 @@ public interface CropMapper {
  
     public List<Crop> SearchCropList(@Param("type") String type, @Param("group") int group);
     
+    public List<Crop> searchAllCrops();
+    
 }

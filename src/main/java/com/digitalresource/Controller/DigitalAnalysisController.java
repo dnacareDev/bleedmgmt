@@ -24,9 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.Entity.AnalysisDB;
+import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.User;
 import com.digitalresource.RModule.RunEtcR;
 import com.digitalresource.Service.AnalysisDbService;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.LogService;
 
 @Controller
@@ -39,12 +41,20 @@ public class DigitalAnalysisController {
 	private LogService logService;	
 	
 	@Autowired
+	private CropService cropService;
+	
+	@Autowired
 	private FileController fileController;
 	
 	
 	@RequestMapping("/digital_analysis")
 	public ModelAndView digital_analysis(ModelAndView mv) {
 		
+		List<Crop> cropList = cropService.searchAllCrops();
+//		System.out.println(cropList);
+		
+		
+		mv.addObject("cropList", cropList);
 		mv.setViewName("lab/digital_analysis");
 		
 		return mv;

@@ -89,6 +89,7 @@
 			.top-menu .main-content .modal-dialog {
 			    max-width: 850px;
 			    margin: 1.75rem auto;
+			    width: 700px; /* 모달창 크기 줄이기. 다른 모니터에서 깨진다면 수정*/
 			}
 		}
 		
@@ -101,6 +102,19 @@
         
         .tui-grid-cell {
             background-color: white;
+        }
+        
+        .input-file-button{
+        	float:left;
+            border: 1px solid #217566;
+            border-radius: 5px;
+            height:45px;
+            font-size: 13px;
+            color:#fff;
+            width: calc((20% - 20px)/2);
+            margin-left: 10px;
+            background-color: #217566;
+            cursor: pointer;
         }
 		
     </style>
@@ -192,7 +206,14 @@
 		               		<tbody>
 			               		<tr>
 		                			<td><label class="reg" for="crop">작물</label></td>
-		                			<td><input type="text" name="crop"></td>
+		                			<td>
+		                				<!--  <input type="text" name="crop"> -->
+		                				<select style="width: 230px; height:30px; padding:4px; margin-right:26px;" name="crop_name" id="crop_name">
+	                                        <th:block th:each="list : ${cropList}">
+	                                            <option th:value="${list.crop_name}" th:text="${list.crop_name}"></option>
+	                                        </th:block>
+	                           			</select>
+		                			</td>
 		                		</tr>
 		               			<tr>
 		                			<td><label class="reg" for="mabc_category">분류</label></td>
@@ -211,12 +232,17 @@
 		                			<td><input type="text" name="detail_note"></td>
 		                		</tr>
 		                		<tr>
-		                			<td><div class="atbd-upload__button">
-		                				<input type="file" id="upload_file" name="file">
-		                			</div></td>
-		                			<td>
+		                			<td style="vertical-align:middle;">
+		                				첨부파일&nbsp;-&nbsp;
 		                				<a id="genoType_example_file" href="/common/r/example/genotype_data.xlsx" download>예제파일다운</a>
 		                			</td>
+		                			<td><div class="atbd-upload__button">
+		                				<label class="input-file-button" for="upload_file" id="file-label"
+	                                   	style="margin-top: 5px; margin-left: 68px; width: 63%; background-color: #fff; border: 1px solid #D9D9D9; color:#B2B2B2; font-size:14px;text-align:left; padding: 0 15px; display: flex; align-items: center">
+	                                		<i class="bi bi-upload" style="margin-right:5px; font-size:14px; vertical-align:middle"></i><span style="vertical-align:middle; margin-left:50px; font-weight:500;">Click to Upload</span>
+	                            		</label>
+		                				<input type="file" id="upload_file" name="file" style="display:none;">
+		                			</div></td>
 		                		</tr>
 		                	</tbody>
 			            </table>
@@ -488,7 +514,7 @@
 		}
     	
     	console.log(str);
-    	window.open('/geneticMerge/selectType.jsp?selectfiles='+ str , 'selectType', 'top=300, left=600, width=600, height=400, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no');
+    	window.open('/geneticMerge/selectType.jsp?selectfiles='+ str , 'selectType', 'top=300, left=600, width=600, height=250, toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=no');
 
        
     }

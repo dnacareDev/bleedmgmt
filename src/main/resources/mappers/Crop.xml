@@ -77,4 +77,10 @@
 	<insert id="insertNewCrop" >
 		
 	</insert>
+	
+	<select id="searchAllCrops" resultType="Crop">
+        SELECT *
+        FROM crop 
+    </select>
+	
 </mapper>

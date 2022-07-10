@@ -27,8 +27,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.digitalresource.DigitalTools.RunMarkerDB;
 import com.digitalresource.Entity.ChromosomeViewer;
+import com.digitalresource.Entity.Crop;
 import com.digitalresource.Entity.MarkerInformation;
 import com.digitalresource.Entity.User;
+import com.digitalresource.Service.CropService;
 import com.digitalresource.Service.LogService;
 import com.digitalresource.Service.MarkerInformationService;
 
@@ -42,12 +44,20 @@ public class DigitalLabDBController {
 	private LogService logService;
 	
 	@Autowired
+	private CropService cropService;
+	
+	@Autowired
 	private FileController fileController;
 	
 	
 	@RequestMapping("/digital_lab_DB")
 	public ModelAndView digitalLabDB(ModelAndView mv) {
 		
+		List<Crop> cropList = cropService.searchAllCrops();
+//		System.out.println(cropList);
+		
+		
+		mv.addObject("cropList", cropList);
 		mv.setViewName("lab/digital_lab_DB");
 		
 		return mv;

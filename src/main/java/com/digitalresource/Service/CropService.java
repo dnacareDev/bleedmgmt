@@ -1,9 +1,9 @@
 package com.digitalresource.Service;
 
 
-import com.digitalresource.Entity.Crop;
-
 import java.util.List;
+
+import com.digitalresource.Entity.Crop;
 
 public interface CropService {
     public int registCrop(Crop crop);
@@ -23,5 +23,7 @@ public interface CropService {
     public String SelectCropById(int crop_id);
 
     public List<Crop> SearchCropList(String type, int group);
+    
+    public List<Crop> searchAllCrops();
     
 }

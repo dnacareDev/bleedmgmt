@@ -9,12 +9,12 @@
         }
 
         table {
-            border-top: 1px solid grey;
+            border: 1px solid white !important;
             border-collapse: collapse;
         }
 
         th, td {
-            border-bottom: 2px solid #E5E9F2;
+            border-bottom: 2px solid white;
             padding: 10px;
             text-align: center;
             font-weight: initial;
@@ -671,6 +671,8 @@
             border-collapse: collapse;
             border-spacing: 0;
         }
+        
+        
 
         #pop_data1 table thead tr {
             border-top: 2px solid #aaa;
@@ -722,6 +724,8 @@
 		
         .modal-content {
             height: 100%;
+            width: 750px;
+            margin: 1.75rem auto;
         }
         
 
@@ -997,7 +1001,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-0">
-                        <button onclick="InsertFileBtn()">데이터 등록</button>
+                        
                     </div>
                     <div>
                         <div class="atbd-upload">
@@ -1016,7 +1020,8 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-secondary btn-sm mr-auto ml-3" data-dismiss="modal">닫기</button>
+                    <button class="btn btn-primary btn-sm" onclick="InsertFileBtn()">데이터 등록</button>
                 </div>
             </div>
         </div>
@@ -1326,8 +1331,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-0">
-                        <button onclick="dataToggle('#data_upload2', '#data_upload');">데이터 등록</button>
-                        <button type="button" onclick="testbtn()">등록서식 다운로드</button>
+	                    <button style="visibility:hidden;" onclick="dataToggle('#data_upload2', '#data_upload');">데이터 등록</button>
+                        <button type="button" class="float-right" onclick="testbtn()">등록서식 다운로드</button>
                     </div>
                     <div>
                         <div class="atbd-upload">
@@ -1346,7 +1351,8 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-secondary btn-sm mr-auto ml-3" data-dismiss="modal">닫기</button>
+                    <button class="btn btn-primary btn-sm" onclick="dataToggle('#data_upload2', '#data_upload');">데이터 등록</button>
                 </div>
             </div>
         </div>
@@ -1399,7 +1405,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload', '#data_upload2');">취소</button>
+                    <button type="button" class="btn btn-secondary btn-sm mr-auto ml-3" data-dismiss="modal" onclick="dataToggle('#data_upload', '#data_upload2');">닫기</button>
                     <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload', '#data_upload2'); InsertExcel();">등록</button>
                 </div>
             </div>
@@ -1435,7 +1441,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2');">취소</button>
+                    <button type="button" class="btn btn-secondary btn-sm mr-auto ml-3" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2');">닫기</button>
                     <!--<button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="dataToggle('#data_upload3', '#data_upload2'); InsertExcel();">등록</button>-->
                 </div>
             </div>
@@ -2771,6 +2777,9 @@
 
         let data = {"crop_id": crop_id, "resource_name": resource_name};
 
+        var loading = document.querySelector('.load_wrap');
+    	loading.classList.add('on');
+        
         $.ajax(
             {
                 url: 'searchHeader',
@@ -2778,6 +2787,9 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                	
+                	loading.classList.remove('on');
+                	
                     $("#resource_id").val(result.resource_id);
                     
                     console.log("breed result : ", result)
