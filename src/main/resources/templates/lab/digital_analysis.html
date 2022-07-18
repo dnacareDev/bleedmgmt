@@ -345,7 +345,7 @@
    
     <div class="load_wrap">
         <div class="load">
-            <h2>잠시만 기다려주세요</h2>
+            <h2>분석중입니다</h2>
             <div class="loader"></div>
         </div>
     </div>
@@ -420,14 +420,14 @@
 					
 				console.log(dataArr);
 				
-				// 화면너비에 맞춰 grid 컬럼의 너비 계산의 넓이를 사
+				// 화면너비에 맞춰 grid 컬럼의 너비 계산
 				let client_width = document.body.clientWidth;
 				
 				$(window).resize(function() {
 					
 					client_width = document.body.clientWidth;
 					
-					console.log(client_width * 60/ 1920);
+					//console.log(client_width * 60/ 1920);
 					
 					analysis_grid.setColumns([
 						{
@@ -498,7 +498,7 @@
 							
 				analysis_grid = new tui.Grid({
 					el: document.getElementById('analysis_grid'),
-					scrollX: true,
+					scrollX: false,
 					scrollY: false,
 					data: dataArr,
 					//data: result.analysis_db,
@@ -600,7 +600,7 @@
 		let fileCheck = $("#upload_file").val();
 
 		if(!fileCheck) {
-			alert("파일을 첨부해 주세요.");
+			Alert1("파일을 첨부해 주세요.");
 			return false;
 		}
 		

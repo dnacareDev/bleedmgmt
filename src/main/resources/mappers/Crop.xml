@@ -81,6 +81,7 @@
 	<select id="searchAllCrops" resultType="Crop">
         SELECT *
         FROM crop 
+        GROUP BY crop_name
     </select>
 	
 </mapper>

@@ -47,6 +47,8 @@ public interface BreedService {
 	List<Breed> SearchBreed2(String breed_name, int resource_id);
 
 	List<Breed> SearchBreed3(int resource_id);
+	
+	int[] SearchFilledBreed(String crop_name, int resourceId);
 
 	Breed SearchBreedById(int target_id);
 
@@ -69,4 +71,6 @@ public interface BreedService {
 	int UpdateAllBreed(List<StandardList> list);
 	
 	List<StandardList> SearchStandardByCellValue(String cell_value);
+	
+	List<StandardList> DatabaseSelect(String crop_name, int resourceId);
 }

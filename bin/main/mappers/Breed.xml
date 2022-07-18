@@ -198,10 +198,10 @@
     </select>
 
     <select id="SearchBreed2" resultType="Breed">
-        SELECT *,
+        SELECT * <!--  ,
         (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND (d.detail_info = 2 OR d.detail_info = 1) AND (s.standard_data IS NOT NULL)) AS
-        detail_count
-        FROM breed b
+        detail_count -->
+        FROM breed b 
         <choose>
             <when test="crop_name != 'none'">
                 WHERE b.variety_name = #{crop_name} AND b.resource_id = #{resource_id}
@@ -211,11 +211,16 @@
     </select>
 
     <select id="SearchBreed3" resultType="Breed">
-        SELECT *,
+        SELECT * <!-- ,
         (SELECT COUNT(*) FROM standard s LEFT JOIN detail d ON s.detail_id = d.detail_id WHERE s.breed_id = b.breed_id AND d.detail_info = 2 AND (s.standard_data IS NOT NULL)) AS
-        detail_count
+        detail_count -->
         FROM breed b
         WHERE b.resource_id = #{resource_id}
+    </select>
+    
+    <select id="SearchFilledBreed" resultType="int">
+    	SELECT distinct b.breed_id FROM breed a, standard b, detail c
+		WHERE b.breed_id=a.breed_id AND b.detail_id=c.detail_id AND (c.detail_info = 2 OR c.detail_info = 1) AND b.standard_data IS NOT NULL AND a.variety_name = #{crop_name} AND a.resource_id = #{resourceId} ORDER BY b.breed_id DESC;
     </select>
 
     <select id="SearchBreedById" resultType="Breed">
@@ -311,4 +316,14 @@
     		SELECT breed_id from standard where standard_data = #{cell_value}
     	)
     </select>
+    
+    <select id="DatabaseSelect" resultType="StandardList">
+    	SELECT * FROM standard 
+    	WHERE breed_id in
+    		(SELECT breed_id FROM breed WHERE variety_name = #{crop_name} AND resource_id = #{resourceId} ORDER BY breed_id DESC)  
+    	AND detail_id in 
+    		(SELECT detail_id FROM detail WHERE detail_display = 1)
+    	ORDER BY breed_id DESC, detail_id ASC
+    </select>
+    
 </mapper>

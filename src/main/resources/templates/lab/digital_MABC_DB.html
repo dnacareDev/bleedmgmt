@@ -161,7 +161,7 @@
 	                                    	<span data-feather="plus-square"></span>
 	                                    </button>
 	                                    -->
-	                                    <button class="btn btn-lg btn-primary bottom_btn" data-toggle="modal" data-target="#insert_file" style="float:right; background-color: #217566; color: #EDF6F1; height: 34px">
+	                                    <button class="btn btn-lg btn-primary bottom_btn" data-toggle="modal" data-target="#insert_file" onclick="Today()" style="float:right; background-color: #217566; color: #EDF6F1; height: 34px">
 		                                    데이터 등록
 		                                </button>
 		                                <button class="btn btn-lg btn-primary bottom_btn" onclick="run()" style="float:right; margin-right:5px; background-color: #217566; color: #EDF6F1; height: 34px">
@@ -225,7 +225,7 @@
 		                		</tr>
 		                		<tr>
 		                			<td><label class="reg" for="regist_date">등록일</label></td>
-		                			<td><input type="text" name="regist_date"></td>
+		                			<td><input type="text" name="regist_date" id="regist_date" readonly></td>
 		                		</tr>
 		                		<tr>
 		                			<td><label class="reg" for="detail_note">상세내용</label></td>
@@ -294,6 +294,21 @@
         	SearchPlan();
         });
 	
+	
+	function Today() {
+		
+		let currentTime = new Date();
+		let year = currentTime.getFullYear();
+		let month = currentTime.getMonth() + 1;
+		let day = currentTime.getDate();
+		
+		console.log(month);
+		
+		$("#regist_date").val(year + '-' + (("00"+month.toString()).slice(-2)) + '-' + (("00"+day.toString()).slice(-2)));
+		
+	}
+	
+	
 	// grid
     var mabc_grid = null;
 	
@@ -315,6 +330,7 @@
 	                	
 						let dataArr = [];
 						let rowArr = {};
+						let client_width = document.body.clientWidth;
 						
 						for(let i=0 ; i<result.mabc_sample.length ;  i++) {
 							
@@ -324,7 +340,7 @@
 											'crop': result.mabc_sample[i].crop,
 											'detail' : result.mabc_sample[i].detail,
 											'mabc_category': result.mabc_sample[i].mabc_category,
-											'file': '<a href="upload/' + result.mabc_sample[i].file_name + '" download=' + result.mabc_sample[i].file_origin_name + '><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
+											'file': '<a href="upload/' + result.mabc_sample[i].file_name + '" download="' + result.mabc_sample[i].file_origin_name + '"><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
 											'file_name': result.mabc_sample[i].file_name,
 											'file_origin_name': result.mabc_sample[i].file_origin_name,
 											'regist_date': result.mabc_sample[i].regist_date,
@@ -349,13 +365,13 @@
 								{
 									header: '번호',
 									name: 'number',
-									width: 60,
+									width: client_width * 60 / 1920,
 									align: 'center'
 								},
 								{
 				                    header: 'mabc_id',
 				                    name: 'mabc_id',
-				                    width: 80,
+				                    width: client_width * 80 / 1920,
 				                    align: 'center',
 				                    //editor: 'text',
 				                    //sortable: true,
@@ -364,21 +380,21 @@
 				                {
 				                    header: '다운로드',
 				                    name: 'file',
-				                    width: 80,
+				                    width: client_width * 80 / 1920,
 				                    align: 'center',
 				                },
 
 				                {
 				                    header: '파일명',
 				                    name: 'file_origin_name',
-				                    width: 250,
+				                    width: client_width * 250 / 1920,
 				                    align: 'center',
 				                },
 				                {
 				                    header: '작물',
 				                    name: 'crop',
 				                    sortable: true,
-				                    width: 150,
+				                    width: client_width * 150 / 1920,
 				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
 				                    align: 'center',
 				                },
@@ -386,7 +402,7 @@
 				                    header: '분류',
 				                    name: 'mabc_category',
 				                    sortable: true,
-				                    width: 200,
+				                    width: client_width * 200 / 1920,
 				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
 				                    align: 'center',
 				                },
@@ -394,7 +410,7 @@
 				                    header: '등록자',
 				                    name: 'regist_person',
 				                    sortable: true,
-				                    width: 250,
+				                    width: client_width * 250 / 1920,
 				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
 				                    align: 'center',
 				                },
@@ -402,14 +418,14 @@
 				                    header: '등록일',
 				                    name: 'regist_date',
 				                    sortable: true,
-				                    width: 250,
+				                    width: client_width * 250 / 1920,
 				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
 				                    align: 'center',
 				                },
 				                {
 				                    header: '상세내용',
 				                    name: 'detail_note',
-				                    width: 470,
+				                    width: client_width * 470 / 1920,
 				                    align: 'center',
 				                },
 							],
@@ -418,6 +434,83 @@
 				                perPage: limit
 				            }
 						});
+						
+						//반응형
+						$(window).resize(function() {
+							
+							client_width = document.body.clientWidth;
+							
+							mabc_grid.setColumns([
+								{
+									header: '번호',
+									name: 'number',
+									width: client_width * 60 / 1920,
+									align: 'center'
+								},
+								{
+				                    header: 'mabc_id',
+				                    name: 'mabc_id',
+				                    width: client_width * 80 / 1920,
+				                    align: 'center',
+				                    //editor: 'text',
+				                    //sortable: true,
+				                    hidden: true
+				                },
+				                {
+				                    header: '다운로드',
+				                    name: 'file',
+				                    width: client_width * 80 / 1920,
+				                    align: 'center',
+				                },
+
+				                {
+				                    header: '파일명',
+				                    name: 'file_origin_name',
+				                    width: client_width * 250 / 1920,
+				                    align: 'center',
+				                },
+				                {
+				                    header: '작물',
+				                    name: 'crop',
+				                    sortable: true,
+				                    width: client_width * 150 / 1920,
+				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+				                    align: 'center',
+				                },
+				                {
+				                    header: '분류',
+				                    name: 'mabc_category',
+				                    sortable: true,
+				                    width: client_width * 200 / 1920,
+				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+				                    align: 'center',
+				                },
+				                {
+				                    header: '등록자',
+				                    name: 'regist_person',
+				                    sortable: true,
+				                    width: client_width * 250 / 1920,
+				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+				                    align: 'center',
+				                },
+				                {
+				                    header: '등록일',
+				                    name: 'regist_date',
+				                    sortable: true,
+				                    width: client_width * 250 / 1920,
+				                    filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+				                    align: 'center',
+				                },
+				                {
+				                    header: '상세내용',
+				                    name: 'detail_note',
+				                    width: client_width * 470 / 1920,
+				                    align: 'center',
+				                },
+							]);
+							
+						});
+						
 						
                 }
 	            	

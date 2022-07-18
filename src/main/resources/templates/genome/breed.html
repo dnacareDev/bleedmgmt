@@ -1999,8 +1999,8 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        // $("#CropSelect").val(getSessionS(type_id));			// 2022-06-07 | 최근방문한 작물 종류 저장(관리자원 삭제기능 도입시 문제가 생길것 같아 비활성화)
-        
+        $("#CropSelect").val(getSessionS(type_id));			// 2022-06-07 | 최근방문한 작물 종류 저장(관리자원 삭제기능 도입시 문제가 생길것 같아 비활성화)
+        													// 2022-07-11 | 재활성화
         console.log(type);
 
         
@@ -2387,6 +2387,8 @@
             $("#breed_file").modal("show");
 
             var data = {"breed_id": e, "file_type": 0};
+            
+            console.log(data);
 
             $.ajax(
                 {
@@ -2439,7 +2441,7 @@
                             let file_json = file.replace(/\"/g, "&quot;");
 
                             file_add += '<tr>';
-                            file_add += '<td>' + (i + 1) + '</td>';
+                            file_add += '<td>' + (result.breed_file.length - i) + '</td>';
                             file_add += '<td><button onclick="ModifyBtn(' + result.breed_file[i].breed_file_id + ')" style="border:0px; color:blue; background: white;">' + result.breed_file[i].breed_file_title + '</button></td>';
                             file_add += '<td>' + result.breed_file[i].create_date + '</td>';
                             file_add += '<td><input type="hidden" id="file_' + result.breed_file[i].breed_file_id + '" value="' + file.replace(/\"/g, "&quot;") + '"></td>';
@@ -2537,6 +2539,7 @@
     	
     	if (confirm("삭제하시겠습니까?") == true) {
     		breed_file_id = $("#breed_file_id").val();
+    		//let log_file_contents = $("#log_file_contents_modify").val("[[${type}]] (breed_id : " + $("#breed_file_id").val() + ") 파일 삭제");
         	
         	//console.log(breed_file_id);
         	
@@ -2548,6 +2551,7 @@
                         url: 'DeleteBreedFile',
                         method: 'POST',
                         dataType: 'json',
+                        //data: {"breed_file_id": breed_file_id, "log_file_contents": log_file_contents},
                         data: {"breed_file_id": breed_file_id},
                         success: function (result) {
                         	loading.classList.remove('on');
@@ -2615,7 +2619,7 @@
     		$.ajax(
                     {
                         //url: 'searchOnlyHeader',
-                        url: 'searchHeader',
+                        url: 'searchHeader2',
                         method: 'POST',
                         dataType: 'json',
                         //data: {"crop_id": $("#CropSelect").val(), "resource_id": resource_all_resource[i].resource_id},
@@ -2675,7 +2679,56 @@
                             
                             // standard에 있는 데이터값을 그리드에 입력
                             const dataList = [];
-                         	 
+                         	
+                            
+                            let k = 0;
+                            for (let j = 0; j < result.breed.length; j++) {
+                            	//let data = result.breed[i].standardList;
+                                
+                            	// cell_value가 있는 행만 출력
+                            	let breed_id_flag = false;
+                                for (let k = 0; k < result.standardLists.length; k++) {
+                                	if(result.standardLists[k].standard_data == cell_value) {
+                                		breed_id_flag = true;
+                                		break;
+                                	}
+                                }
+                                if(breed_id_flag == false) {
+                                	//console.log("breed_flag");
+                                	continue;
+                                }
+                            	
+                            	
+                            	let tempArray = {};
+                                
+                                tempArray['breed_id'] = result.breed[i].breed_id;
+                                
+                                for (let j=0 ; j < result.detail.length; j++) {
+                                	//console.log("k : ", k);
+                                    tempArray[headerName[colName[j]]] = result.standardLists[k].standard_data;
+                                    
+                                    //console.log(tempArray[headerName[colName[j]]]);
+                                    
+                                    k++;
+                                    
+                                }
+                                
+                                for(let j=0 ; j < result.detail.length; j++) {
+                                	if(tempArray[headerName[colName[j]]] == cell_value) {
+                                		dataList.push(tempArray);
+                                		break;
+                                	}
+                                }
+                                
+                                //console.log("tempArray : ", tempArray);
+                                
+                                
+                            }
+                            
+                            
+                            
+                            
+                            /*
                             for (let j = 0; j < result.breed.length; j++) {
                             	
                             	let breed_id_flag = false;
@@ -2717,7 +2770,7 @@
                                 
                                 dataList.push(tempArray);
                             }
-                            
+                            */
                             selectgrid[i].resetData(dataList);
                             
                             /*
@@ -2782,7 +2835,7 @@
         
         $.ajax(
             {
-                url: 'searchHeader',
+                url: 'searchHeader2',
                 method: 'POST',
                 dataType: 'json',
                 data: data,
@@ -2792,9 +2845,20 @@
                 	
                     $("#resource_id").val(result.resource_id);
                     
-                    console.log("breed result : ", result)
-                    
+                    console.log("breed result : ", result);
                     //console.log("resource_id : ", resource_id);
+                    
+                    /*
+                    for(let i=0 ; i<result.breed.length ; i++) {
+                    	for(let j=0 ; j<result.standardLists.length ; j++) {
+                    		if(result.breed[i].breed_id == result.standardLists[j].breed_id) {
+                    			console.log("aaa");
+                    			//result.breed[i]['standardLists'[j]] = result.standardLists[j];
+                    		}
+                    	} 
+                    }
+                    */
+                    
                     
                     tui.Grid.applyTheme('clean');
                     
@@ -2936,6 +3000,75 @@
                     
                     breedgrid.setColumns(headerArr);
 
+                    
+                    
+                    const dataList = [];
+                    
+                    let k = 0;
+                    for (let i = 0; i < result.breed.length; i++) {
+                    	//let data = result.breed[i].standardList;
+                        
+                        
+						let isMatch = false;
+                    	for(let j=0 ; j<result.breed_file.length ; j++) {
+                    		if(result.breed[i].breed_id == result.breed_file[j].breed_id) {
+                    			isMatch = true;
+                    			break;
+                    		}
+                    	}
+                    	
+                    	
+                    	
+                    	let tempArray = {};
+                        
+                    	if(isMatch == true ){
+                        	tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down-fill"></i>';
+                        } else {
+	                        tempArray['file'] = '<i class="bi bi-file-earmark"></i>';
+                        }
+    
+                        tempArray['breed_id'] = result.breed[i].breed_id;
+                        
+                        tempArray['status'] = '<span style="color:blue">COMMON</span>';
+                        for(let j=0 ; j<result.filledBreedId.length ; j++) {
+                        	if(result.breed[i].breed_id == result.filledBreedId[j]) {
+                        		tempArray['status'] = '<span style="color:blue">ANALYSIS</span>';
+                        		break;
+                        	}
+                        }
+                        /*
+                        if (result.breed[i].detail_count == 0) {
+                            tempArray['status'] = '<span style="color:blue">COMMON</span>';
+                        } else {
+                            tempArray['status'] = '<span style="color:blue">ANALYSIS</span>';
+                        }
+                        */
+                        
+                        //tempArray['status'] = '<span style="color:blue">COMMON</span>';
+                        tempArray['breed_id'] = result.breed[i].breed_id;
+                        
+                        
+                        for (let j=0 ; j < result.detail.length; j++) {
+                        	//console.log("k : ", k);
+                            tempArray[headerName[colName[j]]] = result.standardLists[k].standard_data;
+                            
+                            //console.log(tempArray[headerName[colName[j]]]);
+                            
+                            k++;
+                        }
+                        
+                        //console.log("tempArray : ", tempArray);
+                        dataList.push(tempArray);
+                        
+                    }
+            
+                    //console.log("dataList : ", dataList);
+                    
+                    breedgrid.resetData(dataList);
+                    
+                    
+                    
+                    /*
                     const dataList = [];
 
                     for (let i = 0; i < result.breed.length; i++) {
@@ -2954,7 +3087,7 @@
                         let data = result.breed[i].standardList;
                         let tempArray = {};
 
-                        //console.log(isMatch);
+                        //console.log("data : ", data);
                         
                         if(isMatch == true ){
                         	tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down-fill"></i>';
@@ -2985,24 +3118,16 @@
                                 }
                             }
                         }
-                        
-                        /*
-                        for (let j = 1; j < headerName.length; j++) {
-                            if ((typeof headerName[colName[j - 1]]) === 'string') {
-                                tempArray[headerName[colName[j - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                            } else if ((typeof headerName[colName[j - 1]]) === 'number') {
-                                if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
-                                    tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
-                                }
-                            }
-                        }
-                        */
 
                         //console.log("tempArray : ", tempArray);
                         dataList.push(tempArray);
                     }
 
                     breedgrid.resetData(dataList);
+                    */
+                    
+                    
+                    
 
                     breedgrid.on('editingStart', (ev) => {
                         if ($(".plus_btn_submit1")[0].style.display != 'block') {
@@ -3550,7 +3675,10 @@
                     let lData = {"resource_name": resource_name, "datalist_date": now, "crop_id": crop_id, "user_group": group};
 
                     listData.push(lData);
-
+					
+                    
+                    
+                    
                     $.ajax(
                         {
                             url: 'insertBreedDataList',

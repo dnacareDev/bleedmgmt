@@ -216,6 +216,11 @@ public class BreedServiceImpl implements BreedService {
   public List<Breed> SearchBreed3(int resource_id) {
     return breedMapper.SearchBreed3(resource_id);
   }
+  
+  @Override
+  public int[] SearchFilledBreed(String crop_name, int resourceId) {
+	  return breedMapper.SearchFilledBreed(crop_name, resourceId);
+  }
 
   @Override
   public Breed SearchBreedById(int target_id) {
@@ -270,5 +275,10 @@ public class BreedServiceImpl implements BreedService {
   @Override
   public List<StandardList> SearchStandardByCellValue(String cell_value) {
 	  return breedMapper.SearchStandardByCellValue(cell_value);
+  }
+  
+  @Override
+  public List<StandardList> DatabaseSelect(String crop_name, int resourceId) {
+	  return breedMapper.DatabaseSelect(crop_name, resourceId);
   }
 }

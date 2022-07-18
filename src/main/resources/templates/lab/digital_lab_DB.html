@@ -153,7 +153,7 @@
 	                                    <button type="button" class="btn btn-icon btn-light btn-circle" title="데이터 삭제" onclick="delete_row()">
 	                                        <span data-feather="trash-2"></span>
 	                                    </button>
-	                                    <button class="btn btn-lg btn-primary bottom_btn" data-toggle="modal" data-target="#marker_insert_modal" style="float:right; background-color: #217566; color: #EDF6F1; height: 34px">
+	                                    <button class="btn btn-lg btn-primary bottom_btn" data-toggle="modal" data-target="#marker_insert_modal" onclick="Today()" style="float:right; background-color: #217566; color: #EDF6F1; height: 34px">
 		                                    데이터 등록
 		                                </button>
 	                                </div>
@@ -200,7 +200,7 @@
 		                		</tr>
 		                		<tr>
 		                			<td><label class="reg" for="regist_date">등록일</label></td>
-		                			<td><input type="text" name="regist_date"></td>
+		                			<td><input type="text" name="regist_date" id="regist_date" readonly></td>
 		                		</tr>
 		                		<tr>
 		                			<td><label class="reg" for="detail_note">상세내용</label></td>
@@ -256,8 +256,9 @@
 	// 페이지 시작
 	$(document).ready(function(){
 			SearchDB();
-
-		});
+			
+			//Today();
+	});
 	
 	// 페이지 당 데이터 개수 변경
 	$("#limit").change(function () {
@@ -271,6 +272,19 @@
 			
 			SearchDB();
 	})
+	
+	function Today() {
+		
+		let currentTime = new Date();
+		let year = currentTime.getFullYear();
+		let month = currentTime.getMonth() + 1;
+		let day = currentTime.getDate();
+		
+		console.log(month);
+		
+		$("#regist_date").val(year + '-' + (("00"+month.toString()).slice(-2)) + '-' + (("00"+day.toString()).slice(-2)));
+		
+	}
 	
 	// grid
     let marker_grid = null;
@@ -288,8 +302,8 @@
 			success : function(result) {
 				
 				let dataArr = [];
-				
 				let rowArr = {};
+				let client_width = document.body.clientWidth;
 				
 				console.log("result marker", result);
 				
@@ -297,7 +311,7 @@
 					
 					rowArr = {
 									'number' : result.marker_information.length - i,
-									'file': '<a href="upload/' + result.marker_information[i].marker_file + '" download=' + result.marker_information[i].marker_origin_file + '><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
+									'file': '<a href="upload/' + result.marker_information[i].marker_file + '" download="' + result.marker_information[i].marker_origin_file + '"><i class="bi bi-file-earmark-arrow-down-fill"></i></a>',
 									'file_name' : result.marker_information[i].marker_file,			// 파일명 조회 용도
 									'file_origin_name' : result.marker_information[i].marker_origin_file,
 									'marker_num': result.marker_information[i].marker_num,
@@ -325,7 +339,7 @@
 						{
 							header: '번호',
 							name: 'number',
-							width: 60,
+							width: client_width * 60 / 1920,
 							align: 'center',
 							
 						},
@@ -334,26 +348,26 @@
                             name: 'marker_num',
                             //sortable: true,
                             hidden: true,
-                            width: 60,
+                            width: client_width * 60 / 1920,
                             align: 'center',
                         },
 						{
                             header: '다운로드',
                             name: 'file',
-                            width: 80,
+                            width: client_width * 80 / 1920,
                             align: 'center',
                         },
                         {
 		                    header: '파일명',
 		                    name: 'file_origin_name',
-		                    width: 250,
+		                    width: client_width * 250 / 1920,
 		                    align: 'center',
 		                },
 						{
                             header: '작물',
                             name: 'crop_name',
                             sortable: true,
-                            width: 150,
+                            width: client_width * 150 / 1920,
                             align: 'center',
                             filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
                         },
@@ -361,7 +375,7 @@
                             header: '분류',
                             name: 'marker_category',
                             sortable: true,
-                            width: 200,
+                            width: client_width * 200 / 1920,
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                         },
@@ -369,7 +383,7 @@
                             header: '등록자',
                             name: 'regist_person',
                             sortable: true,
-                            width: 250,
+                            width: client_width * 250 / 1920,
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                         },
@@ -377,14 +391,14 @@
                             header: '등록일',
                             name: 'regist_date',
                             sortable: true,
-                            width: 250,
+                            width: client_width * 250 / 1920,
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                         },
                         {
                             header: '상세내용',
                             name: 'detail_note',
-                            width: 470,
+                            width: client_width * 470 / 1920,
                             align: 'center',
                         }
 					],
@@ -393,6 +407,85 @@
                         perPage: limit
                     },
 				});
+				
+				//반응형
+				$(window).resize(function() {
+					
+					client_width = document.body.clientWidth;
+					
+					marker_grid.setColumns([
+						
+						{
+							header: '번호',
+							name: 'number',
+							width: client_width * 60 / 1920,
+							align: 'center',
+							
+						},
+						{
+                            header: 'marker_num',
+                            name: 'marker_num',
+                            //sortable: true,
+                            hidden: true,
+                            width: client_width * 60 / 1920,
+                            align: 'center',
+                        },
+						{
+                            header: '다운로드',
+                            name: 'file',
+                            width: client_width * 80 / 1920,
+                            align: 'center',
+                        },
+                        {
+		                    header: '파일명',
+		                    name: 'file_origin_name',
+		                    width: client_width * 250 / 1920,
+		                    align: 'center',
+		                },
+						{
+                            header: '작물',
+                            name: 'crop_name',
+                            sortable: true,
+                            width: client_width * 150 / 1920,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '분류',
+                            name: 'marker_category',
+                            sortable: true,
+                            width: client_width * 200 / 1920,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '등록자',
+                            name: 'regist_person',
+                            sortable: true,
+                            width: client_width * 250 / 1920,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '등록일',
+                            name: 'regist_date',
+                            sortable: true,
+                            width: client_width * 250 / 1920,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '상세내용',
+                            name: 'detail_note',
+                            width: client_width * 470 / 1920,
+                            align: 'center',
+                        }
+						
+					]);
+					
+					
+				});
+				
 				
 
 			}

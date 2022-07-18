@@ -64,14 +64,15 @@ public class ResourceController {
 
   @RequestMapping("regist-resource")
   public ModelAndView registResourcePage(ModelAndView mv, Authentication auth) {
-    List<Crop> cropList = cropService.selectCropList();
-    User user = (User)auth.getPrincipal();
+//    List<Crop> cropList = cropService.selectCropList();
+	  List<Crop> cropList = cropService.searchAllCrops();  
+      User user = (User)auth.getPrincipal();
     
-    mv.addObject("user", user);
-    mv.addObject("cropList", cropList);
+      mv.addObject("user", user);
+      mv.addObject("cropList", cropList);
 
-    mv.setViewName("resource/regist_resource");
-    return mv;
+      mv.setViewName("resource/regist_resource");
+      return mv;
   }
 
   @PostMapping("search-resource")

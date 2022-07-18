@@ -406,27 +406,6 @@
 				SearchPlan();
 	});
 
-	/*
-	function fileUpload() {
-		
-		//console.log("fileUpload ex_file_span");
-		
-		let fileInput = $(".ex_file");
-		
-		for(let i=0 ; i<fileInput.length; i++) {
-			if( fileInput[i].files.length > 0) {
-				for(let j=0 ; j<fileInput[i].files.length; j++) {
-					console.log(fileInput[i].files[j].name);
-					$("#file-label1 span")[i].text(fileInput[i].files[j].name);
-					//$(".ex_file_span")[i].text();
-				}
-			}
-		}
-		
-		$("#file-label1 span").text("aaa");
-		
-	}
-	*/
 	
 	
 	let MABC_design_grid = null;
@@ -446,6 +425,8 @@
 				let dataArr = [];
 				let rowArr = {};
 				
+				let client_width = document.body.clientWidth;
+				
 				//tui.Grid.applyTheme('clean');
 				// 2022-05-12 | marker_grid를 qtl_grid로 교체. 뭔가 출력이 안된다 싶으면 이 부분을 확인해보자
 				MABC_design_grid = new tui.Grid({
@@ -459,14 +440,14 @@
 						{
 							header: '번호',
 							name: 'number',
-							width: 60,
+							width: client_width * 60 / 1920,
 							align: 'center',
 						},
 						{
                             header: 'mabc_design_id',
                             name: 'mabc_design_id',
                             //sortable: true,
-                            width: 180,
+                            width: client_width * 180 / 1920,
                             align: 'center',
                             //filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
                             hidden: true
@@ -475,7 +456,7 @@
                             header: '작물',
                             name: 'crop',
                             sortable: true,
-                            width: 180,
+                            width: client_width * 180 / 1920,
                             align: 'center',
                             filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
                         
@@ -485,7 +466,7 @@
                             name: 'mabc_status',
                             //editor: 'text',
                             sortable: true,
-                            width: 300,
+                            width: client_width * 300 / 1920,
                             align: 'center',
                             filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
                         },
@@ -493,7 +474,7 @@
                             header: '상세내용',
                             name: 'note',
                             sortable: true,
-                            width: 600,
+                            width: client_width * 600 / 1920,
                             align: 'center',
                             filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
                         },
@@ -503,7 +484,7 @@
                             editor: 'text',
                             hidden: true,
                             sortable: true,
-                            width: 150,
+                            width: client_width * 150 / 1920,
                             align: 'center',
                             filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
                         },
@@ -512,7 +493,7 @@
                             name: 'create_date',
                             editor: 'text',
                             sortable: true,
-                            width: 450,
+                            width: client_width * 450 / 1920,
                             align: 'center',
                             filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
                         },
@@ -537,6 +518,80 @@
                 }
 
 				MABC_design_grid.resetData(dataArr);
+				
+				
+				
+				$(window).resize(function() {
+					
+					client_width = document.body.clientWidth;
+				
+					MABC_design_grid.setColumns([
+						{
+							header: '번호',
+							name: 'number',
+							width: client_width * 60 / 1920,
+							align: 'center',
+						},
+						{
+                            header: 'mabc_design_id',
+                            name: 'mabc_design_id',
+                            //sortable: true,
+                            width: client_width * 180 / 1920,
+                            align: 'center',
+                            //filter: {type: 'select', showApplyBtn: true, showClearBtn: true},
+                            hidden: true
+                        },
+                        {
+                            header: '작물',
+                            name: 'crop',
+                            sortable: true,
+                            width: client_width * 180 / 1920,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        
+                        },
+						{
+                            header: '분석상태',
+                            name: 'mabc_status',
+                            //editor: 'text',
+                            sortable: true,
+                            width: client_width * 300 / 1920,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '상세내용',
+                            name: 'note',
+                            sortable: true,
+                            width: client_width * 600 / 1920,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        },
+						{
+                            header: 'jobid',
+                            name: 'jobid',
+                            editor: 'text',
+                            hidden: true,
+                            sortable: true,
+                            width: client_width * 150 / 1920,
+                            align: 'center',
+                            filter: {type: 'select', showApplyBtn: true, showClearBtn: true}
+                        },
+                        {
+                            header: '등록일',
+                            name: 'create_date',
+                            editor: 'text',
+                            sortable: true,
+                            width: client_width * 450 / 1920,
+                            align: 'center',
+                            filter: {type: 'text', showApplyBtn: true, showClearBtn: true}
+                        },
+						
+					]);
+				});
+					
+				
+				
 				
 				
 				

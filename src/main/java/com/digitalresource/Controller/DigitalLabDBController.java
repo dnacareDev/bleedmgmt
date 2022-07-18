@@ -54,7 +54,7 @@ public class DigitalLabDBController {
 	public ModelAndView digitalLabDB(ModelAndView mv) {
 		
 		List<Crop> cropList = cropService.searchAllCrops();
-//		System.out.println(cropList);
+		System.out.println(cropList);
 		
 		
 		mv.addObject("cropList", cropList);

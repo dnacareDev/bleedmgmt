@@ -44,7 +44,10 @@ public class HomeController {
 
   @RequestMapping("/home")
   public ModelAndView gethome(ModelAndView mv, Authentication auth) {
-    User user = (User)auth.getPrincipal();
+    
+	  
+	  
+	User user = (User)auth.getPrincipal();
     int group = user.getUser_group();
 
     List<Crop> crops = cropService.selectCropList();
@@ -141,75 +144,6 @@ public class HomeController {
     return result;
   }
   
-  @ResponseBody
-  @RequestMapping("selectYear")
-  public Map<String, Object> SelectYear(Authentication auth, @RequestParam("crop_id") int crop_id) {
-    User user = (User)auth.getPrincipal();
-    int group = user.getUser_group();
 
-    Map<String, Object> result = new LinkedHashMap<String, Object>();
-    YearCount yearCounts = new YearCount();
-    
-    SimpleDateFormat formatNowYear = new SimpleDateFormat("yyyy");
-    
-    Date date = new Date();
-    
-    
-    String currentYear = formatNowYear.format(date);
-    
-    System.out.println("now year? : " + currentYear);
-    
-
-    List<ResourceName> resourceList = RService.resourceList(group);
-
-    String crop_name = breedService.SearchCropName(crop_id);
-
-    int[][] count = new int[resourceList.size()][5];
-    
-    for (int i = 0; i < resourceList.size(); i++) {
-      String resource_name = resourceList.get(i).getResource_name();
-
-      
-      for (int j = 0; j < 5 ; j++) {
-    	  System.out.println("i="+i+", j="+j);
-    	  
-    	  yearCounts = RService.SelectCropYear(crop_name, Integer.toString((Integer.parseInt(currentYear) - j)), resource_name, group);
-    	  
-    	  System.out.println("yearCounts : " + yearCounts);
-    	  
-    	  
-    	  // 현재연도가 가장 마지막 배열에 들어갈 수 있도록 [j] => [4-j] | count[i][0] : 2022년 => 2018년
-    	  if(yearCounts != null) {
-              count[i][4-j] = yearCounts.getResource_count();
-            } else {
-              count[i][4-j] = 0;
-            }
-    	  
-        }
-      
-      
-      
-      
-      /*
-      for (int j = 1; j <= 12; j++) {
-        String year = String.format("%04d", j);
-
-        yearCounts = RService.SelectCropYear(crop_name, year, resource_name, group);
-
-        if(yearCounts != null) {
-          count[i][j - 1] = yearCounts.getResource_count();
-        } else {
-          count[i][j - 1] = 0;
-        }
-      }
-      */
-    }
-
-    result.put("resourceList", resourceList);
-    result.put("count", count);
-    
-    return result;
-  }
-  
   
 }

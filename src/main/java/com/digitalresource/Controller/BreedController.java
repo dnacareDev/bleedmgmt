@@ -1,7 +1,20 @@
 package com.digitalresource.Controller;
 
-import com.digitalresource.Entity.*;
-import com.digitalresource.Service.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +27,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.*;
+import com.digitalresource.Entity.Breed;
+import com.digitalresource.Entity.BreedFile;
+import com.digitalresource.Entity.BreedFileSimple;
+import com.digitalresource.Entity.Crop;
+import com.digitalresource.Entity.DataList;
+import com.digitalresource.Entity.Detail;
+import com.digitalresource.Entity.StandardList;
+import com.digitalresource.Entity.Uploads;
+import com.digitalresource.Entity.User;
+import com.digitalresource.Service.BreedService;
+import com.digitalresource.Service.CropService;
+import com.digitalresource.Service.DataListService;
+import com.digitalresource.Service.DetailService;
+import com.digitalresource.Service.LogService;
+import com.digitalresource.Service.ResourceNameService;
+import com.digitalresource.Service.ResourceService;
 
 @Controller
 public class BreedController {
@@ -102,19 +123,87 @@ public class BreedController {
 
     List<BreedFileSimple> breed_file = breedService.IsMatchBreedFile();
     
+    System.out.println("breed : " + breed);
+    
     result.put("breed", breed);
     result.put("detail", details);
     result.put("resource_id", resourceId);
     result.put("breed_file", breed_file);
-//    Gson gson = new Gson();
-//    String jsonString = gson.toJson(result.get("standardList"));
-//
-//    System.out.println(jsonString);
-//    System.out.println("================================");
 
     return result;
   }
 
+  @ResponseBody
+  @RequestMapping("searchHeader2")
+  public Map<String, Object> SearchBreed2(Authentication auth, @RequestParam("crop_id") int crop_id, @RequestParam("resource_name") String resource_name) {
+    User user = (User)auth.getPrincipal();
+    int group = user.getUser_group();
+    Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+    int[] resourceNameId = resourceNameService.SelectResourceNameId(resource_name, group);
+    int resourceId = 0;
+
+    for (int i = 0; i < resourceNameId.length; i++) {
+      if (resourceService.SearchResourceId(crop_id, resourceNameId[i], group) != null) {
+        resourceId = resourceService.SearchResourceId(crop_id, resourceNameId[i], group);
+        break;
+      }
+    }
+    System.out.println("resource_name : " + resource_name);
+    System.out.println("resourceId : " + resourceId);
+
+    List<Detail> details = detailService.SelectDetailListByResource(resourceId);
+
+    String crop_name = breedService.SearchCropName(crop_id);
+
+    List<Breed> breed = breedService.SearchBreed2(crop_name, resourceId);
+    
+    int[] filledBreedId = breedService.SearchFilledBreed(crop_name, resourceId);
+    
+    //System.out.println("filled : " + Arrays.toString(filledBreedId));
+
+    List<StandardList> standardLists = new ArrayList<StandardList>();
+    //List<StandardList> standardListsFiltered = new ArrayList<StandardList>();
+    
+    /*
+    for(int i = 0; i < breed.size(); i++) {
+      standardLists = breedService.SelectStandard2(breed.get(i).getBreed_id());
+
+      breed.get(i).setStandardList(standardLists);
+    }
+    */
+    
+    standardLists = breedService.DatabaseSelect(crop_name, resourceId);
+
+    /*
+    for(int i=0 ; i<breed.size() ; i++) {
+    	System.out.println("i = " + i);
+    	for(int j=0 ; j<standardLists.size() ; j++) {
+    		System.out.println("j = " + j);
+    		if(breed.get(i).getBreed_id() == standardLists.get(j).getBreed_id()) {
+    			breed.get(i).setStandardList(standardLists);
+    		}
+    	}
+    }
+    */
+    
+    
+    
+    
+    List<BreedFileSimple> breed_file = breedService.IsMatchBreedFile();
+    
+//    System.out.println("breed : " + breed);
+    
+    result.put("breed", breed);
+    result.put("filledBreedId", filledBreedId);
+    result.put("standardLists", standardLists);
+    result.put("detail", details);
+    result.put("resource_id", resourceId);
+    result.put("breed_file", breed_file);
+
+    return result;
+  }
+  
   @ResponseBody
   @RequestMapping("insertBreed2")
   public int insertBreed(Authentication auth, @RequestParam(value = "data") String data, @RequestParam(value = "resource_id") int resource_id, @RequestParam(value = "crop_id") int crop_id, @RequestParam(value = "resource_name") String resource_name, @RequestParam(value = "type_check") int type_check, @RequestParam(value = "log_contents") String log_contents) {
@@ -175,9 +264,17 @@ public class BreedController {
   // 첨부파일 리스트에서 삭제
   @ResponseBody
   @RequestMapping("DeleteBreedFile")
-  public int DeleteFile(@RequestParam("breed_file_id") int breed_file_id) {
+  public int DeleteFile(
+		  				Authentication auth,
+		  				@RequestParam("breed_file_id") int breed_file_id)
+		  				/*@RequestParam("log_file_contents") String log_file_contents*/ {
 	  int result = breedService.DeleteBreedFile(breed_file_id);
-	  
+	  /*
+	  User user = (User)auth.getPrincipal();
+      String userIdName = user.getUser_username(); 
+	  String userName = user.getUser_name();
+      logService.RecordLog(userIdName, userName, log_file_contents);
+	  */
 	  return result;
   }
 
@@ -194,7 +291,7 @@ public class BreedController {
 		  							@RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
     
 	
-	  
+//	  System.out.println(log_file_contents);
 	
 	  
 	String[] extension = file.getOriginalFilename().split("\\.");
@@ -248,91 +345,52 @@ public class BreedController {
 		  							@ModelAttribute BreedFile breed_file, 
 		  							@RequestParam("file") MultipartFile file, 
 		  							@RequestParam("type") String type, 
-		  							//@RequestParam("log_file_contents_modify") String log_file_contents_modify,
+		  							@RequestParam("log_file_contents_modify") String log_file_contents_modify,
 		  							@RequestParam("resource_id") int resource_id, 
 		  							@RequestParam(value = "crop_id", required = false) int crop_id) throws IOException {
     
+	  
+//	  System.out.println(log_file_contents_modify);
 	  
 	  int update_file = breedService.UpdateBreedFile(breed_file);
 	  
 		String[] extension = file.getOriginalFilename().split("\\.");
 
-	    String file_name = fileController.ChangeFileName(extension[1]);
-	    String origin_file_name = file.getOriginalFilename();
-	    
-//	    System.out.println("breed_file : " + breed_file);
+		System.out.println("isFile : " + file.getOriginalFilename().length());
+		
+		if(file.getOriginalFilename().length() != 0) {
+			String file_name = fileController.ChangeFileName(extension[1]);
+		    String origin_file_name = file.getOriginalFilename();
+		    
+//		    System.out.println("breed_file : " + breed_file);
 
-//	    String path = "src/main/webapp/upload";
-	    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/";
+//		    String path = "src/main/webapp/upload";
+		    String path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/";
 
-	    File filePath = new File(path);
+		    File filePath = new File(path);
 
-	    if (!filePath.exists())
-	      filePath.mkdirs();
+		    if (!filePath.exists())
+		      filePath.mkdirs();
 
-	    Path fileLocation = Paths.get(path).toAbsolutePath().normalize();
-	    Path targetLocation = fileLocation.resolve(file_name);
+		    Path fileLocation = Paths.get(path).toAbsolutePath().normalize();
+		    Path targetLocation = fileLocation.resolve(file_name);
 
-	    Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+		    Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-	    Uploads upload = new Uploads();
-	    upload.setUploads_file(file_name);
-	    upload.setUploads_origin_file(origin_file_name);
-	    upload.setBreed_file_id(breed_file.getBreed_file_id());
+		    Uploads upload = new Uploads();
+		    upload.setUploads_file(file_name);
+		    upload.setUploads_origin_file(origin_file_name);
+		    upload.setBreed_file_id(breed_file.getBreed_file_id());
 
-	    int update_upload = breedService.UpdateBreedUpload(upload);
-	  
-	  
-	  /*
-	  if (file.isEmpty()) {
-      int update_file = breedService.UpdateBreedFile(breed_file);
-    } else {
-    	
-    	
-    	
-//      String delete_path = "upload/" + breed_file.getUploads_file();
-      String delete_path = "/data/apache-tomcat-9.0.8/webapps/ROOT/upload/" + breed_file.getUploads_file();
-      File origin_file = new File(delete_path);
-      
-      System.out.println("delete_path : " + delete_path);
-
-      if (origin_file.delete()) {
-    	  System.out.println("file delete success");
-        String[] extension = file.getOriginalFilename().split("\\.");
-
-        String file_name = fileController.ChangeFileName(extension[1]);
-        String origin_file_name = file.getOriginalFilename();
-
-        String path = "upload";
-
-        File filePath = new File(path);
-
-        if (!filePath.exists())
-          filePath.mkdirs();
-
-        Path fileLocation = Paths.get(path).toAbsolutePath().normalize();
-        Path targetLocation = fileLocation.resolve(file_name);
-
-        Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
-        Uploads upload = new Uploads();
-        upload.setUploads_file(file_name);
-        upload.setUploads_origin_file(origin_file_name);
-        upload.setBreed_file_id(breed_file.getBreed_file_id());
-
-        int update_upload = breedService.UpdateBreedUpload(upload);
-        
-        
-      }
-    }
-    */
-
-    /*
+		    int update_upload = breedService.UpdateBreedUpload(upload);
+		} 
+		
+    
     User user = (User)auth.getPrincipal();
     String userIdName = user.getUser_username(); 
 	String userName = user.getUser_name();
     logService.RecordLog(userIdName, userName, log_file_contents_modify);
-    */
+    
     
     String str = URLEncoder.encode(type, "UTF-8");
     String url = "/breed?type=" + str + "&id=" + resource_id + "&crop_id=" + crop_id;
@@ -392,6 +450,7 @@ public class BreedController {
       breed.setUser_group(user_group);
 
       int breed_result = breedService.InsertBreed(breed);
+      
 
       List<Detail> detail = breedService.SelectDetailExcel2(resource_id);
 
@@ -461,7 +520,6 @@ public class BreedController {
     int[] resource_name_id = resourceNameService.SelectResourceNameId(obj.getString("resource_name"), group);
 
     int resource_id = 0;
-
     for(int i = 0; i < resource_name_id.length; i++) {
       if(resourceService.SearchResourceId(crop_id, resource_name_id[i], group) != null) {
         resource_id = resourceService.SearchResourceId(crop_id, resource_name_id[i], group);
@@ -472,7 +530,7 @@ public class BreedController {
 
     List<Integer> breed_id = datalistService.SelectTarget(obj.getString("datalist_date"), obj.getString("resource_name"), resource_id);
     List<Breed> breed = breedService.SearchBreed3(resource_id);
-
+    
     for (int i = 0; i < breed.size(); i++) {
       if (Objects.equals(breed.get(i).getCreate_date().split(" ")[0], obj.getString("datalist_date"))) {
         dataList.setResource_id(resource_id);
@@ -488,6 +546,7 @@ public class BreedController {
         datalistService.InsertDataList(dataList);
       }
     }
+    
 
     return dataList;
   }
@@ -512,6 +571,8 @@ public class BreedController {
 
     Map<Integer, Object> Breed = new LinkedHashMap<Integer, Object>();
 
+    System.out.println(breed_id);
+    
     for (int i = 0; i < breed_id.size(); i++) {
       Breed.put(i, breedService.SelectBreedStandard2(breed_id.get(i)));
     }

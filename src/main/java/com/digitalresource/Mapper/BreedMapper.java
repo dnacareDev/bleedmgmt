@@ -52,6 +52,8 @@ public interface BreedMapper {
   List<Breed> SearchBreed2(@Param("crop_name") String breed_name, @Param("resource_id") int resource_id);
 
   List<Breed> SearchBreed3(@Param("resource_id") int resource_id);
+  
+  int[] SearchFilledBreed(@Param("crop_name") String crop_name, @Param("resourceId") int resourceId);
 
   Breed SearchBreedById(@Param("target_id") int target_id);
 
@@ -76,4 +78,6 @@ public interface BreedMapper {
 	int UpdateAllBreed(List<StandardList> list);
 
 	List<StandardList> SearchStandardByCellValue(String cell_value);
+	
+	List<StandardList> DatabaseSelect(@Param("crop_name") String crop_name, @Param("resourceId") int resourceId);
 }
