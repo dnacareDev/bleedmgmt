@@ -996,7 +996,10 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content modal-bg-white">
                 <div class="modal-header" style="border: none">
+                	<!--  
                     <h6 class="modal-title"><span class="titleType" th:text="${type}"></span> > 첨부파일</h6>
+                    -->
+                    <h6 class="modal-title">첨부파일</h6>
                     <span class="breed_title"></span>
                 </div>
                 <div class="modal-body">
@@ -1020,7 +1023,10 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none">
+                	<!--  
                     <button type="button" class="btn btn-secondary btn-sm mr-auto ml-3" data-dismiss="modal">닫기</button>
+                    -->
+                    <button type="button" class="btn btn-secondary btn-sm mr-auto ml-3" onclick="dataToggle('#breed_file','#pop_data1')">닫기</button>
                     <button class="btn btn-primary btn-sm" onclick="InsertFileBtn()">데이터 등록</button>
                 </div>
             </div>
@@ -2388,6 +2394,8 @@
 
             var data = {"breed_id": e, "file_type": 0};
             
+            console.log("breed_id : ", e);
+            
             console.log(data);
 
             $.ajax(
@@ -2602,7 +2610,7 @@
         //let resource_name = $(".manage")[0].innerText;
         let resource_id = $("#resource_id").val();
 		
-    	
+        $('#gridGroup').empty();
     	$("#pop_data1").modal();
         //$(".titleType").empty();
     	
@@ -2649,7 +2657,12 @@
                             });
                         	
                         	// 헤더 출력
-                        	const headerArr = [];
+                        	const headerArr = [{
+                                'header': '첨부파일',
+                                'name': 'file',
+                                'width': 80,
+                                'align': 'center'
+                            }];
 
                             let headerName = [];
                             let colName = [];
@@ -2698,10 +2711,26 @@
                                 	continue;
                                 }
                             	
-                            	
-                            	let tempArray = {};
                                 
-                                tempArray['breed_id'] = result.breed[i].breed_id;
+                                // 첨부파일 체크
+                                let isMatch = false;
+                            	for(let t=0 ; t<result.breed_file.length ; t++) {
+	               					if(result.breed[j].breed_id == result.breed_file[t].breed_id) {
+	                           			isMatch = true;
+	                           			break;
+	                           		}
+                            	}
+                            	let tempArray = {};
+                            	if(isMatch == true ){
+                                	tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down-fill"></i>';
+                                } else {
+        	                        tempArray['file'] = '<i class="bi bi-file-earmark"></i>';
+                                }
+                                //
+                            	
+                            	//let tempArray = {};
+                                
+                                tempArray['breed_id'] = result.breed[j].breed_id;
                                 
                                 for (let j=0 ; j < result.detail.length; j++) {
                                 	//console.log("k : ", k);
@@ -2725,77 +2754,27 @@
                                 
                             }
                             
-                            
-                            
-                            
-                            /*
-                            for (let j = 0; j < result.breed.length; j++) {
-                            	
-                            	let breed_id_flag = false;
-                            	
-                                for (let k = 0; k < result.breed[j].standardList.length; k++) {
-                                	if(result.breed[j].standardList[k].standard_data == cell_value) {
-                                		breed_id_flag = true;
-                                		break;
-                                	}
-                                }
-                                
-                                if(breed_id_flag == false) {
-                                	//console.log("breed_flag");
-                                	continue;
-                                }
-                            	
-                            	
-                            	
-                                let data = result.breed[j].standardList;
-                                let tempArray = {};
-
-                                //console.log("data : ", data);
-  
-                                // 데이터를 그리드 cell에 입력
-                                for (let k = 1; k < headerName.length; k++) {
-                                	
-                                    if ((typeof headerName[colName[k - 1]]) === 'string') {
-                                        tempArray[headerName[colName[k - 1]]] = '<i class="bi bi-file-earmark-arrow-down"></i>';
-                                    } else if ((typeof headerName[colName[k - 1]]) === 'number') {
-                                    	//console.log(tempArray[headerName[colName[k - 1]]], " vs ", data[k - 1].standard_data);
-                                        if (headerName[colName[k - 1]] == data[k - 1].detail_id) {
-	                                        tempArray[headerName[colName[k - 1]]] = data[k - 1].standard_data;
-        	                                
-                                        }
-                                    }
-                                }
-                                
-                                //console.log("tempArray : ", tempArray);
-                                
-                                dataList.push(tempArray);
-                            }
-                            */
                             selectgrid[i].resetData(dataList);
                             
-                            /*
-                            $.ajax(
-                                    {
-                                        url: 'searchCellValue',
-                                        method: 'POST',
-                                        dataType: 'json',
-                                        data: {"crop_name": crop_name, "cell_value": cell_value, "resource_id": resource_id},
-                                        //data: {"breed_id": resource_list[i].resource_name_id, "resource_name": resource_list[i].resource_name},
-                                        success: function (result) {
-                                        	console.log("cell_value result : ", st_result);
-                                        	let breed_id = [];
-                                        	
-                                        	for(let i=0 ; i<st_result.standardList.length ; i++) {
-                                        		
-                                        		
-                                        		
-                                        		if(st_result.standardList[i].breed_id == 81) {
-                                        			for(let j=0 ; j<)
-                                        		}
-                                        	}
-                                        }
+                            
+                            
+                            //파일첨부 클릭시 첨부파일 리스트 출력
+                            selectgrid[i].on('click', (ev) => {
+                                if (ev.targetType === 'cell' && ev.columnName === 'file') {
+    	                            
+                                	$("#pop_data1").modal('hide');
+                                	
+                                	let id = selectgrid[i].getRow(ev.rowKey).breed_id;
+    	                            
+    	                            console.log("clicked");
+    	                            console.log(id);
+    	
+    	                            FileBtn(id, 'file');
+                            	}                            	
                             });
-                            */
+                            
+
+                            
                         	
                         }
             });        
@@ -2807,12 +2786,14 @@
     /* e : 파종번호 모달창 */
 
     /* s : 모달창 닫힐 때 이벤트 발생 */
+    /*
     $(document).ready(function () {
         $('#pop_data1').on('hidden.bs.modal', function () {
             //selectgrid.destroy();
             $('#gridGroup').empty();
         });
     });
+    */
     /* e : 모달창 닫힐 때 이벤트 발생 */
 
     
@@ -2847,18 +2828,6 @@
                     
                     console.log("breed result : ", result);
                     //console.log("resource_id : ", resource_id);
-                    
-                    /*
-                    for(let i=0 ; i<result.breed.length ; i++) {
-                    	for(let j=0 ; j<result.standardLists.length ; j++) {
-                    		if(result.breed[i].breed_id == result.standardLists[j].breed_id) {
-                    			console.log("aaa");
-                    			//result.breed[i]['standardLists'[j]] = result.standardLists[j];
-                    		}
-                    	} 
-                    }
-                    */
-                    
                     
                     tui.Grid.applyTheme('clean');
                     
@@ -3067,68 +3036,6 @@
                     breedgrid.resetData(dataList);
                     
                     
-                    
-                    /*
-                    const dataList = [];
-
-                    for (let i = 0; i < result.breed.length; i++) {
-                    	
-                    	//isMatch 방식으로 파일이 있는 breed_id 검출
-                    	let isMatch = false;
-                    	
-                    	for(let j=0 ; j<result.breed_file.length ; j++) {
-                    		if(result.breed[i].breed_id == result.breed_file[j].breed_id) {
-                    			isMatch = true;
-                    			break;
-                    		}
-                    	}
-                    	
-                    	
-                        let data = result.breed[i].standardList;
-                        let tempArray = {};
-
-                        //console.log("data : ", data);
-                        
-                        if(isMatch == true ){
-                        	tempArray['file'] = '<i class="bi bi-file-earmark-arrow-down-fill"></i>';
-                        } else {
-	                        tempArray['file'] = '<i class="bi bi-file-earmark"></i>';
-                        }
-    
-                        tempArray['breed_id'] = result.breed[i].breed_id;
-
-                        
-                        
-                        if (result.breed[i].detail_count == 0) {
-                            tempArray['status'] = '<span style="color:blue">COMMON</span>';
-                        } else {
-                            tempArray['status'] = '<span style="color:blue">ANALYSIS</span>';
-                        }
-                        
-                        
-                        
-                        for (let j = 1; j < headerName.length; j++) {
-                            if ((typeof headerName[colName[j - 1]]) === 'string') {
-                            	if(typeof Number(headerName[colName[j - 1]].replace('_checked','')) === 'number' ) {
-                            		tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
-                            	}
-                            } else if ((typeof headerName[colName[j - 1]]) === 'number') {
-                                if (headerName[colName[j - 1]] == data[j - 1].detail_id) {
-                                    tempArray[headerName[colName[j - 1]]] = data[j - 1].standard_data;
-                                }
-                            }
-                        }
-
-                        //console.log("tempArray : ", tempArray);
-                        dataList.push(tempArray);
-                    }
-
-                    breedgrid.resetData(dataList);
-                    */
-                    
-                    
-                    
-
                     breedgrid.on('editingStart', (ev) => {
                         if ($(".plus_btn_submit1")[0].style.display != 'block') {
                             $(".plus_btn_submit2").css("display", "block");
