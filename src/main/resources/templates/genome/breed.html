@@ -2920,6 +2920,10 @@
                         	} else {
 	                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': colHeader.length * 6 + 130, 'filter': filter,'align': 'center'};
                         	}
+                        	
+                        	if(result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2 ) {
+                        		arr['filter']['type'] = 'number';
+                        	}
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
                                 arr = {'header': colHeader, 'name': 'img' + colName[i], 'width': 100, 'info': 'img'};

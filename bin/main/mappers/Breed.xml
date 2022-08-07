@@ -207,7 +207,7 @@
                 WHERE b.variety_name = #{crop_name} AND b.resource_id = #{resource_id}
             </when>
         </choose>
-        ORDER BY b.breed_id DESC
+        ORDER BY b.breed_id ASC
     </select>
 
     <select id="SearchBreed3" resultType="Breed">

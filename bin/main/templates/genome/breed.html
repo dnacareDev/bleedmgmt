@@ -935,9 +935,9 @@
                             <div class="action-btn d-flex justify-content-end">
                                 <div class="atbd-button-list d-flex flex-wrap">
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: left;" id="limit">
-                                        <option value="10">10개</option>
-                                        <option value="20">20개</option>
-                                        <option value="30">30개</option>
+                                        <option value="500">500개</option>
+                                        <option value="1000">1000개</option>
+                                        <option value="1500">1500개</option>
                                     </select>
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect"
                                             onChange="changeSelect(this)">
@@ -2919,6 +2919,10 @@
                             	headerName[colName[i]] = colName[i] + '_checked';
                         	} else {
 	                        	arr = {'header': colHeader, 'name': colName[i], 'editor': 'text', 'sortable': 'true', 'sortingType': 'asc', 'width': colHeader.length * 6 + 130, 'filter': filter,'align': 'center'};
+                        	}
+                        	
+                        	if(result.detail[i].detail_info == 1 || result.detail[i].detail_info == 2 ) {
+                        		arr['filter']['type'] = 'number';
                         	}
                         } else if (result.detail[i].detail_info == 3) {
                             if (result.detail[i].detail_type == 0) {
