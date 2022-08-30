@@ -23,7 +23,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     {
         SimpleGrantedAuthority authroAuthority = (SimpleGrantedAuthority) ((List<GrantedAuthority>)authentication.getAuthorities()).get(0);
 
-        System.out.println("aaa" +  authroAuthority.getAuthority());
+        //System.out.println("aaa" +  authroAuthority.getAuthority());
         
         switch (authroAuthority.getAuthority())
         {

@@ -1,7 +1,5 @@
 package com.digitalresource.Config.Security;
 
-import com.digitalresource.Entity.User;
-import com.digitalresource.Service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,7 +26,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException
     {
+    	
         User user = service.loadUserByUsername(authentication.getName());
+        
         if(user == null)
         {
             throw new UsernameNotFoundException("해당 아이디가 없습니다.");

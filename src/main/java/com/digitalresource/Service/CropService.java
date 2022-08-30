@@ -22,7 +22,7 @@ public interface CropService {
 
     public String SelectCropById(int crop_id);
 
-    public List<Crop> SearchCropList(String type, int group);
+    public List<Crop> SearchCropList(int user_type, String user_name, String type, int group);
     
     public List<Crop> searchAllCrops();
     

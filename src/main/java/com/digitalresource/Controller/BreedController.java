@@ -77,8 +77,10 @@ public class BreedController {
     User user = (User)auth.getPrincipal();
     int group = user.getUser_group();
 
-    List<Crop> crops = cropService.SearchCropList(type, group);
-
+    List<Crop> crops = cropService.SearchCropList(user.getUser_type(), user.getUser_name(), type, group);
+    
+    mv.addObject("user", user);
+    
     mv.addObject("crop_id", crop_id);
     mv.addObject("cropList", crops);
     mv.addObject("type", type);

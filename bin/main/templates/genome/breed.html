@@ -935,9 +935,9 @@
                             <div class="action-btn d-flex justify-content-end">
                                 <div class="atbd-button-list d-flex flex-wrap">
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px; float: left;" id="limit">
-                                        <option value="500">500개</option>
-                                        <option value="1000">1000개</option>
-                                        <option value="1500">1500개</option>
+                                        <option value="10">10개</option>
+                                        <option value="20">20개</option>
+                                        <option value="30">30개</option>
                                     </select>
                                     <select class="form-control form-control-lg mt-10 mb-10 mr-10" style="width: 250px;" name="selectCrop" id="CropSelect"
                                             onChange="changeSelect(this)">
@@ -1690,7 +1690,7 @@
 
     function getSessionS(key, useRemove) {
         let result = "";
-
+        
         if (sessionStorage.getItem(key) !== null) {
             result = sessionStorage.getItem(key);
             if (useRemove) {
@@ -2005,11 +2005,21 @@
 
     // DB에 저장된 데이터 출력
     $(document).ready(function () {
-        $("#CropSelect").val(getSessionS(type_id));			// 2022-06-07 | 최근방문한 작물 종류 저장(관리자원 삭제기능 도입시 문제가 생길것 같아 비활성화)
-        													// 2022-07-11 | 재활성화
-        console.log(type);
+    	
+    	// 고추, 무, 배추로 권한이 제한되어있을 경우 option_count = 0이므로 아무것도 출력할 것이 없다. 알림창만 띄우고 중지
+    	let option_count = document.getElementById('CropSelect').length;
 
-        
+    	if(option_count == 0) {
+    		Alert1("조회할 권한을 가진 작목이 없습니다");
+    		return;
+    	}
+    	
+    	// user_type = 2면 세션값 적용 X
+    	let user_type = "[[${user.user_type}]]";
+        if(user_type != 2) {
+        	$("#CropSelect").val(getSessionS(type_id));
+        }
+    	
         SearchBreed(1);
         SearchBreedgrid(1);
         
@@ -2809,6 +2819,20 @@
         let resource_name = $(".manage")[0].innerText;
         let limit = $("#limit").val();
 
+        /*
+        let user_name = "[[${user.user_name}]]";
+        let user_type = $("#user_type").val();
+        console.log("user_name : ", user_name);
+        console.log("user_type : ", user_type);
+        console.log("crop : ", $("#CropSelect option:selected").text());
+        // 특정작목 연구원 아이디는 user_type = 2 | 해당작목이 아니면 경고메시지만 출력하고 목록이 출력되지 않는다
+        
+        if(user_type == 2 && user_name != $("#CropSelect option:selected").text()) {
+        	Alert1("No");
+        	return;
+        }
+        */
+        
         let data = {"crop_id": crop_id, "resource_name": resource_name};
 
         var loading = document.querySelector('.load_wrap');

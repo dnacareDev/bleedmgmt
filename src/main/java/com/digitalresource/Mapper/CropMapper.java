@@ -25,7 +25,7 @@ public interface CropMapper {
 
     public String SelectCropById(@Param("crop_id") int crop_id);
  
-    public List<Crop> SearchCropList(@Param("type") String type, @Param("group") int group);
+    public List<Crop> SearchCropList(@Param("user_type") int user_type, @Param("user_name") String user_name, @Param("type") String type, @Param("group") int group);
     
     public List<Crop> searchAllCrops();
     

@@ -63,7 +63,11 @@
         from resource r
                  inner join resource_name rn on r.resource_name_id = rn.resource_name_id
                  inner join crop c on c.crop_id = r.crop_id
-        where rn.resource_name =#{type} AND rn.user_group = #{group} AND r.resource_use=1;
+        where rn.resource_name =#{type} AND rn.user_group = #{group} AND r.resource_use=1
+        <!-- user_type이 2면 아이디와 품종명이 같은것만 검색 -->
+        <if test="user_type == 2">
+            AND crop_name = #{user_name}
+        </if>
     </select>
 
     <select id="SearchCrop" resultType="Crop">
